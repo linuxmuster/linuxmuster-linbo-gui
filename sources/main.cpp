@@ -6,8 +6,6 @@
 int main( int argc, char* argv[] )
 {
   QApplication linboGuiApp( argc, argv );
-
-
   /*QWSServer* wsServer = QWSServer::instance();
 
   if ( wsServer ) {

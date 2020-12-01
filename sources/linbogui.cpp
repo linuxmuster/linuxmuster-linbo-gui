@@ -50,11 +50,11 @@ LinboGui::LinboGui()
 }
 
 // prevent closing (eg. by pressing escape key)
-void LinboGui::done(int r) {
+/*void LinboGui::done(int r) {
 
 #ifdef TEST_ENV
     QDialog::done(r);
 #else
     Q_UNUSED(r)
 #endif
-}
+}*/

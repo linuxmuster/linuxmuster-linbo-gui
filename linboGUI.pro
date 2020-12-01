@@ -4,6 +4,10 @@ INCLUDEPATH += .
 CFLAGS += -DQWS -static
 QT += gui svg
 
+QTPLUGIN.platforms = qlinuxfb
+# have to set env: QT_QPA_EVDEV_MOUSE_PARAMETERS=/dev/input/event3
+QTPLUGIN += qevdevmouseplugin
+
 # define test Enviroment
 TEST_ENV="\"$$PWD/fakeroot\""
 message($$TEST_ENV)
@@ -17,7 +21,9 @@ target.path = /usr/bin
 
 INCLUDEPATH += \
     headers/ \
-    headers/backend
+    headers/backend \
+    headers/frontend \
+    headers/frontend/components
 
 # Input
 HEADERS += \
@@ -27,15 +33,16 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
+    \
     headers/linbogui.h \
-    headers/linboosselectbutton.h \
-    headers/linboosselectionrow.h \
-    headers/linbostartactions.h \
-    headers/linbostartpage.h \
-    headers/qmodernprogressbar.h \
-    headers/qmodernpushbutton.h \
-    headers/qmodernpushbuttonoverlay.h \
-    headers/qmodernstackedwidget.h
+    headers/frontend/linboosselectbutton.h \
+    headers/frontend/linboosselectionrow.h \
+    headers/frontend/linbostartactions.h \
+    headers/frontend/linbostartpage.h \
+    headers/frontend/components/qmodernprogressbar.h \
+    headers/frontend/components/qmodernpushbutton.h \
+    headers/frontend/components/qmodernpushbuttonoverlay.h \
+    headers/frontend/components/qmodernstackedwidget.h
 
 SOURCES += \
     sources/backend/linboconfig.cpp \
@@ -45,15 +52,15 @@ SOURCES += \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
     sources/linbogui.cpp \
-    sources/linboosselectbutton.cpp \
-    sources/linboosselectionrow.cpp \
-    sources/linbostartactions.cpp \
-    sources/linbostartpage.cpp \
+    sources/frontend/linboosselectbutton.cpp \
+    sources/frontend/linboosselectionrow.cpp \
+    sources/frontend/linbostartactions.cpp \
+    sources/frontend/linbostartpage.cpp \
     sources/main.cpp \
-    sources/qmodernprogressbar.cpp \
-    sources/qmodernpushbutton.cpp \
-    sources/qmodernpushbuttonoverlay.cpp \
-    sources/qmodernstackedwidget.cpp
+    sources/frontend/components/qmodernprogressbar.cpp \
+    sources/frontend/components/qmodernpushbutton.cpp \
+    sources/frontend/components/qmodernpushbuttonoverlay.cpp \
+    sources/frontend/components/qmodernstackedwidget.cpp
 
 RESOURCES += \
     resources/linbo.qrc

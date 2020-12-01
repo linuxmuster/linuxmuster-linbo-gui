@@ -27,17 +27,18 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QScreen>
+#include <QMainWindow>
 
 #include "linbostartpage.h"
 #include "linbobackend.h"
 
-class LinboGui : public QDialog
+class LinboGui : public QMainWindow
 {
     Q_OBJECT
 public:
     LinboGui();
 
-    void done(int r) override;
+    //void done(int r) override;
 
 private:
     LinboBackend* backend;
