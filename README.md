@@ -1,4 +1,4 @@
-# Modern Linbo GUI
+# Linuxmuster Linbo GUI
 A new GUI for [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt5!
 
 # Screenshots
