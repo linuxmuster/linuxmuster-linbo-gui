@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/cache-22x22.png</file>
+        <file>icons/information-22x22.png</file>
+        <file>icons/register-22x22.png</file>
+        <file>icons/sync+start-22x22.png</file>
+        <file>icons/console-22x22.png</file>
+        <file>icons/new+start-22x22.png</file>
+        <file>icons/start-22x22.png</file>
+        <file>icons/upload-22x22.png</file>
+        <file>icons/image-22x22.png</file>
+        <file>icons/partition-22x22.png</file>
+        <file>icons/computer-64x64.png</file>
+        <file>icons/drive-harddisk-64x64.png</file>
+        <file>icons/system-reboot-32x32.png</file>
+        <file>icons/system-shutdown-32x32.png</file>
+        <file>icons/default.png</file>
+        <file>svgIcons/overlayChecked.svg</file>
+        <file>svgIcons/ubuntu.svg</file>
+        <file>svgIcons/windows.svg</file>
+        <file>svgIcons/startAction.svg</file>
+        <file>svgIcons/syncAction.svg</file>
+        <file>svgIcons/resetAction.svg</file>
+        <file>svgIcons/overlayHovered.svg</file>
+        <file>svgIcons/overlayPressed.svg</file>
+        <file>svgIcons/shutdownAction.svg</file>
+        <file>svgIcons/rebootAction.svg</file>
+        <file>svgIcons/settingsAction.svg</file>
+        <file>fonts/SegoeUI.ttf</file>
+        <file>svgIcons/cancel.svg</file>
+        <file>svgIcons/back.svg</file>
+    </qresource>
+</RCC>
