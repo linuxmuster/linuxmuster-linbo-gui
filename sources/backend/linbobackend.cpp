@@ -221,11 +221,11 @@ bool LinboBackend::reinstallCurrentOs() {
     return true;
 }
 
-bool LinboBackend::authenticate(QString password) {
+bool LinboBackend::login(QString password) {
     if(this->state != Idle)
         return false;
 
-    this->logger->log("Authenticating", LinboLogType::LinboLogChapterBeginning);
+    this->logger->log("Authenticating with password: " + password, LinboLogType::LinboLogChapterBeginning);
 
     this->executeCommand(true, "authenticate", this->config->getServerIpAddress(), "linbo", password, "linbo");
     bool successfull = this->synchronosProcess->exitCode() == 0;
@@ -238,6 +238,14 @@ bool LinboBackend::authenticate(QString password) {
     this->logger->log("Authentication " + QString(successfull ? "OK":"FAILED"), LinboLogType::LinboLogChapterEnd);
 
     return successfull;
+}
+
+void LinboBackend::logout() {
+    if(this->state != Root)
+        return;
+
+    this->rootPassword.clear();
+    this->setState(Idle);
 }
 
 bool LinboBackend::partitionDrive(bool format) {
@@ -350,7 +358,7 @@ LinboOs* LinboBackend::getCurrentOs() {
 }
 
 void LinboBackend::setCurrentOs(LinboOs* os) {
-    if(this->state != Idle || !this->operatingSystems.contains(os) || this->currentOs == os)
+    if((this->state != Idle && this->state != Root) || !this->operatingSystems.contains(os) || this->currentOs == os)
         return;
 
     this->currentOs = os;

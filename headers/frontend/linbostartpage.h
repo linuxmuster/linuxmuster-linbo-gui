@@ -45,6 +45,8 @@ private:
     LinboBackend* backend;
     LinboOsSelectionRow* osSelectionRow;
     LinboStartActions* startActionsWidget;
+    QModernPushButton* rootActionButton;
+    QModernPushButton* logoutActionButton;
     QList<QModernPushButton*> powerActionButtons;
 
     LinboLoginDialog* loginDialog;

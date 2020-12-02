@@ -2,7 +2,8 @@ TARGET = linbo_gui
 DEPENDPATH += .
 INCLUDEPATH += .
 CFLAGS += -DQWS -static
-QT += gui svg
+QT += gui svg \
+    widgets
 
 QTPLUGIN.platforms = qlinuxfb
 # have to set env: QT_QPA_EVDEV_MOUSE_PARAMETERS=/dev/input/event3
@@ -10,7 +11,7 @@ QTPLUGIN += qevdevmouseplugin
 
 # define test Enviroment
 TEST_ENV="\"$$PWD/fakeroot\""
-DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
+#DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
 
 QMAKE_POST_LINK=strip $(TARGET)
 
@@ -33,6 +34,8 @@ HEADERS += \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
     \
+    headers/frontend/components/qmoderndialog.h \
+    headers/frontend/components/qmodernlineedit.h \
     headers/frontend/linbologindialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
@@ -51,6 +54,8 @@ SOURCES += \
     sources/backend/linbologger.cpp \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
+    sources/frontend/components/qmoderndialog.cpp \
+    sources/frontend/components/qmodernlineedit.cpp \
     sources/frontend/linbologindialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \

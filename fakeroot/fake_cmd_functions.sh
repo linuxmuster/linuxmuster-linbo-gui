@@ -81,7 +81,7 @@ authenticate()
     local password="$3"
     if [[ "${server}" != "10.16.1.1" ]] \
       || [[ "${user}" != "linbo" ]] \
-      || [[ "${password}" != "pw123" ]]; then
+      || [[ "${password}" != "Muster!" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
     else

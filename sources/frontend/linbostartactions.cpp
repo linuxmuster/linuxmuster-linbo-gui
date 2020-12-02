@@ -87,6 +87,31 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
 
     this->stackView->addWidget(this->errorWidget);
 
+    // Root widget
+    this->rootWidget = new QWidget();
+    this->rootLayout = new QVBoxLayout(this->rootWidget);
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/image.svg", tr("Create image")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/syncAction.svg", tr("Init cache")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/register.svg", tr("register")));
+
+    for(QModernPushButton* button : this->rootActionButtons)
+        this->rootLayout->addWidget(button);
+
+    this->rootLayout->addStretch();
+
+    // insert a line to separate image specifi and global actions
+    QFrame* separatorLine = new QFrame();
+    separatorLine->setFrameShape(QFrame::HLine);
+    this->rootLayout->insertWidget(2, separatorLine);
+
+    this->rootLayout->setAlignment(Qt::AlignCenter);
+
+    this->stackView->addWidget(this->rootWidget);
+
+
     connect(this->stackView, SIGNAL(currentChanged(int)), this, SLOT(resizeAndPositionAllItems()));
     this->handleLinboStateChanged(this->backend->getState());
 }
@@ -238,6 +263,14 @@ void LinboStartActions::resizeAndPositionAllItems() {
 
     this->resetErrorButton->setGeometry((this->width() - this->cancelButton->width()) / 2, this->height() - this->cancelButton->width() * 1.1, this->cancelButton->width(), this->cancelButton->width());
 
+    // Root widget
+    this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
+
+    int rootActionButtonHeight = this->height() * 0.13;
+    int rootActionButtonWidth = rootActionButtonHeight * 5;
+    for(QModernPushButton* button : this->rootActionButtons)
+        button->setFixedSize(rootActionButtonWidth, rootActionButtonHeight);
+
     this->inited = true;
 }
 
@@ -293,6 +326,10 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
         currentWidget = this->errorWidget;
         break;
     }
+
+    case LinboBackend::Root:
+        currentWidget = this->rootWidget;
+        break;
 
     default:
         break;

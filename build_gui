@@ -1,5 +1,5 @@
 #!/bin/bash
-
-Qt5/bin/qmake linboGUI.pro
+./Qt5/bin/qmake linboGUI.pro
 make
-
+mv linbo_gui linbofs/usr/bin
+make clean

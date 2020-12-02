@@ -18,8 +18,16 @@
 
 #include "qmodernpushbutton.h"
 
-QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QAbstractButton(parent)
+
+QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QModernPushButton(icon, "", parent) {
+
+}
+
+QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* parent) : QAbstractButton(parent)
 {
+    this->svgIcon = nullptr;
+    this->label = nullptr;
+
     this->setMouseTracking(true);
     this->geometryAnimation = new QPropertyAnimation(this, "geometry", this);
     this->geometryAnimation->setDuration(400);
@@ -27,6 +35,7 @@ QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QAbstractB
 
     QStringList overlays;
     overlays.append(icon);
+    overlays.append(label);
     overlays.append(":svgIcons/overlayHovered.svg");
     overlays.append(":svgIcons/overlayPressed.svg");
     overlays.append(":svgIcons/overlayChecked.svg");
@@ -34,9 +43,26 @@ QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QAbstractB
     this->setObjectName(icon);
 
     for(QString overlayName : overlays) {
+        if(overlayName.isEmpty())
+            continue;
 
-        QSvgWidget* overlayWidget = new QSvgWidget(this);
-        overlayWidget->load(overlayName);
+        QWidget* overlayWidget;
+
+        if(overlayName.startsWith(":") || overlayName.startsWith("/")) {
+            QSvgWidget* svgWidget = new QSvgWidget(overlayName, this);
+            if(overlayName == icon)
+                this->svgIcon = svgWidget;
+            else if(overlayName.contains("overlayHovered"))
+                this->hoveredOverlay = svgWidget;
+            overlayWidget = svgWidget;
+        }
+        else {
+            QLabel* labelWidget = new QLabel(overlayName, this);
+            labelWidget->setAlignment(Qt::AlignCenter);
+            if(overlayName == label)
+                this->label = labelWidget;
+            overlayWidget = labelWidget;
+        }
 
         QModernPushButtonOverlay* overlay = new QModernPushButtonOverlay(overlayWidget, this);
         this->overlays.append(overlay);
@@ -44,8 +70,12 @@ QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QAbstractB
 
     this->overlays[0]->setVisibleAnimated(true);
     this->overlays[0]->setAnimationDuration(200);
-    this->overlays[1]->setAnimationDuration(200);
-    this->overlays[2]->setAnimationDuration(100);
+    if(this->overlays.length() == 5) {
+        this->overlays[1]->setVisibleAnimated(true);
+        this->overlays[1]->setAnimationDuration(200);
+    }
+    this->overlays[this->overlays.length()-3]->setAnimationDuration(200);
+    this->overlays[this->overlays.length()-2]->setAnimationDuration(100);
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(handleToggled(bool)));
 }
@@ -59,14 +89,31 @@ void QModernPushButton::handleToggled(bool checked) {
 
 void QModernPushButton::resizeEvent(QResizeEvent *event) {
     // make border width match button size
-    //QFile file(":svgIcons/overlayNormal.svg");
-    //file.open(QFile::ReadOnly);
-    //QString overlayNormalString = file.readAll();
-    //overlayNormalString.replace("stroke-width:15px", "stroke-width:" + QString::number(500/event->size().width() * 5) + "px");
-    //this->overlayHoveredWidget->load(overlayNormalString.toUtf8());
+    QFile file(":svgIcons/overlayHovered.svg");
+    file.open(QFile::ReadOnly);
+    QString overlayHoveredString = file.readAll();
+    QString width = QString::number(this->width());
+    QString height = QString::number(this->height());
+    overlayHoveredString.replace("width=\"500px\"", "width=\"" + width + "px\"");
+    overlayHoveredString.replace("height=\"500px\"", "height=\"" + height + "px\"");
+    overlayHoveredString.replace("viewBox=\"0 0 500px 500px\"", "viewBox=\"0 0 " + width + "px " + height + "px\"");
+    overlayHoveredString.replace("stroke-width:15px", "stroke-width:2px");
+    this->hoveredOverlay->load(overlayHoveredString.toUtf8());
 
     for(QModernPushButtonOverlay* overlay : this->overlays) {
         overlay->widget->setGeometry(QRect(0, 0, event->size().width(), event->size().height()));
+    }
+
+    if(this->label != nullptr && this->svgIcon != nullptr) {
+        // place icon besides text
+        this->svgIcon->setGeometry(QRect(0, 0, event->size().height(), event->size().height()));
+        this->label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        this->label->setGeometry(QRect(event->size().height() * 1.1, 0, event->size().width() - event->size().height(), event->size().height()));
+    }
+    if(this->label != nullptr) {
+        QFont font = this->label->font();
+        font.setPixelSize(this->height() * 0.5);
+        this->label->setFont(font);
     }
 }
 
@@ -112,24 +159,24 @@ void QModernPushButton::keyReleaseEvent(QKeyEvent *e) {
 void QModernPushButton::enterEvent(QEvent *e) {
 
     if(this->overlays.length() >= 2 && this->isEnabled())
-        this->overlays[1]->setVisibleAnimated(true);
+        this->overlays[this->overlays.length()-3]->setVisibleAnimated(true);
     return QAbstractButton::enterEvent(e);
 }
 
 void QModernPushButton::leaveEvent(QEvent *e) {
     if(this->overlays.length() >= 2)
-        this->overlays[1]->setVisibleAnimated(false);
+        this->overlays[this->overlays.length()-3]->setVisibleAnimated(false);
     return QAbstractButton::leaveEvent(e);
 }
 
 void QModernPushButton::mousePressEvent(QMouseEvent *e) {
     if(this->overlays.length() >= 3 && this->isEnabled())
-        this->overlays[2]->setVisibleAnimated(true);
+        this->overlays[this->overlays.length()-2]->setVisibleAnimated(true);
     return QAbstractButton::mousePressEvent(e);
 }
 
 void QModernPushButton::mouseReleaseEvent(QMouseEvent *e) {
     if(this->overlays.length() >= 3)
-        this->overlays[2]->setVisibleAnimated(false);
+        this->overlays[this->overlays.length()-2]->setVisibleAnimated(false);
     return QAbstractButton::mouseReleaseEvent(e);
 }

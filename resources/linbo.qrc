@@ -16,8 +16,6 @@
         <file>icons/system-shutdown-32x32.png</file>
         <file>icons/default.png</file>
         <file>svgIcons/overlayChecked.svg</file>
-        <file>svgIcons/ubuntu.svg</file>
-        <file>svgIcons/windows.svg</file>
         <file>svgIcons/startAction.svg</file>
         <file>svgIcons/syncAction.svg</file>
         <file>svgIcons/resetAction.svg</file>
@@ -29,5 +27,11 @@
         <file>fonts/SegoeUI.ttf</file>
         <file>svgIcons/cancel.svg</file>
         <file>svgIcons/back.svg</file>
+        <file>svgIcons/image.svg</file>
+        <file>svgIcons/logout.svg</file>
+        <file>svgIcons/partition.svg</file>
+        <file>svgIcons/register.svg</file>
+        <file>svgIcons/terminal.svg</file>
+        <file>svgIcons/upload.svg</file>
     </qresource>
 </RCC>

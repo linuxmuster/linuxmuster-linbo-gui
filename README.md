@@ -16,3 +16,4 @@ An error occurred:
 
 # Icons
 All of the SVG icons in this Gui were taken from [fontawesome.com](https://fontawesome.com/license) and slighlty modified.
+The SVG icons are licensed under the [Creative Commons Attribution 4.0 International license](https://fontawesome.com/license).

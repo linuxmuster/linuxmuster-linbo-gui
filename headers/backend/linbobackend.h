@@ -140,7 +140,8 @@ public slots:
     bool syncCurrentOs();
     bool reinstallCurrentOs();
 
-    bool authenticate(QString password);
+    bool login(QString password);
+    void logout();
 
     bool partitionDrive(bool format = true);
     bool initializeCache();

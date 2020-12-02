@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QDebug>
 #include <QEventLoop>
+#include <QLabel>
 
 #include "qmodernpushbuttonoverlay.h"
 
@@ -37,6 +38,7 @@ class QModernPushButton : public QAbstractButton
     Q_OBJECT
 public:
     QModernPushButton(QString icon, QWidget* parent = nullptr);
+    QModernPushButton(QString icon, QString label, QWidget* parent = nullptr);
 
     void setVisibleAnimated(bool visible);
 
@@ -55,6 +57,9 @@ protected:
 private:
     QPropertyAnimation* geometryAnimation;
     QList<QModernPushButtonOverlay*> overlays;
+    QSvgWidget* svgIcon;
+    QSvgWidget* hoveredOverlay;
+    QLabel *label;
 
 private slots:
     void handleToggled(bool checked);

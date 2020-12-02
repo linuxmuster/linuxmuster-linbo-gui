@@ -60,17 +60,23 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 
     // power and settings Buttons
     QWidget* powerActionsLayoutWidget = new QWidget(this);
-    int height = this->height() * 0.2;
+    int height = this->height() * 0.3;
     int width = height / 3;
     int margins = width * 0.1;
     int buttonWidth = width * 0.6;
     powerActionsLayoutWidget->setGeometry(QRect(this->width() - (width + margins), this->height() - (height + margins), width * 1.1, height));
 
-    QModernPushButton* settingsActionButton = new QModernPushButton(":/svgIcons/settingsAction.svg");
-    //connect(settingsActionButton, SIGNAL(clicked()), legacyGui, SLOT(loginAndOpen()));
-    this->powerActionButtons.append(settingsActionButton);
-    settingsActionButton->setFixedHeight(buttonWidth);
-    settingsActionButton->setFixedWidth(buttonWidth);
+    rootActionButton = new QModernPushButton(":/svgIcons/settingsAction.svg");
+    this->powerActionButtons.append(rootActionButton);
+    rootActionButton->setFixedHeight(buttonWidth);
+    rootActionButton->setFixedWidth(buttonWidth);
+
+    logoutActionButton = new QModernPushButton(":/svgIcons/logout.svg");
+    connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
+    this->powerActionButtons.append(logoutActionButton);
+    logoutActionButton->setFixedHeight(buttonWidth);
+    logoutActionButton->setFixedWidth(buttonWidth);
+    logoutActionButton->setVisible(false);
 
     QModernPushButton* rebootActionButton = new QModernPushButton(":/svgIcons/rebootAction.svg");
     connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
@@ -86,20 +92,19 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 
     QVBoxLayout* powerActionsLayout = new QVBoxLayout(powerActionsLayoutWidget);
     powerActionsLayout->setSpacing(0);
-    powerActionsLayout->addWidget(settingsActionButton);
+    powerActionsLayout->addWidget(rootActionButton);
+    powerActionsLayout->addWidget(logoutActionButton);
     powerActionsLayout->addWidget(rebootActionButton);
     powerActionsLayout->addWidget(shutdownActionButton);
 
     // Stuff for imaging
-    this->loginDialog = new LinboLoginDialog(this);
-    this->loginDialog->setWindowFlags(this->loginDialog->windowFlags() | Qt::Popup);
-    this->loginDialog->setFixedSize(QSize(this->height() * 0.5, this->height() * 0.3));
-    this->loginDialog->setStyleSheet( "QDialog { background: white }");
-    connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(exec()));
+    this->loginDialog = new LinboLoginDialog(this->backend, this);
+    int dialogHeight = this->height() * 0.3;
+    int dialogWidth = this->height() * 0.5;
+    this->loginDialog->setGeometry( (this->width() - dialogWidth) / 2, (this->height() - dialogHeight) / 2,dialogWidth, dialogHeight);
+    connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(open()));
 
     this->handleLinboStateChanged(this->backend->getState());
-
-    QInputDialog::getInt(this, "test", "testl");
 }
 
 void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
@@ -117,10 +122,17 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     }
 
     for(QModernPushButton* powerActionButton : this->powerActionButtons)
-        if(this->inited)
+        if(powerActionButton == logoutActionButton)
+            powerActionButton->setVisible(false);
+        else if(this->inited)
             powerActionButton->setVisibleAnimated(powerActionButtonsVisible);
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
+
+    if(newState == LinboBackend::Root) {
+        this->rootActionButton->setVisible(false);
+        this->logoutActionButton->setVisible(true);
+    }
 
     this->inited = true;
 }

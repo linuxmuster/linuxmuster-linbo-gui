@@ -69,6 +69,10 @@ private:
     QFont errorDetailsFont;
     QModernPushButton* resetErrorButton;
 
+    QWidget* rootWidget;
+    QVBoxLayout* rootLayout;
+    QList<QModernPushButton*> rootActionButtons;
+
     bool inited;
 
 private slots:

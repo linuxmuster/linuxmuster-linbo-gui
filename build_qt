@@ -3,12 +3,26 @@
 # Build QT embedded. This can be painful...
 # Qt archive: https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
 # sudo apt install libudev-dev libinput-dev libxkbcommon-dev
+QT_ARCHIVE=qt-everywhere-src-5.15.2.tar.xz
+QT_DIR=qt-everywhere-src-5.15.2
 
-#export QTDIR=`pwd`/`echo "$QT_ARCHIVE" | sed -e 's/.tar.gz//'`
-export QTDIR=qt-everywhere-src-5.15.2
+if test ! -f "$QT_ARCHIVE"
+then
+    echo "Qt archive is not present, downloading it now ..."
+    wget "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
+fi
+
+if test ! -f "$QT_DIR"
+then
+    echo "Qt archive is still packed, extracting it now ..."
+    tar -vxf $QT_ARCHIVE
+else
+    echo "Qt archive is already unpacked, assuming Qt, has already been built"
+    echo "exiting"
+    exit 0
+fi
+
 cd $QTDIR
-#make clean
-#make confclean
 ./configure \
  -prefix ../Qt5 \
  -opensource \
@@ -47,3 +61,6 @@ cd $QTDIR
 make -j8
 make install
 
+echo "--------------------------"
+echo "- Qt has been installed! -"
+echo "--------------------------"
