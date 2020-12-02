@@ -1,19 +1,14 @@
 TARGET = linbo_gui
-DEPENDPATH += .
-INCLUDEPATH += .
-CFLAGS += -DQWS -static
-QT += gui svg \
-    widgets
 
+CONFIG += static
+QT += gui widgets svg
+
+# include Linux framebuffer plugin
 QTPLUGIN.platforms = qlinuxfb
-# have to set env: QT_QPA_EVDEV_MOUSE_PARAMETERS=/dev/input/event3
-QTPLUGIN += qevdevmouseplugin
 
-# define test Enviroment
+# define test Enviroment (only do when actually testing)
 TEST_ENV="\"$$PWD/fakeroot\""
 #DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
-
-QMAKE_POST_LINK=strip $(TARGET)
 
 # deployment
 target.path = /usr/bin
@@ -25,7 +20,6 @@ INCLUDEPATH += \
     headers/frontend \
     headers/frontend/components
 
-# Input
 HEADERS += \
     headers/backend/linboconfig.h \
     headers/backend/linbodiskpartition.h \
@@ -33,7 +27,6 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
-    \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
     headers/frontend/linbologindialog.h \
@@ -70,9 +63,3 @@ SOURCES += \
 
 RESOURCES += \
     resources/linbo.qrc
-
-DISTFILES += \
-    resources/fonts/Segoe UI Bold Italic.ttf \
-    resources/fonts/Segoe UI Bold.ttf \
-    resources/fonts/Segoe UI Italic.ttf \
-    resources/fonts/Segoe UI.ttf

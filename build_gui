@@ -1,5 +1,6 @@
 #!/bin/bash
 ./Qt5/bin/qmake linboGUI.pro
 make
+strip linbo_gui
 mv linbo_gui linbofs/usr/bin
 make clean

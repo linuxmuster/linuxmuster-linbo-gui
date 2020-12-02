@@ -8,7 +8,8 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
     this->headerLabel->setAlignment(Qt::AlignCenter);
 
     this->passwordInput = new QModernLineEdit();
-    this->passwordInput->setEchoMode(QLineEdit::Password);
+    this->passwordInput->setEchoMode(QLineEdit::NoEcho);
+    this->passwordInput->setAlignment(Qt::AlignCenter);
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
     cancelButton = new QModernPushButton("", "cancel");
