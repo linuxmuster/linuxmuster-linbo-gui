@@ -1,32 +1,25 @@
 #!/bin/bash
 
 # Build QT embedded. This can be painful...
+# Qt archive: https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
+# sudo apt install libudev-dev libinput-dev libxkbcommon-dev
 
-( QT_ARCHIVE=`grep qt- ../debian/md5sums.src | awk '{ print $2 }'`
-  export QTDIR=`pwd`/`echo "$QT_ARCHIVE" | sed -e 's/.tar.gz//'`
-  cd $QTDIR
-  make clean
-  echo -e "yes\n" | ./configure \
- -xplatform linux-g++-32 \
- -device-option CROSS_COMPILE=i386-linux-gnu- \
- -embedded x86 \
- -prefix $QTDIR \
+#export QTDIR=`pwd`/`echo "$QT_ARCHIVE" | sed -e 's/.tar.gz//'`
+export QTDIR=qt-everywhere-src-5.15.2
+cd $QTDIR
+#make clean
+#make confclean
+./configure \
+ -prefix ../Qt5 \
  -opensource \
+ -confirm-license \
+ -skip qtwayland \
+ -skip qtlocation \
+ -skip qtscript \
  -release \
  -static \
- -fontconfig \
- -freetype \
  -no-accessibility \
- -no-xmlpatterns \
- -no-phonon \
- -no-phonon-backend \
- -no-webkit \
- -no-exceptions \
- -no-script \
- -no-scripttools \
- -no-nis \
  -no-cups \
- -no-stl \
  -verbose \
  -qt-zlib \
  -qt-libpng \
@@ -35,20 +28,22 @@
  -no-openssl \
  -no-iconv \
  -no-dbus \
- -depths 4,8,16,32 \
- -no-largefile \
- -no-xinerama \
- -no-xrender \
  -no-opengl \
  -no-glib \
  -nomake examples \
- -nomake demos \
- -no-libmng \
- -no-glib \
- -nomake examples \
- -nomake demos \
-  )
-( QT_ARCHIVE=`grep qt- ../debian/md5sums.src | awk '{ print $2 }'`
-  export QTDIR=`pwd`/`echo "$QT_ARCHIVE" | sed -e 's/.tar.gz//'`
-  cd $QTDIR
-  make -j 2 )
+ -libudev \
+ -libinput \
+ -skip qtdeclarative \
+ -skip qtlocation \
+ -skip qtmultimedia \
+ -skip qtquickcontrols \
+ -skip qtsensors \
+ -skip qtwebsockets \
+ -skip qtwinextras \
+ -skip qtwebchannel \
+ -skip qtwebengine \
+ -skip qttools
+
+make -j8
+make install
+

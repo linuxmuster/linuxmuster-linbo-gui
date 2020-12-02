@@ -26,6 +26,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 {
     this->currentOs = nullptr;
     this->logger = nullptr;
+    this->rootPassword = "";
     this->state = Initializing;
 
     // Init some objects
@@ -218,6 +219,25 @@ bool LinboBackend::reinstallCurrentOs() {
                 );
 
     return true;
+}
+
+bool LinboBackend::authenticate(QString password) {
+    if(this->state != Idle)
+        return false;
+
+    this->logger->log("Authenticating", LinboLogType::LinboLogChapterBeginning);
+
+    this->executeCommand(true, "authenticate", this->config->getServerIpAddress(), "linbo", password, "linbo");
+    bool successfull = this->synchronosProcess->exitCode() == 0;
+
+    if(successfull) {
+        this->rootPassword = password;
+        this->setState(Root);
+    }
+
+    this->logger->log("Authentication " + QString(successfull ? "OK":"FAILED"), LinboLogType::LinboLogChapterEnd);
+
+    return successfull;
 }
 
 bool LinboBackend::partitionDrive(bool format) {

@@ -70,6 +70,7 @@ public:
     QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();
     void setCurrentOs(LinboOs* os);
+
     double getAutostartTimeoutProgress();
     int getAutostartTimeoutRemainingSeconds();
 
@@ -101,6 +102,8 @@ private:
 
     QProcess* asynchronosProcess;
     QProcess* synchronosProcess;
+
+    QString rootPassword;
 
     template<typename ... Strings>
     QString executeCommand(bool waitForFinished, QString argument, const Strings&... arguments) {
@@ -136,6 +139,8 @@ public slots:
     bool startCurrentOs();
     bool syncCurrentOs();
     bool reinstallCurrentOs();
+
+    bool authenticate(QString password);
 
     bool partitionDrive(bool format = true);
     bool initializeCache();

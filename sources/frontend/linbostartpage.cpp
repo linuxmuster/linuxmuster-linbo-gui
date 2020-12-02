@@ -90,7 +90,16 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     powerActionsLayout->addWidget(rebootActionButton);
     powerActionsLayout->addWidget(shutdownActionButton);
 
+    // Stuff for imaging
+    this->loginDialog = new LinboLoginDialog(this);
+    this->loginDialog->setWindowFlags(this->loginDialog->windowFlags() | Qt::Popup);
+    this->loginDialog->setFixedSize(QSize(this->height() * 0.5, this->height() * 0.3));
+    this->loginDialog->setStyleSheet( "QDialog { background: white }");
+    connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(exec()));
+
     this->handleLinboStateChanged(this->backend->getState());
+
+    QInputDialog::getInt(this, "test", "testl");
 }
 
 void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) {

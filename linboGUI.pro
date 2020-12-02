@@ -10,7 +10,6 @@ QTPLUGIN += qevdevmouseplugin
 
 # define test Enviroment
 TEST_ENV="\"$$PWD/fakeroot\""
-message($$TEST_ENV)
 DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
 
 QMAKE_POST_LINK=strip $(TARGET)
@@ -34,6 +33,7 @@ HEADERS += \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
     \
+    headers/frontend/linbologindialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
     headers/frontend/linboosselectionrow.h \
@@ -51,6 +51,7 @@ SOURCES += \
     sources/backend/linbologger.cpp \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
+    sources/frontend/linbologindialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \

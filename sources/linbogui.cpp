@@ -25,9 +25,7 @@ LinboGui::LinboGui()
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() / 2);
 #else
     // fill whole screen
-    Qt::WindowFlags flags;
-    flags = Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint;
-    setWindowFlags( flags );
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
     setAttribute(Qt::WA_AlwaysShowToolTips);
     this->setGeometry(QGuiApplication::screens().at(0)->geometry());
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height());
@@ -39,7 +37,7 @@ LinboGui::LinboGui()
 
     // white bakground
     // linuxmuster background color: #394f5e
-    this->setStyleSheet( "QDialog { background: white }");
+    this->setStyleSheet( "QMainWindow { background: white }");
 
     // create the backend
     this->backend = new LinboBackend(this);
