@@ -2,7 +2,8 @@
 
 # Build QT embedded. This can be painful...
 # Qt archive: https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
-# sudo apt install libudev-dev libinput-dev libxkbcommon-dev
+sudo apt install build-essential g++ libudev-dev libinput-dev libxkbcommon-dev
+
 QT_ARCHIVE=qt-everywhere-src-5.15.2.tar.xz
 QT_DIR=qt-everywhere-src-5.15.2
 
