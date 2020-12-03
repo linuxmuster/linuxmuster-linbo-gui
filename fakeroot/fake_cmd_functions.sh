@@ -166,9 +166,9 @@ register()
     local client="$5"
     local ip="$6"
     local group="$7"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.9.0.1" ]] \
       || [[ "${user}" != "linbo" ]] \
-      || [[ "${password}" != "pw123" ]] \
+      || [[ "${password}" != "Muster!" ]] \
       || [[ -n "$8" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
