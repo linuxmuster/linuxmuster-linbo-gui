@@ -48,7 +48,7 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     osSelectionRow->setFixedWidth(this->width());
 
     // action buttons
-    this->startActionsWidget = new LinboStartActions(this->backend, this->osSelectionRow);
+    this->startActionsWidget = new LinboStartActions(this->backend, this);
     mainLayout->addWidget(this->startActionsWidget);
     this->startActionsWidget->setFixedHeight(this->height() * 0.45);
     this->startActionsWidget->setFixedWidth(this->width());

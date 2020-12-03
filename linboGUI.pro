@@ -8,7 +8,7 @@ QTPLUGIN.platforms = qlinuxfb
 
 # define test Enviroment (only do when actually testing)
 TEST_ENV="\"$$PWD/fakeroot\""
-#DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
+DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
 
 # deployment
 target.path = /usr/bin
@@ -30,6 +30,7 @@ HEADERS += \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
     headers/frontend/linbologindialog.h \
+    headers/frontend/linboterminaldialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
     headers/frontend/linboosselectionrow.h \
@@ -50,6 +51,7 @@ SOURCES += \
     sources/frontend/components/qmoderndialog.cpp \
     sources/frontend/components/qmodernlineedit.cpp \
     sources/frontend/linbologindialog.cpp \
+    sources/frontend/linboterminaldialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \

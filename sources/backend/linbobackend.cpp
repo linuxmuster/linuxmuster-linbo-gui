@@ -303,8 +303,17 @@ bool LinboBackend::updateLinbo() {
     if(this->state != Root)
         return false;
 
-    this->executeCommand("update", this->config->getServerIpAddress(), this->config->getCachePath());
+    this->executeCommand(false, "update", this->config->getServerIpAddress(), this->config->getCachePath());
 
+    return true;
+}
+
+bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup) {
+    if(this->state != Root)
+        return false;
+
+    this->executeCommand(true, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup);
+    // TODO: check for errors!
     return true;
 }
 

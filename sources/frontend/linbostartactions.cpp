@@ -88,11 +88,14 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     this->stackView->addWidget(this->errorWidget);
 
     // Root widget
+    this->terminalDialog = new LinboTerminalDialog(parent);
+
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/image.svg", tr("Create image")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal")));
+    connect(this->rootActionButtons[2], SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/syncAction.svg", tr("Init cache")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/register.svg", tr("register")));
@@ -102,11 +105,10 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
 
     this->rootLayout->addStretch();
 
-    // insert a line to separate image specifi and global actions
+    // insert a line to separate image specific and global actions
     QFrame* separatorLine = new QFrame();
     separatorLine->setFrameShape(QFrame::HLine);
     this->rootLayout->insertWidget(2, separatorLine);
-
     this->rootLayout->setAlignment(Qt::AlignCenter);
 
     this->stackView->addWidget(this->rootWidget);
@@ -264,6 +266,11 @@ void LinboStartActions::resizeAndPositionAllItems() {
     this->resetErrorButton->setGeometry((this->width() - this->cancelButton->width()) / 2, this->height() - this->cancelButton->width() * 1.1, this->cancelButton->width(), this->cancelButton->width());
 
     // Root widget
+    int terminalDialogHeight = this->parentWidget()->height() * 0.8;
+    int terminalDialogWidth = terminalDialogHeight;
+
+    this->terminalDialog->setGeometry((this->parentWidget()->width() - terminalDialogWidth) / 2, (this->parentWidget()->height() - terminalDialogHeight) / 2, terminalDialogWidth, terminalDialogHeight);
+
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
     int rootActionButtonHeight = this->height() * 0.13;

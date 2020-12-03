@@ -146,6 +146,7 @@ public slots:
     bool partitionDrive(bool format = true);
     bool initializeCache();
     bool updateLinbo();
+    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup);
 
     bool cancelCurrentAction();
     bool resetError();

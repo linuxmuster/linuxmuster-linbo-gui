@@ -29,6 +29,7 @@
 #include "linbobackend.h"
 #include "linbologger.h"
 #include "linboosselectionrow.h"
+#include "linboterminaldialog.h"
 #include "qmodernstackedwidget.h"
 #include "qmodernpushbutton.h"
 #include "qmodernprogressbar.h"
@@ -72,6 +73,7 @@ private:
     QWidget* rootWidget;
     QVBoxLayout* rootLayout;
     QList<QModernPushButton*> rootActionButtons;
+    LinboTerminalDialog* terminalDialog;
 
     bool inited;
 
