@@ -1,0 +1,151 @@
+#!/bin/bash
+
+## Linbo GUI build generic srcipt
+## Copyright (C) 2020  Dorian Zedler <dorian@itsblue.de>
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU Affero General Public License as published
+## by the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU Affero General Public License for more details.
+##
+## You should have received a copy of the GNU Affero General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+## This script will be modified by the build.sh script
+## so it can be used for both, 64 and 32 bit building!
+## all lines starting with 
+## "## 64: " will just be used for 64 bit building
+## and all lines starting with
+## "## 32: " will just be used for 32 bit building
+
+QT_ARCHIVE=../qt-everywhere-src-5.15.2.tar.xz
+QT_DIR=./qt-everywhere-src-5.15.2
+
+## 32: echo "build32"
+## 64: echo "build64"
+exit 0
+
+if test ! -f "$QT_ARCHIVE"
+then
+    echo "Qt archive is not present, downloading it now ..."
+    wget "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
+fi
+
+if test ! -f "$QT_DIR"
+then
+	echo "Qt archive is still packed, extracting it now ..."
+	tar -vxf $QT_ARCHIVE -C $QT_DIR
+
+	## 64: sudo apt build-essential gcc g++ install libudev-dev libinput-dev libxkbcommon-dev
+
+	## 32: sudo dpkg --add-architecture i386
+	## 32: sudo apt update
+	## 32: sudo apt-get install gcc-multilib g++-multilib libudev-dev:i386 libinput-dev:i386 libxkbcommon-dev:i386
+
+	# export pkgconfig path for 32 bit libraries
+	## 32: export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
+
+	cd $QTDIR
+
+	# configure Qt
+	./configure \
+	 -prefix ../Qt5 \
+	## 32:  -platform linux-g++-32 \
+	 -opensource \
+	 -confirm-license \
+	 -release \
+	 -static \
+	 -verbose \
+	 -qt-zlib \
+	 -qt-libpng \
+	 -libudev \
+	 -libinput \
+	 -nomake examples \
+	 -no-gif \
+	 -no-libjpeg \
+	 -no-openssl \
+	 -no-iconv \
+	 -no-dbus \
+	 -no-opengl \
+	 -no-glib \
+	 -no-cups \
+	 -no-accessibility \
+	 -no-libproxy \
+	 -no-sql-sqlite \
+	 -no-feature-texthtmlparser \
+	 -no-feature-textodfwriter \
+	 -no-feature-calendarwidget \
+	 -no-feature-printpreviewwidget \
+	 -no-feature-colordialog \
+	 -no-feature-filedialog \
+	 -no-feature-fontdialog \
+	 -no-feature-printpreviewdialog \
+	 -no-feature-progressdialog \
+	 -no-feature-wizard \
+	 -no-feature-ftp \
+	 -no-feature-udpsocket \
+	 -no-feature-networkproxy \
+	 -no-feature-socks5 \
+	 -no-feature-networkdiskcache \
+	 -no-feature-bearermanagement \
+	 -skip qt3d \
+	 -skip qtandroidextras \
+	 -skip qtcanvas3d \
+	 -skip qtcharts \
+	 -skip qtconnectivity \
+	 -skip qtdatavis3d \
+	 -skip qtdoc \
+	 -skip qtgamepad \
+	 -skip qtnetworkauth \
+	 -skip qtpurchasing \
+	 -skip qtwayland \
+	 -skip qtlocation \
+	 -skip qtscript \
+	 -skip qtdeclarative \
+	 -skip qtlocation \
+	 -skip qtmultimedia \
+	 -skip qtquickcontrols \
+	 -skip qtquickcontrols2 \
+	 -skip qtsensors \
+	 -skip qtwebsockets \
+	 -skip qtwinextras \
+	 -skip qtwebchannel \
+	 -skip qtwebengine \
+	 -skip qttools \
+	 -skip qtserialbus \
+	 -skip qtserialport \
+	 -skip qtspeech \
+	 -skip qtx11extras
+
+	make -j8
+	make install
+
+	cd ..
+else
+    echo "Qt archive is already unpacked, assuming Qt, has already been built"
+    echo "continuing with building in 5 seconds"
+    sleep 5
+fi
+
+echo "--------------------------"
+echo "- Qt has been installed! -"
+echo "--------------------------"
+
+rm -rf ./build
+mkdir build
+cd build
+
+../Qt5/bin/qmake ../../../linboGUI.pro
+
+make
+strip linbo_gui
+
+## 64: cp linbo_gui ../../linbofs64/usr/bin
+## 32: cp linbo_gui ../../linbofs/usr/bin
+
+cd ..
