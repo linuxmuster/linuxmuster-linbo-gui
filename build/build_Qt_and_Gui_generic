@@ -26,31 +26,30 @@
 QT_ARCHIVE=../qt-everywhere-src-5.15.2.tar.xz
 QT_DIR=./qt-everywhere-src-5.15.2
 
-## 32: echo "build32"
-## 64: echo "build64"
-exit 0
+## 64: sudo apt install build-essential gcc g++ libudev-dev libinput-dev libxkbcommon-dev -y
+
+## 32: sudo dpkg --add-architecture i386
+## 32: sudo apt update
+## 32: sudo apt install gcc-multilib g++-multilib libudev-dev:i386 libinput-dev:i386 libxkbcommon-dev:i386 -y
+
+# export pkgconfig path for 32 bit libraries
+## 32: export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
 if test ! -f "$QT_ARCHIVE"
 then
     echo "Qt archive is not present, downloading it now ..."
-    wget "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
+    wget -O $QT_ARCHIVE "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
 fi
 
-if test ! -f "$QT_DIR"
+if [ ! -d "Qt5" ]
 then
 	echo "Qt archive is still packed, extracting it now ..."
-	tar -vxf $QT_ARCHIVE -C $QT_DIR
+	rm -rf $QT_DIR
+	mkdir $QT_DIR
+	echo "This may take a long time..."
+	tar -xf $QT_ARCHIVE -C ./
 
-	## 64: sudo apt build-essential gcc g++ install libudev-dev libinput-dev libxkbcommon-dev
-
-	## 32: sudo dpkg --add-architecture i386
-	## 32: sudo apt update
-	## 32: sudo apt-get install gcc-multilib g++-multilib libudev-dev:i386 libinput-dev:i386 libxkbcommon-dev:i386
-
-	# export pkgconfig path for 32 bit libraries
-	## 32: export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
-
-	cd $QTDIR
+	cd $QT_DIR
 
 	# configure Qt
 	./configure \
@@ -142,10 +141,14 @@ cd build
 
 ../Qt5/bin/qmake ../../../linboGUI.pro
 
-make
+make -j 8
 strip linbo_gui
 
-## 64: cp linbo_gui ../../linbofs64/usr/bin
-## 32: cp linbo_gui ../../linbofs/usr/bin
+
+## 64: mkdir ../../linbofs64/usr/bin/
+## 64: cp linbo_gui ../../linbofs64/usr/bin/
+## 32: mkdir ../../linbofs/usr/bin/
+## 32: cp linbo_gui ../../linbofs/usr/bin/
 
 cd ..
+

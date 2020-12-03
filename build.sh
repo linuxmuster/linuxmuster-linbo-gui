@@ -23,26 +23,29 @@ cd build
 mkdir buildGUI64
 
 # create the buildfile
-cp build_Qt_and_Gui_generic buildGUI64/build
+cp build_Qt_and_Gui_generic buildGUI64/build.sh
 cd buildGUI64
 
-sed -i '/## 32: /d' build
-sed -i 's/## 64: //g' build
+sed -i '/## 32: /d' build.sh
+sed -i 's/## 64: //g' build.sh
 
-./build
+./build.sh
 
 cd ..
+
+sleep 10
 
 # build for 32-Bit
 mkdir buildGUI32
 
 # create the buildfile
-cp build_Qt_and_Gui_generic buildGUI32/build
+cp build_Qt_and_Gui_generic buildGUI32/build.sh
 cd buildGUI32
 
-sed -i '/## 64: /d' build
-sed -i 's/## 32: //g' build
+sed -i '/## 64: /d' build.sh
+sed -i 's/## 32: //g' build.sh
 
-./build
+./build.sh
 
 cd ..
+
