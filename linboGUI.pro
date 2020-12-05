@@ -3,12 +3,15 @@ TARGET = linbo_gui
 CONFIG += static
 QT += gui widgets svg
 
-# include Linux framebuffer plugin
+# Include Linux framebuffer plugin
 QTPLUGIN.platforms = qlinuxfb
 
-# define test Enviroment (only do when actually testing)
-TEST_ENV="\"$$PWD/fakeroot\""
-DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
+# Don't define when in release mode
+CONFIG(debug, debug | release) {
+    # Testing enviroment
+    TEST_ENV="\"$$PWD/fakeroot\""
+    DEFINES += TEST_ENV=\"\\\"$${TEST_ENV}\\\"\"
+}
 
 # deployment
 target.path = /usr/bin

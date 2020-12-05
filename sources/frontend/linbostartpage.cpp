@@ -23,6 +23,9 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     this->inited = false;
 
     this->backend = backend;
+#ifdef TEST_ENV
+    this->backend->login("Muster!");
+#endif
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
 
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));

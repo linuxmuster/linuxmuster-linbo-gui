@@ -18,10 +18,6 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
     this->opacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
     connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
 
-    this->scaleAnimation = new QPropertyAnimation(this, "scale");
-    this->scaleAnimation->setDuration(200);
-    this->scaleAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
-
     QPalette pal2 = palette();
     pal2.setColor(QPalette::Background, Qt::white);
     this->setAutoFillBackground(true);
@@ -29,6 +25,39 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
 
     this->raise();
     this->setVisible(false);
+
+    //
+    // - ToolBar -
+    //
+
+    this->titleLabel = new QLabel(this->objectName());
+    this->titleLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    this->closeButton = new QModernPushButton(":svgIcons/cancel.svg");
+    connect(this->closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
+
+    this->toolBarWidget = new QWidget(parent);
+    this->toolBarWidget->setAutoFillBackground(true);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, Qt::white);
+    this->toolBarWidget->setPalette(pal);
+    this->toolBarWidget->hide();
+
+    this->toolBarLayout = new QHBoxLayout(this->toolBarWidget);
+    this->toolBarLayout->setContentsMargins(0,0,0,0);
+    this->toolBarLayout->addWidget(this->titleLabel);
+    this->toolBarLayout->setAlignment(this->titleLabel, Qt::AlignBottom);
+    this->toolBarLayout->addStretch();
+    this->toolBarLayout->addWidget(this->closeButton);
+    this->toolBarLayout->setAlignment(this->closeButton, Qt::AlignBottom);
+
+    this->toolBarOpacityEffect = new QGraphicsOpacityEffect(this->toolBarWidget);
+    this->toolBarOpacityEffect->setOpacity(0);
+    this->toolBarOpacityEffect->setEnabled(false);
+    this->toolBarWidget->setGraphicsEffect(this->toolBarOpacityEffect);
+
+    this->toolBarOopacityEffectAnimation = new QPropertyAnimation(this->toolBarOpacityEffect, "opacity");
+    this->toolBarOopacityEffectAnimation->setDuration(200);
+    this->toolBarOopacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
 }
 
 void QModernDialog::open() {
@@ -64,6 +93,38 @@ double QModernDialog::getScale() {
     return this->scale;
 }
 
+void QModernDialog::setTitle(QString title) {
+    this->title = title;
+    this->titleLabel->setText(title);
+}
+
+QString QModernDialog::getTitle() {
+    return this->title;
+}
+
+void QModernDialog::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+
+    int toolBarHeight = this->parentWidget()->height() * 0.07;
+
+    this->toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
+    this->toolBarLayout->setContentsMargins(toolBarHeight * 0.2, 0,toolBarHeight * 0.1, 0);
+
+    QFont titleFont = this->titleLabel->font();
+    titleFont.setPixelSize(toolBarHeight * 0.5);
+    this->titleLabel->setFont(titleFont);
+    this->titleLabel->setFixedHeight(toolBarHeight * 0.9);
+
+    this->closeButton->setFixedHeight(toolBarHeight * 0.9);
+    this->closeButton->setFixedWidth(toolBarHeight * 0.9);
+
+    if(!this->isFrameless()) {
+        QMargins contentMargins = this->contentsMargins();
+        contentMargins.setTop(0);
+        this->setContentsMargins(contentMargins);
+    }
+}
+
 void QModernDialog::setVisibleAnimated(bool visible) {
     if(this->isVisible() == visible || this->busy)
         return;
@@ -73,7 +134,9 @@ void QModernDialog::setVisibleAnimated(bool visible) {
 
     if(visible) {
         this->setScale(1);
-        this->setVisible(true);
+        this->show();
+        if(!this->isFrameless())
+            this->toolBarWidget->show();
     }
 
     this->opacityEffect->setEnabled(true);
@@ -81,17 +144,39 @@ void QModernDialog::setVisibleAnimated(bool visible) {
     this->opacityEffectAnimation->setEndValue(visible ? 1:0);
     this->opacityEffectAnimation->start();
 
-    //this->scaleAnimation->setStartValue(visible ? 0.95:1);
-    //this->scaleAnimation->setEndValue(visible ? 1:0.95);
-    //this->scaleAnimation->start();
+    if(!this->isFrameless()) {
+        this->toolBarOpacityEffect->setEnabled(true);
+        this->toolBarOopacityEffectAnimation->setStartValue(visible ? 0:1);
+        this->toolBarOopacityEffectAnimation->setEndValue(visible ? 1:0);
+        this->toolBarOopacityEffectAnimation->start();
+    }
 }
 
 void QModernDialog::animationFinished() {
     if(this->opacityEffect->opacity() == 0) {
         this->hide();
+        this->toolBarWidget->hide();
     }
     this->opacityEffect->setEnabled(false);
+    this->toolBarOpacityEffect->setEnabled(false);
     this->busy = false;
+}
+
+bool QModernDialog::isFrameless() {
+    return (this->windowFlags() & Qt::FramelessWindowHint) == Qt::FramelessWindowHint;
+}
+
+void QModernDialog::centerInParent() {
+    int width = this->width();
+    int extraHeight = 0;
+
+    if(!this->isFrameless())
+        extraHeight = this->toolBarWidget->height();
+
+    this->move((this->parentWidget()->width() - width) / 2, (this->parentWidget()->height() - this->height() - extraHeight) / 2 + extraHeight);
+
+    if(!this->isFrameless())
+        this->toolBarWidget->move(this->x(), this->y() - extraHeight);
 }
 
 // -----------------

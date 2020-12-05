@@ -8,6 +8,9 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QtDebug>
+#include <QHBoxLayout>
+
+#include "qmodernpushbutton.h"
 
 class ModalOverlay;
 
@@ -15,23 +18,39 @@ class QModernDialog : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(double scale READ getScale WRITE setScale)
+    Q_PROPERTY(QString title READ getTitle WRITE setTitle)
+
 public:
     QModernDialog(QWidget* parent);
 
+    virtual void setTitle(QString title);
+    virtual QString getTitle();
+
+    virtual void centerInParent();
+
 protected:
+    void resizeEvent(QResizeEvent *event) override;
     virtual void setVisibleAnimated(bool visible);
+    virtual bool isFrameless();
 
 private:
     double scale;
     bool busy;
+    QString title;
 
     ModalOverlay* modalOverlayWidget;
 
     QGraphicsOpacityEffect* opacityEffect;
     QPropertyAnimation* opacityEffectAnimation;
-    QPropertyAnimation* scaleAnimation;
 
     QRect originalGeometry;
+
+    QWidget* toolBarWidget;
+    QHBoxLayout* toolBarLayout;
+    QLabel* titleLabel;
+    QModernPushButton* closeButton;
+    QGraphicsOpacityEffect* toolBarOpacityEffect;
+    QPropertyAnimation* toolBarOopacityEffectAnimation;
 
 public slots:
     void open();

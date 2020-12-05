@@ -4,6 +4,8 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
 {
     this->backend = backend;
 
+    this->setWindowFlags(Qt::FramelessWindowHint);
+
     this->headerLabel = new QLabel(tr("Please enter password:"));
     this->headerLabel->setAlignment(Qt::AlignCenter);
 

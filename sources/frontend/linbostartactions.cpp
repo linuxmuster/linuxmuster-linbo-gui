@@ -269,7 +269,9 @@ void LinboStartActions::resizeAndPositionAllItems() {
     int terminalDialogHeight = this->parentWidget()->height() * 0.8;
     int terminalDialogWidth = terminalDialogHeight;
 
-    this->terminalDialog->setGeometry((this->parentWidget()->width() - terminalDialogWidth) / 2, (this->parentWidget()->height() - terminalDialogHeight) / 2, terminalDialogWidth, terminalDialogHeight);
+    this->terminalDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight);
+    this->terminalDialog->centerInParent();
+    //this->terminalDialog->setWindowFlag(Qt::FramelessWindowHint);
 
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 

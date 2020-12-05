@@ -5,6 +5,8 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
     this->currentHistoryIndex = -1;
     this->commandBeforeHistorySwitch.clear();
 
+    this->setTitle(tr("Terminal"));
+
     this->textBrowser = new QTextBrowser();
     this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     this->textBrowser->setStyleSheet("QTextBrowser {background-color: \"#ffffff\"}");
