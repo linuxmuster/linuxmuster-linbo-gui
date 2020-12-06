@@ -34,6 +34,13 @@ public:
     void setCurrentWidgetAnimated(QWidget* widget);
 
 private:
+    enum AnimationState {
+        Idle,
+        FadingOut,
+        FadingIn
+    };
+
+    AnimationState animationState;
     QWidget* newWidget;
     QPropertyAnimation* opacityAnimation;
 

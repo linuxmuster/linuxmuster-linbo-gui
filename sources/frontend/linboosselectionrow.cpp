@@ -161,8 +161,12 @@ void LinboOsSelectionRow::resizeEvent(QResizeEvent *event) {
 }
 
 void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newState) {
+
     switch (newState) {
     case LinboBackend::Idle:
+    case LinboBackend::Root:
+        for(LinboOsSelectButton* osButton : this->osButtons)
+            osButton->setEnabled(true);
         this->setShowOnlySelectedButton(false);
         break;
 
@@ -171,6 +175,12 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
     case LinboBackend::Syncing:
     case LinboBackend::Reinstalling:
         this->setShowOnlySelectedButton(true);
+        break;
+
+    case LinboBackend::Partitioning:
+    case LinboBackend::RootActionSuccess:
+        for(LinboOsSelectButton* osButton : this->osButtons)
+            osButton->setEnabled(false);
         break;
 
     default:

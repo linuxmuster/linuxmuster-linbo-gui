@@ -9,7 +9,28 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
 
     this->textBrowser = new QTextBrowser();
     this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    this->textBrowser->setStyleSheet("QTextBrowser {background-color: \"#ffffff\"}");
+    this->textBrowser->setStyleSheet("QTextBrowser {background-color: \"#ffffff\";border: 1px solid black;}"
+                                     "QScrollBar:vertical {"
+                                         "    background:lightgrey;"
+                                         "    width:10px;    "
+                                         "    margin: 0px 0px 0px 0px;"
+                                         "}"
+                                         "QScrollBar::handle:vertical {"
+                                         "    background: grey;"
+                                         "    min-height: 0px;"
+                                         "}"
+                                         "QScrollBar::add-line:vertical {"
+                                         "    background: grey;"
+                                         "    height: 0px;"
+                                         "    subcontrol-position: bottom;"
+                                         "    subcontrol-origin: margin;"
+                                         "}"
+                                         "QScrollBar::sub-line:vertical {"
+                                         "    background: grey;"
+                                         "    height: 0 px;"
+                                         "    subcontrol-position: top;"
+                                         "    subcontrol-origin: margin;"
+                                         "}");
 
     this->lineEdit = new QModernLineEdit();
     this->lineEdit->installEventFilter(this);

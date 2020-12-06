@@ -26,13 +26,16 @@
 #include <QList>
 #include <QLabel>
 
+#include "qmodernstackedwidget.h"
+#include "qmodernpushbutton.h"
+#include "qmodernprogressbar.h"
+
 #include "linbobackend.h"
 #include "linbologger.h"
 #include "linboosselectionrow.h"
 #include "linboterminaldialog.h"
-#include "qmodernstackedwidget.h"
-#include "qmodernpushbutton.h"
-#include "qmodernprogressbar.h"
+#include "linboconfirmationdialog.h"
+#include "linboregisterdialog.h"
 
 class LinboStartActions : public QWidget
 {
@@ -62,18 +65,18 @@ private:
     QLabel* logLabel;
     QModernPushButton* cancelButton;
 
-    QWidget* errorWidget;
-    QVBoxLayout* errorLayout;
-    QLabel* errorLabel;
-    QFont errorLabelFont;
-    QLabel* errorDetailsLabel;
-    QFont errorDetailsFont;
-    QModernPushButton* resetErrorButton;
+    QWidget* messageWidget;
+    QVBoxLayout* messageLayout;
+    QLabel* messageLabel;
+    QLabel* messageDetailsLabel;
+    QModernPushButton* resetMessageButton;
 
     QWidget* rootWidget;
     QVBoxLayout* rootLayout;
     QList<QModernPushButton*> rootActionButtons;
     LinboTerminalDialog* terminalDialog;
+    LinboConfirmationDialog* confirmationDialog;
+    LinboRegisterDialog* registerDialog;
 
     bool inited;
 

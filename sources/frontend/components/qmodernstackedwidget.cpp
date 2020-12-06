@@ -20,6 +20,7 @@
 
 QModernStackedWidget::QModernStackedWidget(QWidget* parent) : QStackedWidget(parent)
 {
+    this->animationState = Idle;
     opacityAnimation = new QPropertyAnimation();
     opacityAnimation->setPropertyName("opacity");
     opacityAnimation->setEasingCurve(QEasingCurve::InOutQuad);
@@ -29,8 +30,18 @@ QModernStackedWidget::QModernStackedWidget(QWidget* parent) : QStackedWidget(par
 }
 
 void QModernStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
-    if(widget == nullptr || widget == this->currentWidget())
+    if(widget == nullptr || (widget == this->currentWidget() && this->animationState == Idle))
         return;
+    else if(widget == this->currentWidget() && this->animationState != Idle) {
+        this->newWidget = widget;
+        if(this->animationState == FadingOut) {
+            return;
+        }
+        else {
+            this->handleAnimationFinished();
+            return;
+        }
+    }
 
     this->newWidget = widget;
 
@@ -43,6 +54,8 @@ void QModernStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
     opacityAnimation->setEndValue(0);
     opacityAnimation->setTargetObject(opacityEffect);
     opacityAnimation->start();
+
+    this->animationState = FadingOut;
 }
 
 void QModernStackedWidget::handleAnimationFinished() {
@@ -50,6 +63,7 @@ void QModernStackedWidget::handleAnimationFinished() {
     this->currentWidget()->graphicsEffect()->setEnabled(false);
 
     if(this->newWidget == nullptr) {
+        this->animationState = Idle;
         return;
     }
 
@@ -67,4 +81,6 @@ void QModernStackedWidget::handleAnimationFinished() {
     opacityAnimation->setStartValue(0);
     opacityAnimation->setEndValue(1);
     opacityAnimation->start();
+
+    this->animationState = FadingIn;
 }

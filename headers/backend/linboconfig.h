@@ -32,6 +32,7 @@ public:
 
     const QString& getServerIpAddress() const {return this->serverIpAddress;}
     const QString& getIpAddress() const {return this->ipAddress;}
+    const QString& getSubnetMask() const {return this->subnetMask;}
     const QString& getMacAddress() const {return this->macAddress;}
     const QString& getLinboVersion() const {return this->LinboVersion;}
     const QString& getHostname() const {return this->hostname;}
@@ -56,6 +57,7 @@ private:
 
     void setServerIpAddress( const QString& serverIpAddress ) {this->serverIpAddress = serverIpAddress;}
     void setIpAddress( const QString& ipAddress ) {this->ipAddress = ipAddress;}
+    void setSubnetMask(const QString& subnetMask) {this->subnetMask = subnetMask;}
     void setMacAddress( const QString& macAddress ) {this->macAddress = macAddress;}
     void setLinboVersion( const QString& linboVersion ) {this->LinboVersion = linboVersion;}
     void setHostname( const QString& hostname ) {this->hostname = hostname;}
@@ -76,6 +78,7 @@ private:
 
   QString serverIpAddress;
   QString ipAddress;
+  QString subnetMask;
   QString macAddress;
   QString LinboVersion;
   QString hostname;

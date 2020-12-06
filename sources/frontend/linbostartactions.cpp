@@ -68,27 +68,25 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
 
     this->stackView->addWidget(this->progressBarWidget);
 
-    // Error widget
-    this->errorWidget = new QWidget();
-    this->errorLabel = new QLabel("", this->errorWidget);
-    this->errorLabel->setStyleSheet("QLabel { color : red; }");
-    this->errorLabelFont = QFont("Segoe UI");
-    this->errorLabelFont.setBold(true);
-    this->errorLabel->setAlignment(Qt::AlignCenter);
+    // Message widget
+    this->messageWidget = new QWidget();
+    this->messageLabel = new QLabel("", this->messageWidget);
+    this->messageLabel->setAlignment(Qt::AlignCenter);
 
-    this->errorDetailsLabel = new QLabel("", this->errorWidget);
-    this->errorDetailsLabel->setStyleSheet("QLabel { color : red; }");
-    this->errorDetailsFont = QFont("Segoe UI");
-    this->errorDetailsLabel->setFont(this->errorDetailsFont);
-    this->errorDetailsLabel->setAlignment(Qt::AlignLeft);
+    this->messageDetailsLabel = new QLabel("", this->messageWidget);
+    this->messageDetailsLabel->setAlignment(Qt::AlignLeft);
+    //this->messageDetailsLabel->setWordWrap(true);
 
-    this->resetErrorButton = new QModernPushButton(":/svgIcons/back.svg", this->errorWidget);
-    connect(this->resetErrorButton, SIGNAL(clicked()), this->backend, SLOT(resetError()));
+    this->resetMessageButton = new QModernPushButton(":/svgIcons/back.svg", this->messageWidget);
+    connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
 
-    this->stackView->addWidget(this->errorWidget);
+    this->stackView->addWidget(this->messageWidget);
 
     // Root widget
     this->terminalDialog = new LinboTerminalDialog(parent);
+    this->confirmationDialog = new LinboConfirmationDialog(tr("Partition drive"), tr("Are you shure? This will delete all data on your drive!"),  parent);
+    connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
+    this->registerDialog = new LinboRegisterDialog(backend, parent);
 
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
@@ -98,7 +96,9 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     connect(this->rootActionButtons[2], SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/syncAction.svg", tr("Init cache")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive")));
+    connect(this->rootActionButtons[4], SIGNAL(clicked()), this->confirmationDialog, SLOT(open()));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/register.svg", tr("register")));
+    connect(this->rootActionButtons[5], SIGNAL(clicked()), this->registerDialog, SLOT(open()));
 
     for(QModernPushButton* button : this->rootActionButtons)
         this->rootLayout->addWidget(button);
@@ -249,21 +249,31 @@ void LinboStartActions::resizeAndPositionAllItems() {
 
     this->cancelButton->setGeometry((this->progressBarWidget->width() - cancelButtonWidth) / 2, this->progressBar->y() + progressBarHeight + this->progressBarWidget->height() * 0.05, cancelButtonWidth, cancelButtonWidth);
 
-    // Error widget
-    this->errorWidget->setGeometry(QRect(0,0, this->width(), this->height()));
+    // Message widget
+    this->messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
-    this->errorLabel->setGeometry(0,0, this->width(), this->height() * 0.2);
-    this->errorLabelFont.setPixelSize(this->logFont.pixelSize() * 1.5);
-    this->errorLabel->setFont(this->errorLabelFont);
+    QFont messageFont = this->messageLabel->font();
+    messageFont.setBold(true);
+    messageFont.setPixelSize(this->logFont.pixelSize() * 1.5);
+    this->messageLabel->setFont(messageFont);
 
-    int errorDetailsFontHeight = this->height() * 0.6;
-    this->errorDetailsFont.setPixelSize(errorDetailsFontHeight / 12.5);
-    this->errorDetailsLabel->setFont(this->errorDetailsFont);
+    if(this->messageDetailsLabel->isVisible()) {
+    this->messageLabel->setGeometry(0,0, this->width(), this->height() * 0.2);
 
-    this->errorDetailsLabel->move((this->width() - this->errorDetailsLabel->width()) / 2, this->errorLabel->height());
-    this->errorDetailsLabel->setFixedHeight(errorDetailsFontHeight);
+    int messageDetailsFontHeight = this->height() * 0.6;
+    QFont errorDetailsFont = this->messageDetailsLabel->font();
+    errorDetailsFont.setPixelSize(messageDetailsFontHeight / 12.5);
+    this->messageDetailsLabel->setFont(errorDetailsFont);
 
-    this->resetErrorButton->setGeometry((this->width() - this->cancelButton->width()) / 2, this->height() - this->cancelButton->width() * 1.1, this->cancelButton->width(), this->cancelButton->width());
+    this->messageDetailsLabel->setMaximumWidth(this->width() * 0.8);
+    this->messageDetailsLabel->move((this->width() - this->messageDetailsLabel->width()) / 2, this->messageLabel->height());
+    this->messageDetailsLabel->setFixedHeight(messageDetailsFontHeight);
+    }
+    else {
+        this->messageLabel->setGeometry(0, 0, this->width(), this->height());
+    }
+
+    this->resetMessageButton->setGeometry((this->width() - this->cancelButton->width()) / 2, this->height() - this->cancelButton->width() * 1.1, this->cancelButton->width(), this->cancelButton->width());
 
     // Root widget
     int terminalDialogHeight = this->parentWidget()->height() * 0.8;
@@ -271,7 +281,12 @@ void LinboStartActions::resizeAndPositionAllItems() {
 
     this->terminalDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight);
     this->terminalDialog->centerInParent();
-    //this->terminalDialog->setWindowFlag(Qt::FramelessWindowHint);
+
+    this->confirmationDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight * 0.3);
+    this->confirmationDialog->centerInParent();
+
+    this->registerDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight);
+    this->registerDialog->centerInParent();
 
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
@@ -311,18 +326,20 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
     case LinboBackend::Reinstalling:
+    case LinboBackend::Partitioning:
         this->progressBar->setIndeterminate(true);
         this->progressBar->setReversed(false);
         currentWidget = this->progressBarWidget;
         break;
 
-    case LinboBackend::Error: {
+    case LinboBackend::StartActionError:
+    case LinboBackend::RootActionError: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
-        this->errorLabel->setText("The process \"" + chaperLogs[chaperLogs.length()-1].message + "\" crashed:");
+        this->messageLabel->setText("The process \"" + chaperLogs[chaperLogs.length()-1].message + "\" crashed:");
         QString errorDetails;
         if(chaperLogs.length() == 0)
             errorDetails = "<b>No logs before this crash</b>";
-        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogType::LinboGuiError | LinboLogType::StdErr).length() == 0){
+        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogType::StdErr).length() == 0){
             errorDetails = "<b>The last logs before the crash were:</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
         }
@@ -331,8 +348,21 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
             errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogType::LinboGuiError | LinboLogType::StdErr), 8).join("<br>");
         }
 
-        this->errorDetailsLabel->setText(errorDetails);
-        currentWidget = this->errorWidget;
+        this->messageDetailsLabel->setText(errorDetails);
+        this->messageLabel->setStyleSheet("QLabel { color : red; }");
+        this->messageDetailsLabel->setStyleSheet("QLabel { color : red; }");
+        this->messageDetailsLabel->setVisible(true);
+        currentWidget = this->messageWidget;
+        break;
+    }
+
+    case LinboBackend::RootActionSuccess: {
+        QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
+        this->messageLabel->setText("The process \"" + chaperLogs[chaperLogs.length()-1].message + "\" finished successfully.");
+        this->messageDetailsLabel->setText("");
+        this->messageLabel->setStyleSheet("QLabel { color : green; }");
+        currentWidget = this->messageWidget;
+        this->messageDetailsLabel->setVisible(false);
         break;
     }
 

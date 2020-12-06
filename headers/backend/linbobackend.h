@@ -50,6 +50,9 @@ class LinboBackend : public QObject
 public:
     explicit LinboBackend(QObject *parent = nullptr);
 
+    /**
+     * @brief The LinboState enum contains all possible states of Linbo
+     */
     enum LinboState {
         Initializing,
         Autostarting,
@@ -57,11 +60,13 @@ public:
         Starting,
         Syncing,
         Reinstalling,
+        StartActionError,   /*!< The last start action failed, the resetMessage() function will reset to Idle */
         Root,
         Partitioning,
         InitializingCache,
         Updating,
-        Error
+        RootActionError,    /*!< The last root action failed, the resetMessage() function will reset to Root */
+        RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
     };
 
     LinboState getState();
@@ -149,7 +154,7 @@ public slots:
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup);
 
     bool cancelCurrentAction();
-    bool resetError();
+    bool resetMessage();
 
 private slots:
     void executeAutostart();

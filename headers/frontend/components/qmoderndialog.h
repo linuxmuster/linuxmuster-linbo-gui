@@ -62,6 +62,9 @@ public slots:
 
 private slots:
     void animationFinished();
+
+signals:
+    void closedByUser();
 };
 
 class ModalOverlay : public QWidget {

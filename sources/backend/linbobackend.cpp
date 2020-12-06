@@ -252,6 +252,8 @@ bool LinboBackend::partitionDrive(bool format) {
     if(this->state != Root)
         return false;
 
+    this->logger->log("Partitioning drive", LinboLogType::LinboLogChapterBeginning);
+
     this->setState(Partitioning);
 
     QStringList commandArgs = QStringList(format ? "partition":"partition_noformat");
@@ -312,8 +314,10 @@ bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddr
     if(this->state != Root)
         return false;
 
-    this->executeCommand(true, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup);
-    // TODO: check for errors!
+    this->logger->log("Registering client", LinboLogType::LinboLogChapterBeginning);
+
+    this->executeCommand(false, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup);
+
     return true;
 }
 
@@ -335,18 +339,34 @@ bool LinboBackend::cancelCurrentAction() {
         this->setState(Idle);
         return true;
 
+    case Partitioning:
+        this->logger->log("Cancelling current action: " + QString::number(this->state), LinboLogType::LinboGuiInfo);
+        this->asynchronosProcess->kill();
+        this->setState(Root);
+        return true;
+
     default:
-        this->logger->log("Cannot cancel current action: " + QString::number(this->state), LinboLogType::LinboGuiInfo);
+        this->logger->log("Cannot cancel current action: " + QString::number(this->state), LinboLogType::LinboGuiError);
         return false;
     }
 }
 
 
-bool LinboBackend::resetError() {
-    if(this->state != Error)
+bool LinboBackend::resetMessage() {
+    switch (this->state) {
+    case StartActionError:
+        this->setState(Idle);
+        break;
+    case RootActionError:
+        this->setState(Root);
+        break;
+    case RootActionSuccess:
+        this->setState(Root);
+        break;
+    default:
         return false;
+    }
 
-    this->setState(Idle);
     return true;
 }
 
@@ -434,10 +454,16 @@ void LinboBackend::handleProcessFinished(int exitCode, QProcess::ExitStatus exit
     Q_UNUSED(exitStatus)
     if(exitCode == 0) {
         this->logger->log("Process exited normally.", LinboLogType::LinboGuiInfo);
+        if(this->state >= Root)
+            this->setState(RootActionSuccess);
     }
     else {
         this->logger->log("Process exited with an error.", LinboLogType::LinboGuiError);
-        this->setState(Error);
+
+        if(this->state >= Root)
+            this->setState(RootActionError);
+        else
+            this->setState(StartActionError);
     }
 
     this->logger->log("Process exited.", LinboLogType::LinboLogChapterEnd);
@@ -591,6 +617,9 @@ void LinboBackend::loadEnvironmentValues() {
     this->logger->log("Loading environment values", LinboLogType::LinboGuiInfo);
     //  client ip
     this->config->setIpAddress(this->executeCommand(true, "ip").replace("\n", ""));
+
+    // subnet mask
+    this->config->setSubnetMask(this->executeCommand(true, "subnet").replace("\n", ""));
 
     // mac address
     this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));

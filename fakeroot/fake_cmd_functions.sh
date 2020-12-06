@@ -10,6 +10,16 @@ ip()
     fi
 }
 
+# linbo_cmd subnet
+subnet()
+{
+    if [[ -n "${OFFLINE}" ]]; then
+        echo "OFFLINE"
+    else
+        ifconfig wlp0s20f3 | awk '/netmask /{ print $4;} '
+    fi
+}
+
 # linbo_cmd hostname
 hostname()
 {
@@ -166,7 +176,7 @@ register()
     local client="$5"
     local ip="$6"
     local group="$7"
-    if [[ "${server}" != "10.9.0.1" ]] \
+    if [[ "${server}" != "10.16.1.1" ]] \
       || [[ "${user}" != "linbo" ]] \
       || [[ "${password}" != "Muster!" ]] \
       || [[ -n "$8" ]]; then

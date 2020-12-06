@@ -78,6 +78,8 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* paren
     this->overlays[this->overlays.length()-2]->setAnimationDuration(100);
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(handleToggled(bool)));
+
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void QModernPushButton::handleToggled(bool checked) {

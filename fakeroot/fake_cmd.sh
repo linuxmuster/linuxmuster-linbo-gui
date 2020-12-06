@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # set to empty / comment out for ONLINE mode
-OFFLINE=true
+#OFFLINE=true
 
 DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${DIR}" ]]; then
@@ -25,6 +25,9 @@ case "${cmd}" in
     ip)
         ip
         ;;
+    subnet)
+    	subnet
+    	;;
     hostname)
         hostname
         ;;
@@ -58,6 +61,7 @@ case "${cmd}" in
         ;;
     partition)
         # see above
+        sleep 5
         exit 0
         ;;
     preregister)

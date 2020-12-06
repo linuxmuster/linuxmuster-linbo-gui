@@ -111,13 +111,11 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 }
 
 void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
-    bool powerActionButtonsVisible = true;
+    bool powerActionButtonsVisible = false;
     switch (newState) {
-    case LinboBackend::Autostarting:
-    case LinboBackend::Starting:
-    case LinboBackend::Syncing:
-    case LinboBackend::Reinstalling:
-        powerActionButtonsVisible = false;
+    case LinboBackend::Idle:
+    case LinboBackend::Root:
+        powerActionButtonsVisible = true;
         break;
 
     default:
@@ -125,17 +123,14 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     }
 
     for(QModernPushButton* powerActionButton : this->powerActionButtons)
-        if(powerActionButton == logoutActionButton)
+        if(powerActionButton == logoutActionButton && newState < LinboBackend::Root)
             powerActionButton->setVisible(false);
-        else if(this->inited)
-            powerActionButton->setVisibleAnimated(powerActionButtonsVisible);
+        else if(powerActionButton == logoutActionButton && newState >= LinboBackend::Root)
+            powerActionButton->setVisible(powerActionButtonsVisible);
+        else if(powerActionButton == rootActionButton && newState >= LinboBackend::Root)
+            powerActionButton->setVisible(false);
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
-
-    if(newState == LinboBackend::Root) {
-        this->rootActionButton->setVisible(false);
-        this->logoutActionButton->setVisible(true);
-    }
 
     this->inited = true;
 }

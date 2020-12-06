@@ -32,7 +32,9 @@ HEADERS += \
     headers/backend/linbobackend.h \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
+    headers/frontend/linboconfirmationdialog.h \
     headers/frontend/linbologindialog.h \
+    headers/frontend/linboregisterdialog.h \
     headers/frontend/linboterminaldialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
@@ -53,7 +55,9 @@ SOURCES += \
     sources/backend/linbobackend.cpp \
     sources/frontend/components/qmoderndialog.cpp \
     sources/frontend/components/qmodernlineedit.cpp \
+    sources/frontend/linboconfirmationdialog.cpp \
     sources/frontend/linbologindialog.cpp \
+    sources/frontend/linboregisterdialog.cpp \
     sources/frontend/linboterminaldialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \

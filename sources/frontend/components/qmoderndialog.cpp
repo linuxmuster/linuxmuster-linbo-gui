@@ -7,6 +7,7 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
     this->modalOverlayWidget = new ModalOverlay(parent);
     this->modalOverlayWidget->setVisible(false);
     connect(this->modalOverlayWidget, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(this->modalOverlayWidget, SIGNAL(clicked()), this, SIGNAL(closedByUser()));
 
     this->opacityEffect = new QGraphicsOpacityEffect(this);
     this->opacityEffect->setOpacity(0);
@@ -17,6 +18,7 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
     this->opacityEffectAnimation->setDuration(200);
     this->opacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
     connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
+    connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
 
     QPalette pal2 = palette();
     pal2.setColor(QPalette::Background, Qt::white);
@@ -31,7 +33,7 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
     //
 
     this->titleLabel = new QLabel(this->objectName());
-    this->titleLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    this->titleLabel->setAlignment(Qt::AlignCenter);
     this->closeButton = new QModernPushButton(":svgIcons/cancel.svg");
     connect(this->closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
 
@@ -114,6 +116,7 @@ void QModernDialog::resizeEvent(QResizeEvent *event) {
     titleFont.setPixelSize(toolBarHeight * 0.5);
     this->titleLabel->setFont(titleFont);
     this->titleLabel->setFixedHeight(toolBarHeight * 0.9);
+    this->titleLabel->setFixedWidth(this->width() - toolBarHeight * 0.2);
 
     this->closeButton->setFixedHeight(toolBarHeight * 0.9);
     this->closeButton->setFixedWidth(toolBarHeight * 0.9);
