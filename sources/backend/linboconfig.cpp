@@ -25,6 +25,6 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     backgroundFontcolor = "black";
     consoleFontcolorStdout = "white";
     consoleFontcolorStderr = "red";
-    downloadType = "rsync";
+    downloadMethod = LinboConfig::Rsync;
     autoFormat = 0;
 }

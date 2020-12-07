@@ -178,6 +178,7 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
         break;
 
     case LinboBackend::Partitioning:
+    case LinboBackend::UpdatingCache:
     case LinboBackend::RootActionSuccess:
         for(LinboOsSelectButton* osButton : this->osButtons)
             osButton->setEnabled(false);

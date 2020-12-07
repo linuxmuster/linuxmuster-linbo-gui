@@ -7,8 +7,6 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 
     this->mainLayout = new QVBoxLayout(this);
 
-    this->mainLayout->addStretch();
-
     this->mainLayout->addWidget(new QLabel(tr("Room")));
     roomEdit = new QModernLineEdit();
     connect(roomEdit, SIGNAL(textChanged(const QString&)), this, SLOT(handleRoomChanged(const QString&)));
@@ -62,8 +60,11 @@ void LinboRegisterDialog::registerClient() {
 void LinboRegisterDialog::handleRoomChanged(const QString& newText) {
     QString currentHostnameText = this->hostnameEdit->text();
     currentHostnameText.replace("-", "");
-    if(this->hostnameEdit->text().isEmpty() || newText.startsWith(currentHostnameText))
+    if(this->hostnameEdit->text().isEmpty() || newText.startsWith(currentHostnameText) || (currentHostnameText.startsWith(newText) && this->hostnameEdit->text().endsWith("-")))
         this->hostnameEdit->setText(newText + "-");
+
+    if(newText.isEmpty() && this->hostnameEdit->text() == "-")
+        this->hostnameEdit->setText("");
 }
 
 void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
@@ -73,7 +74,7 @@ void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
     int margins = buttonHeight * 0.4;
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
-    for(int i = 1; i < 9; i++) {
+    for(int i = 0; i < 8; i++) {
         this->mainLayout->itemAt(i)->widget()->setFixedSize(this->width() - margins * 2, buttonHeight);
     }
 

@@ -36,6 +36,7 @@ HEADERS += \
     headers/frontend/linbologindialog.h \
     headers/frontend/linboregisterdialog.h \
     headers/frontend/linboterminaldialog.h \
+    headers/frontend/linboupdatecachedialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
     headers/frontend/linboosselectionrow.h \
@@ -59,6 +60,7 @@ SOURCES += \
     sources/frontend/linbologindialog.cpp \
     sources/frontend/linboregisterdialog.cpp \
     sources/frontend/linboterminaldialog.cpp \
+    sources/frontend/linboupdatecachedialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \

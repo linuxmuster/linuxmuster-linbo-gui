@@ -16,7 +16,7 @@ subnet()
     if [[ -n "${OFFLINE}" ]]; then
         echo "OFFLINE"
     else
-        ifconfig wlp0s20f3 | awk '/netmask /{ print $4;} '
+        echo "255.255.0.0"
     fi
 }
 

@@ -87,6 +87,7 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     this->confirmationDialog = new LinboConfirmationDialog(tr("Partition drive"), tr("Are you shure? This will delete all data on your drive!"),  parent);
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
     this->registerDialog = new LinboRegisterDialog(backend, parent);
+    this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
 
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
@@ -94,7 +95,8 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal")));
     connect(this->rootActionButtons[2], SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
-    this->rootActionButtons.append(new QModernPushButton(":svgIcons/syncAction.svg", tr("Init cache")));
+    this->rootActionButtons.append(new QModernPushButton(":svgIcons/syncAction.svg", tr("Update cache")));
+    connect(this->rootActionButtons[3], SIGNAL(clicked()), this->updateCacheDialog, SLOT(open()));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive")));
     connect(this->rootActionButtons[4], SIGNAL(clicked()), this->confirmationDialog, SLOT(open()));
     this->rootActionButtons.append(new QModernPushButton(":svgIcons/register.svg", tr("register")));
@@ -276,17 +278,20 @@ void LinboStartActions::resizeAndPositionAllItems() {
     this->resetMessageButton->setGeometry((this->width() - this->cancelButton->width()) / 2, this->height() - this->cancelButton->width() * 1.1, this->cancelButton->width(), this->cancelButton->width());
 
     // Root widget
-    int terminalDialogHeight = this->parentWidget()->height() * 0.8;
-    int terminalDialogWidth = terminalDialogHeight;
+    int dialogHeight = this->parentWidget()->height() * 0.8;
+    int dialogWidth = dialogHeight;
 
-    this->terminalDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight);
+    this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
     this->terminalDialog->centerInParent();
 
-    this->confirmationDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight * 0.3);
+    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
     this->confirmationDialog->centerInParent();
 
-    this->registerDialog->setGeometry(0, 0, terminalDialogWidth, terminalDialogHeight);
+    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
     this->registerDialog->centerInParent();
+
+    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.6);
+    this->updateCacheDialog->centerInParent();
 
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
@@ -327,6 +332,7 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
     case LinboBackend::Syncing:
     case LinboBackend::Reinstalling:
     case LinboBackend::Partitioning:
+    case LinboBackend::UpdatingCache:
         this->progressBar->setIndeterminate(true);
         this->progressBar->setReversed(false);
         currentWidget = this->progressBarWidget;

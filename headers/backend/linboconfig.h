@@ -30,6 +30,12 @@ class LinboConfig : public QObject
 public:
     friend class LinboBackend;
 
+    enum DownloadMethod {
+        Rsync,
+        Multicast,
+        Torrent
+    };
+
     const QString& getServerIpAddress() const {return this->serverIpAddress;}
     const QString& getIpAddress() const {return this->ipAddress;}
     const QString& getSubnetMask() const {return this->subnetMask;}
@@ -49,7 +55,7 @@ public:
     const QString& getBackgroundFontcolor() {return this->backgroundFontcolor;}
     const QString& getConsoleFontcolorStdout() {return this->consoleFontcolorStdout;}
     const QString& getConsoleFontcolorStderr() {return this->consoleFontcolorStderr;}
-    const QString& getDownloadType() {return this->downloadType;}
+    const DownloadMethod& getDownloadMethod() {return this->downloadMethod;}
     const bool& getAutoFormat() {return this->autoFormat;}
 
 private:
@@ -73,7 +79,7 @@ private:
     void setBackgroundFontcolor( const QString& backgroundFontcolor ){this->backgroundFontcolor = backgroundFontcolor;}
     void setConsoleFontcolorStdout( const QString& consoleFontcolorStdout ){this->consoleFontcolorStdout = consoleFontcolorStdout;}
     void setConsoleFontcolorStderr( const QString& consoleFontcolorStderr ){this->consoleFontcolorStderr = consoleFontcolorStderr;}
-    void setDownloadType( const QString& downloadType ){this->downloadType = downloadType;}
+    void setDownloadMethod( const DownloadMethod& downloadMethod ){this->downloadMethod = downloadMethod;}
     void setAutoFormat( const bool& autoFormat ){this->autoFormat = autoFormat;}
 
   QString serverIpAddress;
@@ -88,7 +94,7 @@ private:
   QString hddSize;
   QString cachePath;
   QString hostGroup;
-  QString downloadType;
+  DownloadMethod downloadMethod;
   QString backgroundFontcolor;
   QString consoleFontcolorStdout;
   QString consoleFontcolorStderr;

@@ -36,6 +36,7 @@
 #include "linboterminaldialog.h"
 #include "linboconfirmationdialog.h"
 #include "linboregisterdialog.h"
+#include "linboupdatecachedialog.h"
 
 class LinboStartActions : public QWidget
 {
@@ -77,6 +78,7 @@ private:
     LinboTerminalDialog* terminalDialog;
     LinboConfirmationDialog* confirmationDialog;
     LinboRegisterDialog* registerDialog;
+    LinboUpdateCacheDialog* updateCacheDialog;
 
     bool inited;
 
