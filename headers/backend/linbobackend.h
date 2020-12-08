@@ -63,7 +63,7 @@ public:
         StartActionError,   /*!< The last start action failed, the resetMessage() function will reset to Idle */
         Root,
         Partitioning,
-        InitializingCache,
+        UpdatingCache,
         Updating,
         RootActionError,    /*!< The last root action failed, the resetMessage() function will reset to Root */
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
@@ -87,7 +87,9 @@ protected:
     void writeToPartitionConfig(QMap<QString, QString> config, LinboDiskPartition* partition);
     void writeToOsConfig(QMap<QString, QString> config, LinboOs* os);
 
-    bool toBool(const QString& value);
+    bool stringToBool(const QString& value);
+    LinboConfig::DownloadMethod stringToDownloadMethod(const QString& value);
+    QString downloadMethodToString(const LinboConfig::DownloadMethod& value);
 
 private:
     LinboState state;
@@ -149,7 +151,7 @@ public slots:
     void logout();
 
     bool partitionDrive(bool format = true);
-    bool initializeCache();
+    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup);
 

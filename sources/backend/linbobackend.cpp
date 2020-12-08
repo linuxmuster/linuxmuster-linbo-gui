@@ -275,22 +275,27 @@ bool LinboBackend::partitionDrive(bool format) {
     return true;
 }
 
-bool LinboBackend::initializeCache() {
+bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool format) {
     if(this->state != Root)
         return false;
 
-    this->setState(InitializingCache);
+    this->logger->log("Updating cache", LinboLogType::LinboLogChapterBeginning);
+    this->setState(UpdatingCache);
 
-    QStringList commandArgs = this->buildCommand("initcache", config->getServerIpAddress(), config->getCachePath());
+    QStringList commandArgs = this->buildCommand(format ? "initcache_format":"initcache", config->getServerIpAddress(), config->getCachePath());
 
-    if( this->config->getDownloadType().isEmpty() )
-        commandArgs.append(this->config->getDownloadType());
+    if( downloadMethod < LinboConfig::Rsync || downloadMethod > LinboConfig::Torrent )
+        commandArgs.append(this->downloadMethodToString(this->config->getDownloadMethod()));
     else
-        commandArgs.append("rsync");
+        commandArgs.append(this->downloadMethodToString(downloadMethod));
 
     for(int i = 0; i < this->operatingSystems.length(); i++) {
         LinboOs* os = this->operatingSystems[i];
-        commandArgs.append(this->buildCommand(os->getBaseImage()->getName(), os->getDifferentialImage()->getName()));
+        commandArgs.append(this->buildCommand(os->getBaseImage()->getName()));
+        if(os->getDifferentialImage() != nullptr)
+            commandArgs.append(this->buildCommand(os->getDifferentialImage()->getName()));
+        else
+            commandArgs.append(this->buildCommand(""));
         /* TODO ?? for(unsigned int j = 0; j < os[i].image_history.size(); j++) {
           saveappend( command, os[i].image_history[j].get_image() );
         }*/
@@ -340,6 +345,7 @@ bool LinboBackend::cancelCurrentAction() {
         return true;
 
     case Partitioning:
+    case UpdatingCache:
         this->logger->log("Cancelling current action: " + QString::number(this->state), LinboLogType::LinboGuiInfo);
         this->asynchronosProcess->kill();
         this->setState(Root);
@@ -418,7 +424,8 @@ QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStr
 
     if(waitForFinished) {
         // clear old output
-        this->synchronosProcess->readAll();
+        if(this->synchronosProcess->bytesAvailable())
+            this->synchronosProcess->readAll();
 
         this->synchronosProcess->start(command, commandArgs);
         this->synchronosProcess->waitForStarted();
@@ -454,15 +461,15 @@ void LinboBackend::handleProcessFinished(int exitCode, QProcess::ExitStatus exit
     Q_UNUSED(exitStatus)
     if(exitCode == 0) {
         this->logger->log("Process exited normally.", LinboLogType::LinboGuiInfo);
-        if(this->state >= Root)
+        if(this->state > Root)
             this->setState(RootActionSuccess);
     }
     else {
         this->logger->log("Process exited with an error.", LinboLogType::LinboGuiError);
 
-        if(this->state >= Root)
+        if(this->state > Root)
             this->setState(RootActionError);
-        else
+        else if(this->state != Root && this->state != Idle) // prevent showin an error when the process was cancelled
             this->setState(StartActionError);
     }
 
@@ -657,19 +664,19 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
         else if(key == "cache")   linboConfig->setCachePath(value);
         else if(key == "roottimeout")   linboConfig->setRootTimeout((unsigned int)value.toInt());
         else if(key == "group")   linboConfig->setHostGroup(value);
-        else if(key == "autopartition")  linboConfig->setAutoPartition(toBool(value));
-        else if(key == "autoinitcache")  linboConfig->setAutoInitCache(toBool(value));
-        else if(key == "autoformat")  linboConfig->setAutoFormat(toBool(value));
+        else if(key == "autopartition")  linboConfig->setAutoPartition(stringToBool(value));
+        else if(key == "autoinitcache")  linboConfig->setAutoInitCache(stringToBool(value));
+        else if(key == "autoformat")  linboConfig->setAutoFormat(stringToBool(value));
         else if(key == "backgroundfontcolor")  linboConfig->setBackgroundFontcolor(value);
         else if(key == "consolefontcolorstdout")  linboConfig->setConsoleFontcolorStdout(value);
         else if(key == "consolefontcolorstderr")  linboConfig->setConsoleFontcolorStderr(value);
         else if(key == "usemulticast") {
             if(value.toInt() == 0)
-                linboConfig->setDownloadType("rsync");
+                linboConfig->setDownloadMethod(LinboConfig::Rsync);
             else
-                linboConfig->setDownloadType("multicast");
+                linboConfig->setDownloadMethod(LinboConfig::Multicast);
         }
-        else if(key == "downloadtype")  linboConfig->setDownloadType(value);
+        else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
     }
 }
 
@@ -680,7 +687,7 @@ void LinboBackend::writeToPartitionConfig(QMap<QString, QString> config, LinboDi
         else if(key == "size")  partition->setSize(value.toInt());
         else if(key == "id")  partition->setId(value);
         else if(key == "fstype")  partition->setFstype(value);
-        else if(key.startsWith("bootable"))  partition->setBootable(toBool(value));
+        else if(key.startsWith("bootable"))  partition->setBootable(stringToBool(value));
     }
 }
 
@@ -698,19 +705,44 @@ void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
         else if(key == "kernel")        os->setKernel(value);
         else if(key == "initrd")        os->setInitrd(value);
         else if(key == "append")        os->setKernelOptions(value);
-        else if(key == "syncenabled")   os->setSyncButtonEnabled(toBool(value));
-        else if(key == "startenabled")  os->setStartButtonEnabled(toBool(value));
-        else if((key == "remotesyncenabled") || (key == "newenabled"))   os->setReinstallButtonEnabled(toBool(value));
+        else if(key == "syncenabled")   os->setSyncButtonEnabled(stringToBool(value));
+        else if(key == "startenabled")  os->setStartButtonEnabled(stringToBool(value));
+        else if((key == "remotesyncenabled") || (key == "newenabled"))   os->setReinstallButtonEnabled(stringToBool(value));
         else if(key == "defaultaction") os->setDefaultAction(os->startActionFromString(value));
-        else if(key == "autostart")     os->setAutostartEnabled(toBool(value));
+        else if(key == "autostart")     os->setAutostartEnabled(stringToBool(value));
         else if(key == "autostarttimeout")   os->setAutostartTimeout(value.toInt());
-        else if(key == "hidden")        os->setHidden(toBool(value));
+        else if(key == "hidden")        os->setHidden(stringToBool(value));
     }
 }
 
-bool LinboBackend::toBool(const QString& value) {
+bool LinboBackend::stringToBool(const QString& value) {
     QStringList trueWords("yes");
     trueWords.append("true");
     trueWords.append("enable");
     return trueWords.contains(value.simplified());
+}
+
+
+LinboConfig::DownloadMethod LinboBackend::stringToDownloadMethod(const QString& value) {
+    if(value == "rsync")
+        return LinboConfig::Rsync;
+    else if(value == "multicast")
+        return LinboConfig::Multicast;
+    else if(value == "torrent")
+        return LinboConfig::Torrent;
+    else
+        return LinboConfig::Rsync;
+}
+
+QString LinboBackend::downloadMethodToString(const LinboConfig::DownloadMethod& value) {
+    switch (value) {
+        case LinboConfig::Rsync:
+        return "rsync";
+    case LinboConfig::Multicast:
+        return "multicast";
+    case LinboConfig::Torrent:
+        return "torrent";
+    default:
+        return "rsync";
+    }
 }
