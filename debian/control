@@ -1,0 +1,13 @@
+Source: linuxmuster-linbo-gui7
+Section: admin
+Priority: extra
+Maintainer: Thomas Schmitt <thomas@linuxmuster.net>
+Homepage: https://github.com/linuxmuster/linuxmuster-linbo-gui
+Build-Depends: build-essential, gcc, g++, libudev-dev, libxkbcommon-dev, gcc-multilib, g++-multilib, libudev-dev:i386, libxkbcommon-dev:i386
+
+Package: linuxmuster-linbo-gui7
+Architecture: all
+Depends: linuxmuster-linbo-common7 (>= 2.4.0)
+Description: linuxmuster-linbo scripts
+ This package contains the scripts for the Linux-based Network Boot
+ (LINBO) boot/install/repair system.
