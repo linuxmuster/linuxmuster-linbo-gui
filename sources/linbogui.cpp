@@ -34,6 +34,7 @@ LinboGui::LinboGui()
 
     // Load segoe font
     QFontDatabase::addApplicationFont(":/fonts/SegoeUI.ttf");
+    qApp->setFont(QFont("Segoe UI"));
 
     // white bakground
     // linuxmuster background color: #394f5e
