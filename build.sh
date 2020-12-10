@@ -39,7 +39,7 @@ do
 	cp build_Qt_and_Gui_generic buildGUI$ARCH/build.sh
 	cd buildGUI$ARCH
 
-	sed -i 's/## $ARCH: //g' build.sh
+	sed -i "s/## $ARCH: //g" build.sh
 
 	./build.sh $@
 
