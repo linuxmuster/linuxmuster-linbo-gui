@@ -17,35 +17,44 @@
 ##
 ## This script will build the linbo GUI for 32 and 64 bit.
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $DIR
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root as it needs to use apt!" 
+   exit 1
+fi
+
+
 cd build
 
-# build for 64-Bit
-mkdir buildGUI64
+for ARCH in 64 32
+do
+    echo "Building linbo_gui7 for $ARCH"
 
-# create the buildfile
-cp build_Qt_and_Gui_generic buildGUI64/build.sh
-cd buildGUI64
+	# build for 64-Bit
+	mkdir buildGUI$ARCH
 
-sed -i '/## 32: /d' build.sh
-sed -i 's/## 64: //g' build.sh
+	# create the buildfile
+	cp build_Qt_and_Gui_generic buildGUI$ARCH/build.sh
+	cd buildGUI$ARCH
 
-./build.sh
+	sed -i 's/## $ARCH: //g' build.sh
 
-cd ..
+	./build.sh $@
 
-sleep 10
+	if [[ $? -ne 0 ]]; then
+	   echo "There was an error when building linbo_gui for $ARCH!" 
+	   exit 1
+	fi
 
-# build for 32-Bit
-mkdir buildGUI32
+	cd ..
 
-# create the buildfile
-cp build_Qt_and_Gui_generic buildGUI32/build.sh
-cd buildGUI32
+    sleep 10
 
-sed -i '/## 64: /d' build.sh
-sed -i 's/## 32: //g' build.sh
+done
 
-./build.sh
-
-cd ..
+echo "--------------------------------------"
+echo "- linbo_gui7 was build successfully! -"
+echo "--------------------------------------"
 

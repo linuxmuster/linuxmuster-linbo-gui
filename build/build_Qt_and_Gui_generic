@@ -23,14 +23,37 @@
 ## and all lines starting with
 ## "## 32: " will just be used for 32 bit building
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $DIR
+
 QT_ARCHIVE=../qt-everywhere-src-5.15.2.tar.xz
 QT_DIR=./qt-everywhere-src-5.15.2
+
+DO_CLEAN=1
+DO_WAIT=1
+
+while test $# -gt 0
+do
+    case "$1" in
+        --noclean) DO_CLEAN=0
+            ;;
+        --nowait) DO_WAIT=0
+            ;;
+    esac
+    shift
+done
 
 ## 64: sudo apt install build-essential gcc g++ libudev-dev libinput-dev libxkbcommon-dev -y
 
 ## 32: sudo dpkg --add-architecture i386
 ## 32: sudo apt update
 ## 32: sudo apt install gcc-multilib g++-multilib libudev-dev:i386 libinput-dev:i386 libxkbcommon-dev:i386 -y
+
+# Check for errors in apt install
+if [[ $? -ne 0 ]]; then
+   echo "There was an error when running apt install!" 
+   exit 1
+fi
 
 # export pkgconfig path for 32 bit libraries
 ## 32: export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
@@ -121,27 +144,61 @@ then
 	 -skip qtspeech \
 	 -skip qtx11extras
 
+	# Check for errors in configure
+	if [[ $? -ne 0 ]]; then
+	   echo "There was an error when configuring Qt (see above)!" 
+	   exit 1
+	fi
+
 	make -j8
+	# Check for errors in make
+	if [[ $? -ne 0 ]]; then
+	   echo "There was an error when building Qt (see above)!" 
+	   exit 1
+	fi
+	
 	make install
+	# Check for errors in make install
+	if [[ $? -ne 0 ]]; then
+	   echo "There was an error when installing Qt (see above)!" 
+	   exit 1
+	fi
+
+	echo "---------------------------------------"
+	echo "- Qt has been installed successfully! -"
+	echo "---------------------------------------"
 
 	cd ..
 else
-    echo "Qt archive is already unpacked, assuming Qt, has already been built"
-    echo "continuing with building in 5 seconds"
-    sleep 5
+    echo "Qt install dir exists, assuming Qt has already been built"
+    
+	if [[ $DO_WAIT -ne 0 ]]; then
+		echo "continuing with building in 5 seconds"
+		sleep 5
+	fi
 fi
 
-echo "--------------------------"
-echo "- Qt has been installed! -"
-echo "--------------------------"
+echo "-------------------------------"
+echo "- Starting to build linbo_gui -"
+echo "-------------------------------"
 
-rm -rf ./build
+if [[ $DO_CLEAN -ne 0 ]]; then
+	rm -rf ./build
+fi
+
 mkdir build
 cd build
 
 ../Qt5/bin/qmake ../../../linboGUI.pro
 
-make -j 8
+make -j8
+
+# Check for errors in make
+if [[ $? -ne 0 ]]; then
+   echo "There was an error when building!" 
+   exit 1
+fi
+
 strip linbo_gui
 
 
