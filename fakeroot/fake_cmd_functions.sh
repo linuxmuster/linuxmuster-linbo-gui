@@ -10,8 +10,8 @@ ip()
     fi
 }
 
-# linbo_cmd subnet
-subnet()
+# linbo_cmd netmask
+netmask()
 {
     if [[ -n "${OFFLINE}" ]]; then
         echo "OFFLINE"
@@ -176,10 +176,11 @@ register()
     local client="$5"
     local ip="$6"
     local group="$7"
+    local role="$8"
     if [[ "${server}" != "10.16.1.1" ]] \
       || [[ "${user}" != "linbo" ]] \
       || [[ "${password}" != "Muster!" ]] \
-      || [[ -n "$8" ]]; then
+      || [[ -n "$9" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
     else

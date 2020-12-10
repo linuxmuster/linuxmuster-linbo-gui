@@ -25,8 +25,8 @@ case "${cmd}" in
     ip)
         ip
         ;;
-    subnet)
-    	subnet
+    netmask)
+    	netmask
     	;;
     hostname)
         hostname

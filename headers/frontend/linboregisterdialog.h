@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QComboBox>
 
 #include "qmoderndialog.h"
 #include "qmodernlineedit.h"
@@ -29,6 +30,7 @@ private:
     QModernLineEdit* hostnameEdit;
     QModernLineEdit* ipAddressEdit;
     QModernLineEdit* hostGroupEdit;
+    QComboBox* roleSelectBox;
     QHBoxLayout* buttonLayout;
 
 private slots:

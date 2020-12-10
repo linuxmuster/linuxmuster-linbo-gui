@@ -37,6 +37,16 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     hostGroupEdit = new QModernLineEdit();
     this->mainLayout->addWidget(hostGroupEdit);
 
+    this->mainLayout->addWidget(new QLabel(tr("Client role")));
+    this->roleSelectBox = new QComboBox();
+
+    this->roleSelectBox->addItem(tr("Classroom student computer"), LinboBackend::ClassroomStudentComputerRole);
+    this->roleSelectBox->addItem(tr("Classroom teacher computer"), LinboBackend::ClassroomTeacherComputerRole);
+    this->roleSelectBox->addItem(tr("Faculty teacher computer"), LinboBackend::FacultyTeacherComputerRole);
+    this->roleSelectBox->addItem(tr("Staff computer"), LinboBackend::StaffComputerRole);
+
+    this->mainLayout->addWidget(this->roleSelectBox);
+
     this->mainLayout->addStretch();
 
     buttonLayout = new QHBoxLayout();
@@ -53,7 +63,7 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 }
 
 void LinboRegisterDialog::registerClient() {
-    this->backend->registerClient(this->roomEdit->text(), this->hostnameEdit->text(), this->ipAddressEdit->text(), this->hostGroupEdit->text());
+    this->backend->registerClient(this->roomEdit->text(), this->hostnameEdit->text(), this->ipAddressEdit->text(), this->hostGroupEdit->text(), LinboBackend::LinboDeviceRole(this->roleSelectBox->currentData().toInt()));
     this->setVisibleAnimated(false);
 }
 
@@ -74,8 +84,8 @@ void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
     int margins = buttonHeight * 0.4;
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
-    for(int i = 0; i < 8; i++) {
-        this->mainLayout->itemAt(i)->widget()->setFixedSize(this->width() - margins * 2, buttonHeight);
+    for(int i = 0; i < 10; i++) {
+        this->mainLayout->itemAt(i)->widget()->setFixedSize(this->width() - margins * 2, buttonHeight* 0.8);
     }
 
     this->buttonLayout->setContentsMargins(0,0,0,0);

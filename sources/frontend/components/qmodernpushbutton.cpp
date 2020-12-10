@@ -29,6 +29,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* paren
     this->label = nullptr;
 
     this->setMouseTracking(true);
+
     this->geometryAnimation = new QPropertyAnimation(this, "geometry", this);
     this->geometryAnimation->setDuration(400);
     this->geometryAnimation->setEasingCurve(QEasingCurve::InOutQuad);

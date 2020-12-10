@@ -315,13 +315,15 @@ bool LinboBackend::updateLinbo() {
     return true;
 }
 
-bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup) {
+bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboDeviceRole deviceRole) {
     if(this->state != Root)
         return false;
 
     this->logger->log("Registering client", LinboLogType::LinboLogChapterBeginning);
 
-    this->executeCommand(false, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup);
+    this->setState(Registering);
+
+    this->executeCommand(false, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup, this->deviceRoleToString(deviceRole));
 
     return true;
 }
@@ -469,7 +471,7 @@ void LinboBackend::handleProcessFinished(int exitCode, QProcess::ExitStatus exit
 
         if(this->state > Root)
             this->setState(RootActionError);
-        else if(this->state != Root && this->state != Idle) // prevent showin an error when the process was cancelled
+        else if(this->state != Root && this->state != Idle) // prevent showing an error when the process was cancelled
             this->setState(StartActionError);
     }
 
@@ -626,7 +628,7 @@ void LinboBackend::loadEnvironmentValues() {
     this->config->setIpAddress(this->executeCommand(true, "ip").replace("\n", ""));
 
     // subnet mask
-    this->config->setSubnetMask(this->executeCommand(true, "subnet").replace("\n", ""));
+    this->config->setSubnetMask(this->executeCommand(true, "netmask").replace("\n", ""));
 
     // mac address
     this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));
@@ -744,5 +746,21 @@ QString LinboBackend::downloadMethodToString(const LinboConfig::DownloadMethod& 
         return "torrent";
     default:
         return "rsync";
+    }
+}
+
+
+QString LinboBackend::deviceRoleToString(const LinboDeviceRole& deviceRole) {
+    switch (deviceRole) {
+    case ClassroomStudentComputerRole:
+        return "classroom-studentcomputer";
+    case ClassroomTeacherComputerRole:
+        return "classroom-teachercomputer";
+    case FacultyTeacherComputerRole:
+        return "faculty-teachercomputer";
+    case StaffComputerRole:
+        return "staffcomputer";
+    default:
+        return "";
     }
 }

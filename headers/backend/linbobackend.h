@@ -62,11 +62,20 @@ public:
         Reinstalling,
         StartActionError,   /*!< The last start action failed, the resetMessage() function will reset to Idle */
         Root,
+        Registering,
         Partitioning,
         UpdatingCache,
         Updating,
         RootActionError,    /*!< The last root action failed, the resetMessage() function will reset to Root */
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
+    };
+
+    enum LinboDeviceRole {
+        ClassroomStudentComputerRole,
+        ClassroomTeacherComputerRole,
+        FacultyTeacherComputerRole,
+        StaffComputerRole,
+        DeviceRoleCount
     };
 
     LinboState getState();
@@ -90,6 +99,7 @@ protected:
     bool stringToBool(const QString& value);
     LinboConfig::DownloadMethod stringToDownloadMethod(const QString& value);
     QString downloadMethodToString(const LinboConfig::DownloadMethod& value);
+    QString deviceRoleToString(const LinboDeviceRole& deviceRole);
 
 private:
     LinboState state;
@@ -153,7 +163,7 @@ public slots:
     bool partitionDrive(bool format = true);
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);
     bool updateLinbo();
-    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup);
+    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboDeviceRole deviceRole);
 
     bool cancelCurrentAction();
     bool resetMessage();

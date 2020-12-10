@@ -56,7 +56,7 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     this->startActionsWidget->setFixedHeight(this->height() * 0.45);
     this->startActionsWidget->setFixedWidth(this->width());
 
-    QLabel* versionLabel = new QLabel(backend->getConfig()->getLinboVersion() );//+ " - GUI by Dorian Zedler");
+    QLabel* versionLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION);
     versionLabel->setFont(QFont("Segoe UI"));
     mainLayout->addWidget(versionLabel);
 

@@ -42,7 +42,7 @@ void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     QModernDialog::resizeEvent(event);
 
     QFont font = this->headerLabel->font();
-    this->headerLabel->setFixedWidth(this->width() * 0.9);
+    this->headerLabel->setFixedWidth(this->width());
     this->headerLabel->setFixedHeight(this->height() * 0.2);
     font.setPixelSize(double(this->height()) * 0.1);
     this->headerLabel->setFont(font);
