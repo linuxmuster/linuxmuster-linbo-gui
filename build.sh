@@ -22,7 +22,9 @@ cd $DIR
 
 cd build
 
-for ARCH in 64 32
+Architecures=(64 32)
+
+for ARCH in "${Architecures[@]}"
 do
     echo "Building linbo_gui7 for $ARCH"
 
@@ -35,10 +37,16 @@ do
 
 	sed -i "s/## $ARCH: //g" build.sh
 
+	# remove all other architectures to prevent errors
+	for NOT_ARCH in "${Architecures[@]}"
+	do
+		sed -i "/## $NOT_ARCH: /d" build.sh
+	done
+
 	./build.sh $@
 
 	if [[ $? -ne 0 ]]; then
-	   echo "There was an error when building linbo_gui for $ARCH!" 
+	   echo "There was an error when building linbo_gui for $ARCH!"
 	   exit 1
 	fi
 
