@@ -20,12 +20,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root as it needs to use apt!" 
-   exit 1
-fi
-
-
 cd build
 
 for ARCH in 64 32
