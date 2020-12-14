@@ -222,8 +222,8 @@ cp ./build/linbo_gui ./linbofs/usr/bin/
 
 # shared libraries
 mkdir -p ./linbofs/lib/
-# Get all dependencies | split at path separator | remove everything but path | remove all libs that are not located in /usr... (they are usually not needed) | copy the libs to linbofs/lib
-ldd ./build/linbo_gui | grep "=> /" | awk '{print $3}' | sed '/usr/!d' | xargs -I '{}' cp -v '{}' ./linbofs/lib/
+# Get all dependencies | split at path separator | remove everything but path | copy the libs to linbofs/lib
+ldd ./build/linbo_gui | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./linbofs/lib/
 
 # Keyboard layouts
 mkdir -p ./linbofs/usr/share/X11/
