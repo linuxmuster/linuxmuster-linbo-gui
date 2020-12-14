@@ -43,18 +43,29 @@ do
 		sed -i "/## $NOT_ARCH: /d" build.sh
 	done
 
-	./build.sh $@
+	./build.sh "$1" "$2"
 
 	if [[ $? -ne 0 ]]; then
 	   echo "There was an error when building linbo_gui for $ARCH!"
 	   exit 1
 	fi
+	
+	# remove old linbofs folder
+	rm -rf ../linbofs$ARCH
+	
+	# copy linbofs folder in place
+	cp -r linbofs ../linbofs$ARCH
 
 	cd ..
+
+	# copy icons into linbofs folder
+	cp -r ./icons  ./linbofs$ARCH
 
     sleep 10
 
 done
+
+mv linbofs32 linbofs
 
 echo "--------------------------------------"
 echo "- linbo_gui7 was build successfully! -"

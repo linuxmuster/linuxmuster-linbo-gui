@@ -43,13 +43,13 @@ do
     shift
 done
 
-# Make sure, we have an architecure defined
+# Make sure, we have exactly one architecure defined
 ARCH_VALID=0
-## 64: ARCH_VALID=1
-## 32: ARCH_VALID=1
+## 64: ARCH_VALID=$(($ARCH_VALID + 1))
+## 32: ARCH_VALID=$(($ARCH_VALID + 1))
 
 if [[ $ARCH_VALID -ne 1 ]]; then
-   echo "There was no valid architecture defined for this buildscript!" 
+   echo "ERROR: There was no or more than one valid architecture defined for this buildscript!" 
    echo "Note: this script is not designed to be used standalone, don't execute it!"
    exit 1
 fi
@@ -195,6 +195,7 @@ echo "-------------------------------"
 
 if [[ $DO_CLEAN -ne 0 ]]; then
 	rm -rf ./build
+	rm -rf ./linbofs
 fi
 
 mkdir build
@@ -212,11 +213,20 @@ fi
 
 strip linbo_gui
 
-
-## 64: mkdir ../../linbofs64/usr/bin/
-## 64: cp linbo_gui ../../linbofs64/usr/bin/
-## 32: mkdir ../../linbofs/usr/bin/
-## 32: cp linbo_gui ../../linbofs/usr/bin/
-
+# Deploy all files to the linbofs folder
 cd ..
 
+# main binary
+mkdir -p ./linbofs/usr/bin/
+cp ./build/linbo_gui ./linbofs/usr/bin/
+
+# shared libraries
+mkdir -p ./linbofs/lib/
+# Get all dependencies | split at path separator | remove everything but path | remove all libs that are not located in /usr... (they are usually not needed) | copy the libs to linbofs/lib
+ldd ./build/linbo_gui | grep "=> /" | awk '{print $3}' | sed '/usr/!d' | xargs -I '{}' cp -v '{}' ./linbofs/lib/
+
+# Keyboard layouts
+mkdir -p ./linbofs/usr/share/X11/
+cp -r /usr/share/X11/xkb/ ./linbofs/usr/share/X11/
+
+exit 0
