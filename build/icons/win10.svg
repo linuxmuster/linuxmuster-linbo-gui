@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   aria-hidden="true"
+   focusable="false"
+   data-prefix="fab"
+   data-icon="windows"
+   class="svg-inline--fa fa-windows fa-w-14"
+   role="img"
+   viewBox="0 0 500 500"
+   version="1.1"
+   id="svg891"
+   width="500"
+   height="500">
+  <metadata
+     id="metadata897">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs895" />
+  <rect
+     style="fill:#0174d1;fill-opacity:1;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+     id="rect1462"
+     width="500"
+     height="500"
+     x="0"
+     y="0" />
+  <path
+     fill="#ffffff"
+     d="M 100,141.31696 222.94643,124.37501 V 243.16964 H 100 Z m 0,217.36608 122.94643,16.94197 V 258.30358 H 100 Z m 136.47322,18.75 L 400,400 V 258.30358 H 236.47322 Z m 0,-254.86607 V 243.16964 H 400 V 100 Z"
+     id="path889"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.669643" />
+</svg>
