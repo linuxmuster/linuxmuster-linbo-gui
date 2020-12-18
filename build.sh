@@ -68,6 +68,9 @@ done
 mv linbofs32 linbofs
 
 echo "--------------------------------------"
-echo "- linbo_gui7 was build successfully! -"
+echo "- linbo_gui7 was built successfully! -"
+echo "-   Now building debian packages     -"
 echo "--------------------------------------"
 
+cd ..
+./debian/mkdeb.sh
