@@ -33,7 +33,6 @@ build-arch-stamp:
 
 	# Add here command to compile/build the package.
 	#$(MAKE)
-	./build.sh
 
 	touch build-arch-stamp
 
