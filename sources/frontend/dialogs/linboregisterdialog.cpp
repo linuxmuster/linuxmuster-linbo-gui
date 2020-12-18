@@ -3,6 +3,8 @@
 LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent) : QModernDialog(parent)
 {
     this->backend = backend;
+    //: This is the title of the register dialog
+    //= dialog_register_title
     this->setTitle(tr("Register client"));
 
     this->mainLayout = new QVBoxLayout(this);

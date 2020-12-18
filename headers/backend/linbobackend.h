@@ -62,6 +62,8 @@ public:
         Reinstalling,
         StartActionError,   /*!< The last start action failed, the resetMessage() function will reset to Idle */
         Root,
+        CreatingImage,
+        UploadingImage,
         Registering,
         Partitioning,
         UpdatingCache,
@@ -76,6 +78,11 @@ public:
         FacultyTeacherComputerRole,
         StaffComputerRole,
         DeviceRoleCount
+    };
+
+    enum ImageCreationAction {
+        ReplaceImage,
+        CreateNewImage
     };
 
     LinboState getState();
@@ -159,6 +166,9 @@ public slots:
 
     bool login(QString password);
     void logout();
+
+    bool createImageOfCurrentOs(LinboImage::ImageType type, ImageCreationAction action);
+    bool uploadImageOfCurrentOs(LinboImage::ImageType type);
 
     bool partitionDrive(bool format = true);
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);

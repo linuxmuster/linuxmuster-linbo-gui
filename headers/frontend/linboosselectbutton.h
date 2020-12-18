@@ -25,8 +25,10 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QEventLoop>
+
 #include "qmodernpushbutton.h"
 #include "linboos.h"
+#include "linbobackend.h"
 
 class LinboOsSelectButton : public QWidget
 {
@@ -44,9 +46,22 @@ private:
     void setVisibleAnimated(bool visible);
     void setVisible(bool visible) override;
 
+    // if set to true, the "old" Layout will be used (one big and four small buttons)
+    void setShowActionButtons(bool showActionButtons);
+
+    bool inited;
+    bool showActionButtons;
+    bool shouldBeVisible;
+
     QModernPushButton* button;
+    QList<QModernPushButton*> startActionButtons;
+    QList<QModernPushButton*> rootActionButtons;
     QButtonGroup* buttonGroup;
     LinboOs* os;
+
+private slots:
+    void handleBackendStateChange(LinboBackend::LinboState state);
+    void updateActionButtonVisibility();
 };
 
 #endif // LINBOOSSELECTBUTTON_H

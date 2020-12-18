@@ -38,6 +38,7 @@ private:
 
     explicit QModernPushButtonOverlay(QWidget* overlayWidget, QObject *parent = nullptr);
 
+    bool shouldBeVisible;
     QWidget* widget;
     QGraphicsOpacityEffect* effect;
     QPropertyAnimation* animation;

@@ -21,8 +21,12 @@
 LinboGui::LinboGui()
 {
 #ifdef TEST_ENV
+    this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.75 / 2);
+    this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().height() / 2);
+
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() / 2);
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() / 2);
+
 #else
     // fill whole screen
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);

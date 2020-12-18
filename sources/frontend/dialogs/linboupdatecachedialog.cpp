@@ -64,7 +64,7 @@ void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
         QAbstractButton* button = static_cast<QAbstractButton*>(this->mainLayout->itemAt(i)->widget());
         button->setFixedSize(this->width() - margins * 2, buttonHeight);
         QFont buttonFont = button->font();
-        buttonFont.setPixelSize(buttonHeight * 0.45);
+        buttonFont.setPixelSize(buttonHeight <= 0 ? 1:buttonHeight * 0.45);
         button->setFont(buttonFont);
 
     }

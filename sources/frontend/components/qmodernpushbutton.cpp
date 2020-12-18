@@ -27,6 +27,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* paren
 {
     this->svgIcon = nullptr;
     this->label = nullptr;
+    this->shouldBeVisible = true;
 
     this->setMouseTracking(true);
 
@@ -115,7 +116,7 @@ void QModernPushButton::resizeEvent(QResizeEvent *event) {
     }
     if(this->label != nullptr) {
         QFont font = this->label->font();
-        font.setPixelSize(this->height() * 0.5);
+        font.setPixelSize(int(this->height() * 0.5) <= 0 ? 1 : this->height() * 0.5);
         this->label->setFont(font);
     }
 }
@@ -127,22 +128,33 @@ void QModernPushButton::setGeometryAnimated(const QRect& geometry) {
 }
 
 void QModernPushButton::setVisibleAnimated(bool visible) {
+    if(visible == this->shouldBeVisible)
+        return;
+
     if(!this->isVisible()) {
         // if the parent was hidden
         // -> Show it to be able to fade the overlays in
-        // -> Hide overlays to prevent them from appearing without an animation!
         this->setVisible(true);
         for(QModernPushButtonOverlay* overlay : this->overlays)
             overlay->setVisible(false);
     }
 
+    this->shouldBeVisible = visible;
     this->setEnabled(visible);
 
-    if(!visible)
+    if(!visible) {
         for(QModernPushButtonOverlay* overlay : this->overlays)
             overlay->setVisibleAnimated(false);
+
+        // if the button is still supposed to be hidden after 400ms (the default animation duration)
+        // -> hide the button to prevent it from overlaying other stuff
+        QTimer::singleShot(400, [=]{
+            if(!this->shouldBeVisible)
+                this->setVisible(false);
+        });
+    }
     else
-        this->overlays[0]->setVisible(true);
+        this->overlays[0]->setVisibleAnimated(true);
 }
 
 void QModernPushButton::paintEvent(QPaintEvent *e) {

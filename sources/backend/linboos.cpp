@@ -17,9 +17,11 @@
  ****************************************************************************/
 
 #include "linboos.h"
+#include "linbobackend.h"
 
-LinboOs::LinboOs(QObject *parent) : QObject(parent)
+LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
 {
+    this->parent = parent;
     this->autostartEnabled = false;
     this->autostartTimeout = 0;
     this->hidden = false;
@@ -28,6 +30,21 @@ LinboOs::LinboOs(QObject *parent) : QObject(parent)
     this->baseImage = nullptr;
     this->differentialImage = nullptr;
     // TODO ?? image_history.clear();
+}
+
+bool LinboOs::start() {
+    this->parent->setCurrentOs(this);
+    return this->parent->startCurrentOs();
+}
+
+bool LinboOs::sync() {
+    this->parent->setCurrentOs(this);
+    return this->parent->syncCurrentOs();
+}
+
+bool LinboOs::reinstall() {
+    this->parent->setCurrentOs(this);
+    return this->parent->reinstallCurrentOs();
 }
 
 bool LinboOs::getActionEnabled(LinboOsStartAction action) {

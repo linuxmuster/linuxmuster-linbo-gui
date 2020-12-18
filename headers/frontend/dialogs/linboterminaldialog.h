@@ -12,6 +12,7 @@
 
 #include "qmoderndialog.h"
 #include "qmodernlineedit.h"
+#include "qmoderntextbrowser.h"
 
 class LinboTerminalDialog : public QModernDialog
 {
@@ -23,7 +24,7 @@ protected:
     virtual void setVisibleAnimated(bool visible) override;
 
 private:
-    QTextBrowser* textBrowser;
+    QModernTextBrowser* textBrowser;
     QLineEdit* lineEdit;
     QVBoxLayout* mainLayout;
     QProcess* process;

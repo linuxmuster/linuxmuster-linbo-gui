@@ -21,6 +21,7 @@
 LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
+    this->sizeOverride = nullptr;
 
     this->backend = backend;
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -40,6 +41,8 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->getIconName(), os, this->osButtonGroup, this);
 #endif
         connect(osButton->button, SIGNAL(toggled(bool)), this, SLOT(handleButtonToggled(bool)));
+
+        osButton->setShowActionButtons(!this->backend->getConfig()->getUseMinimalLayout());
 
         // auto select current OS
         if(this->backend->getCurrentOs() == os)
@@ -73,55 +76,104 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->handleLinboStateChanged(this->backend->getState());
 }
 
-void LinboOsSelectionRow::resizeAndPositionAllButtons() {
+void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int widthOverride) {
+
+    heightOverride = this->height();
+    widthOverride = this->width();
+
+    if(this->sizeOverride != nullptr)
+        heightOverride = this->sizeOverride->height();
+
+    if(this->sizeOverride != nullptr)
+        widthOverride = this->sizeOverride->width();
 
     if(this->osButtons.length() > 0) {
-        int buttonWidth = 0;
-        buttonWidth = this->width() / this->osButtonGroup->buttons().length();
+
+        bool useMinimalLayout = this->backend->getConfig()->getUseMinimalLayout();
+        int buttonCount = this->osButtons.length();
+
+        int spacing;
+        int buttonWidth;
+        int buttonHeight;
+        int totalWidth;
+
+        if(useMinimalLayout || (!useMinimalLayout && buttonCount < 2)) {
+            spacing = heightOverride * 0.2;
+            buttonWidth = std::min((widthOverride - spacing) / buttonCount, heightOverride * 3);
+            buttonHeight = heightOverride;
+            totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
+        }
+        else if(!useMinimalLayout && buttonCount > 2) {
+            // if we have more than two buttons -> we have multiple rows with two buttons each
+            spacing = heightOverride * 0.1;
+            buttonWidth = std::min((widthOverride - spacing) / 2, int(heightOverride * 1.5) - spacing);
+            totalWidth = buttonWidth * 2 + spacing * (2 + 1);
+            buttonHeight = heightOverride / 2 - spacing / 2;
+            //qDebug() << "Button height: " << buttonHeight << " buttonWidth: " << buttonWidth;
+        }
+        else {
+            qWarning() << "[ERROR] More than 4 OSs defined";
+            return;
+        }
+
+        int x = (widthOverride - totalWidth) / 2;
 
         for(int i = 0; i < this->osButtons.length(); i++) {
 
-        bool visible = true;
-        QRect geometry = this->osButtons[i]->geometry();
+            bool visible = true;
+            QRect geometry = this->osButtons[i]->geometry();
 
-        if(!this->osButtons[i]->button->isChecked() || !this->showOnlySelectedButton) {
-            visible = !this->showOnlySelectedButton;
-            geometry = QRect(buttonWidth * i, 0, buttonWidth, this->height());
-        }
-        else {
-            visible = true;
-            geometry = QRect((this->width() - buttonWidth) / 2, 0, buttonWidth, this->height());
-        }
+            if(this->osButtons[i]->getOs() != this->backend->getCurrentOs() || !this->showOnlySelectedButton) {
+                // "normal" buttons
+                visible = !this->showOnlySelectedButton;
+                if(!useMinimalLayout && buttonCount > 2)
+                    if(i < 2)
+                        geometry = QRect(x + (buttonWidth  * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
+                    else
+                        geometry = QRect(x + (buttonWidth * (i-2)) + (spacing * ((i-2)+1)), buttonHeight + spacing, buttonWidth, buttonHeight);
+                else
+                    geometry = QRect(x + (buttonWidth * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
+            }
+            else {
+                // singular button
+                visible = true;
+                geometry = QRect((widthOverride - heightOverride) / 2, 0, heightOverride, heightOverride);
+            }
 
-        if(this->inited) {
-            this->osButtons[i]->setVisibleAnimated(visible);
+            if(this->inited) {
+                this->osButtons[i]->setVisibleAnimated(visible);
 
-            QPropertyAnimation* moveAnimation = new QPropertyAnimation(this->osButtons[i], "geometry");
-            moveAnimation->setEasingCurve(QEasingCurve::InOutQuad);
-            moveAnimation->setDuration(400);
-            moveAnimation->setStartValue(this->osButtons[i]->geometry());
-            moveAnimation->setEndValue(geometry);
-            moveAnimation->start();
+                QPropertyAnimation* moveAnimation = new QPropertyAnimation(this);
+                moveAnimation->setPropertyName("geometry");
+                moveAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+                moveAnimation->setDuration(400);
+                moveAnimation->setTargetObject(this->osButtons[i]);
+                moveAnimation->setStartValue(this->osButtons[i]->geometry());
+                moveAnimation->setEndValue(geometry);
+                moveAnimation->start();
+                connect(moveAnimation, &QPropertyAnimation::finished, moveAnimation, &QPropertyAnimation::deleteLater);
+
+                continue;
+            }
+            else {
+                // Do not animate the first time
+                this->osButtons[i]->setVisible(visible);
+                this->osButtons[i]->setGeometry(geometry);
+            }
         }
-        else {
-            // Do not animate the first time
-            this->osButtons[i]->setVisible(visible);
-            this->osButtons[i]->setGeometry(geometry);
-        }
-    }
     }
     else {
-        int infoLabelHeight = this->height();
-        int infoLabelWidth = this->width() * 0.8;
-        int noOsLabelHeight = this->height() * 0.2;
-        this->noOsLabelFont.setPixelSize(noOsLabelHeight * 0.8);
+        int infoLabelHeight = heightOverride;
+        int infoLabelWidth = widthOverride * 0.8;
+        int noOsLabelHeight = heightOverride * 0.2;
+        this->noOsLabelFont.setPixelSize(int(noOsLabelHeight * 0.8) <= 0 ? 1:noOsLabelHeight * 0.8);
         this->noOsLabel->setFont(this->noOsLabelFont);
-        this->noOsLabel->setGeometry((this->width() - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
+        this->noOsLabel->setGeometry((widthOverride - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
         this->noOsLabel->show();
 
-        this->environmentValuesLabelFont.setPixelSize(infoLabelHeight * 0.1);
+        this->environmentValuesLabelFont.setPixelSize(int(infoLabelHeight * 0.1) <= 0 ? 1:infoLabelHeight * 0.1);
         this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
-        this->environmentValuesLabel->setGeometry((this->width() - infoLabelWidth) / 2, noOsLabelHeight, infoLabelWidth, infoLabelHeight);
+        this->environmentValuesLabel->setGeometry((widthOverride - infoLabelWidth) / 2, noOsLabelHeight, infoLabelWidth, infoLabelHeight);
         this->environmentValuesLabel->show();
     }
 
@@ -186,5 +238,22 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
 
     default:
         break;
+    }
+}
+
+void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
+    if(size.height() < this->height()) {
+        this->sizeOverride = new QSize(size);
+        this->resizeAndPositionAllButtons();
+        QTimer::singleShot(400, [=]{this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
+    }
+    else {
+        if(this->sizeOverride != nullptr) {
+            delete this->sizeOverride;
+            this->sizeOverride = nullptr;
+        }
+
+        delete this->sizeOverride;
+        this->setFixedSize(size);
     }
 }

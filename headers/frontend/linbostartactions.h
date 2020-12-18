@@ -80,6 +80,8 @@ private:
     LinboRegisterDialog* registerDialog;
     LinboUpdateCacheDialog* updateCacheDialog;
 
+    QWidget* emptyWidget;
+
     bool inited;
 
 private slots:

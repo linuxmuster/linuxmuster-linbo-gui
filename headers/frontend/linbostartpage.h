@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QInputDialog>
+#include <QPropertyAnimation>
 
 #include "linbobackend.h"
 #include "linboosselectbutton.h"
@@ -50,6 +51,9 @@ private:
     QList<QModernPushButton*> powerActionButtons;
 
     LinboLoginDialog* loginDialog;
+
+    QPropertyAnimation* startActionWidgetAnimation;
+    QPropertyAnimation* osSelectionRowAnimation;
 
     bool inited;
 

@@ -10,7 +10,7 @@ upload()
     local imagefile="$5"
     if [[ "${server}" != "10.16.1.1" ]] \
       || [[ "${luser}" != "linbo" ]] \
-      || [[ "${lpassword}" != "pw123" ]] \
+      || [[ "${lpassword}" != "Muster!" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
       || [[ "${imagefile}" != "opensuse-cpqmini.cloop" ]]; then
         echo "Wrong parameters: «$*»"

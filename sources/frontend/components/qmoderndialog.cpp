@@ -113,7 +113,7 @@ void QModernDialog::resizeEvent(QResizeEvent *event) {
     this->toolBarLayout->setContentsMargins(toolBarHeight * 0.2, 0,toolBarHeight * 0.1, 0);
 
     QFont titleFont = this->titleLabel->font();
-    titleFont.setPixelSize(toolBarHeight * 0.5);
+    titleFont.setPixelSize(toolBarHeight <= 0 ? 1:toolBarHeight * 0.5);
     this->titleLabel->setFont(titleFont);
     this->titleLabel->setFixedHeight(toolBarHeight * 0.9);
     this->titleLabel->setFixedWidth(this->width() - toolBarHeight * 0.2);

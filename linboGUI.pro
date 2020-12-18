@@ -1,6 +1,6 @@
 TARGET = linbo_gui
 
-VERSION = 7.0.1-Alpha01
+VERSION = 7.0.1-Alpha02
 DEFINES += GUI_VERSION=\"\\\"$${VERSION}\\\"\"
 
 CONFIG += static
@@ -24,6 +24,7 @@ INCLUDEPATH += \
     headers/ \
     headers/backend \
     headers/frontend \
+    headers/frontend/dialogs \
     headers/frontend/components
 
 HEADERS += \
@@ -35,11 +36,13 @@ HEADERS += \
     headers/backend/linbobackend.h \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
-    headers/frontend/linboconfirmationdialog.h \
-    headers/frontend/linbologindialog.h \
-    headers/frontend/linboregisterdialog.h \
-    headers/frontend/linboterminaldialog.h \
-    headers/frontend/linboupdatecachedialog.h \
+    headers/frontend/components/qmoderntextbrowser.h \
+    headers/frontend/dialogs/linboconfirmationdialog.h \
+    headers/frontend/dialogs/linboimagecreationdialog.h \
+    headers/frontend/dialogs/linbologindialog.h \
+    headers/frontend/dialogs/linboregisterdialog.h \
+    headers/frontend/dialogs/linboterminaldialog.h \
+    headers/frontend/dialogs/linboupdatecachedialog.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
     headers/frontend/linboosselectionrow.h \
@@ -59,11 +62,13 @@ SOURCES += \
     sources/backend/linbobackend.cpp \
     sources/frontend/components/qmoderndialog.cpp \
     sources/frontend/components/qmodernlineedit.cpp \
-    sources/frontend/linboconfirmationdialog.cpp \
-    sources/frontend/linbologindialog.cpp \
-    sources/frontend/linboregisterdialog.cpp \
-    sources/frontend/linboterminaldialog.cpp \
-    sources/frontend/linboupdatecachedialog.cpp \
+    sources/frontend/components/qmoderntextbrowser.cpp \
+    sources/frontend/dialogs/linboconfirmationdialog.cpp \
+    sources/frontend/dialogs/linboimagecreationdialog.cpp \
+    sources/frontend/dialogs/linbologindialog.cpp \
+    sources/frontend/dialogs/linboregisterdialog.cpp \
+    sources/frontend/dialogs/linboterminaldialog.cpp \
+    sources/frontend/dialogs/linboupdatecachedialog.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \
@@ -77,3 +82,6 @@ SOURCES += \
 
 RESOURCES += \
     resources/linbo.qrc
+
+DISTFILES += \
+    resources/svgIcons/infoBg.svg

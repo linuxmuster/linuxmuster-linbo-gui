@@ -28,6 +28,8 @@
 
 #include "linboimage.h"
 
+class LinboBackend;
+
 class LinboOs : public QObject
 {
     Q_OBJECT
@@ -63,8 +65,14 @@ public:
     bool getActionEnabled(LinboOsStartAction action);
     static LinboOsStartAction startActionFromString(const QString& name);
 
+    bool start();
+    bool sync();
+    bool reinstall();
+
+    LinboBackend* getBackend() {return this->parent;}
+
 private:
-    explicit LinboOs(QObject *parent = nullptr);
+    explicit LinboOs(LinboBackend *parent = nullptr);
 
     void setName (const QString& name) {this->name = name;}
     void setDescription  (const QString& description) {this->description = description;}
@@ -84,6 +92,8 @@ private:
     void setAutostartTimeout (const int& autostartTimeout) {this->autostartTimeout = autostartTimeout;}
     void setDefaultAction (const LinboOsStartAction& defaultAction) {this->defaultAction = defaultAction;}
     void setHidden (const bool& hidden) {this->hidden = hidden;}
+
+    LinboBackend* parent;
 
     QString name;
     QString version;

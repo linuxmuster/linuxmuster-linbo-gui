@@ -36,6 +36,8 @@ public:
     LinboOs* getSelectedOs();
     void setShowOnlySelectedButton(bool value);
 
+    void setMinimumSizeAnimated(QSize size);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -50,8 +52,10 @@ private:
     bool showOnlySelectedButton;
     bool inited;
 
+    QSize* sizeOverride;
+
 private slots:
-    void resizeAndPositionAllButtons();
+    void resizeAndPositionAllButtons(int heightOverride = -1, int widthOverride = -1);
     void handleButtonToggled(bool checked);
     void handleLinboStateChanged(LinboBackend::LinboState newState);
 

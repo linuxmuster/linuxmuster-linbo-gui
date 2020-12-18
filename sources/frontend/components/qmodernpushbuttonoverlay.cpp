@@ -20,6 +20,7 @@
 
 QModernPushButtonOverlay::QModernPushButtonOverlay(QWidget* overlayWidget, QObject *parent) : QObject(parent)
 {
+    this->shouldBeVisible = false;
     this->widget = overlayWidget;
     this->widget->setVisible(false);
 
@@ -43,18 +44,23 @@ void QModernPushButtonOverlay::setAnimationDuration(int duration) {
 }
 
 void QModernPushButtonOverlay::setVisible(bool visible) {
-    if(this->widget->isVisible() == visible)
+    if(this->shouldBeVisible == visible)
         return;
+
+    this->shouldBeVisible = visible;
 
     this->effect->setOpacity(0);
     this->widget->setVisible(visible);
 }
 
 void QModernPushButtonOverlay::setVisibleAnimated(bool visible) {
-    if(this->widget->isVisible() == visible)
+    if(this->shouldBeVisible == visible)
         return;
 
+    this->shouldBeVisible = visible;
+
     int startValue = visible ? 0:1;
+    this->animation->stop();
     this->animation->setStartValue(startValue);
     this->animation->setEndValue(1-startValue);
     this->animation->start();

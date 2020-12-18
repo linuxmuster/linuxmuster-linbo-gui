@@ -42,21 +42,29 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     QVBoxLayout* mainLayout = new QVBoxLayout(mainLayoutWidget);
     mainLayout->setSpacing(this->height()*0.025);
     mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->addItem(new QSpacerItem(0,0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    mainLayout->addStretch();
 
     // OS Buttons
     osSelectionRow = new LinboOsSelectionRow(this->backend);
     mainLayout->addWidget(osSelectionRow);
-    osSelectionRow->setFixedHeight(this->height() * 0.25);
-    osSelectionRow->setFixedWidth(this->width());
+
+    this->osSelectionRowAnimation = new QPropertyAnimation(this->osSelectionRow, "minimumSize");
+    this->osSelectionRowAnimation->setDuration(400);
+    this->osSelectionRowAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
     // action buttons
     this->startActionsWidget = new LinboStartActions(this->backend, this);
+    this->startActionsWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainLayout->addWidget(this->startActionsWidget);
-    this->startActionsWidget->setFixedHeight(this->height() * 0.45);
-    this->startActionsWidget->setFixedWidth(this->width());
+
+    this->startActionWidgetAnimation = new QPropertyAnimation(this->startActionsWidget, "minimumSize");
+    this->startActionWidgetAnimation->setDuration(400);
+    this->startActionWidgetAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+
+    mainLayout->addStretch();
 
     QLabel* versionLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION);
+    versionLabel->setFixedHeight(this->height() * 0.05);
     versionLabel->setFont(QFont("Segoe UI"));
     mainLayout->addWidget(versionLabel);
 
@@ -112,13 +120,54 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 
 void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     bool powerActionButtonsVisible = false;
+    int startActionsWidgetHeight;
+    int osSelectionRowHeight;
+    bool useMinimalLayout = this->backend->getConfig()->getUseMinimalLayout();
+
     switch (newState) {
+    case LinboBackend::StartActionError:
+    case LinboBackend::RootActionError:
+        osSelectionRowHeight = this->height() * 0.2;
+        startActionsWidgetHeight = this->height() * 0.5;
+        break;
+
     case LinboBackend::Idle:
-    case LinboBackend::Root:
+        if(useMinimalLayout){
+            osSelectionRowHeight = this->height() * 0.3;
+            startActionsWidgetHeight = this->height() * 0.2;
+        }
+        else {
+            osSelectionRowHeight = this->height() * 0.5;
+            startActionsWidgetHeight = this->height() * 0;
+        }
+
         powerActionButtonsVisible = true;
         break;
 
+    case LinboBackend::Root:
+    case LinboBackend::Registering:
+    case LinboBackend::RootActionSuccess:
+        if(useMinimalLayout){
+            osSelectionRowHeight = this->height() * 0.3;
+            startActionsWidgetHeight = this->height() * 0.2;
+        }
+        else {
+            osSelectionRowHeight = this->height() * 0.4;
+            startActionsWidgetHeight = this->height() * 0.3;
+        }
+
+        powerActionButtonsVisible = true;
+        break;
+
+    case LinboBackend::Partitioning:
+    case LinboBackend::UpdatingCache:
+        osSelectionRowHeight = this->height() * 0;
+        startActionsWidgetHeight = this->height() * 0.2;
+        break;
+
     default:
+        osSelectionRowHeight = this->height() * 0.3;
+        startActionsWidgetHeight = this->height() * 0.2;
         break;
     }
 
@@ -131,6 +180,18 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
             powerActionButton->setVisible(false);
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
+
+    if(this->inited) {
+        this->startActionWidgetAnimation->setStartValue(QSize(this->width(), this->startActionsWidget->height()));
+        this->startActionWidgetAnimation->setEndValue(QSize(this->width(), startActionsWidgetHeight));
+        this->startActionWidgetAnimation->start();
+
+        this->osSelectionRow->setMinimumSizeAnimated(QSize(this->width(), osSelectionRowHeight));
+    }
+    else {
+        this->startActionsWidget->setMinimumSize(this->width(), startActionsWidgetHeight);
+        this->osSelectionRow->setMinimumSize(this->width(), osSelectionRowHeight);
+    }
 
     this->inited = true;
 }

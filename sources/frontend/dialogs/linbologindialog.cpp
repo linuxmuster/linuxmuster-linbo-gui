@@ -1,4 +1,4 @@
-#include "../../headers/frontend/linbologindialog.h"
+#include "linbologindialog.h"
 
 LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QModernDialog(parent)
 {
@@ -44,7 +44,7 @@ void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     QFont font = this->headerLabel->font();
     this->headerLabel->setFixedWidth(this->width());
     this->headerLabel->setFixedHeight(this->height() * 0.2);
-    font.setPixelSize(double(this->height()) * 0.1);
+    font.setPixelSize(this->height() <= 0 ? 1:double(this->height()) * 0.1);
     this->headerLabel->setFont(font);
 
     this->passwordInput->setFixedHeight(this->height() * 0.2);

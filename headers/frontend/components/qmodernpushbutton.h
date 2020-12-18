@@ -30,6 +30,7 @@
 #include <QDebug>
 #include <QEventLoop>
 #include <QLabel>
+#include <QTimer>
 
 #include "qmodernpushbuttonoverlay.h"
 
@@ -55,6 +56,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
+    bool shouldBeVisible;
     QPropertyAnimation* geometryAnimation;
     QList<QModernPushButtonOverlay*> overlays;
     QSvgWidget* svgIcon;

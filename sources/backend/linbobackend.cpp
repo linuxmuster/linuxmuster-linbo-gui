@@ -248,6 +248,72 @@ void LinboBackend::logout() {
     this->setState(Idle);
 }
 
+bool LinboBackend::createImageOfCurrentOs(LinboImage::ImageType type, ImageCreationAction action) {
+    if(this->state != Root)
+        return false;
+
+    this->logger->log("Creating image", LinboLogType::LinboLogChapterBeginning);
+
+    this->setState(CreatingImage);
+
+    QString imagePath = this->currentOs->getBaseImage()->getName();// if a new Image is created, this will have to be the new name, if a differential image is created, this will have to be its name
+    QString baseImagePath = this->currentOs->getBaseImage()->getName(); // if a new Image is created, this will have to be the new name
+
+    this->executeCommand(
+                false,
+                "create",
+                this->config->getCachePath(),
+                imagePath,
+                baseImagePath,
+                this->currentOs->getBootPartition(),
+                this->currentOs->getRootPartition(),
+                this->currentOs->getKernel(),
+                this->currentOs->getInitrd()
+                );
+
+    return true;
+}
+
+bool LinboBackend::uploadImageOfCurrentOs(LinboImage::ImageType type) {
+    if(this->state != Root)
+        return false;
+
+    this->logger->log("Uploading image", LinboLogType::LinboLogChapterBeginning);
+
+    this->setState(UploadingImage);
+
+    QString imagePath;
+
+    this->executeCommand(false, "upload", this->config->getServerIpAddress(), "linbo", this->rootPassword, this->config->getCachePath(), imagePath);
+
+    return true;
+}
+
+/*
+
+reading and writing .desc:
+
+    command = LINBO_CMD("readfile");
+    saveappend( command, config.get_cache() );
+    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
+    saveappend( command, ( QString("/tmp/") + elements[i].get_baseimage() + QString(".desc") ) );
+    infoBrowser->setLoadCommand( command );
+
+    command = LINBO_CMD("writefile");
+    saveappend( command, config.get_cache() );
+    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
+    saveappend( command, ( QString("/tmp/") + elements[i].get_baseimage() + QString(".desc") ) );
+    infoBrowser->setSaveCommand( command );
+
+    command = LINBO_CMD("upload");
+    saveappend( command, config.get_server() );
+    saveappend( command, QString("linbo") );
+    saveappend( command, QString("password") );
+    saveappend( command, config.get_cache() );
+    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
+    infoBrowser->setUploadCommand( command );
+
+*/
 bool LinboBackend::partitionDrive(bool format) {
     if(this->state != Root)
         return false;
@@ -679,6 +745,7 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
                 linboConfig->setDownloadMethod(LinboConfig::Multicast);
         }
         else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
+        else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
     }
 }
 
@@ -700,8 +767,8 @@ void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
         else if(key == "description")   os->setDescription(value);
         else if(key == "version")       os->setVersion(value);
         else if(key == "iconname")      os->setIconName(value);
-        else if(key == "image")         os->setDifferentialImage(new LinboImage(value, os));
-        else if(key == "baseimage")     os->setBaseImage(new LinboImage(value, os));
+        else if(key == "image")         os->setDifferentialImage(new LinboImage(value, LinboImage::DifferentialImage, os));
+        else if(key == "baseimage")     os->setBaseImage(new LinboImage(value, LinboImage::BaseImage, os));
         else if(key == "boot")          os->setBootPartition(value);
         else if(key == "root")          os->setRootPartition(value);
         else if(key == "kernel")        os->setKernel(value);

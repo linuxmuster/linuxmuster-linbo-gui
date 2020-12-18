@@ -57,6 +57,7 @@ public:
     const QString& getConsoleFontcolorStderr() {return this->consoleFontcolorStderr;}
     const DownloadMethod& getDownloadMethod() {return this->downloadMethod;}
     const bool& getAutoFormat() {return this->autoFormat;}
+    const bool& getUseMinimalLayout() {return this->useMinimalLayout;}
 
 private:
     explicit LinboConfig(QObject *parent = nullptr);
@@ -81,6 +82,7 @@ private:
     void setConsoleFontcolorStderr( const QString& consoleFontcolorStderr ){this->consoleFontcolorStderr = consoleFontcolorStderr;}
     void setDownloadMethod( const DownloadMethod& downloadMethod ){this->downloadMethod = downloadMethod;}
     void setAutoFormat( const bool& autoFormat ){this->autoFormat = autoFormat;}
+    void setUseMinimalLayout(const bool& useMinimalLayout){this->useMinimalLayout = useMinimalLayout;}
 
   QString serverIpAddress;
   QString ipAddress;
@@ -102,6 +104,7 @@ private:
   bool autoPartition;
   bool autoInitCache;
   bool autoFormat;
+  bool useMinimalLayout;
 
 signals:
 

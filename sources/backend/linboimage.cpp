@@ -18,7 +18,8 @@
 
 #include "linboimage.h"
 
-LinboImage::LinboImage(QString name, QObject *parent) : QObject(parent)
+LinboImage::LinboImage(QString name, ImageType type, QObject *parent) : QObject(parent)
 {
     this->setName(name);
+    this->setType(type);
 }

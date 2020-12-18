@@ -18,5 +18,11 @@
         <file>svgIcons/register.svg</file>
         <file>svgIcons/terminal.svg</file>
         <file>svgIcons/upload.svg</file>
+        <file>svgIcons/reinstallBg.svg</file>
+        <file>svgIcons/startBg.svg</file>
+        <file>svgIcons/syncBg.svg</file>
+        <file>svgIcons/infoBg.svg</file>
+        <file>svgIcons/imageBg.svg</file>
+        <file>svgIcons/uploadBg.svg</file>
     </qresource>
 </RCC>
