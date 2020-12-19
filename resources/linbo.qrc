@@ -24,5 +24,10 @@
         <file>svgIcons/infoBg.svg</file>
         <file>svgIcons/imageBg.svg</file>
         <file>svgIcons/uploadBg.svg</file>
+        <file>svgIcons/info-solid.svg</file>
+        <file>svgIcons/overlayReinstall.svg</file>
+        <file>svgIcons/overlayStart.svg</file>
+        <file>svgIcons/overlaySync.svg</file>
+        <file>svgIcons/overlayImage.svg</file>
     </qresource>
 </RCC>

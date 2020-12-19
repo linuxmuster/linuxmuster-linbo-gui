@@ -56,6 +56,8 @@ private:
     QModernPushButton* button;
     QList<QModernPushButton*> startActionButtons;
     QList<QModernPushButton*> rootActionButtons;
+    QModernPushButtonOverlay* defaultStartActionOverlay;
+    QModernPushButtonOverlay* defaultRootActionOverlay;
     QButtonGroup* buttonGroup;
     LinboOs* os;
 

@@ -19,12 +19,15 @@
 #include "qmodernpushbutton.h"
 
 
-QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QModernPushButton(icon, "", parent) {
-
+QModernPushButton::QModernPushButton(QString icon, QWidget* parent) : QModernPushButton(icon, "", parent)
+{
 }
 
-QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* parent) : QAbstractButton(parent)
+QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* parent) : QModernPushButton(icon, label, {}, parent)
 {
+}
+
+QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernPushButtonOverlay*> extraOverlays, QWidget* parent) : QAbstractButton(parent) {
     this->svgIcon = nullptr;
     this->label = nullptr;
     this->shouldBeVisible = true;
@@ -35,49 +38,72 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* paren
     this->geometryAnimation->setDuration(400);
     this->geometryAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
-    QStringList overlays;
-    overlays.append(icon);
-    overlays.append(label);
-    overlays.append(":svgIcons/overlayHovered.svg");
-    overlays.append(":svgIcons/overlayPressed.svg");
-    overlays.append(":svgIcons/overlayChecked.svg");
-
     this->setObjectName(icon);
 
-    for(QString overlayName : overlays) {
-        if(overlayName.isEmpty())
-            continue;
-
-        QWidget* overlayWidget;
-
-        if(overlayName.startsWith(":") || overlayName.startsWith("/")) {
-            QSvgWidget* svgWidget = new QSvgWidget(overlayName, this);
-            if(overlayName == icon)
-                this->svgIcon = svgWidget;
-            else if(overlayName.contains("overlayHovered"))
-                this->hoveredOverlay = svgWidget;
-            overlayWidget = svgWidget;
-        }
-        else {
-            QLabel* labelWidget = new QLabel(overlayName, this);
-            labelWidget->setAlignment(Qt::AlignCenter);
-            if(overlayName == label)
-                this->label = labelWidget;
-            overlayWidget = labelWidget;
-        }
-
-        QModernPushButtonOverlay* overlay = new QModernPushButtonOverlay(overlayWidget, this);
-        this->overlays.append(overlay);
+    // Background
+    if(!icon.isEmpty()) {
+        this->svgIcon = new QSvgWidget(icon);
+        this->overlays.append(new QModernPushButtonOverlay(QModernPushButtonOverlay::Background, this->svgIcon, true));
     }
 
-    this->overlays[0]->setVisibleAnimated(true);
-    this->overlays[0]->setAnimationDuration(200);
-    if(this->overlays.length() == 5) {
-        this->overlays[1]->setVisibleAnimated(true);
-        this->overlays[1]->setAnimationDuration(200);
+    this->label = new QLabel(label);
+    this->label->setAlignment(Qt::AlignCenter);
+    this->overlays.append(new QModernPushButtonOverlay(QModernPushButtonOverlay::Background, this->label, true));
+    this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::Background, extraOverlays));
+
+    // Hover
+    this->hoveredOverlay = new QSvgWidget(":svgIcons/overlayHovered.svg");
+    this->overlays.append(
+                new QModernPushButtonOverlay(
+                    QModernPushButtonOverlay::OnHover,
+                    this->hoveredOverlay,
+                    true
+                    )
+                );
+
+    this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::OnHover, extraOverlays));
+
+    // Pressed
+    this->overlays.append(
+                new QModernPushButtonOverlay(
+                    QModernPushButtonOverlay::OnPressed,
+                    new QSvgWidget(":svgIcons/overlayPressed.svg"),
+                    true
+                    )
+                );
+
+    this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed, extraOverlays));
+
+    // Checked
+    this->overlays.append(
+                new QModernPushButtonOverlay(
+                    QModernPushButtonOverlay::OnChecked,
+                    new QSvgWidget(":svgIcons/overlayChecked.svg"),
+                    true
+                    )
+                );
+
+    this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::OnChecked, extraOverlays));
+
+    // set defaults
+    for(QModernPushButtonOverlay* overlay : this->overlays) {
+        overlay->setParent(this);
+        overlay->widget->setParent(this);
     }
-    this->overlays[this->overlays.length()-3]->setAnimationDuration(200);
-    this->overlays[this->overlays.length()-2]->setAnimationDuration(100);
+
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::Background)) {
+        if(overlay->managedAutomatically)
+            overlay->setVisibleAnimated(true);
+        overlay->setAnimationDuration(200);
+    }
+
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover)) {
+        overlay->setAnimationDuration(200);
+    }
+
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed)) {
+        overlay->setAnimationDuration(100);
+    }
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(handleToggled(bool)));
 
@@ -87,8 +113,10 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QWidget* paren
 void QModernPushButton::handleToggled(bool checked) {
     if(checked)
         emit this->checked();
-    if(this->overlays.length() >= 4)
-        this->overlays[3]->setVisibleAnimated(checked);
+
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnChecked)) {
+        overlay->setVisibleAnimated(checked);
+    }
 }
 
 void QModernPushButton::resizeEvent(QResizeEvent *event) {
@@ -133,16 +161,16 @@ void QModernPushButton::setVisible(bool visible) {
 }
 
 void QModernPushButton::setVisibleAnimated(bool visible) {
-    qDebug() << "Stiing button " << this->objectName() << " to visible animated: " << visible;
     if(visible == this->shouldBeVisible)
         return;
 
     if(!this->isVisible()) {
         // if the parent was hidden
         // -> Show it to be able to fade the overlays in
-        this->setVisible(true);
         for(QModernPushButtonOverlay* overlay : this->overlays)
             overlay->setVisible(false);
+
+        this->setVisible(true);
     }
 
     this->shouldBeVisible = visible;
@@ -150,7 +178,8 @@ void QModernPushButton::setVisibleAnimated(bool visible) {
 
     if(!visible) {
         for(QModernPushButtonOverlay* overlay : this->overlays)
-            overlay->setVisibleAnimated(false);
+            if(overlay->managedAutomatically)
+                overlay->setVisibleAnimated(false);
 
         // if the button is still supposed to be hidden after 400ms (the default animation duration)
         // -> hide the button to prevent it from overlaying other stuff
@@ -160,7 +189,9 @@ void QModernPushButton::setVisibleAnimated(bool visible) {
         });
     }
     else
-        this->overlays[0]->setVisibleAnimated(true);
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::Background))
+            if(overlay->managedAutomatically)
+                overlay->setVisibleAnimated(true);
 }
 
 void QModernPushButton::paintEvent(QPaintEvent *e) {
@@ -179,25 +210,46 @@ void QModernPushButton::keyReleaseEvent(QKeyEvent *e) {
 
 void QModernPushButton::enterEvent(QEvent *e) {
 
-    if(this->overlays.length() >= 2 && this->isEnabled())
-        this->overlays[this->overlays.length()-3]->setVisibleAnimated(true);
+    if(this->isEnabled())
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
+            overlay->setVisibleAnimated(true);
+
     return QAbstractButton::enterEvent(e);
 }
 
 void QModernPushButton::leaveEvent(QEvent *e) {
-    if(this->overlays.length() >= 2)
-        this->overlays[this->overlays.length()-3]->setVisibleAnimated(false);
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
+            overlay->setVisibleAnimated(false);
+
     return QAbstractButton::leaveEvent(e);
 }
 
 void QModernPushButton::mousePressEvent(QMouseEvent *e) {
-    if(this->overlays.length() >= 3 && this->isEnabled())
-        this->overlays[this->overlays.length()-2]->setVisibleAnimated(true);
+    if(this->isEnabled())
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
+            overlay->setVisibleAnimated(true);
+
     return QAbstractButton::mousePressEvent(e);
 }
 
 void QModernPushButton::mouseReleaseEvent(QMouseEvent *e) {
-    if(this->overlays.length() >= 3)
-        this->overlays[this->overlays.length()-2]->setVisibleAnimated(false);
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
+        overlay->setVisibleAnimated(false);
+
     return QAbstractButton::mouseReleaseEvent(e);
+}
+
+QList<QModernPushButtonOverlay*> QModernPushButton::getOverlaysOfType(QModernPushButtonOverlay::OverlayType type) {
+    return this->getOverlaysOfType(type, this->overlays);
+}
+
+QList<QModernPushButtonOverlay*> QModernPushButton::getOverlaysOfType(QModernPushButtonOverlay::OverlayType type, QList<QModernPushButtonOverlay*> overlays) {
+    QList<QModernPushButtonOverlay*> filteredOverlays;
+
+    for(QModernPushButtonOverlay* overlay : overlays) {
+        if(overlay->getType() == type)
+            filteredOverlays.append(overlay);
+    }
+
+    return filteredOverlays;
 }

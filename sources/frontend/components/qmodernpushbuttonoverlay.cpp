@@ -18,9 +18,11 @@
 
 #include "qmodernpushbuttonoverlay.h"
 
-QModernPushButtonOverlay::QModernPushButtonOverlay(QWidget* overlayWidget, QObject *parent) : QObject(parent)
+QModernPushButtonOverlay::QModernPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent) : QObject(parent)
 {
     this->shouldBeVisible = false;
+    this->managedAutomatically = managedAutomatically;
+    this->type = type;
     this->widget = overlayWidget;
     this->widget->setVisible(false);
 
@@ -88,4 +90,8 @@ void QModernPushButtonOverlay::handleAnimationStateChanged(QAbstractAnimation::S
     default:
         break;
     }
+}
+
+QModernPushButtonOverlay::OverlayType QModernPushButtonOverlay::getType() {
+    return this->type;
 }

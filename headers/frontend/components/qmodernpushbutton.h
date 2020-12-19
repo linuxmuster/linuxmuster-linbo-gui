@@ -40,6 +40,7 @@ class QModernPushButton : public QAbstractButton
 public:
     QModernPushButton(QString icon, QWidget* parent = nullptr);
     QModernPushButton(QString icon, QString label, QWidget* parent = nullptr);
+    QModernPushButton(QString icon, QString label, QList<QModernPushButtonOverlay*> extraOverlays, QWidget* parent = nullptr);
 
     void setVisible(bool visible) override;
     void setVisibleAnimated(bool visible);
@@ -63,6 +64,9 @@ private:
     QSvgWidget* svgIcon;
     QSvgWidget* hoveredOverlay;
     QLabel *label;
+
+    QList<QModernPushButtonOverlay*> getOverlaysOfType(QModernPushButtonOverlay::OverlayType type);
+    QList<QModernPushButtonOverlay*> getOverlaysOfType(QModernPushButtonOverlay::OverlayType type, QList<QModernPushButtonOverlay*> overlays);
 
 private slots:
     void handleToggled(bool checked);

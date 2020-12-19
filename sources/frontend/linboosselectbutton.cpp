@@ -28,37 +28,55 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     connect(os->getBackend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
-    this->button = new QModernPushButton(icon, this);
+    if(!os->getBackend()->getConfig()->getUseMinimalLayout()) {
+        QStringList startActionButtonIcons = {
+            ":/svgIcons/startBg.svg",
+            ":/svgIcons/syncBg.svg",
+            ":/svgIcons/reinstallBg.svg",
+            ":/svgIcons/infoBg.svg"
+        };
+
+        for(QString actionButtonIcon : startActionButtonIcons) {
+            QModernPushButton* actionButton = new QModernPushButton(actionButtonIcon, this);
+            actionButton->setGeometry(0,0,0,0);
+            this->startActionButtons.append(actionButton);
+        }
+
+        connect(this->startActionButtons[0], &QModernPushButton::clicked, this->os, &LinboOs::start);
+        connect(this->startActionButtons[1], &QModernPushButton::clicked, this->os, &LinboOs::sync);
+        connect(this->startActionButtons[2], &QModernPushButton::clicked, this->os, &LinboOs::reinstall);
+
+        QStringList rootActionButtons = {
+            ":/svgIcons/imageBg.svg",
+            ":/svgIcons/uploadBg.svg"
+        };
+
+        for(QString actionButtonIcon : rootActionButtons) {
+            QModernPushButton* actionButton = new QModernPushButton(actionButtonIcon, this);
+            actionButton->setGeometry(0,0,0,0);
+            this->rootActionButtons.append(actionButton);
+        }
+
+        this->defaultStartActionOverlay = new QModernPushButtonOverlay (
+                    QModernPushButtonOverlay::Background,
+                    new QSvgWidget(":/svgIcons/overlayStart.svg"),
+                    false
+                    );
+
+        this->defaultRootActionOverlay = new QModernPushButtonOverlay (
+                    QModernPushButtonOverlay::Background,
+                    new QSvgWidget(":/svgIcons/overlayImage.svg"),
+                    false
+                    );
+
+        this->button = new QModernPushButton(icon, "", {this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
+    }
+    else {
+        this->button = new QModernPushButton(icon, "", this);
+    }
+
     this->button->setCheckable(true);
     this->buttonGroup->addButton(this->button);
-
-    QStringList startActionButtonIcons = {
-        ":/svgIcons/startBg.svg",
-        ":/svgIcons/syncBg.svg",
-        ":/svgIcons/reinstallBg.svg",
-        ":/svgIcons/infoBg.svg"
-    };
-
-    for(QString actionButtonIcon : startActionButtonIcons) {
-        QModernPushButton* actionButton = new QModernPushButton(actionButtonIcon, this);
-        actionButton->setGeometry(0,0,0,0);
-        this->startActionButtons.append(actionButton);
-    }
-
-    connect(this->startActionButtons[0], &QModernPushButton::clicked, this->os, &LinboOs::start);
-    connect(this->startActionButtons[0], &QModernPushButton::clicked, this->os, &LinboOs::sync);
-    connect(this->startActionButtons[0], &QModernPushButton::clicked, this->os, &LinboOs::reinstall);
-
-    QStringList rootActionButtons = {
-        ":/svgIcons/imageBg.svg",
-        ":/svgIcons/uploadBg.svg"
-    };
-
-    for(QString actionButtonIcon : rootActionButtons) {
-        QModernPushButton* actionButton = new QModernPushButton(actionButtonIcon, this);
-        actionButton->setGeometry(0,0,0,0);
-        this->rootActionButtons.append(actionButton);
-    }
 
     QWidget::setVisible(true);
 }
@@ -68,32 +86,27 @@ LinboOs* LinboOsSelectButton::getOs() {
 }
 
 void LinboOsSelectButton::setVisibleAnimated(bool visible) {
-
-    qDebug() << "Stiing OS " << this->os->getName() << " to visible animated: " << visible;
-
     this->shouldBeVisible = visible;
     this->button->setVisibleAnimated(visible);
 
     this->updateActionButtonVisibility();
-
 }
 
 void LinboOsSelectButton::setVisible(bool visible) {
-    qDebug() << "Stiing OS " << this->os->getName() << " to visible: " << visible;
     this->shouldBeVisible = visible;
     this->button->setVisible(visible);
 
     for(QModernPushButton* actionButton : this->startActionButtons)
-            actionButton->setVisible(this->shouldBeVisible);
+        actionButton->setVisible(this->shouldBeVisible);
 
     for(QModernPushButton* actionButton : this->rootActionButtons)
-            actionButton->setVisible(this->shouldBeVisible);
+        actionButton->setVisible(this->shouldBeVisible);
 }
 
 void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
 
-    if(!this->showActionButtons) {
+    if(!this->showActionButtons || this->os->getBackend()->getConfig()->getUseMinimalLayout()) {
         this->button->setGeometry((this->width() - this->height()) / 2 , 0, this->height(), this->height());
     }
     else {
@@ -106,6 +119,7 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         int actionButtonSize = (this->width() - this->height()) / this->startActionButtons.length() - spacing;
 
         if(actionButtonSize < 0) {
+            // only the big button is visible
             actionButtonSize = 0;
             x = 0;
             spacing = 0;
@@ -126,6 +140,8 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
             x += actionButtonSize + spacing;
         }
     }
+
+    this->updateActionButtonVisibility();
 }
 
 
@@ -147,27 +163,47 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 }
 
 void LinboOsSelectButton::updateActionButtonVisibility() {
+    if(this->os->getBackend()->getConfig()->getUseMinimalLayout())
+        return;
+
     if(!this->showActionButtons) {
         for(QModernPushButton* actionButton : this->startActionButtons)
-                actionButton->setVisible(false);
+            actionButton->setVisible(false);
 
         for(QModernPushButton* actionButton : this->rootActionButtons)
-                actionButton->setVisible(false);
+            actionButton->setVisible(false);
+
+        this->defaultStartActionOverlay->setVisible(false);
+        this->defaultRootActionOverlay->setVisible(false);
 
         return;
     }
 
+    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root;
+    bool rootActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root;
+
     for(QModernPushButton* actionButton : this->startActionButtons)
         if(this->inited)
-            actionButton->setVisibleAnimated(this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root);
+            actionButton->setVisibleAnimated(startActionVisible);
         else
             actionButton->setVisible(this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root);
 
     for(QModernPushButton* actionButton : this->rootActionButtons)
         if(this->inited)
-            actionButton->setVisibleAnimated(this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root);
+            actionButton->setVisibleAnimated(rootActionVisible);
         else
-            actionButton->setVisible(this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root);
+            actionButton->setVisible(rootActionVisible);
+
+    bool defaultOverlaysVisible = this->width() > this->height() * 1.2;
+
+    if(false && this->inited) {
+        this->defaultStartActionOverlay->setVisibleAnimated(startActionVisible && defaultOverlaysVisible);
+        this->defaultRootActionOverlay->setVisibleAnimated(rootActionVisible && defaultOverlaysVisible);
+    }
+    else {
+        this->defaultStartActionOverlay->setVisible(startActionVisible && defaultOverlaysVisible);
+        this->defaultRootActionOverlay->setVisible(rootActionVisible && defaultOverlaysVisible);
+    }
 
     this->inited = true;
 }

@@ -34,19 +34,29 @@ class QModernPushButtonOverlay : public QObject
 public:
     friend class QModernPushButton;
 
+    enum OverlayType {
+        Background,
+        OnHover,
+        OnPressed,
+        OnChecked
+    };
+
+    explicit QModernPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);
+
+    void setVisible(bool visible);
+    void setVisibleAnimated(bool visible);
 private:
 
-    explicit QModernPushButtonOverlay(QWidget* overlayWidget, QObject *parent = nullptr);
-
     bool shouldBeVisible;
+    bool managedAutomatically;
+    OverlayType type;
     QWidget* widget;
     QGraphicsOpacityEffect* effect;
     QPropertyAnimation* animation;
 
     void setAnimationDuration(int duration);
-    void setVisible(bool visible);
-    void setVisibleAnimated(bool visible);
     void setEffectEnabled(bool enabled);
+    OverlayType getType();
 
 private slots:
     void handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State);
