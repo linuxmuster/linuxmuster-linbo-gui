@@ -2,3 +2,5 @@
 build/buildGUI*
 build/linbofs*
 build/*.tar.xz
+debian/linuxmuster-linbo-gui7
+debian/tmp.*
