@@ -3,7 +3,7 @@
 # mkarchives.sh: Creates 32 & 64bit linbo_gui archives
 #
 # thomas@linuxmuster.net
-# 20201208
+# 20201218
 #
 
 src_dir="$(pwd)"
@@ -12,20 +12,43 @@ build_dir="$src_dir/build"
 build32_dir="$build_dir/linbofs"
 build64_dir="$build_dir/linbofs64"
 arc_dir="$deb_dir/linuxmuster-linbo-gui7/srv/linbo"
+initramfs_base_url="https://raw.githubusercontent.com/linuxmuster/linuxmuster-linbo/master/conf"
+tmp_dir="$deb_dir/tmp.$$"
 
 rm -rf "$arc_dir"
 mkdir -p "$arc_dir"
+mkdir -p "$tmp_dir"
+
+# libs to exclude in any case
+libs_ex_any="libc.so.6\nlibpthread.so.0"
+libs_ex="$tmp_dir/libs_ex"
 
 for i in "$build32_dir" "$build64_dir"; do
   case "$i" in
-    *64) bits="64" ; source="$build64_dir" ;;
-    *) bits="32" ; source="$build32_dir" ;;
+    *64) bits="64" ; source="$build64_dir" ; initramfs_url="$initramfs_base_url/initramfs64.conf" ;;
+    *) bits="32" ; source="$build32_dir" ; initramfs_url="$initramfs_base_url/initramfs.conf" ;;
   esac
+  # get initramfs.conf
+  initramfs_conf="$tmp_dir/$(basename "$initramfs_url")"
+  wget "$initramfs_url" -O "$initramfs_conf"
+  # get existing libs
+  libs="$(ls -1 "$source/lib/")"
+  if [ -s "$initrams_conf" -a -n "$libs" ]; then
+    rm -f "$libs_ex"
+    # exclude libs which are already in linbofs by looking in initramfs.conf
+    for l in $libs; do
+      grep -q "$l" "$initramfs_conf" && echo "$l" >> "$libs_ex"
+    done
+  else
+    echo "$libs_ex_any" > "$libs_ex"
+  fi
   archive="${arc_dir}/linbo_gui${bits}_7.tar.lz"
   cd "$i"
   echo -n "Creating $(basename $archive) ... "
-  tar --lzma -cf "$archive" * || exit 1
+  tar --lzma -X "$libs_ex" -cf "$archive" * || exit 1
   md5sum "$archive" | awk '{print $1}' > "$archive.md5" || exit 1
   echo "Done!"
   cd "$src_dir"
 done
+
+rm -rf "$tmp_dir"

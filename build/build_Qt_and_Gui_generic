@@ -18,7 +18,7 @@
 ##
 ## This script will be modified by the build.sh script
 ## so it can be used for both, 64 and 32 bit building!
-## all lines starting with 
+## all lines starting with
 ## "## 64: " will just be used for 64 bit building
 ## and all lines starting with
 ## "## 32: " will just be used for 32 bit building
@@ -49,12 +49,12 @@ ARCH_VALID=0
 ## 32: ARCH_VALID=$(($ARCH_VALID + 1))
 
 if [[ $ARCH_VALID -ne 1 ]]; then
-   echo "ERROR: There was no or more than one valid architecture defined for this buildscript!" 
+   echo "ERROR: There was no or more than one valid architecture defined for this buildscript!"
    echo "Note: this script is not designed to be used standalone, don't execute it!"
    exit 1
 fi
 
-## 64: sudo apt install build-essential gcc g++ libudev-dev libinput-dev libxkbcommon-dev -y
+## 64: sudo apt install build-essential gcc g++ libudev-dev libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y
 
 ## 32: sudo dpkg --add-architecture i386
 ## 32: sudo apt update
@@ -62,7 +62,7 @@ fi
 
 # Check for errors in apt install
 if [[ $? -ne 0 ]]; then
-   echo "There was an error when running apt install!" 
+   echo "There was an error when running apt install!"
    exit 1
 fi
 
@@ -157,21 +157,21 @@ then
 
 	# Check for errors in configure
 	if [[ $? -ne 0 ]]; then
-	   echo "There was an error when configuring Qt (see above)!" 
+	   echo "There was an error when configuring Qt (see above)!"
 	   exit 1
 	fi
 
 	make -j8
 	# Check for errors in make
 	if [[ $? -ne 0 ]]; then
-	   echo "There was an error when building Qt (see above)!" 
+	   echo "There was an error when building Qt (see above)!"
 	   exit 1
 	fi
-	
+
 	make install
 	# Check for errors in make install
 	if [[ $? -ne 0 ]]; then
-	   echo "There was an error when installing Qt (see above)!" 
+	   echo "There was an error when installing Qt (see above)!"
 	   exit 1
 	fi
 
@@ -182,7 +182,7 @@ then
 	cd ..
 else
     echo "Qt install dir exists, assuming Qt has already been built"
-    
+
 	if [[ $DO_WAIT -ne 0 ]]; then
 		echo "continuing with building in 5 seconds"
 		sleep 5
@@ -207,7 +207,7 @@ make -j8
 
 # Check for errors in make
 if [[ $? -ne 0 ]]; then
-   echo "There was an error when building!" 
+   echo "There was an error when building!"
    exit 1
 fi
 
