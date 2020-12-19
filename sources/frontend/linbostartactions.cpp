@@ -94,10 +94,6 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         this->rootActionButtons.append(new QModernPushButton(":svgIcons/image.svg", tr("Create image")));
         this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
-        // insert a line to separate image specific and global actions
-        QFrame* separatorLine = new QFrame();
-        separatorLine->setFrameShape(QFrame::HLine);
-        this->rootLayout->insertWidget(2, separatorLine);
     }
 
     QModernPushButton* buttonCache;
@@ -120,6 +116,13 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
 
     for(QModernPushButton* button : this->rootActionButtons)
         this->rootLayout->addWidget(button);
+
+    if(this->backend->getConfig()->getUseMinimalLayout()) {
+        // insert a line to separate image specific and global actions
+        QFrame* separatorLine = new QFrame();
+        separatorLine->setFrameShape(QFrame::HLine);
+        this->rootLayout->insertWidget(2, separatorLine);
+    }
 
     this->rootLayout->addStretch();
 
@@ -192,7 +195,7 @@ void LinboStartActions::resizeAndPositionAllItems() {
         geometries.append(QRect());
 
     // move buttons into place
-    this->buttonWidget->setGeometry(0,0,this->width(), this->height() * 0.4);
+    this->buttonWidget->setGeometry(0,0,this->width(), this->height());
 
     int buttonSpacing = this->buttonWidget->height() * 0.1;
     int defaultButtonHeight = this->buttonWidget->height() * 0.6;

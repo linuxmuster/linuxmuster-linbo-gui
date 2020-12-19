@@ -68,6 +68,9 @@ LinboOs* LinboOsSelectButton::getOs() {
 }
 
 void LinboOsSelectButton::setVisibleAnimated(bool visible) {
+
+    qDebug() << "Stiing OS " << this->os->getName() << " to visible animated: " << visible;
+
     this->shouldBeVisible = visible;
     this->button->setVisibleAnimated(visible);
 
@@ -76,6 +79,7 @@ void LinboOsSelectButton::setVisibleAnimated(bool visible) {
 }
 
 void LinboOsSelectButton::setVisible(bool visible) {
+    qDebug() << "Stiing OS " << this->os->getName() << " to visible: " << visible;
     this->shouldBeVisible = visible;
     this->button->setVisible(visible);
 

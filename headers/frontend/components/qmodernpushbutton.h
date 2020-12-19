@@ -41,6 +41,7 @@ public:
     QModernPushButton(QString icon, QWidget* parent = nullptr);
     QModernPushButton(QString icon, QString label, QWidget* parent = nullptr);
 
+    void setVisible(bool visible) override;
     void setVisibleAnimated(bool visible);
 
     void setGeometryAnimated(const QRect& geometry);

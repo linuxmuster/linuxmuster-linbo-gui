@@ -127,7 +127,13 @@ void QModernPushButton::setGeometryAnimated(const QRect& geometry) {
     this->geometryAnimation->start();
 }
 
+void QModernPushButton::setVisible(bool visible) {
+    this->shouldBeVisible = visible;
+    QAbstractButton::setVisible(visible);
+}
+
 void QModernPushButton::setVisibleAnimated(bool visible) {
+    qDebug() << "Stiing button " << this->objectName() << " to visible animated: " << visible;
     if(visible == this->shouldBeVisible)
         return;
 

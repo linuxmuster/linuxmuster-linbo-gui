@@ -30,10 +30,6 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));
 
-    // create an instance of the old GUI (as a backup)
-    //linboGUIImpl* legacyGui = new linboGUIImpl(this);
-    //legacyGui->setStyleSheet( "QDialog { background: white }");
-
     // create the main layout
 
     // main layout
@@ -127,7 +123,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     switch (newState) {
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError:
-        osSelectionRowHeight = this->height() * 0.2;
+        osSelectionRowHeight = this->height() * 0.3;
         startActionsWidgetHeight = this->height() * 0.5;
         break;
 
@@ -137,7 +133,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
             startActionsWidgetHeight = this->height() * 0.2;
         }
         else {
-            osSelectionRowHeight = this->height() * 0.5;
+            osSelectionRowHeight = this->height() * 0.4;
             startActionsWidgetHeight = this->height() * 0;
         }
 
@@ -149,7 +145,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     case LinboBackend::RootActionSuccess:
         if(useMinimalLayout){
             osSelectionRowHeight = this->height() * 0.3;
-            startActionsWidgetHeight = this->height() * 0.2;
+            startActionsWidgetHeight = this->height() * 0.45;
         }
         else {
             osSelectionRowHeight = this->height() * 0.4;

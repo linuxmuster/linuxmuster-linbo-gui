@@ -49,6 +49,7 @@ private:
     QFont noOsLabelFont;
     QLabel* environmentValuesLabel;
     QFont environmentValuesLabelFont;
+    QPropertyAnimation* sizeAnimation;
     bool showOnlySelectedButton;
     bool inited;
 

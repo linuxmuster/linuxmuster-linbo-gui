@@ -28,6 +28,10 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
 
     this->showOnlySelectedButton = false;
 
+    this->sizeAnimation = new QPropertyAnimation(this, "minimumSize", this);
+    this->sizeAnimation->setDuration(100);
+    this->sizeAnimation->setEasingCurve(QEasingCurve::OutQuad);
+
     this->osButtonGroup = new QButtonGroup();
     this->osButtonGroup->setExclusive(true);
 
@@ -97,18 +101,24 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
         int buttonHeight;
         int totalWidth;
 
-        if(useMinimalLayout || (!useMinimalLayout && buttonCount < 2)) {
+        if(useMinimalLayout) {
             spacing = heightOverride * 0.2;
             buttonWidth = std::min((widthOverride - spacing) / buttonCount, heightOverride * 3);
             buttonHeight = heightOverride;
+            totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
+        }
+        else if (!useMinimalLayout && buttonCount <= 2) {
+            spacing = heightOverride * 0.1;
+            buttonWidth = std::min((widthOverride - spacing) / buttonCount, int(heightOverride * 1.5) - spacing);
+            buttonHeight = heightOverride / 2 - spacing / 2;
             totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
         }
         else if(!useMinimalLayout && buttonCount > 2) {
             // if we have more than two buttons -> we have multiple rows with two buttons each
             spacing = heightOverride * 0.1;
             buttonWidth = std::min((widthOverride - spacing) / 2, int(heightOverride * 1.5) - spacing);
-            totalWidth = buttonWidth * 2 + spacing * (2 + 1);
             buttonHeight = heightOverride / 2 - spacing / 2;
+            totalWidth = buttonWidth * 2 + spacing * (2 + 1);
             //qDebug() << "Button height: " << buttonHeight << " buttonWidth: " << buttonWidth;
         }
         else {
@@ -132,7 +142,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
                     else
                         geometry = QRect(x + (buttonWidth * (i-2)) + (spacing * ((i-2)+1)), buttonHeight + spacing, buttonWidth, buttonHeight);
                 else
-                    geometry = QRect(x + (buttonWidth * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
+                    geometry = QRect(x + (buttonWidth * i) + (spacing * (i+1)), (heightOverride - buttonHeight) / 2, buttonWidth, buttonHeight);
             }
             else {
                 // singular button
@@ -146,7 +156,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
                 QPropertyAnimation* moveAnimation = new QPropertyAnimation(this);
                 moveAnimation->setPropertyName("geometry");
                 moveAnimation->setEasingCurve(QEasingCurve::InOutQuad);
-                moveAnimation->setDuration(400);
+                moveAnimation->setDuration(300);
                 moveAnimation->setTargetObject(this->osButtons[i]);
                 moveAnimation->setStartValue(this->osButtons[i]->geometry());
                 moveAnimation->setEndValue(geometry);
@@ -245,7 +255,10 @@ void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
     if(size.height() < this->height()) {
         this->sizeOverride = new QSize(size);
         this->resizeAndPositionAllButtons();
-        QTimer::singleShot(400, [=]{this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
+        this->sizeAnimation->setStartValue(this->size());
+        this->sizeAnimation->setEndValue(size);
+        connect(this->sizeAnimation, &QPropertyAnimation::finished, [=]{this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
+        QTimer::singleShot(300, [=]{this->sizeAnimation->start();});
     }
     else {
         if(this->sizeOverride != nullptr) {
