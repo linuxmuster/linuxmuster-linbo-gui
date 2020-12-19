@@ -174,7 +174,6 @@ void QModernPushButton::setVisibleAnimated(bool visible) {
     }
 
     this->shouldBeVisible = visible;
-    this->setEnabled(visible);
 
     if(!visible) {
         for(QModernPushButtonOverlay* overlay : this->overlays)

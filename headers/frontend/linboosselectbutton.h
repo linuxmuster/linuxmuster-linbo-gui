@@ -64,6 +64,7 @@ private:
 private slots:
     void handleBackendStateChange(LinboBackend::LinboState state);
     void updateActionButtonVisibility();
+    void handlePrimaryButtonClicked();
 };
 
 #endif // LINBOOSSELECTBUTTON_H

@@ -1,9 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>svgIcons/overlayChecked.svg</file>
-        <file>svgIcons/startAction.svg</file>
-        <file>svgIcons/syncAction.svg</file>
-        <file>svgIcons/resetAction.svg</file>
         <file>svgIcons/overlayHovered.svg</file>
         <file>svgIcons/overlayPressed.svg</file>
         <file>svgIcons/shutdownAction.svg</file>
@@ -18,9 +15,6 @@
         <file>svgIcons/register.svg</file>
         <file>svgIcons/terminal.svg</file>
         <file>svgIcons/upload.svg</file>
-        <file>svgIcons/reinstallBg.svg</file>
-        <file>svgIcons/startBg.svg</file>
-        <file>svgIcons/syncBg.svg</file>
         <file>svgIcons/infoBg.svg</file>
         <file>svgIcons/imageBg.svg</file>
         <file>svgIcons/uploadBg.svg</file>
@@ -29,5 +23,14 @@
         <file>svgIcons/overlayStart.svg</file>
         <file>svgIcons/overlaySync.svg</file>
         <file>svgIcons/overlayImage.svg</file>
+        <file>svgIcons/startActionIcons/reinstall.svg</file>
+        <file>svgIcons/startActionIcons/reinstallBg.svg</file>
+        <file>svgIcons/startActionIcons/reinstallDisabledBg.svg</file>
+        <file>svgIcons/startActionIcons/start.svg</file>
+        <file>svgIcons/startActionIcons/startBg.svg</file>
+        <file>svgIcons/startActionIcons/startDisabledBg.svg</file>
+        <file>svgIcons/startActionIcons/sync.svg</file>
+        <file>svgIcons/startActionIcons/syncBg.svg</file>
+        <file>svgIcons/startActionIcons/syncDisabledBg.svg</file>
     </qresource>
 </RCC>
