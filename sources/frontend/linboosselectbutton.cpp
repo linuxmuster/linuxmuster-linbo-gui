@@ -50,6 +50,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
                     );
 
         this->button = new QModernPushButton(icon, "", {this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
+        this->setToolTip(this->os->getDescription());
 
         connect(this->button, &QModernPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
@@ -64,18 +65,19 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             bool disabled = !this->os->getActionEnabled(startAction);
 
             if(disabled)
-                startActionIconPath.replace("Bg.svg", "DisabledBg.svg");
+                continue;
 
             QModernPushButton* actionButton = new QModernPushButton(startActionIconPath, this);
             actionButton->setEnabled(!disabled);
             this->startActionButtons.append(actionButton);
+
+            switch (startAction) {
+            case LinboOs::StartOs: connect(actionButton, &QModernPushButton::clicked, this->os, &LinboOs::start); break;
+            case LinboOs::SyncOs: connect(actionButton, &QModernPushButton::clicked, this->os, &LinboOs::sync); break;
+            case LinboOs::ReinstallOs: connect(actionButton, &QModernPushButton::clicked, this->os, &LinboOs::reinstall); break;
+            default: break;
+            }
         }
-
-        connect(this->startActionButtons[0], &QModernPushButton::clicked, this->os, &LinboOs::start);
-        connect(this->startActionButtons[1], &QModernPushButton::clicked, this->os, &LinboOs::sync);
-        connect(this->startActionButtons[2], &QModernPushButton::clicked, this->os, &LinboOs::reinstall);
-
-        this->startActionButtons.append(new QModernPushButton(":/svgIcons/infoBg.svg", this));
 
         QStringList rootActionButtons = {
             ":/svgIcons/imageBg.svg",
@@ -155,7 +157,7 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
 
         int x = this->height();
         int spacing = this->width() * 0.04;
-        int actionButtonSize = (this->width() - this->height()) / this->startActionButtons.length() - spacing;
+        int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
 
         if(actionButtonSize < 0) {
             // only the big button is visible

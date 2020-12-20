@@ -33,13 +33,13 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     // Action Buttons
     this->buttonWidget = new QWidget();
 
-    this->startOsButton = new QModernPushButton(":/svgIcons/startAction.svg", this->buttonWidget);
+    this->startOsButton = new QModernPushButton(":/svgIcons/startActionIcons/start.svg", this->buttonWidget);
     connect(this->startOsButton, SIGNAL(clicked()), this->backend, SLOT(startCurrentOs()));
 
-    this->syncOsButton = new QModernPushButton(":/svgIcons/syncAction.svg", this->buttonWidget);
+    this->syncOsButton = new QModernPushButton(":/svgIcons/startActionIcons/sync.svg", this->buttonWidget);
     connect(this->syncOsButton, SIGNAL(clicked()), this->backend, SLOT(syncCurrentOs()));
 
-    this->reinstallOsButton = new QModernPushButton(":/svgIcons/resetAction.svg", this->buttonWidget);
+    this->reinstallOsButton = new QModernPushButton(":/svgIcons/startActionIcons/reinstall.svg", this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
     this->noBaseImageLabel = new QLabel(tr("No baseimage defined"), this->buttonWidget);
@@ -102,7 +102,7 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     connect(buttonCache, SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
     this->rootActionButtons.append(buttonCache);
 
-    buttonCache = new QModernPushButton(":svgIcons/syncAction.svg", tr("Update cache"));
+    buttonCache = new QModernPushButton(":svgIcons/startActionIcons/sync.svg", tr("Update cache"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->updateCacheDialog, SLOT(open()));
 
@@ -374,13 +374,13 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
         QString errorDetails;
         if(chaperLogs.length() == 0)
             errorDetails = "<b>" + tr("No logs before this crash") + "</b>";
-        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogType::StdErr).length() == 0){
+        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0){
             errorDetails = "<b>" + tr("The last logs before the crash were:") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
         }
         else {
             errorDetails = "<b>" + tr("The last errors before the crash were:") + "</b><br>";
-            errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogType::LinboGuiError | LinboLogType::StdErr), 8).join("<br>");
+            errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::LinboGuiError | LinboLogger::StdErr), 8).join("<br>");
         }
 
         errorDetails += "<br><br><b>" + tr("Please ask your system administrator for help.") + "</b>";
@@ -424,10 +424,10 @@ void LinboStartActions::handleLatestLogChanged(const LinboLogger::LinboLog& late
 
     QString logColor = "black";
     switch (latestLog.type) {
-    case LinboLogType::StdErr:
+    case LinboLogger::StdErr:
         logColor = this->backend->getConfig()->getConsoleFontcolorStderr();
         break;
-    case LinboLogType::StdOut:
+    case LinboLogger::StdOut:
         // TODO?? logColor = this->backend->getConfig()->getConsoleFontcolorStdout();
         break;
     default:

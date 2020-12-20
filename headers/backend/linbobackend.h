@@ -80,10 +80,15 @@ public:
         DeviceRoleCount
     };
 
-    enum ImageCreationAction {
-        ReplaceImage,
-        CreateNewImage
+    enum LinboPostProcessAction {
+        NoAction = 1,
+        Shutdown = 2,
+        Reboot = 4,
+        Logout = 8,
+        UploadImage = 16
     };
+    Q_DECLARE_FLAGS(LinboPostProcessActions, LinboPostProcessAction)
+    Q_FLAG(LinboPostProcessActions)
 
     LinboState getState();
     LinboLogger* getLogger();
@@ -128,6 +133,8 @@ private:
     QProcess* synchronosProcess;
 
     QString rootPassword;
+    LinboImage* imageToUploadAutomatically;
+    LinboPostProcessActions postProcessActions;
 
     template<typename ... Strings>
     QString executeCommand(bool waitForFinished, QString argument, const Strings&... arguments) {
@@ -167,8 +174,10 @@ public slots:
     bool login(QString password);
     void logout();
 
-    bool createImageOfCurrentOs(LinboImage::ImageType type, ImageCreationAction action);
-    bool uploadImageOfCurrentOs(LinboImage::ImageType type);
+    bool replaceImageOfCurrentOs(LinboPostProcessActions postProcessAction = NoAction);
+    bool createImageOfCurrentOS(QString name, LinboPostProcessActions postProcessAction = NoAction);
+
+    bool uploadImage(LinboImage* image, LinboPostProcessActions postProcessAction = NoAction);
 
     bool partitionDrive(bool format = true);
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);
@@ -191,5 +200,7 @@ signals:
     void autostartTimeoutProgressChanged();
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(LinboBackend::LinboPostProcessActions)
 
 #endif // LINBOBACKEND_H

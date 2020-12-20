@@ -31,28 +31,18 @@ class LinboImage : public QObject
 public:
     friend class LinboBackend;
 
-    enum ImageType {
-        BaseImage,
-        DifferentialImage
-    };
-
     const QString& getDescription() const {return this->description;}
     const QString& getName() const {return this->name;}
-    const ImageType& getType() const {return this->type;}
-
-    ImageType getType();
 
 protected:
-    explicit LinboImage(QString name, ImageType type, QObject *parent = nullptr);
+    explicit LinboImage(QString name, QObject *parent = nullptr);
 
     void setDescription (const QString& description) {this->description = description;}
     void setName(const QString& name) {this->name = name;}
-    void setType(const ImageType& type) {this->type = type;}
 
 private:
   QString name;
   QString description;
-  ImageType type;
 
 
 };

@@ -25,26 +25,6 @@
 #include <QFile>
 #include <QStringList>
 
-enum class LinboLogType {
-    UnknownLogType = -1,
-    StdOut = 1,
-    StdErr = 2,
-    LinboGuiInfo = 4,
-    LinboGuiError = 8,
-    LinboLogChapterBeginning = 16,
-    LinboLogChapterEnd = 32
-};
-
-inline LinboLogType operator|(LinboLogType a, LinboLogType b)
-{
-    return static_cast<LinboLogType>(static_cast<int>(a) | static_cast<int>(b));
-};
-
-inline LinboLogType operator&(LinboLogType a, LinboLogType b)
-{
-    return static_cast<LinboLogType>(static_cast<int>(a) & static_cast<int>(b));
-};
-
 class LinboLogger : public QObject
 {
     Q_OBJECT
@@ -52,6 +32,18 @@ class LinboLogger : public QObject
 public:
 
     friend class LinboBackend;
+
+    enum LinboLogType {
+        UnknownLogType = -1,
+        StdOut = 1,
+        StdErr = 2,
+        LinboGuiInfo = 4,
+        LinboGuiError = 8,
+        LinboLogChapterBeginning = 16,
+        LinboLogChapterEnd = 32
+    };
+    Q_DECLARE_FLAGS(LinboLogTypes, LinboLogType)
+    Q_FLAG(LinboLogTypes)
 
     typedef struct {
         QString message;
@@ -64,7 +56,7 @@ public:
     static QString logTypeToString(LinboLogType logType);
     QList<LinboLog> getLogs();
     QList<LinboLog> getLogsOfCurrentChapter();
-    static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogType filterType);
+    static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterType);
     static QStringList logsToStacktrace(QList<LinboLog> logs, int limit);
 
 private:
@@ -80,5 +72,7 @@ signals:
     void latestLogChanged(const LinboLogger::LinboLog& latestLog);
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(LinboLogger::LinboLogTypes)
 
 #endif // LINBOLOGGER_H

@@ -91,11 +91,11 @@ QList<LinboLogger::LinboLog> LinboLogger::getLogsOfCurrentChapter() {
     return tmpLogs;
 }
 
-QList<LinboLogger::LinboLog> LinboLogger::getFilterLogs(QList<LinboLog> logs, LinboLogType filterType) {
+QList<LinboLogger::LinboLog> LinboLogger::getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterTypes) {
     QList<LinboLog> tmpLogs;
 
     for(LinboLog log : logs) {
-        if((log.type & filterType) == log.type)
+        if(filterTypes.testFlag(log.type))
             tmpLogs.append(log);
     }
 
