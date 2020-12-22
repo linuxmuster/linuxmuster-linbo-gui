@@ -25,12 +25,11 @@
         <file>svgIcons/overlayImage.svg</file>
         <file>svgIcons/startActionIcons/reinstall.svg</file>
         <file>svgIcons/startActionIcons/reinstallBg.svg</file>
-        <file>svgIcons/startActionIcons/reinstallDisabledBg.svg</file>
         <file>svgIcons/startActionIcons/start.svg</file>
         <file>svgIcons/startActionIcons/startBg.svg</file>
-        <file>svgIcons/startActionIcons/startDisabledBg.svg</file>
         <file>svgIcons/startActionIcons/sync.svg</file>
         <file>svgIcons/startActionIcons/syncBg.svg</file>
-        <file>svgIcons/startActionIcons/syncDisabledBg.svg</file>
+        <file>svgIcons/desktop.svg</file>
+        <file>svgIcons/network.svg</file>
     </qresource>
 </RCC>

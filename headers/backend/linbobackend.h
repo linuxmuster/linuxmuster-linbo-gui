@@ -133,7 +133,7 @@ private:
     QProcess* synchronosProcess;
 
     QString rootPassword;
-    LinboImage* imageToUploadAutomatically;
+    const LinboImage* imageToUploadAutomatically;
     LinboPostProcessActions postProcessActions;
 
     template<typename ... Strings>
@@ -177,7 +177,7 @@ public slots:
     bool replaceImageOfCurrentOs(LinboPostProcessActions postProcessAction = NoAction);
     bool createImageOfCurrentOS(QString name, LinboPostProcessActions postProcessAction = NoAction);
 
-    bool uploadImage(LinboImage* image, LinboPostProcessActions postProcessAction = NoAction);
+    bool uploadImage(const LinboImage* image, LinboPostProcessActions postProcessAction = NoAction);
 
     bool partitionDrive(bool format = true);
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);

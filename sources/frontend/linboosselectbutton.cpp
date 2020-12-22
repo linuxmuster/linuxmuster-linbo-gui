@@ -62,7 +62,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
             QString startActionIconPath = startActionButtonIcons[startAction];
-            bool disabled = !this->os->getActionEnabled(startAction);
+            bool disabled = !this->os->getActionEnabled(startAction) || this->os->getDefaultAction() == startAction;
 
             if(disabled)
                 continue;
@@ -80,7 +80,6 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         }
 
         QStringList rootActionButtons = {
-            ":/svgIcons/imageBg.svg",
             ":/svgIcons/uploadBg.svg"
         };
 

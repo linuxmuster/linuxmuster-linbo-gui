@@ -264,6 +264,15 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
 
     this->setState(CreatingImage);
 
+    if(this->postProcessActions.testFlag(UploadImage) && name == this->currentOs->getBaseImage()->getName()) {
+        this->imageToUploadAutomatically = this->currentOs->getBaseImage();
+    }
+    else if(this->postProcessActions.testFlag(UploadImage)) {
+        this->imageToUploadAutomatically = new LinboImage(name);
+    }
+
+    // TODO: Description
+
     this->executeCommand(
                 false,
                 "create",
@@ -279,7 +288,7 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
     return true;
 }
 
-bool LinboBackend::uploadImage(LinboImage* image, LinboPostProcessActions postProcessActions) {
+bool LinboBackend::uploadImage(const LinboImage* image, LinboPostProcessActions postProcessActions) {
     if(this->state != Root)
         return false;
 
@@ -739,6 +748,9 @@ void LinboBackend::loadEnvironmentValues() {
 
     // subnet mask
     this->config->setSubnetMask(this->executeCommand(true, "netmask").replace("\n", ""));
+
+    // subnet bitmask
+    this->config->setSubnetBitmask(this->executeCommand(true, "bitmask").replace("\n", ""));
 
     // mac address
     this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));

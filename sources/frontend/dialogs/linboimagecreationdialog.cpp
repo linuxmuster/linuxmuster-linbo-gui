@@ -14,7 +14,16 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->mainLayout->addWidget(new QLabel(tr("The action to perfom:")));
     this->mainLayout->addWidget(new QLabel(tr("Hint: If you replace an image, a backup of the current one will be created automatically.")));
 
-    QRadioButton* replaceBaseImage = new QRadioButton(tr("replace current base image"));
+    QRadioButton* replaceImage = new QRadioButton(tr("replace current image"));
+    this->mainLayout->addWidget(replaceImage);
 
+    QRadioButton* createNewImage = new QRadioButton(tr("create a new image"));
+    this->mainLayout->addWidget(createNewImage);
+
+    this->imageNameLineEdit = new QModernLineEdit();
+    this->mainLayout->addWidget(this->imageNameLineEdit);
+
+    this->imageDescriptionTextBrowser = new QModernTextBrowser();
+    this->mainLayout->addWidget(this->imageDescriptionTextBrowser);
 
 }

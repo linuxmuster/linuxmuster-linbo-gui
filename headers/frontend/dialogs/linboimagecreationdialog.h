@@ -29,7 +29,7 @@ private:
     LinboBackend* backend;
     QVBoxLayout* mainLayout;
     QButtonGroup* actionButtonGroup;
-    QModernLineEdit imageNameLineEdit;
+    QModernLineEdit* imageNameLineEdit;
     QModernTextBrowser* imageDescriptionTextBrowser;
     QCheckBox* rebootCheckBox;
     QCheckBox* shutDownCheckBox;

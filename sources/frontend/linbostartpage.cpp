@@ -44,10 +44,6 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     osSelectionRow = new LinboOsSelectionRow(this->backend);
     mainLayout->addWidget(osSelectionRow);
 
-    this->osSelectionRowAnimation = new QPropertyAnimation(this->osSelectionRow, "minimumSize");
-    this->osSelectionRowAnimation->setDuration(400);
-    this->osSelectionRowAnimation->setEasingCurve(QEasingCurve::InOutQuad);
-
     // action buttons
     this->startActionsWidget = new LinboStartActions(this->backend, this);
     this->startActionsWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -59,11 +55,14 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
 
     mainLayout->addStretch();
 
-    QLabel* versionLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION);
-    versionLabel->setFixedHeight(this->height() * 0.05);
-    versionLabel->setFont(QFont("Segoe UI"));
-    mainLayout->addWidget(versionLabel);
+    // client info
+    clientInfo = new LinboClientInfo(this->backend->getConfig(), this);
+    clientInfo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    mainLayout->addWidget(clientInfo);
 
+    this->clientInfoAnimation = new QPropertyAnimation(clientInfo, "maximumSize");
+    this->clientInfoAnimation->setDuration(400);
+    this->clientInfoAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
     // power and settings Buttons
     QWidget* powerActionsLayoutWidget = new QWidget(this);
@@ -118,6 +117,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     bool powerActionButtonsVisible = false;
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
+    int clientInfoHeight = 0;
     bool useMinimalLayout = this->backend->getConfig()->getUseMinimalLayout();
 
     switch (newState) {
@@ -137,6 +137,8 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
             startActionsWidgetHeight = this->height() * 0;
         }
 
+        clientInfoHeight = this->height() * 0.15;
+
         powerActionButtonsVisible = true;
         break;
 
@@ -151,6 +153,8 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
             osSelectionRowHeight = this->height() * 0.4;
             startActionsWidgetHeight = this->height() * 0.3;
         }
+
+        clientInfoHeight = this->height() * 0.3;
 
         powerActionButtonsVisible = true;
         break;
@@ -183,11 +187,21 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
         this->startActionWidgetAnimation->start();
 
         this->osSelectionRow->setMinimumSizeAnimated(QSize(this->width(), osSelectionRowHeight));
+
+        this->clientInfoAnimation->setStartValue(QSize(this->width(), this->clientInfo->height()));
+        this->clientInfoAnimation->setEndValue(QSize(this->width(), clientInfoHeight));
+        this->clientInfoAnimation->start();
     }
     else {
         this->startActionsWidget->setMinimumSize(this->width(), startActionsWidgetHeight);
         this->osSelectionRow->setMinimumSize(this->width(), osSelectionRowHeight);
+        this->clientInfo->setMaximumSize(this->width(), clientInfoHeight);
     }
 
     this->inited = true;
+}
+
+void LinboStartPage::keyPressEvent(QKeyEvent *ev)
+{
+    qDebug() << "You Pressed Key " << (ev->key() == Qt::Key_F1);
 }

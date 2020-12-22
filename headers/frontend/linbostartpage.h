@@ -33,6 +33,7 @@
 #include "qmodernprogressbar.h"
 #include "linboosselectionrow.h"
 #include "linbostartactions.h"
+#include "linboclientinfo.h"
 
 #include "linbologindialog.h"
 
@@ -46,6 +47,7 @@ private:
     LinboBackend* backend;
     LinboOsSelectionRow* osSelectionRow;
     LinboStartActions* startActionsWidget;
+    LinboClientInfo* clientInfo;
     QModernPushButton* rootActionButton;
     QModernPushButton* logoutActionButton;
     QList<QModernPushButton*> powerActionButtons;
@@ -53,13 +55,14 @@ private:
     LinboLoginDialog* loginDialog;
 
     QPropertyAnimation* startActionWidgetAnimation;
-    QPropertyAnimation* osSelectionRowAnimation;
+    QPropertyAnimation* clientInfoAnimation;
 
     bool inited;
 
 private slots:
     void handleLinboStateChanged(LinboBackend::LinboState newState);
 
+    void keyPressEvent(QKeyEvent *ev) override;
 signals:
 
 };
