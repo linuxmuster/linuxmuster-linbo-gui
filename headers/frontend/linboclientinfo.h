@@ -21,13 +21,11 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QVBoxLayout* mainLayout;
+    QWidget* mainWidget;
+    QGridLayout* mainLayout;
 
     QSvgWidget* networkIconWidget;
     QSvgWidget* desktopIconWidget;
-
-    QHBoxLayout* networkInfoLayout;
-    QHBoxLayout* clientInfoLayout;
 
 signals:
 

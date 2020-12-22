@@ -58,6 +58,7 @@ private:
     QPropertyAnimation* clientInfoAnimation;
 
     bool inited;
+    bool showClientInfo;
 
 private slots:
     void handleLinboStateChanged(LinboBackend::LinboState newState);

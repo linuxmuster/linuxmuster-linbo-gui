@@ -3,38 +3,29 @@
 LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget(parent)
 {
 
-    this->mainLayout = new QVBoxLayout(this);
+    this->mainWidget = new QWidget(this);
+
+    this->mainLayout = new QGridLayout(this->mainWidget);
     this->mainLayout->setAlignment(Qt::AlignCenter);
 
-    this->mainLayout->addStretch();
-
-    this->networkInfoLayout = new QHBoxLayout();
-    this->networkInfoLayout->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    this->mainLayout->addLayout(this->networkInfoLayout);
-
     this->networkIconWidget = new QSvgWidget(":/svgIcons/network.svg");
-    this->networkInfoLayout->addWidget(this->networkIconWidget);
+    this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
-    this->networkInfoLayout->addWidget(new QLabel("Hostname: " + config->getHostname()));
-    this->networkInfoLayout->addWidget(new QLabel("Group:" + config->getHostGroup()));
-    this->networkInfoLayout->addWidget(new QLabel("Client IP:" + config->getIpAddress()));
-    this->networkInfoLayout->addWidget(new QLabel("Mac:" + config->getMacAddress()));
-
-    this->mainLayout->addStretch();
-
-    this->clientInfoLayout = new QHBoxLayout();
-    this->clientInfoLayout->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    this->mainLayout->addLayout(this->clientInfoLayout);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Hostname:") + "</b>  " + config->getHostname()), 0, 1, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Group:") + "</b>  " + config->getHostGroup()), 0, 2, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Client IP:") + "</b>  " + config->getIpAddress()), 0, 3, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac:") + "</b>  " + config->getMacAddress()), 0, 4, 1, 1);
 
     this->desktopIconWidget = new QSvgWidget(":/svgIcons/desktop.svg");
-    this->clientInfoLayout->addWidget(this->desktopIconWidget);
+    this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
-    this->clientInfoLayout->addWidget(new QLabel("HD: " + config->getHddSize()));
-    this->clientInfoLayout->addWidget(new QLabel("Cache: " + config->getCacheSize()));
-    this->clientInfoLayout->addWidget(new QLabel("CPU: " + config->getCpuModel()));
-    this->clientInfoLayout->addWidget(new QLabel("RAM: " + config->getRamSize()));
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("HD:") + "</b>  " + config->getHddSize()), 1, 1, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Cache:") + "</b>  " + config->getCacheSize()), 1, 2, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("CPU:") + "</b>  " + config->getCpuModel()), 1, 3, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("RAM:") + "</b>  " + config->getRamSize()), 1, 4, 1, 1);
 
-    this->mainLayout->addStretch();
+
+    this->setStyleSheet("QGridLayout {background: red;}");
 }
 
 
@@ -43,21 +34,26 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
 
     int iconHeight = this->height() * 0.3;
 
+    this->mainWidget->setGeometry(0,0,this->width(), this->height());
+    this->mainLayout->setSpacing(this->height() * 0.2);
+
     this->networkIconWidget->setFixedSize(iconHeight, iconHeight);
     this->desktopIconWidget->setFixedSize(iconHeight, iconHeight);
 
     // set font size
-    for(int i = 0; i < 8; i++) {
-        QLayoutItem* labelItem;
+    for(int i = 0; i < 10; i++) {
+        // skip svg icons
+        if(i == 0 || i == 5)
+            continue;
 
-        if(i < 4)
-            labelItem = this->networkInfoLayout->itemAt(i + 1);
-        else
-            labelItem = this->clientInfoLayout->itemAt(i-4 + 1);
+        QLayoutItem* labelItem = this->mainLayout->itemAt(i);
 
         QLabel* label = static_cast<QLabel*>(labelItem->widget());
+
+        label->setMaximumWidth(this->width() * 0.2);
+
         QFont labelFont = label->font();
-        labelFont.setPixelSize(this->height() * 0.2);
+        labelFont.setPixelSize(int(this->height() * 0.2) <= 0 ? 1:this->height() * 0.2);
         label->setFont(labelFont);
     }
 }
