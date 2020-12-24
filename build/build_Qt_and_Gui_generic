@@ -54,6 +54,8 @@ if [[ $ARCH_VALID -ne 1 ]]; then
    exit 1
 fi
 
+sudo apt update
+
 ## 64: sudo apt install build-essential gcc g++ libudev-dev libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y
 
 ## 32: sudo dpkg --add-architecture i386
