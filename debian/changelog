@@ -1,3 +1,10 @@
+linuxmuster-linbo-gui7 (0.4-0) lmn7; urgency=low
+
+  * release 7.0.1-Alpha03-01
+    (https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/tag/7.0.1-Alpha03-01).
+
+ -- Thomas Schmitt <thomas@linuxmuster.net>  Fri, 25 Dec 2020 15:25:47 +0100
+
 linuxmuster-linbo-gui7 (0.3-0) lmn7; urgency=low
 
   * release 7.0.1-Alpha02 (https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/tag/7.0.1-Alpha02).
