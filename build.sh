@@ -86,4 +86,4 @@ cd ..
 mkdir archives
 cp ../linuxmuster-linbo-gui7_* ./archives
 cd archives
-zip -r ../archives.zip 
+zip -r ../archives.zip *
