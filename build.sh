@@ -61,7 +61,11 @@ do
 	# copy icons into linbofs folder
 	cp -r ./icons  ./linbofs$ARCH
 
-    sleep 10
+	echo "------------------------------------------------"
+	echo "- linbo_gui7 for $ARCH was built successfully! -"
+	echo "------------------------------------------------"
+
+    sleep 5
 
 done
 
@@ -71,6 +75,9 @@ echo "--------------------------------------"
 echo "- linbo_gui7 was built successfully! -"
 echo "-   Now building debian packages     -"
 echo "--------------------------------------"
+
+sudo apt update
+sudo apt install debhelper -y
 
 cd ..
 ./debian/mkdeb.sh

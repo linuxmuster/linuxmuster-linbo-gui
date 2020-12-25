@@ -155,7 +155,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     case LinboBackend::Registering:
     case LinboBackend::RootActionSuccess:
         if(useMinimalLayout){
-            osSelectionRowHeight = this->height() * 0.3;
+            osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.45;
         }
         else {

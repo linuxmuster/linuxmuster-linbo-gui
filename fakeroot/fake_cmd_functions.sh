@@ -6,7 +6,7 @@ ip()
     if [[ -n "${OFFLINE}" ]]; then
         echo "OFFLINE"
     else
-        echo "10.16.3.68"
+        echo "10.0.1.100"
     fi
 }
 
@@ -20,10 +20,20 @@ netmask()
     fi
 }
 
+# linbo_cmd bitmask
+bitmask()
+{
+    if [[ -n "${OFFLINE}" ]]; then
+        echo "OFFLINE"
+    else
+        echo "16"
+    fi
+}
+
 # linbo_cmd hostname
 hostname()
 {
-    echo "cpqmathe045"
+    echo "Linbo-Test"
 }
 
 # linbo_cmd cpu
@@ -83,13 +93,13 @@ battery()
     echo "$((RANDOM%100))"
 }
 
-# linbo_cmd authenticate 10.16.1.1 linbo pw123
+# linbo_cmd authenticate 10.0.0.1 linbo pw123
 authenticate()
 {
     local server="$1"
     local user="$2"
     local password="$3"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${user}" != "linbo" ]] \
       || [[ "${password}" != "Muster!" ]]; then
         echo "Wrong parameters: «$*»"
@@ -125,11 +135,11 @@ start()
     fi
 }
 
-# linbo_cmd preregister 10.16.1.1
+# linbo_cmd preregister 10.0.0.1
 # writes to /tmp/newregister
 preregister()
 {
-    if [[ "${1}" != "10.16.1.1" ]]; then
+    if [[ "${1}" != "10.0.0.1" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
     else
@@ -166,7 +176,7 @@ readfile()
     fi
 }
 
-# linbo_cmd register 10.16.1.1 linbo pw123 room client ip group
+# linbo_cmd register 10.0.0.1 linbo pw123 room client ip group
 register()
 {
     local server="$1"
@@ -177,7 +187,7 @@ register()
     local ip="$6"
     local group="$7"
     local role="$8"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${user}" != "linbo" ]] \
       || [[ "${password}" != "Muster!" ]] \
       || [[ -n "$9" ]]; then
@@ -188,8 +198,8 @@ register()
     fi
 }
 
-# linbo_cmd synconly 10.16.1.1 /dev/sda4 opensuse-cpqmini.cloop "" /dev/sda1 /dev/sda1 /boot/vmlinuz /boot/initrd "resume=/dev/sda2 splash=silent quiet showopts"
-# linbo_cmd synconly 10.16.1.1 /dev/sda4 opensuse-cpqmini.cloop "" /dev/sda1 /dev/sda1 /boot/vmlinuz /boot/initrd "noresume splash=silent quiet showopts klassenarbeit=1"
+# linbo_cmd synconly 10.0.0.1 /dev/sda4 opensuse-cpqmini.cloop "" /dev/sda1 /dev/sda1 /boot/vmlinuz /boot/initrd "resume=/dev/sda2 splash=silent quiet showopts"
+# linbo_cmd synconly 10.0.0.1 /dev/sda4 opensuse-cpqmini.cloop "" /dev/sda1 /dev/sda1 /boot/vmlinuz /boot/initrd "noresume splash=silent quiet showopts klassenarbeit=1"
 synconly()
 {
     # TODO: check $baseimage $image
@@ -202,7 +212,7 @@ synconly()
     local kernel="$7"
     local initrd="$8"
     local append="$9"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
       || [[ "${baseimage}" != "opensuse-cpqmini.cloop" ]] \
       || [[ "${image}" != "" ]] \
@@ -221,13 +231,13 @@ synconly()
     fi
 }
 
-# linbo_cmd update 10.16.1.1 /dev/sda4 [force]
+# linbo_cmd update 10.0.0.1 /dev/sda4 [force]
 update()
 {
     local server="$1"
     local cachedev="$2"
     local force="$3"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
@@ -239,7 +249,7 @@ update()
 # linbo_cmd version
 version()
 {
-    echo "LINBO 3.0.0-1"
+    echo "LINBO 2.4.1"
 }
 
 # linbo_cmd writefile /dev/sda4 filename

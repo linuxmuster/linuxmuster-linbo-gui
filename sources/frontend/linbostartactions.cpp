@@ -84,19 +84,25 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
 
     // Root widget
     this->terminalDialog = new LinboTerminalDialog(parent);
-    this->confirmationDialog = new LinboConfirmationDialog(tr("Partition drive"), tr("Are you shure? This will delete all data on your drive!"),  parent);
+    this->confirmationDialog = new LinboConfirmationDialog(tr("Partition drive"), tr("Are you sure? This will delete all data on your drive!"),  parent);
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
     this->registerDialog = new LinboRegisterDialog(backend, parent);
     this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
+    this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
 
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
+
+    QModernPushButton* buttonCache;
+
     if(this->backend->getConfig()->getUseMinimalLayout()) {
-        this->rootActionButtons.append(new QModernPushButton(":svgIcons/image.svg", tr("Create image")));
+        buttonCache = new QModernPushButton(":svgIcons/image.svg", tr("Create image"));
+        this->rootActionButtons.append(buttonCache);
+        connect(buttonCache, &QModernPushButton::clicked, this->imageCreationDialog, &LinboImageCreationDialog::open);
+
         this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
     }
 
-    QModernPushButton* buttonCache;
 
     buttonCache = new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal"));
     connect(buttonCache, SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
@@ -110,7 +116,7 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->confirmationDialog, SLOT(open()));
 
-    buttonCache = new QModernPushButton(":svgIcons/register.svg", tr("register"));
+    buttonCache = new QModernPushButton(":svgIcons/register.svg", tr("Register"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->registerDialog, SLOT(open()));
 
@@ -305,6 +311,9 @@ void LinboStartActions::resizeAndPositionAllItems() {
     // Root widget
     int dialogHeight = this->parentWidget()->height() * 0.8;
     int dialogWidth = dialogHeight;
+
+    this->imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->imageCreationDialog->centerInParent();
 
     this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
     this->terminalDialog->centerInParent();

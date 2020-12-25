@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# linbo_cmd upload 10.16.1.1 linbo pw123 /dev/sda4 opensuse-cpqmini.cloop
+# linbo_cmd upload 10.0.0.1 linbo pw123 /dev/sda4 opensuse-cpqmini.cloop
 upload()
 {
     local server="$1"
@@ -8,7 +8,7 @@ upload()
     local lpassword="$3"
     local cachedev="$4"
     local imagefile="$5"
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${luser}" != "linbo" ]] \
       || [[ "${lpassword}" != "Muster!" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
@@ -20,11 +20,11 @@ upload()
 # echo-Befehle des logs
 echo 'Befehl      : upload_cloop'
 echo 'Parameter    : 1'
-echo '10.16.1.1'
-echo 'Lade opensuse-cpqmini.cloop zu 10.16.1.1 hoch ...'
+echo '10.0.0.1'
+echo 'Lade opensuse-cpqmini.cloop zu 10.0.0.1 hoch ...'
 echo '/dev/sda4'
 echo 'Mounte Cache-Partition /dev/sda4 ...'
-echo 'Lade opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent auf 10.16.1.1 hoch ...'
+echo 'Lade opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent auf 10.0.0.1 hoch ...'
 echo 'sending incremental file list'
 echo 'opensuse-cpqmini.cloop'
 echo '    501,710,848   8%    8.79MB/s    0:09:52  '
@@ -988,8 +988,8 @@ sleep 0.05
 echo '        444,952 100%   13.10MB/s    0:00:00 (xfr#1, to-chk=0/1)'
 sleep 0.05
 echo 'Starte Torrent-Dienst für opensuse-cpqmini.cloop.'
-echo 'Upload von opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent nach 10.16.1.1 erfolgreich.'
+echo 'Upload von opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent nach 10.0.0.1 erfolgreich.'
 echo 'Veranlasse Upload von image.log.'
 echo 'Veranlasse Upload von linbo.log.'
-echo 'Upload von opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent nach 10.16.1.1 erfolgreich.'
+echo 'Upload von opensuse-cpqmini.cloop opensuse-cpqmini.cloop.info opensuse-cpqmini.cloop.postsync opensuse-cpqmini.cloop.desc opensuse-cpqmini.cloop.torrent nach 10.0.0.1 erfolgreich.'
 }

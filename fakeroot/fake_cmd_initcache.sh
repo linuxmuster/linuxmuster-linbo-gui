@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# linbo_cmd initcache 10.16.1.1 /dev/sda4 torrent opensuse-cpqmini.cloop
+# linbo_cmd initcache 10.0.0.1 /dev/sda4 torrent opensuse-cpqmini.cloop
 initcache()
 {
     local parameters="$*"
@@ -9,7 +9,7 @@ initcache()
     local downloadtype="$3"
     shift; shift; shift
     local images=("$@")
-    if [[ "${server}" != "10.16.1.1" ]] \
+    if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
       || [[ "${downloadtype}" != "torrent" ]] \
       || [[ "${images}" != "opensuse-cpqmini.cloop" ]]; then
@@ -18,13 +18,13 @@ initcache()
     fi
 
 # echo-Befehle des logs
-echo 'RSYNC Download 10.16.1.1 -> opensuse-cpqmini.cloop.torrent...'
+echo 'RSYNC Download 10.0.0.1 -> opensuse-cpqmini.cloop.torrent...'
 sleep 0.05
 echo 'Starte Torrent-Dienst für opensuse-cpqmini.cloop.'
 sleep 0.05
 echo 'META INFO'
 sleep 0.05
-echo 'Announce: http://10.16.1.1:6969/announce'
+echo 'Announce: http://10.0.0.1:6969/announce'
 sleep 0.05
 echo 'Created On: Sat Mar 11 08:28:27 2017'
 sleep 0.05
