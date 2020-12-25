@@ -27,5 +27,3 @@ All of the SVG icons in this Gui were taken from one of the following sources an
 - The Debian icon was taken from [debian.org](https://www.debian.org/logos/)
 - The Windows 7 icon was taken from [Wikipedia](https://commons.wikimedia.org/wiki/File:Windows_logo_-_2002%E2%80%932012_(Black).svg)
 - All other icons were taken from [fontawesome.com](https://fontawesome.com/license) and are licensed under the [Creative Commons Attribution 4.0 International license](https://fontawesome.com/license).
-
-(&(memberof=CN=role-student,OU=Groups,OU=GLOBAL,DC=linuxmuster,DC=lan)(!(Unid=---)))
