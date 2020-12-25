@@ -56,6 +56,7 @@ protected:
     void leaveEvent(QEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
 
 private:
     bool shouldBeVisible;
@@ -73,6 +74,8 @@ private slots:
 
 signals:
     void checked();
+    void hovered();
+    void doubleClicked();
 };
 
 #endif // QMODERNPUSHBUTTON_H

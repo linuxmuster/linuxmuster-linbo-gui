@@ -213,6 +213,8 @@ void QModernPushButton::enterEvent(QEvent *e) {
         for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
             overlay->setVisibleAnimated(true);
 
+    emit this->hovered();
+
     return QAbstractButton::enterEvent(e);
 }
 
@@ -236,6 +238,11 @@ void QModernPushButton::mouseReleaseEvent(QMouseEvent *e) {
         overlay->setVisibleAnimated(false);
 
     return QAbstractButton::mouseReleaseEvent(e);
+}
+
+void QModernPushButton::mouseDoubleClickEvent(QMouseEvent *e) {
+    emit this->doubleClicked();
+    return QAbstractButton::mouseDoubleClickEvent(e);
 }
 
 QList<QModernPushButtonOverlay*> QModernPushButton::getOverlaysOfType(QModernPushButtonOverlay::OverlayType type) {

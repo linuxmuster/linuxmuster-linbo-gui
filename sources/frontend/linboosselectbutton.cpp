@@ -79,20 +79,17 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             }
         }
 
-        QStringList rootActionButtons = {
-            ":/svgIcons/uploadBg.svg"
-        };
 
-        for(QString actionButtonIcon : rootActionButtons) {
-            QModernPushButton* actionButton = new QModernPushButton(actionButtonIcon, this);
-            actionButton->setGeometry(0,0,0,0);
-            this->rootActionButtons.append(actionButton);
-        }
-
-        // TODO: connect root buttons
+        // root action button
+        QModernPushButton* actionButton = new QModernPushButton(":/svgIcons/uploadBg.svg", this);
+        actionButton->setGeometry(0,0,0,0);
+        connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::uploadImage);
+        this->rootActionButtons.append(actionButton);
     }
     else {
         this->button = new QModernPushButton(icon, "", this);
+        connect(this->button, &QModernPushButton::hovered, [=]{this->button->setChecked(true);});
+        connect(this->button, &QModernPushButton::doubleClicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
     }
 
     this->button->setCheckable(true);
@@ -117,7 +114,7 @@ void LinboOsSelectButton::handlePrimaryButtonClicked() {
             break;
         }
     else if (this->os->getBackend()->getState() == LinboBackend::Root){
-        // TODO
+        emit this->createImage();
     }
 }
 
