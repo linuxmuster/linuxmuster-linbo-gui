@@ -379,7 +379,7 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
-        this->messageLabel->setText(tr("The process \"%s\" crashed:").replace("%s", chaperLogs[chaperLogs.length()-1].message));
+        this->messageLabel->setText(tr("The process \"%1\" crashed:").arg(chaperLogs[chaperLogs.length()-1].message));
         QString errorDetails;
         if(chaperLogs.length() == 0)
             errorDetails = "<b>" + tr("No logs before this crash") + "</b>";
@@ -394,7 +394,7 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
 
         errorDetails += "<br><br><b>" + tr("Please ask your system administrator for help.") + "</b>";
 
-        this->messageDetailsLabel->setText(errorDetails);
+        this->messageDetailsLabel->setText("<html>" + errorDetails + "</html>");
         this->messageLabel->setStyleSheet("QLabel { color : red; }");
         this->messageDetailsLabel->setStyleSheet("QLabel { color : red; }");
         this->messageDetailsLabel->setVisible(true);

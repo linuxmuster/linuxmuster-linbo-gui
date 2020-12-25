@@ -49,6 +49,8 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
         QLayoutItem* labelItem = this->mainLayout->itemAt(i);
 
         QLabel* label = static_cast<QLabel*>(labelItem->widget());
+        label->setText("<html>" + label->text() + "</html>");
+        label->setTextFormat(Qt::RichText);
 
         label->setMaximumWidth(this->width() * 0.2);
 

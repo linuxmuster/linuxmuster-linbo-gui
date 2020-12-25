@@ -112,7 +112,6 @@ then
 	 -no-accessibility \
 	 -no-libproxy \
 	 -no-sql-sqlite \
-	 -no-feature-texthtmlparser \
 	 -no-feature-textodfwriter \
 	 -no-feature-calendarwidget \
 	 -no-feature-printpreviewwidget \
