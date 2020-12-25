@@ -77,7 +77,13 @@ echo "-   Now building debian packages     -"
 echo "--------------------------------------"
 
 sudo apt update
-sudo apt install debhelper -y
+sudo apt install debhelper zip -y
 
 cd ..
 ./debian/mkdeb.sh
+
+# copy all archives to a common dir and zip them
+mkdir archives
+cp ../linuxmuster-linbo-gui7_* ./archives
+cd archives
+zip -r ../archives.zip 
