@@ -1,7 +1,11 @@
 # Linuxmuster Linbo GUI
 A new GUI for [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt5!
 
-# Building
+# Releases
+The latest release can be found [here](https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/latest)  
+The attached file archives.zip contains the `linuxmuster-linbo-gui7_*.deb` Package which you can install on your server.
+
+# Building yourself
 For your convenience there is a script to build the package: [build.sh](./build.sh)  
 You have to invoke it in the build root.  
 Please note: It will take a long time to build the first time you do it.  
