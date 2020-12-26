@@ -14,9 +14,9 @@ Please note: It will take a long time to build the first time you do it.
 
 # Screenshots
 This is what the new GUI looks like so far:  
-Choosing an OS (new Layout):  
+Choosing an OS (minimalistic Layout):  
 ![choose](/screenshots/choose.gif)  
-Choosing an OS (legacy layout):
+Choosing an OS (legacy layout):  
 ![legacy](/screenshots/legacy.gif)
 Performing a long action (eg. syncing OS):  
 ![long](/screenshots/long.gif)  
