@@ -17,7 +17,7 @@ This is what the new GUI looks like so far:
 Choosing an OS (minimalistic Layout):  
 ![choose](/screenshots/choose.gif)  
 Choosing an OS (legacy layout):  
-![legacy](/screenshots/legacy.gif)
+![legacy](/screenshots/legacy.gif)  
 Performing a long action (eg. syncing OS):  
 ![long](/screenshots/long.gif)  
 Starting an OS:  
@@ -26,7 +26,7 @@ Autostarting an OS:
 ![autostart](/screenshots/autostart.gif)  
 An error occurred:  
 ![error](/screenshots/error.gif)  
-
+  
 # Icons
 All of the SVG icons in this Gui were taken from one of the following sources and slighlty modified:
 - The Linux Mint was taken from [Icon Fonts](http://www.onlinewebfonts.com/icon) and is licensed by CC BY 3.0
