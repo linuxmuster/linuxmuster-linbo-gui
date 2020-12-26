@@ -1,5 +1,4 @@
 *.pro.user*
-archives*
 build/buildGUI*
 build/linbofs*
 build/*.tar.xz
