@@ -1,4 +1,5 @@
 # Linuxmuster Linbo GUI
+![Build and Upload Release Asset](https://github.com/linuxmuster/linuxmuster-linbo-gui/workflows/Build%20and%20Upload%20Release%20Asset/badge.svg)
 A new GUI for [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt5!
 
 # Releases
