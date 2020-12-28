@@ -16,9 +16,9 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "linbostartactions.h"
+#include "linbomainactions.h"
 
-LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : QWidget(parent)
+LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->backend = backend;
     connect(this->backend, SIGNAL(currentOsChanged(LinboOs*)), this, SLOT(handleCurrentOsChanged(LinboOs*)));
@@ -145,7 +145,7 @@ LinboStartActions::LinboStartActions(LinboBackend* backend, QWidget *parent) : Q
     this->handleLinboStateChanged(this->backend->getState());
 }
 
-void LinboStartActions::resizeAndPositionAllItems() {
+void LinboMainActions::resizeAndPositionAllItems() {
 
     // stack view
     this->stackView->setFixedSize(this->size());
@@ -338,17 +338,17 @@ void LinboStartActions::resizeAndPositionAllItems() {
     this->inited = true;
 }
 
-void LinboStartActions::resizeEvent(QResizeEvent *event) {
+void LinboMainActions::resizeEvent(QResizeEvent *event) {
     this->resizeAndPositionAllItems();
     QWidget::resizeEvent(event);
 }
 
-void LinboStartActions::handleCurrentOsChanged(LinboOs* newOs) {
+void LinboMainActions::handleCurrentOsChanged(LinboOs* newOs) {
     Q_UNUSED(newOs)
     this->resizeAndPositionAllItems();
 }
 
-void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newState) {
+void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     QWidget* currentWidget = nullptr;
 
@@ -427,7 +427,7 @@ void LinboStartActions::handleLinboStateChanged(LinboBackend::LinboState newStat
 }
 
 
-void LinboStartActions::handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
+void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
     if(this->backend->getState() == LinboBackend::Idle)
         return;
 
@@ -446,7 +446,7 @@ void LinboStartActions::handleLatestLogChanged(const LinboLogger::LinboLog& late
     this->logLabel->setText(latestLog.message);
 }
 
-void LinboStartActions::handleAutostartTimeoutProgressChanged() {
+void LinboMainActions::handleAutostartTimeoutProgressChanged() {
     if(this->backend->getState() != LinboBackend::Autostarting)
         return;
 

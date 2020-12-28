@@ -44,11 +44,11 @@ HEADERS += \
     headers/frontend/dialogs/linboterminaldialog.h \
     headers/frontend/dialogs/linboupdatecachedialog.h \
     headers/frontend/linboclientinfo.h \
+    headers/frontend/linbomainactions.h \
+    headers/frontend/linbomainpage.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
     headers/frontend/linboosselectionrow.h \
-    headers/frontend/linbostartactions.h \
-    headers/frontend/linbostartpage.h \
     headers/frontend/components/qmodernprogressbar.h \
     headers/frontend/components/qmodernpushbutton.h \
     headers/frontend/components/qmodernpushbuttonoverlay.h \
@@ -71,11 +71,11 @@ SOURCES += \
     sources/frontend/dialogs/linboterminaldialog.cpp \
     sources/frontend/dialogs/linboupdatecachedialog.cpp \
     sources/frontend/linboclientinfo.cpp \
+    sources/frontend/linbomainactions.cpp \
+    sources/frontend/linbomainpage.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \
-    sources/frontend/linbostartactions.cpp \
-    sources/frontend/linbostartpage.cpp \
     sources/main.cpp \
     sources/frontend/components/qmodernprogressbar.cpp \
     sources/frontend/components/qmodernpushbutton.cpp \
@@ -85,5 +85,6 @@ SOURCES += \
 RESOURCES += \
     resources/linbo.qrc
 
-DISTFILES += \
-    resources/svgIcons/infoBg.svg
+TRANSLATIONS += \
+    resources/translations/blank.ts \
+    resources/translations/de.ts

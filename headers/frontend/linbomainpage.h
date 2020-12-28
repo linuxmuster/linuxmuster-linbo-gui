@@ -16,8 +16,8 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#ifndef LINBOGUISTARTPAGE_H
-#define LINBOGUISTARTPAGE_H
+#ifndef LINBOMAINPAGE_H
+#define LINBOMAINPAGE_H
 
 #include <QObject>
 #include <QWidget>
@@ -32,21 +32,21 @@
 #include "linboosselectbutton.h"
 #include "qmodernprogressbar.h"
 #include "linboosselectionrow.h"
-#include "linbostartactions.h"
+#include "linbomainactions.h"
 #include "linboclientinfo.h"
 
 #include "linbologindialog.h"
 
-class LinboStartPage : public QWidget
+class LinboMainPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LinboStartPage(LinboBackend* backend, QWidget *parent = nullptr);
+    explicit LinboMainPage(LinboBackend* backend, QWidget *parent = nullptr);
 
 private:
     LinboBackend* backend;
     LinboOsSelectionRow* osSelectionRow;
-    LinboStartActions* startActionsWidget;
+    LinboMainActions* startActionsWidget;
     LinboClientInfo* clientInfo;
     QModernPushButton* rootActionButton;
     QModernPushButton* logoutActionButton;
@@ -68,4 +68,4 @@ signals:
 
 };
 
-#endif // LINBOGUISTARTPAGE_H
+#endif // LINBOMAINPAGE_H

@@ -16,9 +16,9 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "linbostartpage.h"
+#include "linbomainpage.h"
 
-LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
+LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
 
@@ -45,7 +45,7 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     mainLayout->addWidget(osSelectionRow);
 
     // action buttons
-    this->startActionsWidget = new LinboStartActions(this->backend, this);
+    this->startActionsWidget = new LinboMainActions(this->backend, this);
     this->startActionsWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainLayout->addWidget(this->startActionsWidget);
 
@@ -121,7 +121,7 @@ LinboStartPage::LinboStartPage(LinboBackend* backend, QWidget *parent) : QWidget
     this->handleLinboStateChanged(this->backend->getState());
 }
 
-void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
+void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     bool powerActionButtonsVisible = false;
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
@@ -210,7 +210,7 @@ void LinboStartPage::handleLinboStateChanged(LinboBackend::LinboState newState) 
     this->inited = true;
 }
 
-void LinboStartPage::keyPressEvent(QKeyEvent *ev)
+void LinboMainPage::keyPressEvent(QKeyEvent *ev)
 {
     if(ev->key() == Qt::Key_F1 && this->backend->getState() == LinboBackend::Idle) {
         this->showClientInfo = !this->showClientInfo;

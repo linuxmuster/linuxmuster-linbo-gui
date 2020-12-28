@@ -11,17 +11,31 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->networkIconWidget = new QSvgWidget(":/svgIcons/network.svg");
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
+    //= client_info_hostname
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Hostname:") + "</b>  " + config->getHostname()), 0, 1, 1, 1);
+
+    //= client_info_group
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Group:") + "</b>  " + config->getHostGroup()), 0, 2, 1, 1);
+
+    //= client_info_ip
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Client IP:") + "</b>  " + config->getIpAddress()), 0, 3, 1, 1);
+
+    //= client_info_mac
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac:") + "</b>  " + config->getMacAddress()), 0, 4, 1, 1);
 
     this->desktopIconWidget = new QSvgWidget(":/svgIcons/desktop.svg");
     this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("HD:") + "</b>  " + config->getHddSize()), 1, 1, 1, 1);
+    //= client_info_hdd
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("HDD:") + "</b>  " + config->getHddSize()), 1, 1, 1, 1);
+
+    //= client_info_cache
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Cache:") + "</b>  " + config->getCacheSize()), 1, 2, 1, 1);
+
+    //= client_info_cpu
     this->mainLayout->addWidget(new QLabel("<b>" + tr("CPU:") + "</b>  " + config->getCpuModel()), 1, 3, 1, 1);
+
+    //= client_info_ram
     this->mainLayout->addWidget(new QLabel("<b>" + tr("RAM:") + "</b>  " + config->getRamSize()), 1, 4, 1, 1);
 
 
@@ -49,7 +63,6 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
         QLayoutItem* labelItem = this->mainLayout->itemAt(i);
 
         QLabel* label = static_cast<QLabel*>(labelItem->widget());
-        label->setText("<html>" + label->text() + "</html>");
         label->setTextFormat(Qt::RichText);
 
         label->setMaximumWidth(this->width() * 0.2);

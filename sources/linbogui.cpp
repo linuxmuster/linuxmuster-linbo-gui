@@ -47,8 +47,10 @@ LinboGui::LinboGui()
     // create the backend
     this->backend = new LinboBackend(this);
 
+    // TODO: attach translator
+
     // create start page
-    this->startPage = new LinboStartPage(this->backend, this);
+    this->startPage = new LinboMainPage(this->backend, this);
 
 }
 

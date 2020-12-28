@@ -16,8 +16,8 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#ifndef LINBOSTARTACTIONS_H
-#define LINBOSTARTACTIONS_H
+#ifndef LINBOMAINACTIONS_H
+#define LINBOMAINACTIONS_H
 
 #include <QObject>
 #include <QWidget>
@@ -39,11 +39,11 @@
 #include "linboupdatecachedialog.h"
 #include "linboimagecreationdialog.h"
 
-class LinboStartActions : public QWidget
+class LinboMainActions : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LinboStartActions(LinboBackend* backend, QWidget *parent = nullptr);
+    explicit LinboMainActions(LinboBackend* backend, QWidget *parent = nullptr);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -98,4 +98,4 @@ signals:
 
 };
 
-#endif // LINBOSTARTACTIONS_H
+#endif // LINBOMAINACTIONS_H

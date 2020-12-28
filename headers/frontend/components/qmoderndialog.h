@@ -64,6 +64,7 @@ private slots:
     void animationFinished();
 
 signals:
+    void opened();
     void closedByUser();
 };
 

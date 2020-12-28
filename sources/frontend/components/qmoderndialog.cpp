@@ -138,6 +138,7 @@ void QModernDialog::setVisibleAnimated(bool visible) {
     if(visible) {
         this->setScale(1);
         this->show();
+        emit this->opened();
         if(!this->isFrameless())
             this->toolBarWidget->show();
     }

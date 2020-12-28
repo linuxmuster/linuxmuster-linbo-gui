@@ -29,7 +29,7 @@
 #include <QScreen>
 #include <QMainWindow>
 
-#include "linbostartpage.h"
+#include "linbomainpage.h"
 #include "linbobackend.h"
 
 class LinboGui : public QMainWindow
@@ -42,7 +42,7 @@ public:
 
 private:
     LinboBackend* backend;
-    LinboStartPage* startPage;
+    LinboMainPage* startPage;
 
 };
 

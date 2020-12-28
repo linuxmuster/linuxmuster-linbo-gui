@@ -36,6 +36,7 @@ private:
     QHBoxLayout* buttonLayout;
 
 private slots:
+    void refreshPathAndDescription();
     //void createImage();
     //void createImageAndUpload();
 };
