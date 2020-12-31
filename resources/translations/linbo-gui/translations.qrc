@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>af-ZA.qm</file>
+        <file>ar-SA.qm</file>
+        <file>ca-ES.qm</file>
+        <file>cs-CZ.qm</file>
+        <file>da-DK.qm</file>
+        <file>de-DE.qm</file>
+        <file>el-GR.qm</file>
+        <file>es-ES.qm</file>
+        <file>fi-FI.qm</file>
+        <file>fr-FR.qm</file>
+        <file>he-IL.qm</file>
+        <file>hu-HU.qm</file>
+        <file>it-IT.qm</file>
+        <file>ja-JP.qm</file>
+        <file>ko-KR.qm</file>
+        <file>nl-NL.qm</file>
+        <file>no-NO.qm</file>
+        <file>pl-PL.qm</file>
+        <file>pt-BR.qm</file>
+        <file>pt-PT.qm</file>
+        <file>ro-RO.qm</file>
+        <file>ru-RU.qm</file>
+        <file>sr-SP.qm</file>
+        <file>sv-SE.qm</file>
+        <file>tr-TR.qm</file>
+        <file>uk-UA.qm</file>
+        <file>vi-VN.qm</file>
+        <file>zh-CN.qm</file>
+        <file>zh-TW.qm</file>
+    </qresource>
+</RCC>

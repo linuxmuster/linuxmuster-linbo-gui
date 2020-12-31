@@ -87,8 +87,8 @@ SOURCES += \
     sources/frontend/components/qmodernstackedwidget.cpp
 
 RESOURCES += \
-    resources/linbo.qrc
+    resources/linbo.qrc \
+    resources/translations/linbo-gui/translations.qrc
 
 TRANSLATIONS += \
-    resources/translations/blank.ts \
-    resources/translations/de.ts
+    resources/translations/linbo-gui/blank.ts

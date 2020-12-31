@@ -28,6 +28,7 @@
 #include <QFontDatabase>
 #include <QScreen>
 #include <QMainWindow>
+#include <QTranslator>
 
 #include "linbomainpage.h"
 #include "linbobackend.h"

@@ -54,7 +54,20 @@ LinboGui::LinboGui()
     // create the backend
     this->backend = new LinboBackend(this);
 
-    // TODO: attach translator
+    // attach translator
+
+    QString localeName = this->backend->getConfig()->getLocale();
+    if(!localeName.isEmpty() && localeName.length() == 5 && localeName[2] == "-") {
+        // correct case (de-de -> de-DE)
+        qDebug() << "Locale: " << this->backend->getConfig()->getLocale();
+        QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
+        localeName = tmpLocaleName[0] + "-";
+        localeName += tmpLocaleName[1].toUpper();
+
+        QTranslator* translator = new QTranslator(this);
+        translator->load(":/" + localeName + ".qm");
+        QApplication::installTranslator(translator);
+    }
 
     // create start page
     this->startPage = new LinboMainPage(this->backend, this);

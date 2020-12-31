@@ -60,6 +60,8 @@ public:
     const bool& getAutoFormat() {return this->autoFormat;}
     const bool& getUseMinimalLayout() {return this->useMinimalLayout;}
 
+    const QString& getLocale() const {return this->locale;}
+
 private:
     explicit LinboConfig(QObject *parent = nullptr);
 
@@ -86,6 +88,8 @@ private:
     void setAutoFormat( const bool& autoFormat ){this->autoFormat = autoFormat;}
     void setUseMinimalLayout(const bool& useMinimalLayout){this->useMinimalLayout = useMinimalLayout;}
 
+    void setLocale( const QString& locale ) {this->locale = locale;}
+
   QString serverIpAddress;
   QString ipAddress;
   QString subnetMask;
@@ -103,6 +107,7 @@ private:
   QString backgroundFontcolor;
   QString consoleFontcolorStdout;
   QString consoleFontcolorStderr;
+  QString locale;
   unsigned int rootTimeout;
   bool autoPartition;
   bool autoInitCache;

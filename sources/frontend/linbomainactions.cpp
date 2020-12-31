@@ -42,6 +42,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->reinstallOsButton = new QModernPushButton(":/svgIcons/startActionIcons/reinstall.svg", this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
+    //= main_noBaseImage
     this->noBaseImageLabel = new QLabel(tr("No baseimage defined"), this->buttonWidget);
     this->noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
     this->noBaseImageLabelFont = QFont("Segoe UI");
@@ -84,7 +85,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     // Root widget
     this->terminalDialog = new LinboTerminalDialog(parent);
-    this->confirmationDialog = new LinboConfirmationDialog(tr("Partition drive"), tr("Are you sure? This will delete all data on your drive!"),  parent);
+    this->confirmationDialog = new LinboConfirmationDialog(
+                //= dialog_partition_title
+                tr("Partition drive"),
+                //= dialog_partition_question
+                tr("Are you sure? This will delete all data on your drive!"),
+                parent);
+
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
     this->registerDialog = new LinboRegisterDialog(backend, parent);
     this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
@@ -96,26 +103,31 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     QModernPushButton* buttonCache;
 
     if(this->backend->getConfig()->getUseMinimalLayout()) {
+        //= main_root_button_createImage
         buttonCache = new QModernPushButton(":svgIcons/image.svg", tr("Create image"));
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &QModernPushButton::clicked, this->imageCreationDialog, &LinboImageCreationDialog::open);
 
+        //= main_root_button_uploadImage
         this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
     }
 
-
+    //= main_root_button_openTerminal
     buttonCache = new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal"));
     connect(buttonCache, SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
     this->rootActionButtons.append(buttonCache);
 
+    //= main_root_button_updateCache
     buttonCache = new QModernPushButton(":svgIcons/startActionIcons/sync.svg", tr("Update cache"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->updateCacheDialog, SLOT(open()));
 
+    //= main_root_button_partitionDrive
     buttonCache = new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->confirmationDialog, SLOT(open()));
 
+    //= main_root_button_register
     buttonCache = new QModernPushButton(":svgIcons/register.svg", tr("Register"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, SIGNAL(clicked()), this->registerDialog, SLOT(open()));
@@ -380,19 +392,24 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
+        //= main_message_processCrashed
         this->messageLabel->setText(tr("The process \"%1\" crashed:").arg(chaperLogs[chaperLogs.length()-1].message));
         QString errorDetails;
         if(chaperLogs.length() == 0)
+            //= main_message_noLogs
             errorDetails = "<b>" + tr("No logs before this crash") + "</b>";
         else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0){
+            //= main_message_lastLogs
             errorDetails = "<b>" + tr("The last logs before the crash were:") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
         }
         else {
+            //= main_message_lastErrors
             errorDetails = "<b>" + tr("The last errors before the crash were:") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::LinboGuiError | LinboLogger::StdErr), 8).join("<br>");
         }
 
+        //= main_message_askForHelp
         errorDetails += "<br><br><b>" + tr("Please ask your system administrator for help.") + "</b>";
 
         this->messageDetailsLabel->setText("<html>" + errorDetails + "</html>");
@@ -405,6 +422,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 
     case LinboBackend::RootActionSuccess: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
+        //= main_message_processFinishedSuccessfully
         this->messageLabel->setText(tr("The process \"%s\" finished successfully.").replace("%s", chaperLogs[chaperLogs.length()-1].message));
         this->messageDetailsLabel->setText("");
         this->messageLabel->setStyleSheet("QLabel { color : green; }");

@@ -56,24 +56,24 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     }
 
     if(this->osButtons.length() == 0) {
+        //= osSelection_noOperatingSystems
         this->noOsLabel = new QLabel(tr("No Operating system configured in start.conf"), this);
         this->noOsLabel->hide();
         this->noOsLabel->setAlignment(Qt::AlignCenter);
-        this->noOsLabelFont = QFont("Segoe UI");
         this->noOsLabelFont.setBold(true);
         this->noOsLabel->setFont(this->noOsLabelFont);
 
         QString environmentValuesText;
-        environmentValuesText += tr("Host") + ":  " + this->backend->getConfig()->getHostname() + "\n";
-        //noOsText += tr("Group") + ": " + this->backend->getConfig()->getHostGroup() + "\n";
+        //= hostname
+        environmentValuesText += tr("Hostname") + ":  " + this->backend->getConfig()->getHostname() + "\n";
+        //= ip
         environmentValuesText += tr("IP-Address") + ":  " + this->backend->getConfig()->getIpAddress() + "\n";
-        //noOsText += tr("Server IP-Address") + ": " + this->backend->getConfig()->getServerIpAddress() + "\n";
+        //= client_info_mac
         environmentValuesText += tr("Mac-Address") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
 
         this->environmentValuesLabel = new QLabel(environmentValuesText, this);
         this->environmentValuesLabel->hide();
         this->environmentValuesLabel->setAlignment(Qt::AlignCenter);
-        this->environmentValuesLabelFont = QFont("Segoe UI");
         this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
     }
 

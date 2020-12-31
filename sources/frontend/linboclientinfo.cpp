@@ -11,14 +11,14 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->networkIconWidget = new QSvgWidget(":/svgIcons/network.svg");
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
-    //= client_info_hostname
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("Hostname:") + "</b>  " + config->getHostname()), 0, 1, 1, 1);
+    //= hostname
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Hostname") + ":</b>  " + config->getHostname()), 0, 1, 1, 1);
 
-    //= client_info_group
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("Group:") + "</b>  " + config->getHostGroup()), 0, 2, 1, 1);
+    //= group
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Host group") + ":</b>  " + config->getHostGroup()), 0, 2, 1, 1);
 
-    //= client_info_ip
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("Client IP:") + "</b>  " + config->getIpAddress()), 0, 3, 1, 1);
+    //= ip
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("IP-Address") + ":</b>  " + config->getIpAddress()), 0, 3, 1, 1);
 
     //= client_info_mac
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac:") + "</b>  " + config->getMacAddress()), 0, 4, 1, 1);

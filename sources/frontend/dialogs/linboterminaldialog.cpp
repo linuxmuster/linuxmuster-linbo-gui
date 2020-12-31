@@ -5,6 +5,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
     this->currentHistoryIndex = -1;
     this->commandBeforeHistorySwitch.clear();
 
+    //= dialog_terminal_title
     this->setTitle(tr("Terminal"));
 
     this->textBrowser = new QModernTextBrowser();

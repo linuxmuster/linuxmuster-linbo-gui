@@ -802,6 +802,7 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
         }
         else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
         else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
+        else if(key == "locale") linboConfig->setLocale(value);
     }
 }
 

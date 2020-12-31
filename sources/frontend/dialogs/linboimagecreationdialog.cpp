@@ -41,7 +41,8 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->imageDescriptionTextBrowser->setReadOnly(false);
 
     // Post process actions
-    mainLayout->addWidget(new QLabel("<b>" + tr("What to do after the processes has finished?") + "</b>"));
+    //= dialog_createImage_postActionQuestion
+    mainLayout->addWidget(new QLabel("<b>" + tr("What to do after the process has finished?") + "</b>"));
 
     this->postProcessActionButtonGroup = new QButtonGroup(this);
     this->postProcessActionButtonGroup->setExclusive(true);

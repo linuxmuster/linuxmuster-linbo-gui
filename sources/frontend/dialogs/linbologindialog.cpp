@@ -6,6 +6,7 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
 
     this->setWindowFlags(Qt::FramelessWindowHint);
 
+    //= dialog_login_title
     this->headerLabel = new QLabel(tr("Please enter password:"));
     this->headerLabel->setAlignment(Qt::AlignCenter);
 
@@ -14,9 +15,11 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
     this->passwordInput->setAlignment(Qt::AlignCenter);
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
-    cancelButton = new QModernPushButton("", "cancel");
+    //= cancel
+    cancelButton = new QModernPushButton("", tr("cancel"));
     cancelButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    //= dialog_login_button_login
     loginButton = new QModernPushButton("", "login");
     loginButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(loginButton, SIGNAL(clicked()), this, SLOT(inputFinished()));
@@ -68,6 +71,7 @@ void LinboLoginDialog::inputFinished() {
     }
     else {
         this->headerLabel->setStyleSheet("QLabel { color : red; }");
+        //= dialog_login_title_wrong
         this->headerLabel->setText(tr("Wrong password!"));
     }
 
@@ -77,6 +81,7 @@ void LinboLoginDialog::inputFinished() {
 void LinboLoginDialog::setVisibleAnimated(bool visible) {
     if(!visible) {
         this->headerLabel->setStyleSheet("QLabel { color : black; }");
+        //= dialog_login_title
         this->headerLabel->setText(tr("Please enter password:"));
         this->passwordInput->clear();
     }
