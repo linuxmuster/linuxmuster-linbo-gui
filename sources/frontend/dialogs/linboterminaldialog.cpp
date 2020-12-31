@@ -9,6 +9,33 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
 
     this->textBrowser = new QModernTextBrowser();
     this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    this->textBrowser->setStyleSheet("QTextBrowser {"
+                                     "border: 0 0 0 0;"
+                                     "background: black;"
+                                     "padding-left: 5px;"
+                                     "color: white;"
+                                     "}"
+                                     "QScrollBar:vertical {"
+                                     "    background: black;"
+                                     "    width:10px;    "
+                                     "    margin: 0px 0px 0px 0px;"
+                                     "}"
+                                     "QScrollBar::handle:vertical {"
+                                     "    background: lightgrey;"
+                                     "    min-height: 0px;"
+                                     "}"
+                                     "QScrollBar::add-line:vertical {"
+                                     "    background: grey;"
+                                     "    height: 0px;"
+                                     "    subcontrol-position: bottom;"
+                                     "    subcontrol-origin: margin;"
+                                     "}"
+                                     "QScrollBar::sub-line:vertical {"
+                                     "    background: grey;"
+                                     "    height: 0 px;"
+                                     "    subcontrol-position: top;"
+                                     "    subcontrol-origin: margin;"
+                                     "}");
 
     this->lineEdit = new QModernLineEdit();
     this->lineEdit->installEventFilter(this);
@@ -110,4 +137,14 @@ bool LinboTerminalDialog::eventFilter(QObject* obj, QEvent* event) {
         }
     }
     return QModernDialog::eventFilter(obj, event);
+}
+
+
+void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
+    QModernDialog::resizeEvent(event);
+
+    this->lineEdit->setFixedHeight(this->parentWidget()->height() * 0.06);
+    QFont font = this->lineEdit->font();
+    font.setPixelSize(this->lineEdit->height() * 0.5);
+    this->lineEdit->setFont(font);
 }

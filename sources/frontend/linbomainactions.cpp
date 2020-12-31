@@ -321,10 +321,10 @@ void LinboMainActions::resizeAndPositionAllItems() {
     this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
     this->confirmationDialog->centerInParent();
 
-    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.8);
     this->registerDialog->centerInParent();
 
-    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.6);
+    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.5);
     this->updateCacheDialog->centerInParent();
 
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));

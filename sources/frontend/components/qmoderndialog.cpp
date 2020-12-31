@@ -40,17 +40,21 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
     this->toolBarWidget = new QWidget(parent);
     this->toolBarWidget->setAutoFillBackground(true);
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, Qt::white);
+    pal.setColor(QPalette::Background, "white");
     this->toolBarWidget->setPalette(pal);
     this->toolBarWidget->hide();
 
-    this->toolBarLayout = new QHBoxLayout(this->toolBarWidget);
+    QVBoxLayout* toolBarVLayout = new QVBoxLayout(this->toolBarWidget);
+    toolBarVLayout->setContentsMargins(0,0,0,0);
+
+    this->toolBarLayout = new QHBoxLayout();
+    toolBarVLayout->addLayout(this->toolBarLayout);
     this->toolBarLayout->setContentsMargins(0,0,0,0);
     this->toolBarLayout->addWidget(this->titleLabel);
-    this->toolBarLayout->setAlignment(this->titleLabel, Qt::AlignBottom);
+    this->toolBarLayout->setAlignment(this->titleLabel, Qt::AlignCenter);
     this->toolBarLayout->addStretch();
     this->toolBarLayout->addWidget(this->closeButton);
-    this->toolBarLayout->setAlignment(this->closeButton, Qt::AlignBottom);
+    this->toolBarLayout->setAlignment(this->closeButton, Qt::AlignCenter);
 
     this->toolBarOpacityEffect = new QGraphicsOpacityEffect(this->toolBarWidget);
     this->toolBarOpacityEffect->setOpacity(0);
@@ -118,8 +122,8 @@ void QModernDialog::resizeEvent(QResizeEvent *event) {
     this->titleLabel->setFixedHeight(toolBarHeight * 0.9);
     this->titleLabel->setFixedWidth(this->width() - toolBarHeight * 0.2);
 
-    this->closeButton->setFixedHeight(toolBarHeight * 0.9);
-    this->closeButton->setFixedWidth(toolBarHeight * 0.9);
+    this->closeButton->setFixedHeight(toolBarHeight * 0.9 * 0.9);
+    this->closeButton->setFixedWidth(toolBarHeight * 0.9 * 0.9);
 
     if(!this->isFrameless()) {
         QMargins contentMargins = this->contentsMargins();

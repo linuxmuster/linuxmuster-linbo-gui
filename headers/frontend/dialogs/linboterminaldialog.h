@@ -22,6 +22,7 @@ public:
 
 protected:
     virtual void setVisibleAnimated(bool visible) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     QModernTextBrowser* textBrowser;

@@ -13,6 +13,7 @@
 #include "qmodernpushbutton.h"
 #include "qmodernlineedit.h"
 #include "qmoderntextbrowser.h"
+#include "qmodernradiobutton.h"
 
 #include "linbobackend.h"
 
@@ -23,7 +24,7 @@ public:
     LinboImageCreationDialog(LinboBackend* backend, QWidget* parent);
 
 protected:
-    //void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     LinboBackend* backend;
@@ -31,8 +32,10 @@ private:
     QButtonGroup* actionButtonGroup;
     QModernLineEdit* imageNameLineEdit;
     QModernTextBrowser* imageDescriptionTextBrowser;
-    QCheckBox* rebootCheckBox;
-    QCheckBox* shutDownCheckBox;
+
+    QButtonGroup* postProcessActionButtonGroup;
+    QHBoxLayout* postProcessActionLayout;
+
     QHBoxLayout* buttonLayout;
 
 private slots:

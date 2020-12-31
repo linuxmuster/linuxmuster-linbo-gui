@@ -34,8 +34,10 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
+    headers/frontend/components/qmoderncheckbox.h \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
+    headers/frontend/components/qmodernradiobutton.h \
     headers/frontend/components/qmoderntextbrowser.h \
     headers/frontend/dialogs/linboconfirmationdialog.h \
     headers/frontend/dialogs/linboimagecreationdialog.h \
@@ -61,8 +63,10 @@ SOURCES += \
     sources/backend/linbologger.cpp \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
+    sources/frontend/components/qmoderncheckbox.cpp \
     sources/frontend/components/qmoderndialog.cpp \
     sources/frontend/components/qmodernlineedit.cpp \
+    sources/frontend/components/qmodernradiobutton.cpp \
     sources/frontend/components/qmoderntextbrowser.cpp \
     sources/frontend/dialogs/linboconfirmationdialog.cpp \
     sources/frontend/dialogs/linboimagecreationdialog.cpp \

@@ -46,7 +46,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
         this->overlays.append(new QModernPushButtonOverlay(QModernPushButtonOverlay::Background, this->svgIcon, true));
     }
 
-    this->label = new QLabel(label);
+    this->label = new QLabel(label, this);
     this->label->setAlignment(Qt::AlignCenter);
     this->overlays.append(new QModernPushButtonOverlay(QModernPushButtonOverlay::Background, this->label, true));
     this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::Background, extraOverlays));

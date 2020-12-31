@@ -15,8 +15,10 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
     cancelButton = new QModernPushButton("", "cancel");
+    cancelButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
     loginButton = new QModernPushButton("", "login");
+    loginButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(loginButton, SIGNAL(clicked()), this, SLOT(inputFinished()));
 
     this->buttonLayout = new QHBoxLayout();
@@ -41,6 +43,8 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
 void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     QModernDialog::resizeEvent(event);
 
+    int buttonHeight = this->parentWidget()->height() * 0.06;
+
     QFont font = this->headerLabel->font();
     this->headerLabel->setFixedWidth(this->width());
     this->headerLabel->setFixedHeight(this->height() * 0.2);
@@ -50,8 +54,8 @@ void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     this->passwordInput->setFixedHeight(this->height() * 0.2);
     this->passwordInput->setFixedWidth(this->width() * 0.85);
 
-    this->cancelButton->setFixedSize(this->width() * 0.4, this->height() * 0.2);
-    this->loginButton->setFixedSize(this->width() * 0.4, this->height() * 0.2);
+    this->cancelButton->setFixedSize(this->width() * 0.4, buttonHeight);
+    this->loginButton->setFixedSize(this->width() * 0.4, buttonHeight);
 
     this->buttonLayout->setSpacing(this->width() * 0.05);
     this->mainLayout->setSpacing(this->height() * 0.05);

@@ -38,11 +38,18 @@ LinboGui::LinboGui()
 
     // Load segoe font
     QFontDatabase::addApplicationFont(":/fonts/SegoeUI.ttf");
-    qApp->setFont(QFont("Segoe UI"));
+    QFontDatabase::addApplicationFont(":/fonts/PTSans-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/PTSans-BoldItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/PTSans-Italic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/PTSans-Regular.ttf");
+
+    QFont defaultFont ("PTSans");
+    QApplication::setFont(defaultFont);
 
     // white bakground
     // linuxmuster background color: #394f5e
-    this->setStyleSheet( "QMainWindow { background: white }");
+    this->setStyleSheet( "QMainWindow { background: white; } "
+                         "QLabel { color: black; }");
 
     // create the backend
     this->backend = new LinboBackend(this);

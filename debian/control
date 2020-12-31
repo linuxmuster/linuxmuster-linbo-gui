@@ -1,7 +1,7 @@
 Source: linuxmuster-linbo-gui7
 Section: admin
 Priority: extra
-Maintainer: Thomas Schmitt <thomas@linuxmuster.net>
+Maintainer: Thomas Schmitt <thomas@linuxmuster.net>, Dorian Zedler <dorian@itsblue.de>
 Homepage: https://github.com/linuxmuster/linuxmuster-linbo-gui
 Build-Depends: build-essential, gcc, g++, libudev-dev, libxkbcommon-dev, gcc-multilib, g++-multilib, libudev-dev:i386, libxkbcommon-dev:i386
 

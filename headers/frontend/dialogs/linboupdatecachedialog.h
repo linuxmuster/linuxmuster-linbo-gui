@@ -11,6 +11,8 @@
 
 #include "qmoderndialog.h"
 #include "qmodernpushbutton.h"
+#include "qmodernradiobutton.h"
+#include "qmoderncheckbox.h"
 
 #include "linbobackend.h"
 
@@ -26,7 +28,7 @@ private:
     LinboBackend* backend;
     QButtonGroup* updateTypeButtonGroup;
     QVBoxLayout* mainLayout;
-    QCheckBox* formatCheckBox;
+    QModernCheckBox* formatCheckBox;
     QHBoxLayout* buttonLayout;
 
 private slots:

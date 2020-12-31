@@ -46,6 +46,7 @@ private:
     QRect originalGeometry;
 
     QWidget* toolBarWidget;
+    QWidget* toolBarLineWidget;
     QHBoxLayout* toolBarLayout;
     QLabel* titleLabel;
     QModernPushButton* closeButton;

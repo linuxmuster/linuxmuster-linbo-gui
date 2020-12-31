@@ -31,5 +31,13 @@
         <file>svgIcons/startActionIcons/syncBg.svg</file>
         <file>svgIcons/desktop.svg</file>
         <file>svgIcons/network.svg</file>
+        <file>fonts/PTSans-Bold.ttf</file>
+        <file>fonts/PTSans-BoldItalic.ttf</file>
+        <file>fonts/PTSans-Italic.ttf</file>
+        <file>fonts/PTSans-Regular.ttf</file>
+        <file>svgIcons/components/checkboxChecked.svg</file>
+        <file>svgIcons/components/checkboxUnchecked.svg</file>
+        <file>svgIcons/components/radioButtonChecked.svg</file>
+        <file>svgIcons/components/radioButtonUnchecked.svg</file>
     </qresource>
 </RCC>

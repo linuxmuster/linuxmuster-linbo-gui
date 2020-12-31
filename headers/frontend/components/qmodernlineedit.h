@@ -10,6 +10,10 @@ class QModernLineEdit : public QLineEdit
     Q_OBJECT
 public:
     QModernLineEdit(QWidget* parent = nullptr);
+
+protected:
+
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // QMODERNLINEEDIT_H
