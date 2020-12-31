@@ -126,6 +126,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
+        separatorLine->setStyleSheet("QFrame {color: #cccccc;}");
         separatorLine->setFrameShape(QFrame::HLine);
         this->rootLayout->insertWidget(2, separatorLine);
     }
