@@ -121,14 +121,6 @@
         <source>No baseimage defined</source>
         <translation type="unfinished"></translation>
     </message>
-    <message id="dialog_partition_title">
-        <source>Partition drive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="dialog_partition_question">
-        <source>Are you sure? This will delete all data on your drive!</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message id="main_root_button_createImage">
         <source>Create image</source>
         <translation type="unfinished"></translation>
@@ -177,6 +169,17 @@
     <message id="main_message_processFinishedSuccessfully">
         <source>The process %1 finished successfully.</source>
         <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LinboMainPage</name>
+    <message id="dialog_partition_title">
+        <source>Partition drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="dialog_partition_question">
+        <source>Are you sure? This will delete all data on your drive!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
