@@ -5,245 +5,245 @@
     <name>LinboClientInfo</name>
     <message id="client_info_mac">
       <source>Mac:</source>
-      <translation type="unfinished">Mac:</translation>
+      <translation>Mac:</translation>
     </message>
     <message id="client_info_hdd">
       <source>HDD:</source>
-      <translation type="unfinished">HDD:</translation>
+      <translation>HDD:</translation>
     </message>
     <message id="client_info_cache">
       <source>Cache:</source>
-      <translation type="unfinished">Cache:</translation>
+      <translation>Cache:</translation>
     </message>
     <message id="client_info_cpu">
       <source>CPU:</source>
-      <translation type="unfinished">CPU:</translation>
+      <translation>CPU:</translation>
     </message>
     <message id="client_info_ram">
       <source>RAM:</source>
-      <translation type="unfinished">RAM:</translation>
+      <translation>RAM:</translation>
     </message>
   </context>
   <context>
     <name>LinboImageCreationDialog</name>
     <message id="dialog_createImage_title">
       <source>Create image</source>
-      <translation type="unfinished">Create image</translation>
+      <translation>Image erstellen</translation>
     </message>
     <message id="dialog_createImage_action_title">
       <source>The action to perfom:</source>
-      <translation type="unfinished">The action to perfom:</translation>
+      <translation>Auszuführende Aktion:</translation>
     </message>
     <message id="dialog_createImage_action_current">
       <source>replace current image</source>
-      <translation type="unfinished">replace current image</translation>
+      <translation>aktuelles Image ersetzen</translation>
     </message>
     <message id="dialog_createImage_action_new">
       <source>create a new image</source>
-      <translation type="unfinished">create a new image</translation>
+      <translation>neues Image erstellen</translation>
     </message>
     <message id="dialog_createImage_imageName">
       <source>Image name:</source>
-      <translation type="unfinished">Image name:</translation>
+      <translation>Image name:</translation>
     </message>
     <message id="dialog_createImage_imageDescription">
       <source>Image description:</source>
-      <translation type="unfinished">Image description:</translation>
+      <translation>Image Beschreibung:</translation>
     </message>
     <message id="dialog_createImage_postActionQuestion">
       <source>What to do after the process has finished?</source>
       <oldsource>What to do after the processes has finished?</oldsource>
-      <translation type="unfinished">What to do after the process has finished?</translation>
+      <translation>Was soll nach dem Ende des Prozesses passieren?</translation>
     </message>
     <message id="dialog_createImage_postaction_nothing">
       <source>nothing</source>
-      <translation type="unfinished">nothing</translation>
+      <translation>nichts</translation>
     </message>
     <message id="dialog_createImage_postaction_shutdown">
       <source>shutdown</source>
-      <translation type="unfinished">shutdown</translation>
+      <translation>herunterfahren</translation>
     </message>
     <message id="dialog_createImage_postaction_reboot">
       <source>reboot</source>
-      <translation type="unfinished">reboot</translation>
+      <translation>neu starten</translation>
     </message>
     <message id="dialog_createImage_postaction_logout">
       <source>logout</source>
-      <translation type="unfinished">logout</translation>
+      <translation>abmelden</translation>
     </message>
     <message id="dialog_createImage_button_create">
       <source>create</source>
-      <translation type="unfinished">create</translation>
+      <translation>erstellen</translation>
     </message>
     <message id="dialog_createImage_button_createAndUpload">
       <source>create + upload</source>
-      <translation type="unfinished">create + upload</translation>
+      <translation>erstellen + hochladen</translation>
     </message>
     <message id="cancel">
       <source>cancel</source>
-      <translation type="unfinished">cancel</translation>
+      <translation>abbrechen</translation>
     </message>
   </context>
   <context>
     <name>LinboLoginDialog</name>
     <message id="dialog_login_title">
       <source>Please enter password:</source>
-      <translation type="unfinished">Please enter password:</translation>
+      <translation>Bitte Passwort eingeben:</translation>
     </message>
     <message id="dialog_login_title_wrong">
       <source>Wrong password!</source>
-      <translation type="unfinished">Wrong password!</translation>
+      <translation>Falsches Passwort!</translation>
     </message>
   </context>
   <context>
     <name>LinboMainActions</name>
     <message id="main_noBaseImage">
       <source>No baseimage defined</source>
-      <translation type="unfinished">No baseimage defined</translation>
+      <translation>Kein Basisimage definiert</translation>
     </message>
     <message id="dialog_partition_title">
       <source>Partition drive</source>
-      <translation type="unfinished">Partition drive</translation>
+      <translation>Festplatte partitionieren</translation>
     </message>
     <message id="dialog_partition_question">
       <source>Are you sure? This will delete all data on your drive!</source>
-      <translation type="unfinished">Are you sure? This will delete all data on your drive!</translation>
+      <translation>Sind Sie sicher? Dadurch werden alle Daten auf Ihrem Laufwerk gelöscht!</translation>
     </message>
     <message id="main_root_button_createImage">
       <source>Create image</source>
-      <translation type="unfinished">Create image</translation>
+      <translation>Image erstellen</translation>
     </message>
     <message id="main_root_button_uploadImage">
       <source>Upload image</source>
-      <translation type="unfinished">Upload image</translation>
+      <translation>Image hochladen</translation>
     </message>
     <message id="main_root_button_openTerminal">
       <source>Open terminal</source>
-      <translation type="unfinished">Open terminal</translation>
+      <translation>Terminal öffnen</translation>
     </message>
     <message id="main_root_button_updateCache">
       <source>Update cache</source>
-      <translation type="unfinished">Update cache</translation>
+      <translation>Cache aktualisieren</translation>
     </message>
     <message id="main_root_button_partitionDrive">
       <source>Partition drive</source>
-      <translation type="unfinished">Partition drive</translation>
+      <translation>Festplatte partitionieren</translation>
     </message>
     <message id="main_root_button_register">
       <source>Register</source>
-      <translation type="unfinished">Register</translation>
+      <translation>Registrieren</translation>
     </message>
     <message id="main_message_processCrashed">
       <source>The process &quot;%1&quot; crashed:</source>
-      <translation type="unfinished">The process &quot;%1&quot; crashed:</translation>
+      <translation>Der Prozess &quot;%1&quot; ist abgestürzt:</translation>
     </message>
     <message id="main_message_noLogs">
       <source>No logs before this crash</source>
-      <translation type="unfinished">No logs before this crash</translation>
+      <translation>Keine Meldungen vor diesem Absturz</translation>
     </message>
     <message id="main_message_lastLogs">
       <source>The last logs before the crash were:</source>
-      <translation type="unfinished">The last logs before the crash were:</translation>
+      <translation>Die letzten Meldungen vor dem Absturz waren:</translation>
     </message>
     <message id="main_message_lastErrors">
       <source>The last errors before the crash were:</source>
-      <translation type="unfinished">The last errors before the crash were:</translation>
+      <translation>Die letzten Fehler vor dem Absturz waren:</translation>
     </message>
     <message id="main_message_askForHelp">
       <source>Please ask your system administrator for help.</source>
-      <translation type="unfinished">Please ask your system administrator for help.</translation>
+      <translation>Bitten sie ihren Systemadministrator um Hilfe.</translation>
     </message>
     <message id="main_message_processFinishedSuccessfully">
       <source>The process &quot;%s&quot; finished successfully.</source>
-      <translation type="unfinished">The process &quot;%s&quot; finished successfully.</translation>
+      <translation>Der Prozess &quot;%s&quot; wurde erfolgreich abgeschlossen.</translation>
     </message>
   </context>
   <context>
     <name>LinboOsSelectionRow</name>
     <message id="osSelection_noOperatingSystems">
       <source>No Operating system configured in start.conf</source>
-      <translation type="unfinished">No Operating system configured in start.conf</translation>
+      <translation>Kein Betriebssystem in der start.conf konfiguriert</translation>
     </message>
   </context>
   <context>
     <name>LinboRegisterDialog</name>
     <message id="dialog_register_title">
       <source>Register client</source>
-      <translation type="unfinished">Register client</translation>
+      <translation>Client registrieren</translation>
     </message>
     <message id="room">
       <source>Room</source>
-      <translation type="unfinished">Room</translation>
+      <translation>Raum</translation>
     </message>
     <message id="hostname">
       <source>Hostname</source>
-      <translation type="unfinished">Hostname</translation>
+      <translation>Hostname</translation>
     </message>
     <message id="ip">
       <source>IP-Address</source>
-      <translation type="unfinished">IP-Address</translation>
+      <translation>IP-Adresse</translation>
     </message>
     <message id="group">
       <source>Host group</source>
-      <translation type="unfinished">Host group</translation>
+      <translation>Host-Gruppe</translation>
     </message>
     <message id="dialog_register_clientRole">
       <source>Client role</source>
-      <translation type="unfinished">Client role</translation>
+      <translation>Client-Rolle</translation>
     </message>
     <message id="dialog_register_clientRole_classroomStudent">
       <source>Classroom student computer</source>
-      <translation type="unfinished">Classroom student computer</translation>
+      <translation>Schüler-PC im Klassenzimmer</translation>
     </message>
     <message id="dialog_register_clientRole_classroomTeacher">
       <source>Classroom teacher computer</source>
-      <translation type="unfinished">Classroom teacher computer</translation>
+      <translation>Lehrer-PC im Klassenzimmer</translation>
     </message>
     <message id="dialog_register_clientRole_facultyTeacher">
       <source>Faculty teacher computer</source>
-      <translation type="unfinished">Faculty teacher computer</translation>
+      <translation>Fachbereich-Lehrer-PC</translation>
     </message>
     <message id="dialog_register_clientRole_staffComputer">
       <source>Staff computer</source>
-      <translation type="unfinished">Staff computer</translation>
+      <translation>Personalcomputer</translation>
     </message>
     <message id="dialog_register_button_resgister">
       <source>register</source>
-      <translation type="unfinished">register</translation>
+      <translation>registrieren</translation>
     </message>
   </context>
   <context>
     <name>LinboTerminalDialog</name>
     <message id="dialog_terminal_title">
       <source>Terminal</source>
-      <translation type="unfinished">Terminal</translation>
+      <translation>Terminal</translation>
     </message>
   </context>
   <context>
     <name>LinboUpdateCacheDialog</name>
     <message id="dialog_updateCache_title">
       <source>Update cache</source>
-      <translation type="unfinished">Update cache</translation>
+      <translation>Cache aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_rsync">
       <source>Update using rsync</source>
-      <translation type="unfinished">Update using rsync</translation>
+      <translation>Mit Rsync aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_multicast">
       <source>Update using multicast</source>
-      <translation type="unfinished">Update using multicast</translation>
+      <translation>Mit Multicast aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_torrent">
       <source>Update using torrent</source>
-      <translation type="unfinished">Update using torrent</translation>
+      <translation>Mit Torrent aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_formatPartition">
       <source>Format cache partition</source>
-      <translation type="unfinished">Format cache partition</translation>
+      <translation>Cache-Partition formatieren</translation>
     </message>
     <message id="dialog_updateCache_button_update">
       <source>update</source>
-      <translation type="unfinished">update</translation>
+      <translation>aktualisieren</translation>
     </message>
   </context>
 </TS>
