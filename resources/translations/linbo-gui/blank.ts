@@ -137,7 +137,7 @@
         <source>The process &quot;%1&quot; crashed:</source>
         <translation type="unfinished"></translation>
     </message>
-    <message id="main_message_noLogs">
+    <message>
         <source>No logs before this crash</source>
         <translation type="unfinished"></translation>
     </message>
