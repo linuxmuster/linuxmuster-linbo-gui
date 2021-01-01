@@ -43,7 +43,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "New Translations from crowdin (by GitHub Action)" -a
+        git add-commit -m "New Translations from crowdin (by GitHub Action)" -a
         
     - name: Push changes
       uses: ad-m/github-push-action@master
