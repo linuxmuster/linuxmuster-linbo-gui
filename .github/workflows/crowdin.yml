@@ -32,11 +32,12 @@ jobs:
         push_translations: false
 
     - name: Release translations
-      run: TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts) \
-          while read lang; do \
-            echo "Releasing $lang" \
-            lrelease $lang \
-          done <<< "$TRANSLATIONS"
+      run: |
+        TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts)
+        while read lang; do
+          echo "Releasing $lang"
+          lrelease $lang
+        done <<< "$TRANSLATIONS"
           
     - name: Commit files
       run: |
