@@ -16,6 +16,11 @@ jobs:
     - name: Install Qt
       run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
        
+    - name: Clean old translations
+      run: |
+        rm ./resources/translations/linbo-gui/*-*.ts
+        rm ./resources/translations/linbo-gui/*.qm
+       
     - name: Update translations
       run: lupdate ./linboGUI.pro
        
