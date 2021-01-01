@@ -5,6 +5,16 @@ on:
     branches: [ master ]
 
 jobs:
+  update_translatable_strings:
+   runs-on: ubuntu-18.04
+   
+   steps:
+     - name: Install QT
+       run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
+       
+     - name: Update translations
+       run: lupdate ./linbo linboGUI.pro
+       
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
 
