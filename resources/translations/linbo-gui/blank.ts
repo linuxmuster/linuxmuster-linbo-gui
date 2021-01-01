@@ -30,6 +30,17 @@
     </message>
 </context>
 <context>
+    <name>LinboConfirmationDialog</name>
+    <message id="yes">
+        <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="no">
+        <source>no</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LinboImageCreationDialog</name>
     <message id="dialog_createImage_title">
         <source>Create image</source>
@@ -97,6 +108,10 @@
     </message>
     <message id="dialog_login_title_wrong">
         <source>Wrong password!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="dialog_login_button_login">
+        <source>login</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
