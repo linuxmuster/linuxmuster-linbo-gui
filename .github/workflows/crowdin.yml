@@ -1,14 +1,15 @@
 name: Sync translations with Crowdin
 
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch
 
 jobs:
   update_and_sync_translatable_strings:
    runs-on: ubuntu-18.04
    
    steps:
+    - uses: actions/checkout@master
+      
     - name: Checkout
       uses: actions/checkout@v2
        
@@ -18,7 +19,7 @@ jobs:
     - name: Update translations
       run: lupdate ./linboGUI.pro
        
-    - name: sync translations with crowdin
+    - name: Sync translations with crowdin
       uses: crowdin/github-action@1.0.16
       with:
         token: ${{ secrets.CROWDIN_API_TOKEN }}
@@ -28,9 +29,23 @@ jobs:
         download_translations: true
         skip_untranslated_files: true
         export_only_approved: true
-        push_translations: true
-        commit_message: 'New Crowdin translations by Github Action'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        push_translations: false
+
+    - name: Release translations
+      run: TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts) \
+          while read lang; do \
+            echo "Releasing $lang" \
+            lrelease $lang \
+          done <<< "$TRANSLATIONS"
+          
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "New Translations from crowdin (by GitHub Action)" -a
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
