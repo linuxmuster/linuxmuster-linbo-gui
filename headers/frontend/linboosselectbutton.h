@@ -67,8 +67,8 @@ private slots:
     void handlePrimaryButtonClicked();
 
 signals:
-    void createImage();
-    void uploadImage();
+    void imageCreationRequested();
+    void imageUploadRequested();
 
 };
 

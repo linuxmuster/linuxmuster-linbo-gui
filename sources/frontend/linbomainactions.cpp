@@ -84,19 +84,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->stackView->addWidget(this->messageWidget);
 
     // Root widget
-    this->terminalDialog = new LinboTerminalDialog(parent);
-    this->confirmationDialog = new LinboConfirmationDialog(
-                //= dialog_partition_title
-                tr("Partition drive"),
-                //= dialog_partition_question
-                tr("Are you sure? This will delete all data on your drive!"),
-                parent);
-
-    connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
-    this->registerDialog = new LinboRegisterDialog(backend, parent);
-    this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
-    this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
-
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
     this->rootLayout->setAlignment(Qt::AlignCenter);
@@ -107,31 +94,32 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
         //= main_root_button_createImage
         buttonCache = new QModernPushButton(":svgIcons/image.svg", tr("Create image"));
         this->rootActionButtons.append(buttonCache);
-        connect(buttonCache, &QModernPushButton::clicked, this->imageCreationDialog, &LinboImageCreationDialog::open);
+        connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //= main_root_button_uploadImage
         this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
+        connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
     //= main_root_button_openTerminal
     buttonCache = new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal"));
-    connect(buttonCache, SIGNAL(clicked()), this->terminalDialog, SLOT(open()));
+    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::terminalRequested);
     this->rootActionButtons.append(buttonCache);
 
     //= main_root_button_updateCache
     buttonCache = new QModernPushButton(":svgIcons/startActionIcons/sync.svg", tr("Update cache"));
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, SIGNAL(clicked()), this->updateCacheDialog, SLOT(open()));
+    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //= main_root_button_partitionDrive
     buttonCache = new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive"));
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, SIGNAL(clicked()), this->confirmationDialog, SLOT(open()));
+    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
     //= main_root_button_register
     buttonCache = new QModernPushButton(":svgIcons/register.svg", tr("Register"));
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, SIGNAL(clicked()), this->registerDialog, SLOT(open()));
+    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
     for(QModernPushButton* button : this->rootActionButtons)
         this->rootLayout->addWidget(button);
@@ -321,29 +309,10 @@ void LinboMainActions::resizeAndPositionAllItems() {
     this->resetMessageButton->setGeometry((this->width() - resetMessageButtonSize) / 2, this->height() - resetMessageButtonSize * 1.1, resetMessageButtonSize, resetMessageButtonSize);
 
     // Root widget
-    int dialogHeight = this->parentWidget()->height() * 0.8;
-    int dialogWidth = dialogHeight;
-
-    this->imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
-    this->imageCreationDialog->centerInParent();
-
-    this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
-    this->terminalDialog->centerInParent();
-
-    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
-    this->confirmationDialog->centerInParent();
-
-    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.8);
-    this->registerDialog->centerInParent();
-
-    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.5);
-    this->updateCacheDialog->centerInParent();
-
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
     int rootActionButtonHeight = this->height() / this->rootActionButtons.length() - this->height() * 0.03;
     this->rootLayout->setSpacing(this->height() * 0.03);
-    int rootActionButtonWidth = rootActionButtonHeight * 5;
 
     for(QModernPushButton* button : this->rootActionButtons) {
         button->setFixedHeight(rootActionButtonHeight);

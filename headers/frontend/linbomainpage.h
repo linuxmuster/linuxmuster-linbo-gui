@@ -46,13 +46,18 @@ public:
 private:
     LinboBackend* backend;
     LinboOsSelectionRow* osSelectionRow;
-    LinboMainActions* startActionsWidget;
+    LinboMainActions* mainActions;
     LinboClientInfo* clientInfo;
     QModernPushButton* rootActionButton;
     QModernPushButton* logoutActionButton;
     QList<QModernPushButton*> powerActionButtons;
 
     LinboLoginDialog* loginDialog;
+    LinboTerminalDialog* terminalDialog;
+    LinboConfirmationDialog* confirmationDialog;
+    LinboRegisterDialog* registerDialog;
+    LinboUpdateCacheDialog* updateCacheDialog;
+    LinboImageCreationDialog* imageCreationDialog;
 
     QPropertyAnimation* startActionWidgetAnimation;
     QPropertyAnimation* clientInfoAnimation;

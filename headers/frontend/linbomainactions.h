@@ -76,11 +76,6 @@ private:
     QWidget* rootWidget;
     QVBoxLayout* rootLayout;
     QList<QModernPushButton*> rootActionButtons;
-    LinboTerminalDialog* terminalDialog;
-    LinboConfirmationDialog* confirmationDialog;
-    LinboRegisterDialog* registerDialog;
-    LinboUpdateCacheDialog* updateCacheDialog;
-    LinboImageCreationDialog* imageCreationDialog;
 
     QWidget* emptyWidget;
 
@@ -94,7 +89,12 @@ private slots:
     void handleAutostartTimeoutProgressChanged();
 
 signals:
-    void selectedOsChanged();
+    void imageCreationRequested();
+    void imageUploadRequested();
+    void terminalRequested();
+    void cacheUpdateRequested();
+    void drivePartitioningRequested();
+    void registrationRequested();
 
 };
 

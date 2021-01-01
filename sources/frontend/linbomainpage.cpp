@@ -47,11 +47,11 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addWidget(osSelectionRow);
 
     // action buttons
-    this->startActionsWidget = new LinboMainActions(this->backend, this);
-    this->startActionsWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addWidget(this->startActionsWidget);
+    this->mainActions = new LinboMainActions(this->backend, this);
+    this->mainActions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    mainLayout->addWidget(this->mainActions);
 
-    this->startActionWidgetAnimation = new QPropertyAnimation(this->startActionsWidget, "minimumSize");
+    this->startActionWidgetAnimation = new QPropertyAnimation(this->mainActions, "minimumSize");
     this->startActionWidgetAnimation->setDuration(400);
     this->startActionWidgetAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
@@ -113,12 +113,53 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     powerActionsLayout->addWidget(rebootActionButton);
     powerActionsLayout->addWidget(shutdownActionButton);
 
-    // Stuff for imaging
+    // Dialogs (for imaging stuff)
     this->loginDialog = new LinboLoginDialog(this->backend, this);
     int dialogHeight = this->height() * 0.3;
     int dialogWidth = this->height() * 0.5;
     this->loginDialog->setGeometry( (this->width() - dialogWidth) / 2, (this->height() - dialogHeight) / 2,dialogWidth, dialogHeight);
     connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(open()));
+
+    dialogHeight = this->parentWidget()->height() * 0.8;
+    dialogWidth = dialogHeight;
+
+    this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
+    this->imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->imageCreationDialog->centerInParent();
+    connect(this->osSelectionRow, &LinboOsSelectionRow::imageCreationRequested,
+            this->imageCreationDialog, &LinboImageCreationDialog::open);
+    connect(this->mainActions, &LinboMainActions::imageCreationRequested,
+            this->imageCreationDialog, &LinboImageCreationDialog::open);
+
+    this->terminalDialog = new LinboTerminalDialog(parent);
+    this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->terminalDialog->centerInParent();
+    connect(this->mainActions, &LinboMainActions::terminalRequested,
+            this->terminalDialog, &LinboImageCreationDialog::open);
+
+    this->confirmationDialog = new LinboConfirmationDialog(
+                //= dialog_partition_title
+                tr("Partition drive"),
+                //= dialog_partition_question
+                tr("Are you sure? This will delete all data on your drive!"),
+                parent);
+    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
+    this->confirmationDialog->centerInParent();
+    connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
+    connect(this->mainActions, &LinboMainActions::drivePartitioningRequested,
+            this->confirmationDialog, &LinboImageCreationDialog::open);
+
+    this->registerDialog = new LinboRegisterDialog(backend, parent);
+    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.8);
+    this->registerDialog->centerInParent();
+    connect(this->mainActions, &LinboMainActions::registrationRequested,
+            this->registerDialog, &LinboImageCreationDialog::open);
+
+    this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
+    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.5);
+    this->updateCacheDialog->centerInParent();
+    connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
+            this->updateCacheDialog, &LinboImageCreationDialog::open);
 
     this->handleLinboStateChanged(this->backend->getState());
 }
@@ -193,7 +234,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
             powerActionButton->setVisible(powerActionButtonsVisible);
 
     if(this->inited) {
-        this->startActionWidgetAnimation->setStartValue(QSize(this->width(), this->startActionsWidget->height()));
+        this->startActionWidgetAnimation->setStartValue(QSize(this->width(), this->mainActions->height()));
         this->startActionWidgetAnimation->setEndValue(QSize(this->width(), startActionsWidgetHeight));
         this->startActionWidgetAnimation->start();
 
@@ -204,7 +245,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         this->clientInfoAnimation->start();
     }
     else {
-        this->startActionsWidget->setMinimumSize(this->width(), startActionsWidgetHeight);
+        this->mainActions->setMinimumSize(this->width(), startActionsWidgetHeight);
         this->osSelectionRow->setMinimumSize(this->width(), osSelectionRowHeight);
         this->clientInfo->setMinimumSize(this->width() * 0.9, clientInfoHeight);
     }

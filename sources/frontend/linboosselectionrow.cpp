@@ -45,6 +45,8 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->getIconName(), os, this->osButtonGroup, this);
 #endif
         connect(osButton->button, SIGNAL(toggled(bool)), this, SLOT(handleButtonToggled(bool)));
+        connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
+        connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
         osButton->setShowActionButtons(!this->backend->getConfig()->getUseMinimalLayout());
 

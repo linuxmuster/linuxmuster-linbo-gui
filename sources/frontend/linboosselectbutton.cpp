@@ -83,7 +83,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         // root action button
         QModernPushButton* actionButton = new QModernPushButton(":/svgIcons/uploadBg.svg", this);
         actionButton->setGeometry(0,0,0,0);
-        connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::uploadImage);
+        connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::imageUploadRequested);
         this->rootActionButtons.append(actionButton);
     }
     else {
@@ -114,7 +114,8 @@ void LinboOsSelectButton::handlePrimaryButtonClicked() {
             break;
         }
     else if (this->os->getBackend()->getState() == LinboBackend::Root){
-        emit this->createImage();
+        this->os->getBackend()->setCurrentOs(this->os);
+        emit this->imageCreationRequested();
     }
 }
 
