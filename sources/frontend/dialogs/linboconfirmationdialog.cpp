@@ -27,7 +27,7 @@ void LinboConfirmationDialog::resizeEvent(QResizeEvent *event) {
 
     this->questionLabel->setGeometry(0, 0, this->width(), questionLabelHeight);
     QFont font = this->questionLabel->font();
-    font.setPixelSize(buttonHeight * 0.5);
+    font.setPixelSize(buttonHeight * 0.4);
     this->questionLabel->setFont(font);
 
     this->yesButton->setGeometry(margins, this->height() - buttonHeight - margins, this->width() * 0.5 - 2 * margins, buttonHeight);
