@@ -120,32 +120,40 @@ void QModernPushButton::handleToggled(bool checked) {
 }
 
 void QModernPushButton::resizeEvent(QResizeEvent *event) {
-    // make border width match button size
-    QFile file(":svgIcons/overlayHovered.svg");
-    file.open(QFile::ReadOnly);
-    QString overlayHoveredString = file.readAll();
-    QString width = QString::number(this->width());
-    QString height = QString::number(this->height());
-    overlayHoveredString.replace("width=\"500px\"", "width=\"" + width + "px\"");
-    overlayHoveredString.replace("height=\"500px\"", "height=\"" + height + "px\"");
-    overlayHoveredString.replace("viewBox=\"0 0 500px 500px\"", "viewBox=\"0 0 " + width + "px " + height + "px\"");
-    overlayHoveredString.replace("stroke-width:15px", "stroke-width:2px");
-    this->hoveredOverlay->load(overlayHoveredString.toUtf8());
+    QAbstractButton::resizeEvent(event);
 
-    for(QModernPushButtonOverlay* overlay : this->overlays) {
-        overlay->widget->setGeometry(QRect(0, 0, event->size().width(), event->size().height()));
-    }
+    QList<QWidget*> doNotResizeWidgets;
 
-    if(this->label != nullptr && this->svgIcon != nullptr) {
-        // place icon besides text
-        this->svgIcon->setGeometry(QRect(0, 0, event->size().height(), event->size().height()));
-        this->label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        this->label->setGeometry(QRect(event->size().height() * 1.1, 0, event->size().width() - event->size().height(), event->size().height()));
-    }
-    if(this->label != nullptr) {
+    if(this->label != nullptr && !this->label->text().isEmpty()) {
+
+        this->label->setFixedHeight(this->height());
+
         QFont font = this->label->font();
         font.setPixelSize(int(this->height() * 0.5) <= 0 ? 1 : this->height() * 0.5);
         this->label->setFont(font);
+
+        if(this->svgIcon != nullptr) {
+            this->svgIcon->setGeometry(QRect(0, 0, this->height(), this->height()));
+
+            this->label->move(this->height() * 1.1, 0);
+            this->label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+            this->label->adjustSize();
+            this->setMinimumWidth((this->label->x() + this->label->sizeHint().width()) * 1.1);
+
+            doNotResizeWidgets.append(this->svgIcon);
+            doNotResizeWidgets.append(this->label);
+        }
+        else {
+            this->label->setAlignment(Qt::AlignCenter);
+        }
+    }
+
+    for(QModernPushButtonOverlay* overlay : this->overlays) {
+        if(doNotResizeWidgets.contains(overlay->widget))
+            continue;
+
+        overlay->widget->setGeometry(QRect(0, 0, this->width(), this->height()));
     }
 }
 
@@ -193,6 +201,12 @@ void QModernPushButton::setVisibleAnimated(bool visible) {
                 overlay->setVisibleAnimated(true);
 }
 
+const QSize QModernPushButton::minimumSizeHint() {
+    return QAbstractButton::minimumSizeHint();
+    qDebug() << "Minimum width of " << this->objectName() << " is: " << this->svgIcon->width() + this->label->width();
+    return QSize(this->svgIcon->width() + this->label->width(), 100);
+}
+
 void QModernPushButton::paintEvent(QPaintEvent *e) {
     QWidget::paintEvent(e);
 }
@@ -219,8 +233,8 @@ void QModernPushButton::enterEvent(QEvent *e) {
 }
 
 void QModernPushButton::leaveEvent(QEvent *e) {
-        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
-            overlay->setVisibleAnimated(false);
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
+        overlay->setVisibleAnimated(false);
 
     return QAbstractButton::leaveEvent(e);
 }

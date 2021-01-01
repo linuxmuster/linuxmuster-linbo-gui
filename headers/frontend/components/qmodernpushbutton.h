@@ -46,6 +46,7 @@ public:
     void setVisibleAnimated(bool visible);
 
     void setGeometryAnimated(const QRect& geometry);
+    const QSize minimumSizeHint();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

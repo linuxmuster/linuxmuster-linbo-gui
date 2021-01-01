@@ -19,8 +19,9 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : QMo
     cancelButton = new QModernPushButton("", tr("cancel"));
     cancelButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+
     //= dialog_login_button_login
-    loginButton = new QModernPushButton("", "login");
+    loginButton = new QModernPushButton("", tr("login"));
     loginButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(loginButton, SIGNAL(clicked()), this, SLOT(inputFinished()));
 

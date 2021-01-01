@@ -99,6 +99,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
+    this->rootLayout->setAlignment(Qt::AlignCenter);
 
     QModernPushButton* buttonCache;
 
@@ -144,8 +145,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     }
 
     this->rootLayout->addStretch();
-
-    this->rootLayout->setAlignment(Qt::AlignCenter);
 
     this->stackView->addWidget(this->rootWidget);
 
@@ -345,8 +344,11 @@ void LinboMainActions::resizeAndPositionAllItems() {
     int rootActionButtonHeight = this->height() / this->rootActionButtons.length() - this->height() * 0.03;
     this->rootLayout->setSpacing(this->height() * 0.03);
     int rootActionButtonWidth = rootActionButtonHeight * 5;
-    for(QModernPushButton* button : this->rootActionButtons)
-        button->setFixedSize(rootActionButtonWidth, rootActionButtonHeight);
+
+    for(QModernPushButton* button : this->rootActionButtons) {
+        button->setFixedHeight(rootActionButtonHeight);
+        button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    }
 
     this->inited = true;
 }

@@ -13,7 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
        
-    - name: Install QT
+    - name: Install Qt
       run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
        
     - name: Update translations
@@ -36,7 +36,7 @@ jobs:
         TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts)
         while read lang; do
           echo "Releasing $lang"
-          lrelease $lang
+          lrelease -idbased $lang
         done <<< "$TRANSLATIONS"
           
     - name: Commit files

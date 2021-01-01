@@ -6,11 +6,13 @@ LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question
     this->questionLabel = new QLabel(question, this);
     this->questionLabel->setAlignment(Qt::AlignCenter);
 
-    this->yesButton = new QModernPushButton("", "yes", this);
+    //= yes
+    this->yesButton = new QModernPushButton("", tr("yes"), this);
     connect(this->yesButton, SIGNAL(clicked()), this, SIGNAL(accepted()));
     connect(this->yesButton, SIGNAL(clicked()), this, SLOT(autoClose()));
 
-    this->noButton = new QModernPushButton("", "no", this);
+    //= no
+    this->noButton = new QModernPushButton("", tr("no"), this);
     connect(this->noButton, SIGNAL(clicked()), this, SLOT(autoClose()));
     connect(this->noButton, SIGNAL(clicked()), this, SIGNAL(rejected()));
 
