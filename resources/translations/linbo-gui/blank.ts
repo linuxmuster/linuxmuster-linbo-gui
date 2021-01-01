@@ -4,23 +4,28 @@
 <context>
     <name>LinboClientInfo</name>
     <message id="client_info_mac">
-        <source>Mac:</source>
+        <source>Mac</source>
+        <oldsource>Mac:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message id="client_info_hdd">
-        <source>HDD:</source>
+        <source>HDD</source>
+        <oldsource>HDD:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message id="client_info_cache">
-        <source>Cache:</source>
+        <source>Cache</source>
+        <oldsource>Cache:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message id="client_info_cpu">
-        <source>CPU:</source>
+        <source>CPU</source>
+        <oldsource>CPU:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message id="client_info_ram">
-        <source>RAM:</source>
+        <source>RAM</source>
+        <oldsource>RAM:</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -134,10 +139,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_processCrashed">
-        <source>The process &quot;%1&quot; crashed:</source>
+        <source>The process %1 crashed:</source>
+        <oldsource>The process &quot;%1&quot; crashed:</oldsource>
         <translation type="unfinished"></translation>
     </message>
-    <message id="main_message_noLogs">
+    <message>
         <source>No logs before this crash</source>
         <translation type="unfinished"></translation>
     </message>
@@ -154,7 +160,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_processFinishedSuccessfully">
-        <source>The process &quot;%s&quot; finished successfully.</source>
+        <source>The process %1 finished successfully.</source>
+        <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
