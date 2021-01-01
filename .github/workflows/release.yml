@@ -7,14 +7,20 @@ on:
 name: Build Release
 
 jobs:
-  build:
-    name: Build Release
+  build_release:
+    name: Build LinboGUI
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project
         run: ./build.sh
+        
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-18.04
+    needs: [build_release]
+    steps:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
