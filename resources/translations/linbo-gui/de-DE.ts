@@ -5,23 +5,23 @@
     <name>LinboClientInfo</name>
     <message id="client_info_mac">
       <source>Mac:</source>
-      <translation type="unfinished">Mac:</translation>
+      <translation>Mac:</translation>
     </message>
     <message id="client_info_hdd">
       <source>HDD:</source>
-      <translation type="unfinished">HDD:</translation>
+      <translation>HDD:</translation>
     </message>
     <message id="client_info_cache">
       <source>Cache:</source>
-      <translation type="unfinished">Cache:</translation>
+      <translation>Cache:</translation>
     </message>
     <message id="client_info_cpu">
       <source>CPU:</source>
-      <translation type="unfinished">CPU:</translation>
+      <translation>CPU:</translation>
     </message>
     <message id="client_info_ram">
       <source>RAM:</source>
-      <translation type="unfinished">RAM:</translation>
+      <translation>RAM:</translation>
     </message>
   </context>
   <context>
