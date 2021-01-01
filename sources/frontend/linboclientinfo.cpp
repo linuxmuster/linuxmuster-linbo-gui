@@ -21,22 +21,22 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->mainLayout->addWidget(new QLabel("<b>" + tr("IP-Address") + ":</b>  " + config->getIpAddress()), 0, 3, 1, 1);
 
     //= client_info_mac
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac:") + "</b>  " + config->getMacAddress()), 0, 4, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac") + ":</b>  " + config->getMacAddress()), 0, 4, 1, 1);
 
     this->desktopIconWidget = new QSvgWidget(":/svgIcons/desktop.svg");
     this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
     //= client_info_hdd
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("HDD:") + "</b>  " + config->getHddSize()), 1, 1, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("HDD") + ":</b>  " + config->getHddSize()), 1, 1, 1, 1);
 
     //= client_info_cache
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("Cache:") + "</b>  " + config->getCacheSize()), 1, 2, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("Cache") + ":</b>  " + config->getCacheSize()), 1, 2, 1, 1);
 
     //= client_info_cpu
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("CPU:") + "</b>  " + config->getCpuModel()), 1, 3, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("CPU") + ":</b>  " + config->getCpuModel()), 1, 3, 1, 1);
 
     //= client_info_ram
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("RAM:") + "</b>  " + config->getRamSize()), 1, 4, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + tr("RAM") + ":</b>  " + config->getRamSize()), 1, 4, 1, 1);
 
 
     this->setStyleSheet("QGridLayout {background: red;}");

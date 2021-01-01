@@ -393,7 +393,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     case LinboBackend::RootActionError: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
         //= main_message_processCrashed
-        this->messageLabel->setText(tr("The process \"%1\" crashed:").arg(chaperLogs[chaperLogs.length()-1].message));
+        this->messageLabel->setText(tr("The process %1 crashed:").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
         QString errorDetails;
         if(chaperLogs.length() == 0)
             //= main_message_noLogs
@@ -423,7 +423,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     case LinboBackend::RootActionSuccess: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
         //= main_message_processFinishedSuccessfully
-        this->messageLabel->setText(tr("The process \"%s\" finished successfully.").replace("%s", chaperLogs[chaperLogs.length()-1].message));
+        this->messageLabel->setText(tr("The process %1 finished successfully.").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
         this->messageDetailsLabel->setText("");
         this->messageLabel->setStyleSheet("QLabel { color : green; }");
         currentWidget = this->messageWidget;

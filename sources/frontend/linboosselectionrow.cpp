@@ -69,7 +69,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         //= ip
         environmentValuesText += tr("IP-Address") + ":  " + this->backend->getConfig()->getIpAddress() + "\n";
         //= client_info_mac
-        environmentValuesText += tr("Mac-Address") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
+        environmentValuesText += tr("Mac") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
 
         this->environmentValuesLabel = new QLabel(environmentValuesText, this);
         this->environmentValuesLabel->hide();
