@@ -32,7 +32,7 @@ jobs:
         upload_sources: true
         # download new translations
         download_translations: true
-        skip_untranslated_files: true
+        skip_untranslated_strings: true
         export_only_approved: true
         push_translations: false
 
