@@ -30,6 +30,17 @@
     </message>
   </context>
   <context>
+    <name>LinboConfirmationDialog</name>
+    <message id="yes">
+      <source>yes</source>
+      <translation>ja</translation>
+    </message>
+    <message id="no">
+      <source>no</source>
+      <translation>nein</translation>
+    </message>
+  </context>
+  <context>
     <name>LinboImageCreationDialog</name>
     <message id="dialog_createImage_title">
       <source>Create image</source>
@@ -99,20 +110,16 @@
       <source>Wrong password!</source>
       <translation>Falsches Passwort!</translation>
     </message>
+    <message id="dialog_login_button_login">
+      <source>login</source>
+      <translation>anmelden</translation>
+    </message>
   </context>
   <context>
     <name>LinboMainActions</name>
     <message id="main_noBaseImage">
       <source>No baseimage defined</source>
       <translation>Kein Basisimage definiert</translation>
-    </message>
-    <message id="dialog_partition_title">
-      <source>Partition drive</source>
-      <translation>Festplatte partitionieren</translation>
-    </message>
-    <message id="dialog_partition_question">
-      <source>Are you sure? This will delete all data on your drive!</source>
-      <translation>Sind Sie sicher? Dadurch werden alle Daten auf Ihrem Laufwerk gelöscht!</translation>
     </message>
     <message id="main_root_button_createImage">
       <source>Create image</source>
@@ -163,6 +170,17 @@
       <source>The process %1 finished successfully.</source>
       <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
       <translation>Der Prozess %1 wurde erfolgreich abgeschlossen.</translation>
+    </message>
+  </context>
+  <context>
+    <name>LinboMainPage</name>
+    <message id="dialog_partition_title">
+      <source>Partition drive</source>
+      <translation>Festplatte partitionieren</translation>
+    </message>
+    <message id="dialog_partition_question">
+      <source>Are you sure? This will delete all data on your drive!</source>
+      <translation>Sind Sie sicher? Dadurch werden alle Daten auf Ihrem Laufwerk gelöscht!</translation>
     </message>
   </context>
   <context>
