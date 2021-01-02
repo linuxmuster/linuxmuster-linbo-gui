@@ -126,7 +126,7 @@ start()
       || [[ "${cache}" != "/dev/sda4" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
-    elif [[ "${append}" == "resume=/dev/sda2 splash=silent quiet showopts" ]] \
+    elif [[ "${append}" == "resume" ]] \
       || [[ "${append}" == "noresume splash=silent quiet showopts klassenarbeit=1" ]]; then
         return 0
     else
@@ -202,7 +202,6 @@ register()
 # linbo_cmd synconly 10.0.0.1 /dev/sda4 opensuse-cpqmini.cloop "" /dev/sda1 /dev/sda1 /boot/vmlinuz /boot/initrd "noresume splash=silent quiet showopts klassenarbeit=1"
 synconly()
 {
-    # TODO: check $baseimage $image
     local server="$1"
     local cachedev="$2"
     local baseimage="$3"
@@ -214,7 +213,7 @@ synconly()
     local append="$9"
     if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
-      || [[ "${baseimage}" != "opensuse-cpqmini.cloop" ]] \
+      || [[ "${baseimage}" != "ubuntu.cloop" ]] \
       || [[ "${image}" != "" ]] \
       || [[ "${bootdev}" != "/dev/sda1" ]] \
       || [[ "${rootdev}" != "/dev/sda1" ]] \
@@ -222,7 +221,7 @@ synconly()
       || [[ "${initrd}" != "/boot/initrd" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
-    elif [[ "${append}" == "resume=/dev/sda2 splash=silent quiet showopts" ]] \
+    elif [[ "${append}" == "resume" ]] \
       || [[ "${append}" == "noresume splash=silent quiet showopts klassenarbeit=1" ]]; then
         return 0
     else

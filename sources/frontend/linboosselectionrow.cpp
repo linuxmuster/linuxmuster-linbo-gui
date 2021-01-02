@@ -121,7 +121,6 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
             buttonWidth = std::min((widthOverride - spacing) / 2, int(heightOverride * 1.5) - spacing);
             buttonHeight = heightOverride / 2 - spacing / 2;
             totalWidth = buttonWidth * 2 + spacing * (2 + 1);
-            //qDebug() << "Button height: " << buttonHeight << " buttonWidth: " << buttonWidth;
         }
         else {
             qWarning() << "[ERROR] More than 4 OSs defined";
@@ -238,6 +237,8 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
     case LinboBackend::Reinstalling:
+    case LinboBackend::CreatingImage:
+    case LinboBackend::UploadingImage:
         this->setShowOnlySelectedButton(true);
         break;
 

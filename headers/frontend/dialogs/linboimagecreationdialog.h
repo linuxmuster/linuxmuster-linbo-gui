@@ -40,8 +40,7 @@ private:
 
 private slots:
     void refreshPathAndDescription();
-    //void createImage();
-    //void createImageAndUpload();
+    void createImage(LinboBackend::LinboPostProcessActions postProcessActions);
 };
 
 #endif // LINBOIMAGECREATIONDIALOG_H

@@ -45,8 +45,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     //= main_noBaseImage
     this->noBaseImageLabel = new QLabel(tr("No baseimage defined"), this->buttonWidget);
     this->noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
-    this->noBaseImageLabelFont = QFont("Segoe UI");
-    this->noBaseImageLabel->setFont(this->noBaseImageLabelFont);
     this->noBaseImageLabel->hide();
     this->noBaseImageLabel->setAlignment(Qt::AlignCenter);
 
@@ -60,9 +58,20 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->logLabel = new QLabel("", this->progressBarWidget);
     this->logLabel->setAlignment(Qt::AlignCenter);
+    this->passedTimeLabel = new QLabel("00:00", this->progressBarWidget);
+    this->passedTimeLabel->setAlignment(Qt::AlignCenter);
 
-    this->logFont = QFont("Segoe UI");
-    this->logLabel->setFont(this->logFont);
+    this->passedTimeTimer = new QTimer(this->progressBarWidget);
+    connect(this->passedTimeTimer, &QTimer::timeout, [=](){
+       int passedSecs = QDateTime::currentSecsSinceEpoch() - this->processStartedAt;
+       QString passedTime =
+               QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
+               + ":"
+               + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
+       this->passedTimeLabel->setText(passedTime);
+    });
+    this->passedTimeTimer->setInterval(1000);
+    this->processStartedAt = QDateTime::currentSecsSinceEpoch();
 
     this->cancelButton = new QModernPushButton(":/svgIcons/cancel.svg", this->progressBarWidget);
     connect(this->cancelButton, SIGNAL(clicked()), this->backend, SLOT(cancelCurrentAction()));
@@ -149,6 +158,8 @@ void LinboMainActions::resizeAndPositionAllItems() {
 
     // stack view
     this->stackView->setFixedSize(this->size());
+
+    int defaultSpacing = this->height() * 0.03;
 
     // Action buttons
     // bring buttons in correct order:
@@ -249,10 +260,13 @@ void LinboMainActions::resizeAndPositionAllItems() {
         }
     }
 
+    QFont fontCache;
+
     if(selectedOs != nullptr && selectedOs->getBaseImage() == nullptr) {
         int noBaseImageLabelHeight = this->buttonWidget->height() * 0.2;
-        this->noBaseImageLabelFont.setPixelSize(noBaseImageLabelHeight <= 0 ? 1:noBaseImageLabelHeight * 0.8);
-        this->noBaseImageLabel->setFont(this->noBaseImageLabelFont);
+        fontCache = this->noBaseImageLabel->font();
+        fontCache.setPixelSize(noBaseImageLabelHeight <= 0 ? 1:noBaseImageLabelHeight * 0.8);
+        this->noBaseImageLabel->setFont(fontCache);
         this->noBaseImageLabel->setGeometry(0, (this->buttonWidget->height() - noBaseImageLabelHeight) / 2, this->buttonWidget->width(), noBaseImageLabelHeight);
         this->noBaseImageLabel->show();
     }
@@ -268,13 +282,19 @@ void LinboMainActions::resizeAndPositionAllItems() {
     int logLabelWidth = this->progressBarWidget->width() * 0.8;
     int cancelButtonWidth = this->progressBarWidget->height() * 0.4;
 
-    this->logFont.setPixelSize(logLabelHeight <= 0 ? 1:logLabelHeight * 0.8);
-    this->logLabel->setFont(this->logFont);
+    fontCache = this->logLabel->font();
+    fontCache.setPixelSize(logLabelHeight <= 0 ? 1:logLabelHeight * 0.8);
+    this->logLabel->setFont(fontCache);
     this->logLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, 0, logLabelWidth, logLabelHeight);
 
-    progressBar->setGeometry((this->progressBarWidget->width() - progressBarWidth) / 2, this->logLabel->y() + logLabelHeight + this->progressBarWidget->height() * 0.15, progressBarWidth, progressBarHeight);
+    progressBar->setGeometry((this->progressBarWidget->width() - progressBarWidth) / 2, this->logLabel->y() + logLabelHeight + defaultSpacing, progressBarWidth, progressBarHeight);
 
-    this->cancelButton->setGeometry((this->progressBarWidget->width() - cancelButtonWidth) / 2, this->progressBar->y() + progressBarHeight + this->progressBarWidget->height() * 0.05, cancelButtonWidth, cancelButtonWidth);
+    fontCache = this->passedTimeLabel->font();
+    fontCache.setPixelSize(logLabelHeight <= 0 ? 1:logLabelHeight * 0.8);
+    this->passedTimeLabel->setFont(fontCache);
+    this->passedTimeLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, this->progressBar->y() + progressBarHeight + defaultSpacing, logLabelWidth, logLabelHeight);
+
+    this->cancelButton->setGeometry((this->progressBarWidget->width() - cancelButtonWidth) / 2, this->passedTimeLabel->y() + logLabelHeight + defaultSpacing, cancelButtonWidth, cancelButtonWidth);
 
     // Message widget
     this->messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));
@@ -312,7 +332,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
     int rootActionButtonHeight = this->height() / this->rootActionButtons.length() - this->height() * 0.03;
-    this->rootLayout->setSpacing(this->height() * 0.03);
+    this->rootLayout->setSpacing(defaultSpacing);
 
     for(QModernPushButton* button : this->rootActionButtons) {
         button->setFixedHeight(rootActionButtonHeight);
@@ -335,6 +355,7 @@ void LinboMainActions::handleCurrentOsChanged(LinboOs* newOs) {
 void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     QWidget* currentWidget = nullptr;
+    this->passedTimeTimer->stop();
 
     switch (newState) {
     case LinboBackend::Autostarting:
@@ -352,9 +373,14 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
+    case LinboBackend::CreatingImage:
+    case LinboBackend::UploadingImage:
     case LinboBackend::Reinstalling:
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
+        this->passedTimeLabel->setText("00:00");
+        this->processStartedAt = QDateTime::currentSecsSinceEpoch();
+        this->passedTimeTimer->start();
         this->progressBar->setIndeterminate(true);
         this->progressBar->setReversed(false);
         currentWidget = this->progressBarWidget;

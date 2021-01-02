@@ -54,22 +54,22 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     QModernRadioButton* buttonCache = new QModernRadioButton(tr("nothing"));
     buttonCache->setChecked(true);
     this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache);
+    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
 
     //= dialog_createImage_postaction_shutdown
     buttonCache = new QModernRadioButton(tr("shutdown"));
     this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache);
+    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
 
     //= dialog_createImage_postaction_reboot
     buttonCache = new QModernRadioButton(tr("reboot"));
     this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache);
+    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
 
     //= dialog_createImage_postaction_logout
     buttonCache = new QModernRadioButton(tr("logout"));
     this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache);
+    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
 
     // Bottom buttons
     this->buttonLayout = new QHBoxLayout();
@@ -78,11 +78,19 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //= dialog_createImage_button_create
     QModernPushButton* pushButtonCache = new QModernPushButton("", tr("create"));
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
+    connect(pushButtonCache, &QModernPushButton::clicked, [=](){
+        this->createImage(LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId()));
+    });
     this->buttonLayout->addWidget(pushButtonCache);
 
     //= dialog_createImage_button_createAndUpload
     pushButtonCache = new QModernPushButton("", tr("create + upload"));
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
+    connect(pushButtonCache, &QModernPushButton::clicked, [=](){
+        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
+        postProcessActions.setFlag(LinboBackend::NoAction, false);
+        this->createImage( LinboBackend::UploadImage | postProcessActions);
+    });
     this->buttonLayout->addWidget(pushButtonCache);
 
     //= cancel
@@ -94,6 +102,17 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     connect(this, SIGNAL(opened()), this, SLOT(refreshPathAndDescription()));
 }
 
+void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
+
+    if(this->actionButtonGroup->checkedId() == 0)
+        // replace image
+        this->backend->replaceImageOfCurrentOs(postProcessActions);
+    else
+        // create new image
+        this->backend->createImageOfCurrentOS(this->imageNameLineEdit->text(), postProcessActions);
+
+    this->autoClose();
+}
 
 void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
     QModernDialog::resizeEvent(event);

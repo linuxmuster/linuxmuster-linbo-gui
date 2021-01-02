@@ -260,6 +260,8 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
 
     this->postProcessActions = postProcessActions;
 
+    qDebug() << postProcessActions;
+
     this->logger->log("Creating image", LinboLogger::LinboLogChapterBeginning);
 
     this->setState(CreatingImage);
@@ -288,8 +290,13 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
     return true;
 }
 
+
 bool LinboBackend::uploadImage(const LinboImage* image, LinboPostProcessActions postProcessActions) {
-    if(this->state != Root)
+    return this->uploadImagePrivate(image, postProcessActions, false);
+}
+
+bool LinboBackend::uploadImagePrivate(const LinboImage* image, LinboPostProcessActions postProcessActions, bool allowCreatingImageState) {
+    if(this->state != Root && !(this->state == CreatingImage && allowCreatingImageState))
         return false;
 
     this->postProcessActions = postProcessActions;
@@ -560,7 +567,7 @@ void LinboBackend::handleProcessFinished(int exitCode, QProcess::ExitStatus exit
         else if(this->postProcessActions.testFlag(UploadImage)) {
             this->logger->log("Process exited.", LinboLogger::LinboLogChapterEnd);
             this->postProcessActions = this->postProcessActions.setFlag(UploadImage, false);
-            this->uploadImage(this->imageToUploadAutomatically, this->postProcessActions);
+            this->uploadImagePrivate(this->imageToUploadAutomatically, this->postProcessActions, true);
             this->imageToUploadAutomatically = nullptr;
             return;
         }

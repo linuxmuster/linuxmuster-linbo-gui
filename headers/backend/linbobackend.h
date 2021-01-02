@@ -188,6 +188,8 @@ public slots:
     bool resetMessage();
 
 private slots:
+    bool uploadImagePrivate(const LinboImage* image, LinboPostProcessActions postProcessAction = NoAction, bool allowCreatingImageState = false);
+
     void executeAutostart();
     void handleAutostartTimerTimeout();
     void readFromStdout();

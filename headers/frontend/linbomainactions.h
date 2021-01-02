@@ -59,12 +59,13 @@ private:
     QModernPushButton* reinstallOsButton;
     QList<QModernPushButton*> actionButtons;
     QLabel* noBaseImageLabel;
-    QFont noBaseImageLabelFont;
 
     QWidget* progressBarWidget;
     QModernProgressBar* progressBar;
-    QFont logFont;
     QLabel* logLabel;
+    QLabel* passedTimeLabel;
+    QTimer* passedTimeTimer;
+    double processStartedAt;
     QModernPushButton* cancelButton;
 
     QWidget* messageWidget;
