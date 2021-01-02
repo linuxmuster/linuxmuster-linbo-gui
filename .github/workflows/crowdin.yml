@@ -41,7 +41,7 @@ jobs:
         TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts)
         while read lang; do
           echo "Releasing $lang"
-          lrelease -idbased $lang
+          lrelease $lang
         done <<< "$TRANSLATIONS"
           
     - name: Commit files
