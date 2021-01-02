@@ -1,3 +1,13 @@
+linuxmuster-linbo-gui7 (0.6-0) lmn7-testing; urgency=low
+
+  * CodeCrafter912:
+    - Fix #16: Add timer to long operations.
+    - Fix #4: Multi language Support 
+    - New Design in backend
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sat, 2 Jan 2021 11:01:44 +0100
+
+
 linuxmuster-linbo-gui7 (0.5-0) lmn7-testing; urgency=low
 
   * CodeCrafter912:
