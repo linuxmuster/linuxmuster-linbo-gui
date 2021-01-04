@@ -131,6 +131,14 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     connect(this->mainActions, &LinboMainActions::imageCreationRequested,
             this->imageCreationDialog, &LinboImageCreationDialog::open);
 
+    this->imageUploadDialog = new LinboImageUploadDialog(backend, parent);
+    this->imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.4);
+    this->imageUploadDialog->centerInParent();
+    connect(this->osSelectionRow, &LinboOsSelectionRow::imageUploadRequested,
+            this->imageUploadDialog, &LinboImageUploadDialog::open);
+    connect(this->mainActions, &LinboMainActions::imageUploadRequested,
+            this->imageUploadDialog, &LinboImageUploadDialog::open);
+
     this->terminalDialog = new LinboTerminalDialog(parent);
     this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
     this->terminalDialog->centerInParent();
@@ -160,6 +168,25 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->updateCacheDialog->centerInParent();
     connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
             this->updateCacheDialog, &LinboImageCreationDialog::open);
+
+    // Linbo logo
+    QSvgRenderer* renderer = new QSvgRenderer(QString(":/images/linbo_logo_small.svg"));
+    renderer->setAspectRatioMode(Qt::KeepAspectRatio);
+
+    QImage* image = new QImage(500, 100, QImage::Format_ARGB32);
+    image->fill("#ffffff");
+
+    QPainter painter(image);
+    renderer->render(&painter);
+
+    QLabel* linboLogo = new QLabel(this);
+    linboLogo->setPixmap(QPixmap::fromImage(*image));
+
+    int linboLogoHeight = this->height() * 0.15;
+    linboLogo->move((this->width() - linboLogoHeight * 3) / 2, linboLogoHeight * 0.1);
+    linboLogo->setFixedHeight(linboLogoHeight);
+    linboLogo->setFixedWidth(linboLogoHeight * 3);
+    linboLogo->hide();
 
     this->handleLinboStateChanged(this->backend->getState());
 }

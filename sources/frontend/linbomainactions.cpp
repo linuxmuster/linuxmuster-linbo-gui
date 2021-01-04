@@ -106,7 +106,8 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
         connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //= main_root_button_uploadImage
-        this->rootActionButtons.append(new QModernPushButton(":svgIcons/upload.svg", tr("Upload image")));
+        buttonCache = new QModernPushButton(":svgIcons/upload.svg", tr("Upload image"));
+        this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 

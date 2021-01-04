@@ -754,19 +754,6 @@ void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
                     // If the autostart of this OS is enabled and there is
                     // no other OS active yet -> set this OS as current OS
                     this->currentOs = tmpOs;
-
-                // check if this is an additional/incremental image for an existing OS
-                /* TODO unsigned int i; // Being checked later.
-                for(i = 0; i < elements.size(); i++ ) {
-                if(tmp_os.get_name().lower().compare(elements[i].get_name().lower()) == 0) {
-                elements[i].image_history.push_back(tmp_image); break;
-                }
-                }
-                if(i==elements.size()) { // Not included yet -> new image
-                tmp_os.image_history.push_back(tmp_image);
-                elements.push_back(tmp_os);
-                }*/
-
             }
             else
                 tmpOs->deleteLater();

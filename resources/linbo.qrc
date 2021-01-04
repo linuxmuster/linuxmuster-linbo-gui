@@ -39,5 +39,6 @@
         <file>svgIcons/components/checkboxUnchecked.svg</file>
         <file>svgIcons/components/radioButtonChecked.svg</file>
         <file>svgIcons/components/radioButtonUnchecked.svg</file>
+        <file>images/linbo_logo_small.svg</file>
     </qresource>
 </RCC>

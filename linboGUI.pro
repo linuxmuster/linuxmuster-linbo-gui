@@ -41,6 +41,7 @@ HEADERS += \
     headers/frontend/components/qmoderntextbrowser.h \
     headers/frontend/dialogs/linboconfirmationdialog.h \
     headers/frontend/dialogs/linboimagecreationdialog.h \
+    headers/frontend/dialogs/linboimageuploaddialog.h \
     headers/frontend/dialogs/linbologindialog.h \
     headers/frontend/dialogs/linboregisterdialog.h \
     headers/frontend/dialogs/linboterminaldialog.h \
@@ -70,6 +71,7 @@ SOURCES += \
     sources/frontend/components/qmoderntextbrowser.cpp \
     sources/frontend/dialogs/linboconfirmationdialog.cpp \
     sources/frontend/dialogs/linboimagecreationdialog.cpp \
+    sources/frontend/dialogs/linboimageuploaddialog.cpp \
     sources/frontend/dialogs/linbologindialog.cpp \
     sources/frontend/dialogs/linboregisterdialog.cpp \
     sources/frontend/dialogs/linboterminaldialog.cpp \

@@ -27,6 +27,7 @@
 #include <QProgressBar>
 #include <QInputDialog>
 #include <QPropertyAnimation>
+#include <QSvgRenderer>
 
 #include "linbobackend.h"
 #include "linboosselectbutton.h"
@@ -36,6 +37,7 @@
 #include "linboclientinfo.h"
 
 #include "linbologindialog.h"
+#include "linboimageuploaddialog.h"
 
 class LinboMainPage : public QWidget
 {
@@ -58,6 +60,7 @@ private:
     LinboRegisterDialog* registerDialog;
     LinboUpdateCacheDialog* updateCacheDialog;
     LinboImageCreationDialog* imageCreationDialog;
+    LinboImageUploadDialog* imageUploadDialog;
 
     QPropertyAnimation* startActionWidgetAnimation;
     QPropertyAnimation* clientInfoAnimation;
