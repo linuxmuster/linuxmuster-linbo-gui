@@ -17,8 +17,18 @@
  ****************************************************************************/
 
 #include "linboimage.h"
+#include "linbobackend.h"
 
-LinboImage::LinboImage(QString name, QObject *parent) : QObject(parent)
+LinboImage::LinboImage(QString name, LinboBackend *parent) : QObject(parent)
 {
+    this->backend = parent;
     this->setName(name);
+}
+
+QString LinboImage::getDescription() {
+    return this->backend->readImageDescription(this);
+}
+
+bool LinboImage::setDescription (const QString& description) {
+    return this->backend->writeImageDescription(this, description);
 }

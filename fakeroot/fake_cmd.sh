@@ -7,14 +7,17 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${DIR}" ]]; then
     DIR="${PWD}"
 fi
+
+cd "$(dirname "$0")"
+
 # shellcheck source=fake_cmd_functions.sh
-. "${DIR}/fake_cmd_functions.sh"
+. "./fake_cmd_functions.sh"
 # shellcheck source=fake_cmd_create.sh
-. "${DIR}/fake_cmd_create.sh"
+. "./fake_cmd_create.sh"
 # shellcheck source=fake_cmd_upload.sh
-. "${DIR}/fake_cmd_upload.sh"
+. "./fake_cmd_upload.sh"
 # shellcheck source=fake_cmd_initcache.sh
-. "${DIR}/fake_cmd_initcache.sh"
+. "./fake_cmd_initcache.sh"
 
 cmd="${1}"
 if [[ -n "${cmd}" ]]; then

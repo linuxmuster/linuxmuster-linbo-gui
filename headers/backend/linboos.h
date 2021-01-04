@@ -46,8 +46,7 @@ public:
     const QString& getName() const {return this->name;}
     const QString& getDescription() const {return this->description;}
     const QString& getVersion() const {return this->version;}
-    const LinboImage* getBaseImage() const {return this->baseImage;}
-    const LinboImage* getDifferentialImage() const {return this->differentialImage;}
+    LinboImage* getBaseImage() const {return this->baseImage;}
     const QString& getIconName() const {return this->iconName;}
     const QString& getRootPartition() const {return this->rootPartition;}
     const QString& getBootPartition() const {return this->bootPartition;}
@@ -78,7 +77,6 @@ private:
     void setDescription  (const QString& description) {this->description = description;}
     void setVersion (const QString& version) {this->version = version;}
     void setBaseImage (LinboImage* baseImage) {this->baseImage = baseImage;}
-    void setDifferentialImage(LinboImage* differentialImage) {this->differentialImage = differentialImage;}
     void setIconName (const QString& iconName) {this->iconName = iconName;}
     void setRootPartition (const QString& rootPartition) {this->rootPartition = rootPartition;}
     void setBootPartition (const QString& bootPartition) {this->bootPartition = bootPartition;}
@@ -116,7 +114,6 @@ private:
 
     LinboOsStartAction defaultAction;
     LinboImage* baseImage;
-    LinboImage* differentialImage;
 };
 
 #endif // LINBOOS_H

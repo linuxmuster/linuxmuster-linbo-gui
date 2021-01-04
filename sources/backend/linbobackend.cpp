@@ -164,21 +164,13 @@ bool LinboBackend::syncCurrentOs() {
 
     this->setState(Syncing);
 
-    qDebug() << "TEST2";
-
-    QString differentialImage;
-    if(os->getDifferentialImage() == nullptr)
-        differentialImage = "";
-    else
-        differentialImage = os->getDifferentialImage()->getName();
-
     this->executeCommand(
                 false,
                 "syncstart",
                 this->config->getServerIpAddress(),
                 this->config->getCachePath(),
                 os->getBaseImage()->getName(),
-                differentialImage,
+                "",
                 os->getBootPartition(),
                 os->getRootPartition(),
                 os->getKernel(),
@@ -199,19 +191,13 @@ bool LinboBackend::reinstallCurrentOs() {
 
     this->setState(Reinstalling);
 
-    QString differentialImage;
-    if(os->getDifferentialImage() == nullptr)
-        differentialImage = "";
-    else
-        differentialImage = os->getDifferentialImage()->getName();
-
     this->executeCommand(
                 false,
                 "syncr",
                 this->config->getServerIpAddress(),
                 this->config->getCachePath(),
                 os->getBaseImage()->getName(),
-                differentialImage,
+                "",
                 os->getBootPartition(),
                 os->getRootPartition(),
                 os->getKernel(),
@@ -250,21 +236,22 @@ void LinboBackend::logout() {
     this->setState(Idle);
 }
 
-bool LinboBackend::replaceImageOfCurrentOs(LinboPostProcessActions postProcessAction) {
-    return this->createImageOfCurrentOS(this->currentOs->getBaseImage()->getName(), postProcessAction);
+bool LinboBackend::replaceImageOfCurrentOs(QString description, LinboPostProcessActions postProcessAction) {
+    return this->createImageOfCurrentOS(this->currentOs->getBaseImage()->getName(), description, postProcessAction);
 }
 
-bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions postProcessActions) {
+bool LinboBackend::createImageOfCurrentOS(QString name, QString description, LinboPostProcessActions postProcessActions) {
     if(this->state != Root)
         return false;
 
     this->postProcessActions = postProcessActions;
 
-    qDebug() << postProcessActions;
-
     this->logger->log("Creating image", LinboLogger::LinboLogChapterBeginning);
-
     this->setState(CreatingImage);
+
+    this->logger->log("Writing image description", LinboLogger::LinboGuiInfo);
+    if(!this->writeImageDescription(name, description))
+        this->logger->log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
 
     if(this->postProcessActions.testFlag(UploadImage) && name == this->currentOs->getBaseImage()->getName()) {
         this->imageToUploadAutomatically = this->currentOs->getBaseImage();
@@ -273,8 +260,8 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
         this->imageToUploadAutomatically = new LinboImage(name);
     }
 
-    // TODO: Description
 
+    this->logger->log("Beginning image creation...", LinboLogger::LinboGuiInfo);
     this->executeCommand(
                 false,
                 "create",
@@ -290,6 +277,61 @@ bool LinboBackend::createImageOfCurrentOS(QString name, LinboPostProcessActions 
     return true;
 }
 
+QString LinboBackend::readImageDescription(LinboImage* image) {
+    QProcess readProcess;
+    int exitCode = -1;
+    QString description = this->executeCommand(
+                true,
+                this->linboCmdCommand,
+                this->buildCommand("readfile", this->config->getCachePath(), image->getName() + ".desc"),
+                &exitCode);
+
+    if(exitCode == 0)
+        return description;
+    else
+        return "";
+}
+
+bool LinboBackend::writeImageDescription(LinboImage* image, QString newDescription) {
+    return this->writeImageDescription(image->getName(), newDescription);
+}
+
+bool LinboBackend::writeImageDescription(QString imageName, QString newDescription) {
+
+    // substitute umlauts (they will otherwhise crash the WebUI
+    newDescription.replace("ä", "ae");
+    newDescription.replace("Ä", "Ae");
+    newDescription.replace("ö", "oe");
+    newDescription.replace("Ö", "Oe");
+    newDescription.replace("ü", "ue");
+    newDescription.replace("Ü", "Ue");
+
+    QProcess process;
+    process.start(
+                this->linboCmdCommand,
+                this->buildCommand("writefile", this->config->getCachePath(), imageName + ".desc"));
+
+    if(!process.waitForStarted()) {
+        qDebug() << "Not started: " << process.exitCode();
+        return false;
+    }
+
+    process.write(newDescription.toUtf8());
+
+    if(!process.waitForBytesWritten()) {
+        qDebug() << "Not written";
+        return false;
+    }
+
+    process.closeWriteChannel();
+
+    if(!process.waitForFinished()) {
+        qDebug() << "Not finished";
+        return false;
+    }
+
+    return true;
+}
 
 bool LinboBackend::uploadImage(const LinboImage* image, LinboPostProcessActions postProcessActions) {
     return this->uploadImagePrivate(image, postProcessActions, false);
@@ -388,13 +430,7 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
     for(int i = 0; i < this->operatingSystems.length(); i++) {
         LinboOs* os = this->operatingSystems[i];
         commandArgs.append(this->buildCommand(os->getBaseImage()->getName()));
-        if(os->getDifferentialImage() != nullptr)
-            commandArgs.append(this->buildCommand(os->getDifferentialImage()->getName()));
-        else
-            commandArgs.append(this->buildCommand(""));
-        /* TODO ?? for(unsigned int j = 0; j < os[i].image_history.size(); j++) {
-          saveappend( command, os[i].image_history[j].get_image() );
-        }*/
+        commandArgs.append(this->buildCommand(""));
     }
 
     this->executeCommand(false, this->linboCmdCommand, commandArgs);
@@ -512,13 +548,7 @@ int LinboBackend::getAutostartTimeoutRemainingSeconds() {
 // - Helpers -
 // -----------
 
-QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStringList commandArgs) {
-
-#ifdef TEST_ENV
-    command = TEST_ENV"/" + command;
-#else
-#endif
-
+QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStringList commandArgs, int* returnCode) {
     this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
 
     if(waitForFinished) {
@@ -530,6 +560,10 @@ QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStr
         this->synchronosProcess->waitForStarted();
 
         this->synchronosProcess->waitForFinished(10000);
+
+        if(returnCode != nullptr)
+            *returnCode = this->synchronosProcess->exitCode();
+
         return this->synchronosProcess->readAllStandardOutput();
     }
     else {
@@ -832,7 +866,7 @@ void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
         else if(key == "version")       os->setVersion(value);
         else if(key == "iconname")      os->setIconName(value);
         //else if(key == "image")         os->setDifferentialImage(new LinboImage(value, LinboImage::DifferentialImage, os));
-        else if(key == "baseimage")     os->setBaseImage(new LinboImage(value, os));
+        else if(key == "baseimage")     os->setBaseImage(new LinboImage(value, this));
         else if(key == "boot")          os->setBootPartition(value);
         else if(key == "root")          os->setRootPartition(value);
         else if(key == "kernel")        os->setKernel(value);

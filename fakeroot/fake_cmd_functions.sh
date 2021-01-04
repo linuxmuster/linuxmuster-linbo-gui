@@ -172,6 +172,7 @@ readfile()
         echo "Wrong parameters: «$*»"
         return 1
     else
+        cat $filename
         return 0
     fi
 }
@@ -259,8 +260,9 @@ writefile()
     if [[ "${cachepartition}" != "/dev/sda4" ]] \
       || [[ -z "${filename}" ]]; then
         echo "Wrong parameters: «$*»"
-        return 1
+        return 17870
     else
+        cat > ./$filename
         return 0
     fi
 }

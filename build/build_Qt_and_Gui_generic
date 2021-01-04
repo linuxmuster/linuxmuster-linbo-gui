@@ -87,6 +87,9 @@ then
 
 	cd $QT_DIR
 
+	# set default platform plugin
+	export QT_QPA_PLATFORM=linuxfb
+
 	# configure Qt
 	./configure \
 	 -prefix ../Qt5 \

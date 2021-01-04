@@ -106,10 +106,10 @@ void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions
 
     if(this->actionButtonGroup->checkedId() == 0)
         // replace image
-        this->backend->replaceImageOfCurrentOs(postProcessActions);
+        this->backend->replaceImageOfCurrentOs(this->imageDescriptionTextBrowser->toPlainText(), postProcessActions);
     else
         // create new image
-        this->backend->createImageOfCurrentOS(this->imageNameLineEdit->text(), postProcessActions);
+        this->backend->createImageOfCurrentOS(this->imageNameLineEdit->text(), this->imageDescriptionTextBrowser->toPlainText(), postProcessActions);
 
     this->autoClose();
 }
@@ -152,8 +152,12 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 }
 
 void LinboImageCreationDialog::refreshPathAndDescription() {
-    if(this->actionButtonGroup->checkedId() == 0)
+    if(this->actionButtonGroup->checkedId() == 0) {
         this->imageNameLineEdit->setText(this->backend->getCurrentOs()->getBaseImage()->getName());
-    else
+        this->imageDescriptionTextBrowser->setText(this->backend->getCurrentOs()->getBaseImage()->getDescription());
+    }
+    else {
         this->imageNameLineEdit->setText("");
+        this->imageDescriptionTextBrowser->setText("");
+    }
 }

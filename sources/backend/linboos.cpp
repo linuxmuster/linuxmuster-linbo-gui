@@ -28,8 +28,6 @@ LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
     this->defaultAction = SyncOs;
     this->iconName = QString("defaultIcon.svg");
     this->baseImage = nullptr;
-    this->differentialImage = nullptr;
-    // TODO ?? image_history.clear();
 }
 
 bool LinboOs::start() {

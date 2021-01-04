@@ -50,6 +50,8 @@ class LinboBackend : public QObject
 public:
     explicit LinboBackend(QObject *parent = nullptr);
 
+    friend class LinboImage;
+
     /**
      * @brief The LinboState enum contains all possible states of Linbo
      */
@@ -113,6 +115,10 @@ protected:
     QString downloadMethodToString(const LinboConfig::DownloadMethod& value);
     QString deviceRoleToString(const LinboDeviceRole& deviceRole);
 
+    QString readImageDescription(LinboImage* image);
+    bool writeImageDescription(LinboImage* image, QString newDescription);
+    bool writeImageDescription(QString imageName, QString newDescription);
+
 private:
     LinboState state;
     LinboLogger* logger;
@@ -126,8 +132,11 @@ private:
     QTimer* autostartRemainingTimeRefreshTimer;
 
     LinboOs* currentOs;
-
+#ifdef TEST_ENV
+    QString const linboCmdCommand = TEST_ENV"/linbo_cmd";
+#else
     QString const linboCmdCommand = "linbo_cmd";
+#endif
 
     QProcess* asynchronosProcess;
     QProcess* synchronosProcess;
@@ -159,7 +168,7 @@ private:
         return buildCommand(arguments...);
     }
 
-    QString executeCommand(bool wait, QString command, QStringList commandArgs);
+    QString executeCommand(bool wait, QString command, QStringList commandArgs, int* returnCode = nullptr);
 
     void setState(LinboState state);
 
@@ -174,8 +183,8 @@ public slots:
     bool login(QString password);
     void logout();
 
-    bool replaceImageOfCurrentOs(LinboPostProcessActions postProcessAction = NoAction);
-    bool createImageOfCurrentOS(QString name, LinboPostProcessActions postProcessAction = NoAction);
+    bool replaceImageOfCurrentOs(QString description = "", LinboPostProcessActions postProcessAction = NoAction);
+    bool createImageOfCurrentOS(QString name, QString description = "", LinboPostProcessActions postProcessAction = NoAction);
 
     bool uploadImage(const LinboImage* image, LinboPostProcessActions postProcessAction = NoAction);
 
