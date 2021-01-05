@@ -85,3 +85,5 @@ cd ..
 # copy all archives to a common dir and zip them
 mkdir archives
 cp ../linuxmuster-linbo-gui7_* ./archives
+cd archives
+zip -r ./allAssets.zip *

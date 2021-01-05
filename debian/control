@@ -8,6 +8,6 @@ Build-Depends: build-essential, gcc, g++, libudev-dev, libxkbcommon-dev, gcc-mul
 Package: linuxmuster-linbo-gui7
 Architecture: all
 Depends: linuxmuster-linbo-common7 (>= 2.4.0)
-Description: linuxmuster-linbo scripts
- This package contains the scripts for the Linux-based Network Boot
+Description: Linuxmuster Linbo GUI
+ This package contains the GUI for the Linux-based Network Boot
  (LINBO) boot/install/repair system.
