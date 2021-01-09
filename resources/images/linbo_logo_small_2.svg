@@ -8,11 +8,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="722.70099"
-   height="246.701"
-   viewBox="146 75 350.56015 119.66712"
+   height="270"
+   viewBox="146 75 350.56015 130.96875"
    version="1.1"
    id="svg25"
-   sodipodi:docname="LinboLogoSmall.svg"
+   sodipodi:docname="linbo_logo_small_2.svg"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -27,13 +27,13 @@
      inkscape:window-height="1016"
      id="namedview66"
      showgrid="false"
-     inkscape:zoom="2.0423384"
-     inkscape:cx="110.01052"
-     inkscape:cy="54.363978"
+     inkscape:zoom="1.0211692"
+     inkscape:cx="173.25738"
+     inkscape:cy="31.727616"
      inkscape:window-x="72"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g972-2" />
+     inkscape:current-layer="g907" />
   <metadata
      id="metadata29">
     <rdf:RDF>
@@ -42,7 +42,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,7 +58,8 @@
          id="path1254"
          d="M 0,0 5,-5 -12.5,0 5,5 Z"
          style="fill:#0c2842;fill-opacity:1;fill-rule:evenodd;stroke:#0c2842;stroke-width:1.00000003pt;stroke-opacity:1"
-         transform="matrix(0.8,0,0,0.8,10,0)" />
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
     </marker>
     <marker
        orient="auto"
@@ -70,16 +71,17 @@
          id="path978"
          d="M 0,0 5,-5 -12.5,0 5,5 Z"
          style="fill:#0c2842;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.00000003pt;stroke-opacity:1"
-         transform="matrix(0.8,0,0,0.8,10,0)" />
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
     </marker>
   </defs>
   <g
      id="g907"
-     transform="translate(-58.040566,-80.226958)"
+     transform="translate(-58.040566,-68.925327)"
      style="display:inline">
     <g
        id="g972-2"
-       transform="matrix(1.0327911,0,0,1.0327911,52.404919,58.83441)"
+       transform="matrix(1.655936,0,0,1.655936,-39.085932,-71.527357)"
        style="display:inline">
       <g
          transform="matrix(0.26004226,0,0,0.26004226,137.75699,166.32294)"
@@ -238,7 +240,7 @@
     <g
        id="text849-6"
        style="font-style:normal;font-weight:normal;font-size:123.01718903px;line-height:100.07981873px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#0c2842;fill-opacity:1;stroke:none;stroke-width:3.07543015"
-       transform="scale(1.0183578,0.98197314)"
+       transform="matrix(1.0183578,0,0,0.98197314,0,-11.215902)"
        aria-label="LINB">
       <path
          id="path893"
@@ -262,7 +264,7 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
-       transform="matrix(0.45492703,0,0,0.45492703,381.88294,106.67616)"
+       transform="matrix(0.45492703,0,0,0.45492703,381.88294,95.115969)"
        id="g867"
        style="display:inline">
       <g

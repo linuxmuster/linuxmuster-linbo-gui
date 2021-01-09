@@ -6,7 +6,6 @@
         <file>svgIcons/shutdownAction.svg</file>
         <file>svgIcons/rebootAction.svg</file>
         <file>svgIcons/settingsAction.svg</file>
-        <file>fonts/SegoeUI.ttf</file>
         <file>svgIcons/cancel.svg</file>
         <file>svgIcons/back.svg</file>
         <file>svgIcons/image.svg</file>
@@ -40,5 +39,9 @@
         <file>svgIcons/components/radioButtonChecked.svg</file>
         <file>svgIcons/components/radioButtonUnchecked.svg</file>
         <file>images/linbo_logo_small.svg</file>
+        <file>images/by_linuxmuster.net.svg</file>
+        <file>images/linbo_logo_unbranded.svg</file>
+        <file>images/linbo_logo_small_2.svg</file>
+        <file>images/linbo_logo_small_3.svg</file>
     </qresource>
 </RCC>

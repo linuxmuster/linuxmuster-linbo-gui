@@ -34,6 +34,24 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // create the main layout
 
+    // Linbo logo
+    int linboLogoHeight = this->height() * 0.13;
+    QSvgRenderer* renderer = new QSvgRenderer(QString(":/images/linbo_logo_small_3.svg"));
+    renderer->setAspectRatioMode(Qt::KeepAspectRatio);
+
+    QImage* image = new QImage(500, linboLogoHeight, QImage::Format_ARGB32);
+    image->fill("#ffffff");
+
+    QPainter painter(image);
+    renderer->render(&painter);
+
+    QLabel* linboLogo = new QLabel(this);
+    linboLogo->setPixmap(QPixmap::fromImage(*image));
+
+    linboLogo->move((this->width() - linboLogoHeight * 4) / 2, linboLogoHeight * 0.1);
+    linboLogo->setFixedHeight(linboLogoHeight);
+    linboLogo->setFixedWidth(linboLogoHeight * 4);
+
     // main layout
     QWidget* mainLayoutWidget = new QWidget(this);
     mainLayoutWidget->setGeometry(this->geometry());
@@ -169,24 +187,6 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
             this->updateCacheDialog, &LinboImageCreationDialog::open);
 
-    // Linbo logo
-    QSvgRenderer* renderer = new QSvgRenderer(QString(":/images/linbo_logo_small.svg"));
-    renderer->setAspectRatioMode(Qt::KeepAspectRatio);
-
-    QImage* image = new QImage(500, 100, QImage::Format_ARGB32);
-    image->fill("#ffffff");
-
-    QPainter painter(image);
-    renderer->render(&painter);
-
-    QLabel* linboLogo = new QLabel(this);
-    linboLogo->setPixmap(QPixmap::fromImage(*image));
-
-    int linboLogoHeight = this->height() * 0.15;
-    linboLogo->move((this->width() - linboLogoHeight * 3) / 2, linboLogoHeight * 0.1);
-    linboLogo->setFixedHeight(linboLogoHeight);
-    linboLogo->setFixedWidth(linboLogoHeight * 3);
-    linboLogo->hide();
 
     this->handleLinboStateChanged(this->backend->getState());
 }
@@ -207,7 +207,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     case LinboBackend::Idle:
         if(useMinimalLayout){
-            osSelectionRowHeight = this->height() * 0.3;
+            osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.2;
         }
         else {
