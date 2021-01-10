@@ -45,13 +45,13 @@ LinboGui::LinboGui()
     QFont defaultFont ("PTSans");
     QApplication::setFont(defaultFont);
 
-    // white bakground
-    // linuxmuster background color: #394f5e
-    this->setStyleSheet( "QMainWindow { background: white; } "
-                         "QLabel { color: black; }");
-
     // create the backend
     this->backend = new LinboBackend(this);
+
+    // set bakground
+    // linuxmuster background color: #394f5e
+    this->setStyleSheet( "QMainWindow { background: " + this->backend->getConfig()->getBackgroundColor() + "; }"
+                         "QLabel { color: black; }");
 
     // attach translator
     QString localeName = this->backend->getConfig()->getLocale();

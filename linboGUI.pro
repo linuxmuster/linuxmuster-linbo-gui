@@ -38,6 +38,7 @@ HEADERS += \
     headers/frontend/components/qmoderndialog.h \
     headers/frontend/components/qmodernlineedit.h \
     headers/frontend/components/qmodernradiobutton.h \
+    headers/frontend/components/qmodernsvgwidget.h \
     headers/frontend/components/qmoderntextbrowser.h \
     headers/frontend/dialogs/linboconfirmationdialog.h \
     headers/frontend/dialogs/linboimagecreationdialog.h \
@@ -68,6 +69,7 @@ SOURCES += \
     sources/frontend/components/qmoderndialog.cpp \
     sources/frontend/components/qmodernlineedit.cpp \
     sources/frontend/components/qmodernradiobutton.cpp \
+    sources/frontend/components/qmodernsvgwidget.cpp \
     sources/frontend/components/qmoderntextbrowser.cpp \
     sources/frontend/dialogs/linboconfirmationdialog.cpp \
     sources/frontend/dialogs/linboimagecreationdialog.cpp \

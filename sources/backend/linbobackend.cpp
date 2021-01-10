@@ -213,7 +213,7 @@ bool LinboBackend::login(QString password) {
     if(this->state != Idle)
         return false;
 
-    this->logger->log("Authenticating with password: " + password, LinboLogger::LinboLogChapterBeginning);
+    this->logger->log("Authenticating with password.", LinboLogger::LinboLogChapterBeginning);
 
     this->executeCommand(true, "authenticate", this->config->getServerIpAddress(), "linbo", password, "linbo");
     bool successfull = this->synchronosProcess->exitCode() == 0;
@@ -812,6 +812,7 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
     for(QString key : config.keys()) {
         QString value = config[key];
 
+
         if(key == "server")  linboConfig->setServerIpAddress(value);
         else if(key == "cache")   linboConfig->setCachePath(value);
         else if(key == "roottimeout")   linboConfig->setRootTimeout((unsigned int)value.toInt());
@@ -819,15 +820,8 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
         else if(key == "autopartition")  linboConfig->setAutoPartition(stringToBool(value));
         else if(key == "autoinitcache")  linboConfig->setAutoInitCache(stringToBool(value));
         else if(key == "autoformat")  linboConfig->setAutoFormat(stringToBool(value));
-        else if(key == "backgroundfontcolor")  linboConfig->setBackgroundFontcolor(value);
-        else if(key == "consolefontcolorstdout")  linboConfig->setConsoleFontcolorStdout(value);
-        else if(key == "consolefontcolorstderr")  linboConfig->setConsoleFontcolorStderr(value);
-        else if(key == "usemulticast") {
-            if(value.toInt() == 0)
-                linboConfig->setDownloadMethod(LinboConfig::Rsync);
-            else
-                linboConfig->setDownloadMethod(LinboConfig::Multicast);
-        }
+        else if(key == "backgroundcolor" && QRegExp("^([a-fA-F0-9]{6})$").exactMatch(value))
+            linboConfig->setBackgroundColor("#" + value);
         else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
         else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
         else if(key == "locale") linboConfig->setLocale(value);

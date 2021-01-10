@@ -53,9 +53,7 @@ public:
     const unsigned int& getRootTimeout() const {return this->rootTimeout;}
     const bool& getAutoPartition() {return this->autoPartition;}
     const bool& getAutoInitCache() {return this->autoInitCache;}
-    const QString& getBackgroundFontcolor() {return this->backgroundFontcolor;}
-    const QString& getConsoleFontcolorStdout() {return this->consoleFontcolorStdout;}
-    const QString& getConsoleFontcolorStderr() {return this->consoleFontcolorStderr;}
+    const QString& getBackgroundColor() {return this->backgroundColor;}
     const DownloadMethod& getDownloadMethod() {return this->downloadMethod;}
     const bool& getAutoFormat() {return this->autoFormat;}
     const bool& getUseMinimalLayout() {return this->useMinimalLayout;}
@@ -81,9 +79,7 @@ private:
     void setRootTimeout( const unsigned int& rootTimeout ) {this->rootTimeout = rootTimeout;}
     void setAutoPartition( const bool& autoPartition ){this->autoPartition = autoPartition;}
     void setAutoInitCache( const bool& autoInitCache ){this->autoInitCache = autoInitCache;}
-    void setBackgroundFontcolor( const QString& backgroundFontcolor ){this->backgroundFontcolor = backgroundFontcolor;}
-    void setConsoleFontcolorStdout( const QString& consoleFontcolorStdout ){this->consoleFontcolorStdout = consoleFontcolorStdout;}
-    void setConsoleFontcolorStderr( const QString& consoleFontcolorStderr ){this->consoleFontcolorStderr = consoleFontcolorStderr;}
+    void setBackgroundColor( const QString& backgroundColor ){this->backgroundColor = backgroundColor;}
     void setDownloadMethod( const DownloadMethod& downloadMethod ){this->downloadMethod = downloadMethod;}
     void setAutoFormat( const bool& autoFormat ){this->autoFormat = autoFormat;}
     void setUseMinimalLayout(const bool& useMinimalLayout){this->useMinimalLayout = useMinimalLayout;}
@@ -104,9 +100,7 @@ private:
   QString cachePath;
   QString hostGroup;
   DownloadMethod downloadMethod;
-  QString backgroundFontcolor;
-  QString consoleFontcolorStdout;
-  QString consoleFontcolorStderr;
+  QString backgroundColor;
   QString locale;
   unsigned int rootTimeout;
   bool autoPartition;

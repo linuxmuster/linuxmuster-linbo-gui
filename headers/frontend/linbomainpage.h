@@ -35,6 +35,7 @@
 #include "linboosselectionrow.h"
 #include "linbomainactions.h"
 #include "linboclientinfo.h"
+#include "qmodernsvgwidget.h"
 
 #include "linbologindialog.h"
 #include "linboimageuploaddialog.h"

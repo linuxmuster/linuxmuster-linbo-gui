@@ -25,7 +25,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    this->backend->login("Muster!");
+    //this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -34,30 +34,21 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // create the main layout
 
-    // Linbo logo
-    int linboLogoHeight = this->height() * 0.13;
-    QSvgRenderer* renderer = new QSvgRenderer(QString(":/images/linbo_logo_small_3.svg"));
-    renderer->setAspectRatioMode(Qt::KeepAspectRatio);
-
-    QImage* image = new QImage(500, linboLogoHeight, QImage::Format_ARGB32);
-    image->fill("#ffffff");
-
-    QPainter painter(image);
-    renderer->render(&painter);
-
-    QLabel* linboLogo = new QLabel(this);
-    linboLogo->setPixmap(QPixmap::fromImage(*image));
-
-    linboLogo->move((this->width() - linboLogoHeight * 4) / 2, linboLogoHeight * 0.1);
-    linboLogo->setFixedHeight(linboLogoHeight);
-    linboLogo->setFixedWidth(linboLogoHeight * 4);
-
     // main layout
     QWidget* mainLayoutWidget = new QWidget(this);
     mainLayoutWidget->setGeometry(this->geometry());
     QVBoxLayout* mainLayout = new QVBoxLayout(mainLayoutWidget);
     mainLayout->setSpacing(this->height()*0.025);
     mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->addSpacerItem(new QSpacerItem(this->width(), mainLayout->spacing()));
+
+    // Linbo logo
+    int linboLogoHeight = this->height() * 0.13;
+
+    QModernSvgWidget* linboLogo = new QModernSvgWidget(linboLogoHeight, ":/images/linbo_logo_unbranded.svg");
+    mainLayout->addWidget(linboLogo);
+    mainLayout->setAlignment(linboLogo, Qt::AlignCenter);
+
     mainLayout->addStretch();
 
     // OS Buttons
@@ -75,9 +66,18 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     mainLayout->addStretch();
 
+    // version / network label
     QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress());
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
+
+
+    // Linuxmuster logo
+    double linuxmusterLogoHeight = this->height() * 0.06;
+
+    QModernSvgWidget* linuxmusterLogo = new QModernSvgWidget(linuxmusterLogoHeight, ":/images/by_linuxmuster.net.svg");
+    mainLayout->addWidget(linuxmusterLogo);
+    mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
     // client info
     clientInfo = new LinboClientInfo(this->backend->getConfig(), this);
@@ -201,8 +201,14 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     switch (newState) {
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError:
-        osSelectionRowHeight = this->height() * 0.3;
-        startActionsWidgetHeight = this->height() * 0.5;
+        if(useMinimalLayout){
+            osSelectionRowHeight = this->height() * 0.2;
+            startActionsWidgetHeight = this->height() * 0.5;
+        }
+        else {
+            osSelectionRowHeight = this->height() * 0.15;
+            startActionsWidgetHeight = this->height() * 0.45;
+        }
         break;
 
     case LinboBackend::Idle:
@@ -225,12 +231,12 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     case LinboBackend::Registering:
     case LinboBackend::RootActionSuccess:
         if(useMinimalLayout){
-            osSelectionRowHeight = this->height() * 0.2;
-            startActionsWidgetHeight = this->height() * 0.45;
+            osSelectionRowHeight = this->height() * 0.15;
+            startActionsWidgetHeight = this->height() * 0.35;
         }
         else {
-            osSelectionRowHeight = this->height() * 0.4;
-            startActionsWidgetHeight = this->height() * 0.3;
+            osSelectionRowHeight = this->height() * 0.25;
+            startActionsWidgetHeight = this->height() * 0.25;
         }
 
         clientInfoHeight = this->height() * 0.1;
@@ -245,7 +251,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
 
     default:
-        osSelectionRowHeight = this->height() * 0.3;
+        osSelectionRowHeight = this->height() * 0.2;
         startActionsWidgetHeight = this->height() * 0.2;
         break;
     }

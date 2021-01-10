@@ -69,6 +69,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
             QModernPushButton* actionButton = new QModernPushButton(startActionIconPath, this);
             actionButton->setEnabled(!disabled);
+            actionButton->setVisible(false);
             this->startActionButtons.append(actionButton);
 
             switch (startAction) {
@@ -83,6 +84,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         // root action button
         QModernPushButton* actionButton = new QModernPushButton(":/svgIcons/uploadBg.svg", this);
         actionButton->setGeometry(0,0,0,0);
+        actionButton->setVisible(false);
         connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::imageUploadRequested);
         this->rootActionButtons.append(actionButton);
     }
@@ -94,6 +96,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->button->setCheckable(true);
     this->buttonGroup->addButton(this->button);
+    this->updateActionButtonVisibility();
 
     QWidget::setVisible(true);
 }
@@ -134,11 +137,7 @@ void LinboOsSelectButton::setVisible(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisible(visible);
 
-    for(QModernPushButton* actionButton : this->startActionButtons)
-        actionButton->setVisible(this->shouldBeVisible);
-
-    for(QModernPushButton* actionButton : this->rootActionButtons)
-        actionButton->setVisible(this->shouldBeVisible);
+    this->updateActionButtonVisibility();
 }
 
 void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
@@ -224,7 +223,7 @@ void LinboOsSelectButton::updateActionButtonVisibility() {
         if(this->inited)
             actionButton->setVisibleAnimated(startActionVisible);
         else
-            actionButton->setVisible(this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root);
+            actionButton->setVisible(startActionVisible);
 
     for(QModernPushButton* actionButton : this->rootActionButtons)
         if(this->inited)

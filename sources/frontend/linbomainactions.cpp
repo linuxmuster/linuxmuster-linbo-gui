@@ -449,16 +449,10 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
         return;
 
     QString logColor = "black";
-    switch (latestLog.type) {
-    case LinboLogger::StdErr:
-        logColor = this->backend->getConfig()->getConsoleFontcolorStderr();
-        break;
-    case LinboLogger::StdOut:
-        // TODO?? logColor = this->backend->getConfig()->getConsoleFontcolorStdout();
-        break;
-    default:
-        break;
-    }
+
+    if (latestLog.type == LinboLogger::StdErr)
+        logColor = "red";
+
     this->logLabel->setStyleSheet("QLabel { color : " + logColor + "; }");
     this->logLabel->setText(latestLog.message);
 }
