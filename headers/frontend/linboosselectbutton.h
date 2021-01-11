@@ -52,6 +52,7 @@ private:
     bool inited;
     bool showActionButtons;
     bool shouldBeVisible;
+    bool showDefaultAction;
 
     QModernPushButton* button;
     QList<QModernPushButton*> startActionButtons;
@@ -63,7 +64,7 @@ private:
 
 private slots:
     void handleBackendStateChange(LinboBackend::LinboState state);
-    void updateActionButtonVisibility();
+    void updateActionButtonVisibility(bool doNotAnimate = false);
     void handlePrimaryButtonClicked();
 
 signals:

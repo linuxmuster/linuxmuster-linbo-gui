@@ -203,7 +203,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     case LinboBackend::RootActionError:
         if(useMinimalLayout){
             osSelectionRowHeight = this->height() * 0.2;
-            startActionsWidgetHeight = this->height() * 0.5;
+            startActionsWidgetHeight = this->height() * 0.4;
         }
         else {
             osSelectionRowHeight = this->height() * 0.15;

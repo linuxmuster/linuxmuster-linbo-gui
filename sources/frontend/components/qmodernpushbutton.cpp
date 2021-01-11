@@ -31,6 +31,8 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
     this->svgIcon = nullptr;
     this->label = nullptr;
     this->shouldBeVisible = true;
+    this->isPressed = false;
+    this->isHovered = false;
 
     this->setMouseTracking(true);
 
@@ -113,10 +115,6 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
 void QModernPushButton::handleToggled(bool checked) {
     if(checked)
         emit this->checked();
-
-    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnChecked)) {
-        overlay->setVisibleAnimated(checked);
-    }
 }
 
 void QModernPushButton::resizeEvent(QResizeEvent *event) {
@@ -201,13 +199,34 @@ void QModernPushButton::setVisibleAnimated(bool visible) {
                 overlay->setVisibleAnimated(true);
 }
 
-const QSize QModernPushButton::minimumSizeHint() {
-    return QAbstractButton::minimumSizeHint();
-    qDebug() << "Minimum width of " << this->objectName() << " is: " << this->svgIcon->width() + this->label->width();
-    return QSize(this->svgIcon->width() + this->label->width(), 100);
+void QModernPushButton::setOverlayTypeMuted(QModernPushButtonOverlay::OverlayType overlayType, bool muted) {
+    if(this->mutedOverlayTypes.contains(overlayType) && !muted)
+        this->mutedOverlayTypes.removeAt(this->mutedOverlayTypes.indexOf(overlayType));
+    else if(!this->mutedOverlayTypes.contains(overlayType) && muted)
+        this->mutedOverlayTypes.append(overlayType);
+
+    this->repaint();
 }
 
 void QModernPushButton::paintEvent(QPaintEvent *e) {
+
+    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnChecked))
+        overlay->setVisibleAnimated(this->isChecked() && !this->overlayTypeIsMuted(QModernPushButtonOverlay::OnChecked));
+
+    if(this->isEnabled() && this->isHovered)
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
+            overlay->setVisibleAnimated(!this->overlayTypeIsMuted(QModernPushButtonOverlay::OnHover));
+    else
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
+            overlay->setVisibleAnimated(false);
+
+    if(this->isEnabled() && this->isPressed)
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
+            overlay->setVisibleAnimated(!this->overlayTypeIsMuted(QModernPushButtonOverlay::OnPressed));
+    else
+        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
+            overlay->setVisibleAnimated(false);
+
     QWidget::paintEvent(e);
 }
 
@@ -222,41 +241,29 @@ void QModernPushButton::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void QModernPushButton::enterEvent(QEvent *e) {
-
-    if(this->isEnabled())
-        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
-            overlay->setVisibleAnimated(true);
-
+    QAbstractButton::enterEvent(e);
+    this->isHovered = true;
     emit this->hovered();
-
-    return QAbstractButton::enterEvent(e);
 }
 
 void QModernPushButton::leaveEvent(QEvent *e) {
-    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnHover))
-        overlay->setVisibleAnimated(false);
-
-    return QAbstractButton::leaveEvent(e);
+    QAbstractButton::leaveEvent(e);
+    this->isHovered = false;
 }
 
 void QModernPushButton::mousePressEvent(QMouseEvent *e) {
-    if(this->isEnabled())
-        for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
-            overlay->setVisibleAnimated(true);
-
-    return QAbstractButton::mousePressEvent(e);
+    QAbstractButton::mousePressEvent(e);
+    this->isPressed = true;
 }
 
 void QModernPushButton::mouseReleaseEvent(QMouseEvent *e) {
-    for(QModernPushButtonOverlay* overlay : this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed))
-        overlay->setVisibleAnimated(false);
-
-    return QAbstractButton::mouseReleaseEvent(e);
+    QAbstractButton::mouseReleaseEvent(e);
+    this->isPressed = false;
 }
 
 void QModernPushButton::mouseDoubleClickEvent(QMouseEvent *e) {
+    QAbstractButton::mouseDoubleClickEvent(e);
     emit this->doubleClicked();
-    return QAbstractButton::mouseDoubleClickEvent(e);
 }
 
 QList<QModernPushButtonOverlay*> QModernPushButton::getOverlaysOfType(QModernPushButtonOverlay::OverlayType type) {
@@ -272,4 +279,8 @@ QList<QModernPushButtonOverlay*> QModernPushButton::getOverlaysOfType(QModernPus
     }
 
     return filteredOverlays;
+}
+
+bool QModernPushButton::overlayTypeIsMuted(QModernPushButtonOverlay::OverlayType overlayType) {
+    return this->mutedOverlayTypes.contains(overlayType);
 }

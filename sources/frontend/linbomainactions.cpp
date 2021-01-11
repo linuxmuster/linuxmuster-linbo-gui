@@ -463,18 +463,14 @@ void LinboMainActions::handleAutostartTimeoutProgressChanged() {
 
     this->progressBar->setValue(1000 - this->backend->getAutostartTimeoutProgress() * 1000);
 
-    QString actionString;
-    switch (this->backend->getCurrentOs()->getDefaultAction()) {
-    case LinboOs::SyncOs:
-        actionString = "Syncing and starting";
-        break;
-    case LinboOs::ReinstallOs:
-        actionString = "Reinstalling and starting";
-        break;
-    default:
-        actionString = "Starting";
-        break;
-    }
+    //=main_autostart_label
+    this->logLabel->setText(tr("Starting") + " " + this->backend->getCurrentOs()->getName());
 
-    this->logLabel->setText(actionString + " " + this->backend->getCurrentOs()->getName() + " in " + QString::number(this->backend->getAutostartTimeoutRemainingSeconds()) + " seconds.");
+    //=main_autostart_counter
+    int passedSecs = this->backend->getAutostartTimeoutRemainingSeconds();
+    QString passedTime =
+            QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
+            + ":"
+            + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
+    this->passedTimeLabel->setText(passedTime);//QString::number());
 }

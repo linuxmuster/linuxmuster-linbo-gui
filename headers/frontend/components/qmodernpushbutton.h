@@ -46,7 +46,8 @@ public:
     void setVisibleAnimated(bool visible);
 
     void setGeometryAnimated(const QRect& geometry);
-    const QSize minimumSizeHint();
+
+    void setOverlayTypeMuted(QModernPushButtonOverlay::OverlayType overlayType, bool muted);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -61,12 +62,16 @@ protected:
 
 private:
     bool shouldBeVisible;
+    bool isHovered;
+    bool isPressed;
     QPropertyAnimation* geometryAnimation;
     QList<QModernPushButtonOverlay*> overlays;
+    QList<QModernPushButtonOverlay::OverlayType> mutedOverlayTypes;
     QSvgWidget* svgIcon;
     QSvgWidget* hoveredOverlay;
     QLabel *label;
 
+    bool overlayTypeIsMuted(QModernPushButtonOverlay::OverlayType overlayType);
     QList<QModernPushButtonOverlay*> getOverlaysOfType(QModernPushButtonOverlay::OverlayType type);
     QList<QModernPushButtonOverlay*> getOverlaysOfType(QModernPushButtonOverlay::OverlayType type, QList<QModernPushButtonOverlay*> overlays);
 
