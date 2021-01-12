@@ -17,6 +17,7 @@
  ****************************************************************************/
 
 #include "linboconfig.h"
+#include <QtDebug>
 
 LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
 {
@@ -33,5 +34,5 @@ bool LinboConfig::isBackgroundColorDark() {
     QColor backgroundColor = QColor(this->getBackgroundColor());
     int h, s, v;
     backgroundColor.getHsv(&h, &s, &v);
-    return v < 180;
+    return v < 210;
 }

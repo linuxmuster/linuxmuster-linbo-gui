@@ -134,15 +134,22 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
-    for(QModernPushButton* button : this->rootActionButtons)
-        this->rootLayout->addWidget(button);
+    QHBoxLayout* horizontalRootLayoutCache;
+
+    for(int i = 0; i < this->rootActionButtons.length(); i++) {
+        if(i % 2 == 0)
+            horizontalRootLayoutCache = new QHBoxLayout();
+
+        this->rootLayout->addLayout(horizontalRootLayoutCache);
+        horizontalRootLayoutCache->addWidget(this->rootActionButtons[i]);
+    }
 
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
         separatorLine->setStyleSheet("QFrame {color: #cccccc;}");
         separatorLine->setFrameShape(QFrame::HLine);
-        this->rootLayout->insertWidget(2, separatorLine);
+        this->rootLayout->insertWidget(1, separatorLine);
     }
 
     this->rootLayout->addStretch();
@@ -335,7 +342,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     // Root widget
     this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
-    int rootActionButtonHeight = this->height() / this->rootActionButtons.length() - this->height() * 0.03;
+    int rootActionButtonHeight = this->height() / (this->rootActionButtons.length() / 2) - this->height() * 0.03;
     this->rootLayout->setSpacing(defaultSpacing);
 
     for(QModernPushButton* button : this->rootActionButtons) {

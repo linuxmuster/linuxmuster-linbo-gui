@@ -77,14 +77,6 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
     this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::OnPressed, extraOverlays));
 
     // Checked
-    this->overlays.append(
-                new QModernPushButtonOverlay(
-                    QModernPushButtonOverlay::OnChecked,
-                    new QSvgWidget(":/icons/light/overlayChecked.svg"),
-                    true
-                    )
-                );
-
     this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::OnChecked, extraOverlays));
 
     // set defaults

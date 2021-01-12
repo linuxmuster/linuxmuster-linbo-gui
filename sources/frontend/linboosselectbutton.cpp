@@ -39,6 +39,12 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         {LinboOs::UnknownAction, ""}
     };
 
+    QModernPushButtonOverlay* checkedOverlay= new QModernPushButtonOverlay (
+                    QModernPushButtonOverlay::OnChecked,
+                    new QSvgWidget(":/icons/" + iconType + "/overlayChecked.svg"),
+                    false
+                    );
+
     this->defaultStartActionOverlay = new QModernPushButtonOverlay (
                 QModernPushButtonOverlay::Background,
                 new QSvgWidget(defaultStartActionOverlayPaths[this->os->getDefaultAction()]),
@@ -51,7 +57,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
                 false
                 );
 
-    this->button = new QModernPushButton(icon, "", {this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
+    this->button = new QModernPushButton(icon, "", {checkedOverlay, this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
     this->setToolTip(this->os->getDescription());
 
     if(!os->getBackend()->getConfig()->getUseMinimalLayout()) {

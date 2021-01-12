@@ -25,7 +25,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    //this->backend->login("Muster!");
+    this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -39,7 +39,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     QWidget* mainLayoutWidget = new QWidget(this);
     mainLayoutWidget->setGeometry(this->geometry());
     QVBoxLayout* mainLayout = new QVBoxLayout(mainLayoutWidget);
-    mainLayout->setSpacing(this->height()*0.025);
+    mainLayout->setSpacing(this->height()*0.03);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->addSpacerItem(new QSpacerItem(this->width(), mainLayout->spacing()));
 
@@ -55,6 +55,8 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // OS Buttons
     osSelectionRow = new LinboOsSelectionRow(this->backend);
     mainLayout->addWidget(osSelectionRow);
+
+    mainLayout->addStretch();
 
     // action buttons
     this->mainActions = new LinboMainActions(this->backend, this);
@@ -234,15 +236,16 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     case LinboBackend::Registering:
     case LinboBackend::RootActionSuccess:
         if(useMinimalLayout){
-            osSelectionRowHeight = this->height() * 0.15;
-            startActionsWidgetHeight = this->height() * 0.35;
-        }
-        else {
-            osSelectionRowHeight = this->height() * 0.25;
+            osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.25;
         }
+        else {
+            osSelectionRowHeight = this->height() * 0.3;
+            startActionsWidgetHeight = this->height() * 0.15;
+        }
 
-        clientInfoHeight = this->height() * 0.1;
+        if(this->showClientInfo)
+            clientInfoHeight = this->height() * 0.1;
 
         powerActionButtonsVisible = true;
         break;
@@ -291,7 +294,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
 
 void LinboMainPage::keyPressEvent(QKeyEvent *ev)
 {
-    if(ev->key() == Qt::Key_F1 && this->backend->getState() == LinboBackend::Idle) {
+    if(ev->key() == Qt::Key_F1 && (this->backend->getState() == LinboBackend::Idle || this->backend->getState() == LinboBackend::Root)) {
         this->showClientInfo = !this->showClientInfo;
 
         if(this->showClientInfo) {
