@@ -51,7 +51,7 @@ LinboGui::LinboGui()
     // set bakground
     // linuxmuster background color: #394f5e
     this->setStyleSheet( "QMainWindow { background: " + this->backend->getConfig()->getBackgroundColor() + "; }"
-                         "QLabel { color: black; }");
+                         "QLabel { color: " + (this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
 
     // attach translator
     QString localeName = this->backend->getConfig()->getLocale();

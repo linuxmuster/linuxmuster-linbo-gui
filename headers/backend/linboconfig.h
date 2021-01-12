@@ -23,6 +23,7 @@
 #define LINBOCONFIG_H
 
 #include <QObject>
+#include <QColor>
 
 class LinboConfig : public QObject
 {
@@ -54,6 +55,7 @@ public:
     const bool& getAutoPartition() {return this->autoPartition;}
     const bool& getAutoInitCache() {return this->autoInitCache;}
     const QString& getBackgroundColor() {return this->backgroundColor;}
+    bool isBackgroundColorDark();
     const DownloadMethod& getDownloadMethod() {return this->downloadMethod;}
     const bool& getAutoFormat() {return this->autoFormat;}
     const bool& getUseMinimalLayout() {return this->useMinimalLayout;}

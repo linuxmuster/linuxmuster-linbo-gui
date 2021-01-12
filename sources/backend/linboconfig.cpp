@@ -28,3 +28,10 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     autoFormat = 0;
     this->useMinimalLayout = false;
 }
+
+bool LinboConfig::isBackgroundColorDark() {
+    QColor backgroundColor = QColor(this->getBackgroundColor());
+    int h, s, v;
+    backgroundColor.getHsv(&h, &s, &v);
+    return v < 180;
+}

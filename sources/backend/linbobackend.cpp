@@ -820,8 +820,7 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
         else if(key == "autopartition")  linboConfig->setAutoPartition(stringToBool(value));
         else if(key == "autoinitcache")  linboConfig->setAutoInitCache(stringToBool(value));
         else if(key == "autoformat")  linboConfig->setAutoFormat(stringToBool(value));
-        else if(key == "backgroundcolor" && QRegExp("^([a-fA-F0-9]{6})$").exactMatch(value))
-            linboConfig->setBackgroundColor("#" + value);
+        else if(key == "backgroundcolor" && QRegExp("^([a-fA-F0-9]{6})$").exactMatch(value)) linboConfig->setBackgroundColor("#" + value);
         else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
         else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
         else if(key == "locale") linboConfig->setLocale(value);
