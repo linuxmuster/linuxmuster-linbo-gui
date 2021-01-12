@@ -12,10 +12,10 @@ void QModernCheckBox::paintEvent(QPaintEvent *e) {
                         "height: " + indicatorSize + "px;"
                         "}"
                         "QCheckBox::indicator:unchecked {"
-                        "image: url(:/svgIcons/components/checkboxUnchecked.svg);"
+                        "image: url(:/icons/universal/components/checkboxUnchecked.svg);"
                         "}"
                         "QCheckBox::indicator:checked {"
-                        "image: url(:/svgIcons/components/checkboxChecked.svg);"
+                        "image: url(:/icons/universal/components/checkboxChecked.svg);"
                         "}"
                         "");
 

@@ -12,10 +12,10 @@ void QModernRadioButton::paintEvent(QPaintEvent *e) {
                         "height: " + indicatorSize + "px;"
                         "}"
                         "QRadioButton::indicator:unchecked {"
-                        "image: url(:/svgIcons/components/radioButtonUnchecked.svg);"
+                        "image: url(:/icons/universal/components/radioButtonUnchecked.svg);"
                         "}"
                         "QRadioButton::indicator:checked {"
-                        "image: url(:/svgIcons/components/radioButtonChecked.svg);"
+                        "image: url(:/icons/universal/components/radioButtonChecked.svg);"
                         "}"
                         "");
 

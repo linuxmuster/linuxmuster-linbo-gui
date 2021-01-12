@@ -30,16 +30,19 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->inited = false;
 
+    this->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
+
     // Action Buttons
+    QString iconType = backend->getConfig()->isBackgroundColorDark() ? "light":"dark";
     this->buttonWidget = new QWidget();
 
-    this->startOsButton = new QModernPushButton(":/svgIcons/startActionIcons/start.svg", this->buttonWidget);
+    this->startOsButton = new QModernPushButton(":/icons/" + iconType + "/start.svg", this->buttonWidget);
     connect(this->startOsButton, SIGNAL(clicked()), this->backend, SLOT(startCurrentOs()));
 
-    this->syncOsButton = new QModernPushButton(":/svgIcons/startActionIcons/sync.svg", this->buttonWidget);
+    this->syncOsButton = new QModernPushButton(":/icons/" + iconType + "/sync.svg", this->buttonWidget);
     connect(this->syncOsButton, SIGNAL(clicked()), this->backend, SLOT(syncCurrentOs()));
 
-    this->reinstallOsButton = new QModernPushButton(":/svgIcons/startActionIcons/reinstall.svg", this->buttonWidget);
+    this->reinstallOsButton = new QModernPushButton(":/icons/" + iconType + "/reinstall.svg", this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
     //= main_noBaseImage
@@ -73,7 +76,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->passedTimeTimer->setInterval(1000);
     this->processStartedAt = QDateTime::currentSecsSinceEpoch();
 
-    this->cancelButton = new QModernPushButton(":/svgIcons/cancel.svg", this->progressBarWidget);
+    this->cancelButton = new QModernPushButton(":/icons/" + iconType + "/cancel.svg", this->progressBarWidget);
     connect(this->cancelButton, SIGNAL(clicked()), this->backend, SLOT(cancelCurrentAction()));
 
     this->stackView->addWidget(this->progressBarWidget);
@@ -87,7 +90,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->messageDetailsLabel->setAlignment(Qt::AlignLeft);
     //this->messageDetailsLabel->setWordWrap(true);
 
-    this->resetMessageButton = new QModernPushButton(":/svgIcons/back.svg", this->messageWidget);
+    this->resetMessageButton = new QModernPushButton(":/icons/" + iconType + "/back.svg", this->messageWidget);
     connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
 
     this->stackView->addWidget(this->messageWidget);
@@ -101,33 +104,33 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         //= main_root_button_createImage
-        buttonCache = new QModernPushButton(":svgIcons/image.svg", tr("Create image"));
+        buttonCache = new QModernPushButton(":/icons/" + iconType + "/image.svg", tr("Create image"));
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //= main_root_button_uploadImage
-        buttonCache = new QModernPushButton(":svgIcons/upload.svg", tr("Upload image"));
+        buttonCache = new QModernPushButton(":/icons/" + iconType + "/upload.svg", tr("Upload image"));
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
     //= main_root_button_openTerminal
-    buttonCache = new QModernPushButton(":svgIcons/terminal.svg", tr("Open terminal"));
+    buttonCache = new QModernPushButton(":/icons/" + iconType + "/terminal.svg", tr("Open terminal"));
     connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::terminalRequested);
     this->rootActionButtons.append(buttonCache);
 
     //= main_root_button_updateCache
-    buttonCache = new QModernPushButton(":svgIcons/startActionIcons/sync.svg", tr("Update cache"));
+    buttonCache = new QModernPushButton(":/icons/" + iconType + "/sync.svg", tr("Update cache"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //= main_root_button_partitionDrive
-    buttonCache = new QModernPushButton(":svgIcons/partition.svg", tr("Partition drive"));
+    buttonCache = new QModernPushButton(":/icons/" + iconType + "/partition.svg", tr("Partition drive"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
     //= main_root_button_register
-    buttonCache = new QModernPushButton(":svgIcons/register.svg", tr("Register"));
+    buttonCache = new QModernPushButton(":/icons/" + iconType + "/register.svg", tr("Register"));
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
@@ -448,7 +451,7 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
     if(this->backend->getState() == LinboBackend::Idle)
         return;
 
-    QString logColor = "black";
+    QString logColor = this->backend->getConfig()->isBackgroundColorDark() ? "white":"black";
 
     if (latestLog.type == LinboLogger::StdErr)
         logColor = "red";
@@ -472,5 +475,5 @@ void LinboMainActions::handleAutostartTimeoutProgressChanged() {
             QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
             + ":"
             + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
-    this->passedTimeLabel->setText(passedTime);//QString::number());
+    this->passedTimeLabel->setText(passedTime);
 }

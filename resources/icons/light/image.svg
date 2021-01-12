@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="500"
+   width="500"
+   id="svg4"
+   version="1.1"
+   viewBox="0 0 500 500"
+   role="img"
+   class="svg-inline--fa fa-compact-disc fa-w-16"
+   data-icon="compact-disc"
+   data-prefix="fas"
+   focusable="false"
+   aria-hidden="true"
+   sodipodi:docname="image.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="760"
+     inkscape:window-height="480"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="0.472"
+     inkscape:cx="250"
+     inkscape:cy="250"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4" />
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <path
+     style="fill:#ffffff;stroke-width:0.60483873;fill-opacity:1"
+     id="path2"
+     d="m 250,100 c -82.8629,0 -150,67.1371 -150,150 0,82.8629 67.1371,150 150,150 82.8629,0 150,-67.1371 150,-150 0,-82.8629 -67.1371,-150 -150,-150 z m -96.77419,150 h -19.35484 c 0,-64.05242 52.07661,-116.12903 116.12903,-116.12903 v 19.35484 c -53.34677,0 -96.77419,43.42742 -96.77419,96.77419 z M 250,308.06452 c -32.05645,0 -58.06452,-26.00807 -58.06452,-58.06452 0,-32.05645 26.00807,-58.06452 58.06452,-58.06452 32.05645,0 58.06452,26.00807 58.06452,58.06452 0,32.05645 -26.00807,58.06452 -58.06452,58.06452 z m 0,-77.41936 c -10.70565,0 -19.35484,8.64919 -19.35484,19.35484 0,10.70565 8.64919,19.35484 19.35484,19.35484 10.70565,0 19.35484,-8.64919 19.35484,-19.35484 0,-10.70565 -8.64919,-19.35484 -19.35484,-19.35484 z" />
+</svg>

@@ -34,7 +34,7 @@ QModernDialog::QModernDialog(QWidget* parent) : QWidget(parent)
 
     this->titleLabel = new QLabel(this->objectName());
     this->titleLabel->setAlignment(Qt::AlignCenter);
-    this->closeButton = new QModernPushButton(":svgIcons/cancel.svg");
+    this->closeButton = new QModernPushButton(":/icons/dark/cancel.svg");
     connect(this->closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
 
     this->toolBarWidget = new QWidget(parent);

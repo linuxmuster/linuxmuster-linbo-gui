@@ -1,47 +1,67 @@
 <RCC>
     <qresource prefix="/">
-        <file>svgIcons/overlayChecked.svg</file>
-        <file>svgIcons/overlayHovered.svg</file>
-        <file>svgIcons/overlayPressed.svg</file>
-        <file>svgIcons/shutdownAction.svg</file>
-        <file>svgIcons/rebootAction.svg</file>
-        <file>svgIcons/settingsAction.svg</file>
-        <file>svgIcons/cancel.svg</file>
-        <file>svgIcons/back.svg</file>
-        <file>svgIcons/image.svg</file>
-        <file>svgIcons/logout.svg</file>
-        <file>svgIcons/partition.svg</file>
-        <file>svgIcons/register.svg</file>
-        <file>svgIcons/terminal.svg</file>
-        <file>svgIcons/upload.svg</file>
-        <file>svgIcons/infoBg.svg</file>
-        <file>svgIcons/imageBg.svg</file>
-        <file>svgIcons/uploadBg.svg</file>
-        <file>svgIcons/info-solid.svg</file>
-        <file>svgIcons/overlayReinstall.svg</file>
-        <file>svgIcons/overlayStart.svg</file>
-        <file>svgIcons/overlaySync.svg</file>
-        <file>svgIcons/overlayImage.svg</file>
-        <file>svgIcons/startActionIcons/reinstall.svg</file>
-        <file>svgIcons/startActionIcons/reinstallBg.svg</file>
-        <file>svgIcons/startActionIcons/start.svg</file>
-        <file>svgIcons/startActionIcons/startBg.svg</file>
-        <file>svgIcons/startActionIcons/sync.svg</file>
-        <file>svgIcons/startActionIcons/syncBg.svg</file>
-        <file>svgIcons/desktop.svg</file>
-        <file>svgIcons/network.svg</file>
         <file>fonts/PTSans-Bold.ttf</file>
         <file>fonts/PTSans-BoldItalic.ttf</file>
         <file>fonts/PTSans-Italic.ttf</file>
         <file>fonts/PTSans-Regular.ttf</file>
-        <file>svgIcons/components/checkboxChecked.svg</file>
-        <file>svgIcons/components/checkboxUnchecked.svg</file>
-        <file>svgIcons/components/radioButtonChecked.svg</file>
-        <file>svgIcons/components/radioButtonUnchecked.svg</file>
         <file>images/linbo_logo_small.svg</file>
         <file>images/by_linuxmuster.net.svg</file>
         <file>images/linbo_logo_unbranded.svg</file>
         <file>images/linbo_logo_small_2.svg</file>
         <file>images/linbo_logo_small_3.svg</file>
+        <file>icons/dark/back.svg</file>
+        <file>icons/dark/cancel.svg</file>
+        <file>icons/dark/desktop.svg</file>
+        <file>icons/dark/image.svg</file>
+        <file>icons/dark/logout.svg</file>
+        <file>icons/dark/network.svg</file>
+        <file>icons/dark/overlayChecked.svg</file>
+        <file>icons/dark/partition.svg</file>
+        <file>icons/dark/reboot.svg</file>
+        <file>icons/dark/register.svg</file>
+        <file>icons/dark/reinstall.svg</file>
+        <file>icons/dark/settings.svg</file>
+        <file>icons/dark/shutdown.svg</file>
+        <file>icons/dark/start.svg</file>
+        <file>icons/dark/sync.svg</file>
+        <file>icons/dark/terminal.svg</file>
+        <file>icons/dark/upload.svg</file>
+        <file>icons/light/back.svg</file>
+        <file>icons/light/cancel.svg</file>
+        <file>icons/light/desktop.svg</file>
+        <file>icons/light/image.svg</file>
+        <file>icons/light/logout.svg</file>
+        <file>icons/light/network.svg</file>
+        <file>icons/light/overlayChecked.svg</file>
+        <file>icons/light/partition.svg</file>
+        <file>icons/light/reboot.svg</file>
+        <file>icons/light/register.svg</file>
+        <file>icons/light/reinstall.svg</file>
+        <file>icons/light/settings.svg</file>
+        <file>icons/light/shutdown.svg</file>
+        <file>icons/light/start.svg</file>
+        <file>icons/light/sync.svg</file>
+        <file>icons/light/terminal.svg</file>
+        <file>icons/light/upload.svg</file>
+        <file>icons/universal/components/checkboxChecked.svg</file>
+        <file>icons/universal/components/checkboxUnchecked.svg</file>
+        <file>icons/universal/components/radioButtonChecked.svg</file>
+        <file>icons/universal/components/radioButtonUnchecked.svg</file>
+        <file>icons/universal/imageBg.svg</file>
+        <file>icons/universal/infoBg.svg</file>
+        <file>icons/universal/overlayHovered.svg</file>
+        <file>icons/universal/overlayImage.svg</file>
+        <file>icons/universal/overlayPressed.svg</file>
+        <file>icons/universal/overlayReinstall.svg</file>
+        <file>icons/universal/overlayStart.svg</file>
+        <file>icons/universal/overlaySync.svg</file>
+        <file>icons/universal/reinstallBg.svg</file>
+        <file>icons/universal/startBg.svg</file>
+        <file>icons/universal/syncBg.svg</file>
+        <file>icons/universal/uploadBg.svg</file>
+        <file>icons/dark/by_linuxmuster.net.svg</file>
+        <file>icons/dark/linbo_logo_unbranded.svg</file>
+        <file>icons/light/by_linuxmuster.net.svg</file>
+        <file>icons/light/linbo_logo_unbranded.svg</file>
     </qresource>
 </RCC>

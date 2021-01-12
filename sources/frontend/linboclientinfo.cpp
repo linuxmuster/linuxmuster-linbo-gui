@@ -4,11 +4,14 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
 {
 
     this->mainWidget = new QWidget(this);
+    this->mainWidget->setStyleSheet( "QLabel { color: " + QString(config->isBackgroundColorDark() ? "white":"black") + "; }");
 
     this->mainLayout = new QGridLayout(this->mainWidget);
     this->mainLayout->setAlignment(Qt::AlignCenter);
 
-    this->networkIconWidget = new QSvgWidget(":/svgIcons/network.svg");
+    QString iconType = config->isBackgroundColorDark() ? "light":"dark";
+
+    this->networkIconWidget = new QSvgWidget(":/icons/" + iconType + "/network.svg");
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
     //= hostname
@@ -23,7 +26,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     //= client_info_mac
     this->mainLayout->addWidget(new QLabel("<b>" + tr("Mac") + ":</b>  " + config->getMacAddress()), 0, 4, 1, 1);
 
-    this->desktopIconWidget = new QSvgWidget(":/svgIcons/desktop.svg");
+    this->desktopIconWidget = new QSvgWidget(":/icons/" + iconType + "/desktop.svg");
     this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
     //= client_info_hdd

@@ -29,10 +29,13 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     connect(os->getBackend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
+
+    QString iconType = os->getBackend()->getConfig()->isBackgroundColorDark() ? "light":"dark";
+
     QMap<LinboOs::LinboOsStartAction, QString> defaultStartActionOverlayPaths = {
-        {LinboOs::StartOs, ":/svgIcons/overlayStart.svg"},
-        {LinboOs::SyncOs, ":/svgIcons/overlaySync.svg"},
-        {LinboOs::ReinstallOs, ":/svgIcons/overlayReinstall.svg"},
+        {LinboOs::StartOs, ":/icons/universal/overlayStart.svg"},
+        {LinboOs::SyncOs, ":/icons/universal/overlaySync.svg"},
+        {LinboOs::ReinstallOs, ":/icons/universal/overlayReinstall.svg"},
         {LinboOs::UnknownAction, ""}
     };
 
@@ -44,7 +47,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->defaultRootActionOverlay = new QModernPushButtonOverlay (
                 QModernPushButtonOverlay::Background,
-                new QSvgWidget(":/svgIcons/overlayImage.svg"),
+                new QSvgWidget(":/icons/universal/overlayImage.svg"),
                 false
                 );
 
@@ -55,9 +58,9 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         connect(this->button, &QModernPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
         QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
-            {LinboOs::StartOs, ":/svgIcons/startActionIcons/startBg.svg"},
-            {LinboOs::SyncOs, ":/svgIcons/startActionIcons/syncBg.svg"},
-            {LinboOs::ReinstallOs, ":/svgIcons/startActionIcons/reinstallBg.svg"}
+            {LinboOs::StartOs, ":/icons/universal/startBg.svg"},
+            {LinboOs::SyncOs, ":/icons/universal/syncBg.svg"},
+            {LinboOs::ReinstallOs, ":/icons/universal/reinstallBg.svg"}
         };
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
@@ -82,7 +85,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
 
         // root action button
-        QModernPushButton* actionButton = new QModernPushButton(":/svgIcons/uploadBg.svg", this);
+        QModernPushButton* actionButton = new QModernPushButton(":/icons/universal/uploadBg.svg", this);
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
         connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::imageUploadRequested);

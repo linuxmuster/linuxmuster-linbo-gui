@@ -54,7 +54,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
     this->overlays.append(this->getOverlaysOfType(QModernPushButtonOverlay::Background, extraOverlays));
 
     // Hover
-    this->hoveredOverlay = new QSvgWidget(":svgIcons/overlayHovered.svg");
+    this->hoveredOverlay = new QSvgWidget(":/icons/universal/overlayHovered.svg");
     this->overlays.append(
                 new QModernPushButtonOverlay(
                     QModernPushButtonOverlay::OnHover,
@@ -69,7 +69,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
     this->overlays.append(
                 new QModernPushButtonOverlay(
                     QModernPushButtonOverlay::OnPressed,
-                    new QSvgWidget(":svgIcons/overlayPressed.svg"),
+                    new QSvgWidget(":/icons/universal/overlayPressed.svg"),
                     true
                     )
                 );
@@ -80,7 +80,7 @@ QModernPushButton::QModernPushButton(QString icon, QString label, QList<QModernP
     this->overlays.append(
                 new QModernPushButtonOverlay(
                     QModernPushButtonOverlay::OnChecked,
-                    new QSvgWidget(":svgIcons/overlayChecked.svg"),
+                    new QSvgWidget(":/icons/light/overlayChecked.svg"),
                     true
                     )
                 );
@@ -241,24 +241,24 @@ void QModernPushButton::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void QModernPushButton::enterEvent(QEvent *e) {
-    QAbstractButton::enterEvent(e);
     this->isHovered = true;
+    QAbstractButton::enterEvent(e);
     emit this->hovered();
 }
 
 void QModernPushButton::leaveEvent(QEvent *e) {
-    QAbstractButton::leaveEvent(e);
     this->isHovered = false;
+    QAbstractButton::leaveEvent(e);
 }
 
 void QModernPushButton::mousePressEvent(QMouseEvent *e) {
-    QAbstractButton::mousePressEvent(e);
     this->isPressed = true;
+    QAbstractButton::mousePressEvent(e);
 }
 
 void QModernPushButton::mouseReleaseEvent(QMouseEvent *e) {
-    QAbstractButton::mouseReleaseEvent(e);
     this->isPressed = false;
+    QAbstractButton::mouseReleaseEvent(e);
 }
 
 void QModernPushButton::mouseDoubleClickEvent(QMouseEvent *e) {

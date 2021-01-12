@@ -33,6 +33,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));
 
     // create the main layout
+    QString iconType = backend->getConfig()->isBackgroundColorDark() ? "light":"dark";
 
     // main layout
     QWidget* mainLayoutWidget = new QWidget(this);
@@ -45,7 +46,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // Linbo logo
     int linboLogoHeight = this->height() * 0.13;
 
-    QModernSvgWidget* linboLogo = new QModernSvgWidget(linboLogoHeight, ":/images/linbo_logo_unbranded.svg");
+    QModernSvgWidget* linboLogo = new QModernSvgWidget(linboLogoHeight, ":/icons/" + iconType + "/linbo_logo_unbranded.svg");
     mainLayout->addWidget(linboLogo);
     mainLayout->setAlignment(linboLogo, Qt::AlignCenter);
 
@@ -68,6 +69,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // version / network label
     QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress());
+    versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
 
@@ -75,7 +77,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // Linuxmuster logo
     double linuxmusterLogoHeight = this->height() * 0.06;
 
-    QModernSvgWidget* linuxmusterLogo = new QModernSvgWidget(linuxmusterLogoHeight, ":/images/by_linuxmuster.net.svg");
+    QModernSvgWidget* linuxmusterLogo = new QModernSvgWidget(linuxmusterLogoHeight, ":/icons/" + iconType + "/by_linuxmuster.net.svg");
     mainLayout->addWidget(linuxmusterLogo);
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
@@ -93,6 +95,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->showClientInfo = false;
 
     // power and settings Buttons
+
     QWidget* powerActionsLayoutWidget = new QWidget(this);
     int height = this->height() * 0.3;
     int width = height / 3;
@@ -100,25 +103,25 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int buttonWidth = width * 0.6;
     powerActionsLayoutWidget->setGeometry(QRect(this->width() - (width + margins), this->height() - (height + margins), width * 1.1, height));
 
-    rootActionButton = new QModernPushButton(":/svgIcons/settingsAction.svg");
+    rootActionButton = new QModernPushButton(":/icons/" + iconType + "/settings.svg");
     this->powerActionButtons.append(rootActionButton);
     rootActionButton->setFixedHeight(buttonWidth);
     rootActionButton->setFixedWidth(buttonWidth);
 
-    logoutActionButton = new QModernPushButton(":/svgIcons/logout.svg");
+    logoutActionButton = new QModernPushButton(":/icons/" + iconType + "/logout.svg");
     connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
     this->powerActionButtons.append(logoutActionButton);
     logoutActionButton->setFixedHeight(buttonWidth);
     logoutActionButton->setFixedWidth(buttonWidth);
     logoutActionButton->setVisible(false);
 
-    QModernPushButton* rebootActionButton = new QModernPushButton(":/svgIcons/rebootAction.svg");
+    QModernPushButton* rebootActionButton = new QModernPushButton(":/icons/" + iconType + "/reboot.svg");
     connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
     this->powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
     rebootActionButton->setFixedWidth(buttonWidth);
 
-    QModernPushButton* shutdownActionButton = new QModernPushButton(":/svgIcons/shutdownAction.svg");
+    QModernPushButton* shutdownActionButton = new QModernPushButton(":/icons/" + iconType + "/shutdown.svg");
     connect(shutdownActionButton, SIGNAL(clicked()), this->backend, SLOT(shutdown()));
     this->powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
