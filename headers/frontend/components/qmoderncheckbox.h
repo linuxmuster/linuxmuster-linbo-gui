@@ -9,10 +9,13 @@ class QModernCheckBox : public QCheckBox
 {
     Q_OBJECT
 public:
-    QModernCheckBox(QString label = "", QWidget* parent = nullptr);
+    QModernCheckBox(QString label = "", bool darkMode = false, QWidget* parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
+
+private:
+    bool darkMode = false;
 };
 
 #endif // QMODERNCHECKBOX_H

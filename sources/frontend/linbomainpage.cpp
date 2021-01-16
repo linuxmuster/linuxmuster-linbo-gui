@@ -308,4 +308,6 @@ void LinboMainPage::keyPressEvent(QKeyEvent *ev)
             this->clientInfoAnimation->start();
         }
     }
+    else if(ev->key() == Qt::Key_Escape && this->backend->getState() == LinboBackend::Autostarting)
+        this->backend->cancelCurrentAction();
 }

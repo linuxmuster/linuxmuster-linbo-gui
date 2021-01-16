@@ -89,7 +89,6 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             }
         }
 
-
         // root action button
         QModernPushButton* actionButton = new QModernPushButton(":/icons/universal/uploadBg.svg", this);
         actionButton->setGeometry(0,0,0,0);

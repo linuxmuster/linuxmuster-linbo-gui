@@ -43,10 +43,6 @@
         <file>icons/light/sync.svg</file>
         <file>icons/light/terminal.svg</file>
         <file>icons/light/upload.svg</file>
-        <file>icons/universal/components/checkboxChecked.svg</file>
-        <file>icons/universal/components/checkboxUnchecked.svg</file>
-        <file>icons/universal/components/radioButtonChecked.svg</file>
-        <file>icons/universal/components/radioButtonUnchecked.svg</file>
         <file>icons/universal/imageBg.svg</file>
         <file>icons/universal/infoBg.svg</file>
         <file>icons/universal/overlayHovered.svg</file>
@@ -63,5 +59,13 @@
         <file>icons/dark/linbo_logo_unbranded.svg</file>
         <file>icons/light/by_linuxmuster.net.svg</file>
         <file>icons/light/linbo_logo_unbranded.svg</file>
+        <file>icons/dark/checkboxChecked.svg</file>
+        <file>icons/dark/checkboxUnchecked.svg</file>
+        <file>icons/dark/radioButtonChecked.svg</file>
+        <file>icons/dark/radioButtonUnchecked.svg</file>
+        <file>icons/light/checkboxChecked.svg</file>
+        <file>icons/light/checkboxUnchecked.svg</file>
+        <file>icons/light/radioButtonChecked.svg</file>
+        <file>icons/light/radioButtonUnchecked.svg</file>
     </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 #include "qmodernradiobutton.h"
 
-QModernRadioButton::QModernRadioButton(QString label, QWidget* parent) : QRadioButton(label, parent)
+QModernRadioButton::QModernRadioButton(QString label, bool darkMode, QWidget* parent) : QRadioButton(label, parent)
 {
 
 }

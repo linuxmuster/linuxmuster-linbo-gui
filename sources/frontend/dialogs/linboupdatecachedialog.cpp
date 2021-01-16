@@ -35,7 +35,7 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     this->mainLayout->addWidget(separatorLine);
 
     //= dialog_updateCache_formatPartition
-    formatCheckBox = new QModernCheckBox(tr("Format cache partition"));
+    formatCheckBox = new QModernCheckBox(tr("Format cache partition"), backend->getConfig()->isBackgroundColorDark());
     this->mainLayout->addWidget(formatCheckBox);
 
     this->mainLayout->addStretch();

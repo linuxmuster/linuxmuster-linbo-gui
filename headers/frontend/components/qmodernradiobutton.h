@@ -9,7 +9,7 @@ class QModernRadioButton : public QRadioButton
 {
     Q_OBJECT
 public:
-    QModernRadioButton(QString label = "", QWidget* parent = nullptr);
+    QModernRadioButton(QString label = "", bool darkMode = false, QWidget* parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
