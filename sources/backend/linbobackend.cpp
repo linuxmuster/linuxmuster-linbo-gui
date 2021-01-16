@@ -57,7 +57,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     connect( asynchronosProcess, SIGNAL(readyReadStandardError()),
              this, SLOT(readFromStderr()) );
     connect(this->asynchronosProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
+            this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
 
     // synchronos commands are not logged
     this->synchronosProcess = new QProcess(this);
@@ -68,7 +68,6 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 #else
     this->loadStartConfiguration("start.conf");
 #endif
-
     this->loadEnvironmentValues();
 
     // triger autostart if necessary
@@ -520,6 +519,24 @@ LinboConfig* LinboBackend::getConfig() {
     return this->config;
 }
 
+QList<LinboImage*> LinboBackend::getImages() {
+    return this->images.values();
+}
+QList<LinboImage*> LinboBackend::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs) {
+    QList<LinboImage*> filteredImages;
+    QList<LinboImage*> imagesWithoutOs;
+
+    for(LinboImage* image : this->images)
+        if(image->getOs() == os)
+            filteredImages.append(image);
+        else if(includeImagesWithoutOs && !image->hasOs())
+            imagesWithoutOs.append(image);
+
+    filteredImages.append(imagesWithoutOs);
+
+    return filteredImages;
+}
+
 QList<LinboOs*> LinboBackend::getOperatingSystems() {
     return this->operatingSystems;
 }
@@ -563,6 +580,8 @@ QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStr
 
         if(returnCode != nullptr)
             *returnCode = this->synchronosProcess->exitCode();
+        else if(this->synchronosProcess->exitCode() != 0)
+            return "";
 
         return this->synchronosProcess->readAllStandardOutput();
     }
@@ -805,14 +824,22 @@ void LinboBackend::loadEnvironmentValues() {
     hd.remove( *removePartition );
     this->config->setHddSize(this->executeCommand(true, "size", hd).replace("\n", ""));
 
+    // Load all existing images
+    QStringList existingImageNames = this->executeCommand(true, "listimages", this->config->getCachePath()).split("\n");
+    for(QString existingImage : existingImageNames) {
+        existingImage = existingImage.split("/").last();
+        if(!existingImage.isEmpty() && !this->images.contains(existingImage))
+            this->images.insert(existingImage, new LinboImage(existingImage, this));
+    }
+
+    qDebug() << this->images;
+
     this->logger->log("Finished loading environment values", LinboLogger::LinboGuiInfo);
 }
 
 void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig* linboConfig) {
     for(QString key : config.keys()) {
         QString value = config[key];
-
-
         if(key == "server")  linboConfig->setServerIpAddress(value);
         else if(key == "cache")   linboConfig->setCachePath(value);
         else if(key == "roottimeout")   linboConfig->setRootTimeout((unsigned int)value.toInt());
@@ -846,7 +873,6 @@ void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
         else if(key == "version")       os->setVersion(value);
         else if(key == "iconname")      os->setIconName(value);
         //else if(key == "image")         os->setDifferentialImage(new LinboImage(value, LinboImage::DifferentialImage, os));
-        else if(key == "baseimage")     os->setBaseImage(new LinboImage(value, this));
         else if(key == "boot")          os->setBootPartition(value);
         else if(key == "root")          os->setRootPartition(value);
         else if(key == "kernel")        os->setKernel(value);
@@ -859,6 +885,11 @@ void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
         else if(key == "autostart")     os->setAutostartEnabled(stringToBool(value));
         else if(key == "autostarttimeout")   os->setAutostartTimeout(value.toInt());
         else if(key == "hidden")        os->setHidden(stringToBool(value));
+        else if(key == "baseimage") {
+            if(!this->images.contains(value))
+                this->images.insert(value, new LinboImage(value, this));
+            os->setBaseImage(this->images[value]);
+        }
     }
 }
 
@@ -883,7 +914,7 @@ LinboConfig::DownloadMethod LinboBackend::stringToDownloadMethod(const QString& 
 
 QString LinboBackend::downloadMethodToString(const LinboConfig::DownloadMethod& value) {
     switch (value) {
-        case LinboConfig::Rsync:
+    case LinboConfig::Rsync:
         return "rsync";
     case LinboConfig::Multicast:
         return "multicast";

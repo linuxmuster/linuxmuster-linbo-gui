@@ -95,6 +95,8 @@ public:
     LinboState getState();
     LinboLogger* getLogger();
     LinboConfig* getConfig();
+    QList<LinboImage*> getImages();
+    QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true);
     QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();
     void setCurrentOs(LinboOs* os);
@@ -124,6 +126,7 @@ private:
     LinboLogger* logger;
     LinboConfig* config;
     QStringList linboCommandCache;
+    QMap<QString, LinboImage*> images;
     QList<LinboOs*> operatingSystems;
     QList<LinboDiskPartition*> diskPartitions;
 

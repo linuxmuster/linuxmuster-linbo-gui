@@ -113,6 +113,9 @@ case "${cmd}" in
     writefile)
         writefile "$@"
         ;;
+    listimages)
+        listimages "$@"
+        ;;
     *)
         help
         ;;

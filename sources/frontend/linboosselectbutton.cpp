@@ -94,7 +94,10 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         QModernPushButton* actionButton = new QModernPushButton(":/icons/universal/uploadBg.svg", this);
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
-        connect(actionButton, &QModernPushButton::clicked, this, &LinboOsSelectButton::imageUploadRequested);
+        connect(actionButton, &QModernPushButton::clicked, [=]{
+            this->os->getBackend()->setCurrentOs(this->os);
+            emit this->imageUploadRequested();
+        });
         this->rootActionButtons.append(actionButton);
     }
     else {

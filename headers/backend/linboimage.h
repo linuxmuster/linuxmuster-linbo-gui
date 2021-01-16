@@ -26,25 +26,30 @@
 #include <QObject>
 
 class LinboBackend;
+class LinboOs;
 
 class LinboImage : public QObject
 {
     Q_OBJECT
 public:
     friend class LinboBackend;
+    friend class LinboOs;
 
     QString getDescription();
     const QString& getName() const {return this->name;}
+    LinboOs* getOs() {return this->os;}
+    bool hasOs() {return this->os != nullptr;}
 
 protected:
     explicit LinboImage(QString name, LinboBackend *parent = nullptr);
 
     bool setDescription (const QString& description);
     void setName(const QString& name) {this->name = name;}
+    void setOs(LinboOs* os) {this->os = os;}
 
 private:
     LinboBackend* backend;
-
+    LinboOs* os;
     QString name;
 };
 

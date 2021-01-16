@@ -27,8 +27,6 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
                 "}"
                 );
 
-    this->imageSelectBox->addItem("ubuntu.cloop");
-    this->imageSelectBox->addItem("Test2");
     this->mainLayout->addWidget(this->imageSelectBox);
 
     // Post process actions
@@ -80,6 +78,8 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
     this->buttonLayout->addWidget(pushButtonCache);
+
+    connect(this, &LinboImageUploadDialog::opened, this, &LinboImageUploadDialog::refreshImageList);
 }
 
 void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
@@ -117,4 +117,11 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
     for(int i = 0; i < 2; i++) {
         this->buttonLayout->itemAt(i)->widget()->setFixedSize(this->width() * 0.5 - margins * 1.5, buttonHeight);
     }
+}
+
+void LinboImageUploadDialog::refreshImageList() {
+    this->imageSelectBox->clear();
+
+    for(LinboImage* image : this->backend->getImagesOfOs(this->backend->getCurrentOs(), true))
+        this->imageSelectBox->addItem(image->getName());
 }

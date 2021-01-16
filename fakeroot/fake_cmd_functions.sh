@@ -260,9 +260,22 @@ writefile()
     if [[ "${cachepartition}" != "/dev/sda4" ]] \
       || [[ -z "${filename}" ]]; then
         echo "Wrong parameters: «$*»"
-        return 17870
+        return 1
     else
         cat > ./$filename
+        return 0
+    fi
+}
+
+# linbo_cmd listimages <cachedev>
+listimages()
+{
+    local cachepartition="$1"
+    if [[ "${cachepartition}" != "/dev/sda4" ]]; then
+        echo "Wrong parameters: «$*»"
+        return 1
+    else
+        ls -1 ./*.cloop
         return 0
     fi
 }

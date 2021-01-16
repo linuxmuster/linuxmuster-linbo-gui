@@ -45,6 +45,11 @@ bool LinboOs::reinstall() {
     return this->parent->reinstallCurrentOs();
 }
 
+void LinboOs::setBaseImage (LinboImage* baseImage) {
+    baseImage->setOs(this);
+    this->baseImage = baseImage;
+}
+
 bool LinboOs::getActionEnabled(LinboOsStartAction action) {
     switch (action) {
     case StartOs: return this->getStartActionEnabled();

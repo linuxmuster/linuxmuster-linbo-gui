@@ -76,7 +76,7 @@ private:
     void setName (const QString& name) {this->name = name;}
     void setDescription  (const QString& description) {this->description = description;}
     void setVersion (const QString& version) {this->version = version;}
-    void setBaseImage (LinboImage* baseImage) {this->baseImage = baseImage;}
+    void setBaseImage (LinboImage* baseImage);
     void setIconName (const QString& iconName) {this->iconName = iconName;}
     void setRootPartition (const QString& rootPartition) {this->rootPartition = rootPartition;}
     void setBootPartition (const QString& bootPartition) {this->bootPartition = bootPartition;}

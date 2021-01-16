@@ -17,6 +17,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void refreshImageList();
 
 private:
     LinboBackend* backend;
