@@ -1,6 +1,6 @@
 /****************************************************************************
  ** Modern Linbo GUI
- ** Copyright (C) 2020  Dorian Zedler <dorian@itsblue.de>
+ ** Copyright (C) 2020-2021  Dorian Zedler <dorian@itsblue.de>
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU Affero General Public License as published
@@ -35,7 +35,7 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height());
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width());
 #endif
-
+#
     // Load segoe font
     QFontDatabase::addApplicationFont(":/fonts/PTSans-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/PTSans-BoldItalic.ttf");

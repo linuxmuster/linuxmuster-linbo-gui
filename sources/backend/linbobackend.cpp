@@ -1,6 +1,6 @@
 /****************************************************************************
  ** Modern Linbo GUI
- ** Copyright (C) 2020  Dorian Zedler <dorian@itsblue.de>
+ ** Copyright (C) 2020-2021  Dorian Zedler <dorian@itsblue.de>
  **
  ** Portions of the code in this file are based on code by:
  ** Copyright (C) 2007 Martin Oehler <oehler@knopper.net>
@@ -813,7 +813,7 @@ void LinboBackend::loadEnvironmentValues() {
     this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));
 
     // Version
-    this->config->setLinboVersion(this->executeCommand(true, "version").simplified().replace("\n", ""));
+    this->config->setLinboVersion(this->executeCommand(true, "version").simplified().replace("\n", "").split("|").first());
 
     // hostname
     this->config->setHostname(this->executeCommand(true, "hostname").replace("\n", ""));

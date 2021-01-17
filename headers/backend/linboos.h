@@ -1,6 +1,6 @@
 /****************************************************************************
  ** Modern Linbo GUI
- ** Copyright (C) 2020  Dorian Zedler <dorian@itsblue.de>
+ ** Copyright (C) 2020-2021  Dorian Zedler <dorian@itsblue.de>
  **
  ** Portions of the code in this file are based on code by:
  ** Copyright (C) 2007 Martin Oehler <oehler@knopper.net>

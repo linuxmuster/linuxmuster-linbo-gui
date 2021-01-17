@@ -1,6 +1,6 @@
 /****************************************************************************
  ** Modern Linbo GUI
- ** Copyright (C) 2020  Dorian Zedler <dorian@itsblue.de>
+ ** Copyright (C) 2020-2021  Dorian Zedler <dorian@itsblue.de>
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU Affero General Public License as published
@@ -68,7 +68,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + " - GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress());
+    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress());
     versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
