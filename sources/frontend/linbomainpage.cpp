@@ -33,8 +33,6 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));
 
     // create the main layout
-    QString iconType = backend->getConfig()->isBackgroundColorDark() ? "light":"dark";
-
     // main layout
     QWidget* mainLayoutWidget = new QWidget(this);
     mainLayoutWidget->setGeometry(this->geometry());
@@ -46,7 +44,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // Linbo logo
     int linboLogoHeight = this->height() * 0.13;
 
-    QModernSvgWidget* linboLogo = new QModernSvgWidget(linboLogoHeight, ":/icons/" + iconType + "/linbo_logo_unbranded.svg");
+    LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandTopIcon));
     mainLayout->addWidget(linboLogo);
     mainLayout->setAlignment(linboLogo, Qt::AlignCenter);
 
@@ -79,7 +77,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // Linuxmuster logo
     double linuxmusterLogoHeight = this->height() * 0.06;
 
-    QModernSvgWidget* linuxmusterLogo = new QModernSvgWidget(linuxmusterLogoHeight, ":/icons/" + iconType + "/by_linuxmuster.net.svg");
+    LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandBottomIcon));
     mainLayout->addWidget(linuxmusterLogo);
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
@@ -105,25 +103,25 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int buttonWidth = width * 0.6;
     powerActionsLayoutWidget->setGeometry(QRect(this->width() - (width + margins), this->height() - (height + margins), width * 1.1, height));
 
-    rootActionButton = new QModernPushButton(":/icons/" + iconType + "/settings.svg");
+    rootActionButton = new LinboToolButton(LinboGuiTheme::SettingsIcon);
     this->powerActionButtons.append(rootActionButton);
     rootActionButton->setFixedHeight(buttonWidth);
     rootActionButton->setFixedWidth(buttonWidth);
 
-    logoutActionButton = new QModernPushButton(":/icons/" + iconType + "/logout.svg");
+    logoutActionButton = new LinboToolButton(LinboGuiTheme::LogoutIcon);
     connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
     this->powerActionButtons.append(logoutActionButton);
     logoutActionButton->setFixedHeight(buttonWidth);
     logoutActionButton->setFixedWidth(buttonWidth);
     logoutActionButton->setVisible(false);
 
-    QModernPushButton* rebootActionButton = new QModernPushButton(":/icons/" + iconType + "/reboot.svg");
+    LinboPushButton* rebootActionButton = new LinboToolButton(LinboGuiTheme::RebootIcon);
     connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
     this->powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
     rebootActionButton->setFixedWidth(buttonWidth);
 
-    QModernPushButton* shutdownActionButton = new QModernPushButton(":/icons/" + iconType + "/shutdown.svg");
+    LinboPushButton* shutdownActionButton = new LinboToolButton(LinboGuiTheme::ShutdownIcon);
     connect(shutdownActionButton, SIGNAL(clicked()), this->backend, SLOT(shutdown()));
     this->powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
@@ -138,13 +136,11 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // Dialogs (for imaging stuff)
     this->loginDialog = new LinboLoginDialog(this->backend, this);
-    int dialogHeight = this->height() * 0.3;
-    int dialogWidth = this->height() * 0.5;
-    this->loginDialog->setGeometry( (this->width() - dialogWidth) / 2, (this->height() - dialogHeight) / 2,dialogWidth, dialogHeight);
+    int dialogHeight = gTheme->getSize(LinboGuiTheme::DialogHeight);
+    int dialogWidth = gTheme->getSize(LinboGuiTheme::DialogWidth);
+    this->loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
+    this->loginDialog->centerInParent();
     connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(open()));
-
-    dialogHeight = this->parentWidget()->height() * 0.8;
-    dialogWidth = dialogHeight;
 
     this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
     this->imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
@@ -155,7 +151,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
             this->imageCreationDialog, &LinboImageCreationDialog::open);
 
     this->imageUploadDialog = new LinboImageUploadDialog(backend, parent);
-    this->imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.4);
+    this->imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
     this->imageUploadDialog->centerInParent();
     connect(this->osSelectionRow, &LinboOsSelectionRow::imageUploadRequested,
             this->imageUploadDialog, &LinboImageUploadDialog::open);
@@ -174,20 +170,20 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
                 //= dialog_partition_question
                 tr("Are you sure? This will delete all data on your drive!"),
                 parent);
-    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
+    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
     this->confirmationDialog->centerInParent();
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
     connect(this->mainActions, &LinboMainActions::drivePartitioningRequested,
             this->confirmationDialog, &LinboImageCreationDialog::open);
 
     this->registerDialog = new LinboRegisterDialog(backend, parent);
-    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.8);
+    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.7);
     this->registerDialog->centerInParent();
     connect(this->mainActions, &LinboMainActions::registrationRequested,
             this->registerDialog, &LinboImageCreationDialog::open);
 
     this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
-    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.6, dialogHeight * 0.5);
+    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.5, dialogHeight * 0.3);
     this->updateCacheDialog->centerInParent();
     connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
             this->updateCacheDialog, &LinboImageCreationDialog::open);
@@ -233,8 +229,6 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
 
     case LinboBackend::Root:
-    case LinboBackend::Registering:
-    case LinboBackend::RootActionSuccess:
         if(useMinimalLayout){
             osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.25;
@@ -252,8 +246,14 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
+    case LinboBackend::Registering:
         osSelectionRowHeight = this->height() * 0;
         startActionsWidgetHeight = this->height() * 0.2;
+        break;
+
+    case LinboBackend::RootActionSuccess:
+        osSelectionRowHeight = this->height() * 0;
+        startActionsWidgetHeight = this->height() * 0.3;
         break;
 
     default:
@@ -262,7 +262,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
     }
 
-    for(QModernPushButton* powerActionButton : this->powerActionButtons)
+    for(LinboPushButton* powerActionButton : this->powerActionButtons)
         if(powerActionButton == logoutActionButton && newState < LinboBackend::Root)
             powerActionButton->setVisible(false);
         else if(powerActionButton == logoutActionButton && newState >= LinboBackend::Root)

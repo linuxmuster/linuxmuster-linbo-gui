@@ -1,6 +1,6 @@
 #include "linboupdatecachedialog.h"
 
-LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* parent) : QModernDialog(parent)
+LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
     this->backend = backend;
 
@@ -12,49 +12,43 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     this->updateTypeButtonGroup = new QButtonGroup(this);
 
     //= dialog_updateCache_updateType_rsync
-    QModernRadioButton* rsyncButton = new QModernRadioButton(tr("Update using rsync"));
+    LinboRadioButton* rsyncButton = new LinboRadioButton(tr("Update using rsync"));
     rsyncButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Rsync);
     this->mainLayout->addWidget(rsyncButton);
     this->updateTypeButtonGroup->addButton(rsyncButton, int(LinboConfig::Rsync));
 
     //= dialog_updateCache_updateType_multicast
-    QModernRadioButton* multicastButton = new QModernRadioButton(tr("Update using multicast"));
+    LinboRadioButton* multicastButton = new LinboRadioButton(tr("Update using multicast"));
     multicastButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Multicast);
     this->mainLayout->addWidget(multicastButton);
     this->updateTypeButtonGroup->addButton(multicastButton, int(LinboConfig::Multicast));
 
     //= dialog_updateCache_updateType_torrent
-    QModernRadioButton* torrentButton = new QModernRadioButton(tr("Update using torrent"));
+    LinboRadioButton* torrentButton = new LinboRadioButton(tr("Update using torrent"));
     torrentButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Torrent);
     this->mainLayout->addWidget(torrentButton);
     this->updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
 
     QFrame* separatorLine = new QFrame();
-    separatorLine->setStyleSheet("QFrame {color: #cccccc;}");
+    separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";}");
     separatorLine->setFrameShape(QFrame::HLine);
     this->mainLayout->addWidget(separatorLine);
 
     //= dialog_updateCache_formatPartition
-    formatCheckBox = new QModernCheckBox(tr("Format cache partition"), backend->getConfig()->isBackgroundColorDark());
+    formatCheckBox = new LinboCheckBox(tr("Format cache partition"));
     this->mainLayout->addWidget(formatCheckBox);
 
     this->mainLayout->addStretch();
 
-    buttonLayout = new QHBoxLayout();
-
     //= dialog_updateCache_button_update
-    QModernPushButton* updateButton = new QModernPushButton("", tr("update"));
-    updateButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(updateButton, SIGNAL(clicked()), this, SLOT(updateCache()));
-    buttonLayout->addWidget(updateButton);
+    LinboToolButton* toolButtonCache = new LinboToolButton(tr("update"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(updateCache()));
 
     //= cancel
-    QModernPushButton* cancelButton = new QModernPushButton("", tr("cancel"));
-    cancelButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(autoClose()));
-    buttonLayout->addWidget(cancelButton);
-
-    this->mainLayout->addLayout(buttonLayout);
+    toolButtonCache = new LinboToolButton(tr("cancel"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 }
 
 void LinboUpdateCacheDialog::updateCache() {
@@ -63,10 +57,9 @@ void LinboUpdateCacheDialog::updateCache() {
 }
 
 void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
-    QModernDialog::resizeEvent(event);
+    LinboDialog::resizeEvent(event);
 
-    int buttonHeight = this->parentWidget()->height() * 0.06;
-    int margins = buttonHeight * 0.4;
+    int margins = gTheme->getSize(LinboGuiTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
     for(int i = 0; i < 5; i++) {
@@ -75,15 +68,9 @@ void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
             continue;
 
         QAbstractButton* button = static_cast<QAbstractButton*>(this->mainLayout->itemAt(i)->widget());
-        button->setFixedSize(this->width() - margins * 2, buttonHeight);
+        button->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
         QFont buttonFont = button->font();
-        buttonFont.setPixelSize(buttonHeight <= 0 ? 1:buttonHeight * 0.45);
+        buttonFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
         button->setFont(buttonFont);
-
-    }
-
-    this->buttonLayout->setContentsMargins(0,0,0,0);
-    for(int i = 0; i < 2; i++) {
-        this->buttonLayout->itemAt(i)->widget()->setFixedSize(this->width() * 0.5 - margins * 1.5, buttonHeight);
     }
 }

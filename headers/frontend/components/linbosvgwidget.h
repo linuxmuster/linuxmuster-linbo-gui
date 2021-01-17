@@ -7,11 +7,11 @@
 #include <QSvgRenderer>
 #include <QPainter>
 
-class QModernSvgWidget : public QLabel
+class LinboSvgWidget : public QLabel
 {
     Q_OBJECT
 public:
-    QModernSvgWidget(int height, QString path, QWidget* parent = nullptr);
+    LinboSvgWidget(int height, QString path, QWidget* parent = nullptr);
 };
 
 #endif // QMODERNSVGWIDGET_H

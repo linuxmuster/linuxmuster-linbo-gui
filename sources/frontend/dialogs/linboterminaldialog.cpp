@@ -1,6 +1,6 @@
 #include "linboterminaldialog.h"
 
-LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent)
+LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
 {
     this->currentHistoryIndex = -1;
     this->commandBeforeHistorySwitch.clear();
@@ -8,7 +8,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
     //= dialog_terminal_title
     this->setTitle(tr("Terminal"));
 
-    this->textBrowser = new QModernTextBrowser();
+    this->textBrowser = new LinboTextBrowser();
     this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     this->textBrowser->setStyleSheet("QTextBrowser {"
                                      "border: 0 0 0 0;"
@@ -38,7 +38,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
                                      "    subcontrol-origin: margin;"
                                      "}");
 
-    this->lineEdit = new QModernLineEdit();
+    this->lineEdit = new LinboLineEdit();
     this->lineEdit->installEventFilter(this);
     connect(this->lineEdit, SIGNAL(returnPressed()), this, SLOT(execute()));
 
@@ -59,7 +59,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : QModernDialog(parent
 
 void LinboTerminalDialog::setVisibleAnimated(bool visible) {
     //this->textBrowser->setVisible(visible);
-    QModernDialog::setVisibleAnimated(visible);
+    LinboDialog::setVisibleAnimated(visible);
     if(visible)
         this->process->start("sh", QStringList("-i"));
     else
@@ -103,7 +103,7 @@ bool LinboTerminalDialog::eventFilter(QObject* obj, QEvent* event) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
             if(keyEvent->key() != Qt::Key_Up && keyEvent->key() != Qt::Key_Down)
-                return QModernDialog::eventFilter(obj, event);
+                return LinboDialog::eventFilter(obj, event);
 
             int oldHistoryIndex = this->currentHistoryIndex;
 
@@ -137,12 +137,12 @@ bool LinboTerminalDialog::eventFilter(QObject* obj, QEvent* event) {
             }
         }
     }
-    return QModernDialog::eventFilter(obj, event);
+    return LinboDialog::eventFilter(obj, event);
 }
 
 
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
-    QModernDialog::resizeEvent(event);
+    LinboDialog::resizeEvent(event);
 
     this->lineEdit->setFixedHeight(this->parentWidget()->height() * 0.06);
     QFont font = this->lineEdit->font();

@@ -10,12 +10,12 @@
 #include <QToolTip>
 #include <QtDebug>
 
-#include "qmoderndialog.h"
-#include "qmodernpushbutton.h"
-#include "qmodernlineedit.h"
+#include "linbodialog.h"
+#include "linbopushbutton.h"
+#include "linbolineedit.h"
 #include "linbobackend.h"
 
-class LinboLoginDialog : public QModernDialog
+class LinboLoginDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -30,10 +30,6 @@ private:
     QLabel* headerLabel;
     QLineEdit* passwordInput;
     QWidget* buttonLayoutWidget;
-
-    QModernPushButton* cancelButton;
-    QModernPushButton* loginButton;
-    QHBoxLayout* buttonLayout;
 
     QVBoxLayout* mainLayout;
 

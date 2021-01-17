@@ -5,17 +5,18 @@
 #include <QObject>
 #include <QWidget>
 
-class QModernCheckBox : public QCheckBox
+#include "linboguitheme.h"
+
+class LinboCheckBox : public QCheckBox
 {
     Q_OBJECT
 public:
-    QModernCheckBox(QString label = "", bool darkMode = false, QWidget* parent = nullptr);
+    LinboCheckBox(QString label = "", QWidget* parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    bool darkMode = false;
 };
 
 #endif // QMODERNCHECKBOX_H

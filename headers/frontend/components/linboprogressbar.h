@@ -27,11 +27,13 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 
-class QModernProgressBar : public QProgressBar
+#include "linboguitheme.h"
+
+class LinboProgressBar : public QProgressBar
 {
     Q_OBJECT
 public:
-    QModernProgressBar(QWidget* parent = nullptr);
+    LinboProgressBar(QWidget* parent = nullptr);
 
     void setIndeterminate(bool indeterminate);
     bool getIndeterminate();

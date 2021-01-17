@@ -5,11 +5,13 @@
 #include <QButtonGroup>
 #include <QComboBox>
 
-#include "qmoderndialog.h"
+#include "linbodialog.h"
 #include "linbobackend.h"
-#include "qmodernradiobutton.h"
+#include "linboradiobutton.h"
+#include "linbotoolbutton.h"
+#include "linbocombobox.h"
 
-class LinboImageUploadDialog : public QModernDialog
+class LinboImageUploadDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -28,8 +30,6 @@ private:
 
     QButtonGroup* postProcessActionButtonGroup;
     QHBoxLayout* postProcessActionLayout;
-
-    QHBoxLayout* buttonLayout;
 };
 
 #endif // LINBOIMAGEUPLOADDIALOG_H

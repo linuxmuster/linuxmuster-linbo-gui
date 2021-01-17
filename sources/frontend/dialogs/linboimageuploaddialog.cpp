@@ -1,6 +1,6 @@
 #include "linboimageuploaddialog.h"
 
-LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* parent) : QModernDialog(parent)
+LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
     this->backend = backend;
 
@@ -13,19 +13,7 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     //= dialog_uploadImage_selection_title
     this->mainLayout->addWidget(new QLabel("<b>" + tr("The image to upload:") + "</b>"));
 
-    this->imageSelectBox = new QComboBox();
-    this->imageSelectBox->setStyleSheet(
-                "QComboBox {"
-                    "border: 0 0 0 0;"
-                    "border-bottom: 1px solid #ddd;"
-                    "background-color: #f8f8f8;"
-                "selection-color: #ffffff;"
-                "selection-background-color: #394f5e;"
-                "}"
-                "QComboBox:focus {"
-                    "border-bottom: 1px solid #f59c00;"
-                "}"
-                );
+    this->imageSelectBox = new LinboComboBox();
 
     this->mainLayout->addWidget(this->imageSelectBox);
 
@@ -40,54 +28,51 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     this->mainLayout->addLayout(this->postProcessActionLayout);
 
     //= dialog_createImage_postaction_nothing
-    QModernRadioButton* buttonCache = new QModernRadioButton(tr("nothing"));
+    LinboRadioButton* buttonCache = new LinboRadioButton(tr("nothing"));
     buttonCache->setChecked(true);
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
 
     //= dialog_createImage_postaction_shutdown
-    buttonCache = new QModernRadioButton(tr("shutdown"));
+    buttonCache = new LinboRadioButton(tr("shutdown"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
 
     //= dialog_createImage_postaction_reboot
-    buttonCache = new QModernRadioButton(tr("reboot"));
+    buttonCache = new LinboRadioButton(tr("reboot"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
 
     //= dialog_createImage_postaction_logout
-    buttonCache = new QModernRadioButton(tr("logout"));
+    buttonCache = new LinboRadioButton(tr("logout"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
 
     this->mainLayout->addStretch();
 
-    // Bottom buttons
-    this->buttonLayout = new QHBoxLayout();
-    mainLayout->addLayout(this->buttonLayout);
+    // Toolbuttons
 
     //= dialog_uploadImage_button_upload
-    QModernPushButton* pushButtonCache = new QModernPushButton("", tr("upload"));
-    pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, &QModernPushButton::clicked, [=](){
+    LinboToolButton* toolButtonCache = new LinboToolButton(tr("upload"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, &LinboPushButton::clicked, [=](){
+        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
+        this->backend->uploadImage(this->backend->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
+        this->autoClose();
     });
-    this->buttonLayout->addWidget(pushButtonCache);
 
     //= cancel
-    pushButtonCache = new QModernPushButton("", tr("cancel"));
-    pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
-    this->buttonLayout->addWidget(pushButtonCache);
+    toolButtonCache = new LinboToolButton(tr("cancel"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
     connect(this, &LinboImageUploadDialog::opened, this, &LinboImageUploadDialog::refreshImageList);
 }
 
 void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
-    QModernDialog::resizeEvent(event);
+    LinboDialog::resizeEvent(event);
 
-    int buttonHeight = this->parentWidget()->height() * 0.06;
-    int itemHeight = buttonHeight * 0.6;
-    int margins = buttonHeight * 0.4;
+    int margins = gTheme->getSize(LinboGuiTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
     this->mainLayout->setSpacing(margins * 0.5);
@@ -102,20 +87,13 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
 
         // make lables smaller
         if(i != 2)
-            item->setFixedSize(this->width() - margins * 2, buttonHeight * 0.6);
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowLabelHeight));
         else
-            item->setFixedSize(this->width() - margins * 2, buttonHeight* 0.8);
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
 
         QFont itemFont = item->font();
-        itemFont.setPixelSize(itemHeight <= 0 ? 1:itemHeight * 0.6);
+        itemFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
         item->setFont(itemFont);
-    }
-
-    this->buttonLayout->setContentsMargins(0,0,0,0);
-    this->buttonLayout->setSpacing(margins / 2);
-
-    for(int i = 0; i < 2; i++) {
-        this->buttonLayout->itemAt(i)->widget()->setFixedSize(this->width() * 0.5 - margins * 1.5, buttonHeight);
     }
 }
 

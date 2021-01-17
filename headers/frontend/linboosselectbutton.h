@@ -26,7 +26,7 @@
 #include <QSequentialAnimationGroup>
 #include <QEventLoop>
 
-#include "qmodernpushbutton.h"
+#include "linbopushbutton.h"
 #include "linboos.h"
 #include "linbobackend.h"
 
@@ -54,11 +54,11 @@ private:
     bool shouldBeVisible;
     bool showDefaultAction;
 
-    QModernPushButton* button;
-    QList<QModernPushButton*> startActionButtons;
-    QList<QModernPushButton*> rootActionButtons;
-    QModernPushButtonOverlay* defaultStartActionOverlay;
-    QModernPushButtonOverlay* defaultRootActionOverlay;
+    LinboPushButton* button;
+    QList<LinboPushButton*> startActionButtons;
+    QList<LinboPushButton*> rootActionButtons;
+    LinboPushButtonOverlay* defaultStartActionOverlay;
+    LinboPushButtonOverlay* defaultRootActionOverlay;
     QButtonGroup* buttonGroup;
     LinboOs* os;
 

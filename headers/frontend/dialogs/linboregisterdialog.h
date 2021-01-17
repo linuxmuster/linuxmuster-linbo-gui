@@ -8,13 +8,14 @@
 #include <QLabel>
 #include <QComboBox>
 
-#include "qmoderndialog.h"
-#include "qmodernlineedit.h"
-#include "qmodernpushbutton.h"
+#include "linbodialog.h"
+#include "linbolineedit.h"
+#include "linbopushbutton.h"
+#include "linbocombobox.h"
 
 #include "linbobackend.h"
 
-class LinboRegisterDialog : public QModernDialog
+class LinboRegisterDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -26,12 +27,11 @@ protected:
 private:
     LinboBackend* backend;
     QVBoxLayout* mainLayout;
-    QModernLineEdit* roomEdit;
-    QModernLineEdit* hostnameEdit;
-    QModernLineEdit* ipAddressEdit;
-    QModernLineEdit* hostGroupEdit;
+    LinboLineEdit* roomEdit;
+    LinboLineEdit* hostnameEdit;
+    LinboLineEdit* ipAddressEdit;
+    LinboLineEdit* hostGroupEdit;
     QComboBox* roleSelectBox;
-    QHBoxLayout* buttonLayout;
 
 private slots:
     void handleRoomChanged(const QString& newText);

@@ -5,11 +5,13 @@
 #include <QObject>
 #include <QWidget>
 
-class QModernLineEdit : public QLineEdit
+#include "linboguitheme.h"
+
+class LinboLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    QModernLineEdit(QWidget* parent = nullptr);
+    LinboLineEdit(QWidget* parent = nullptr);
 
 protected:
 

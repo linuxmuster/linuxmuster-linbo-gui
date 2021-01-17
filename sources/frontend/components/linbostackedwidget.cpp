@@ -16,9 +16,9 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "qmodernstackedwidget.h"
+#include "linbostackedwidget.h"
 
-QModernStackedWidget::QModernStackedWidget(QWidget* parent) : QStackedWidget(parent)
+LinboStackedWidget::LinboStackedWidget(QWidget* parent) : QStackedWidget(parent)
 {
     this->animationState = Idle;
     opacityAnimation = new QPropertyAnimation();
@@ -29,7 +29,7 @@ QModernStackedWidget::QModernStackedWidget(QWidget* parent) : QStackedWidget(par
     connect(opacityAnimation, SIGNAL(finished()), this, SLOT(handleAnimationFinished()));
 }
 
-void QModernStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
+void LinboStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
     if(widget == nullptr || (widget == this->currentWidget() && this->animationState == Idle))
         return;
     else if(widget == this->currentWidget() && this->animationState != Idle) {
@@ -58,7 +58,7 @@ void QModernStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
     this->animationState = FadingOut;
 }
 
-void QModernStackedWidget::handleAnimationFinished() {
+void LinboStackedWidget::handleAnimationFinished() {
     // disable graphical effect to prevent errors
     this->currentWidget()->graphicsEffect()->setEnabled(false);
 

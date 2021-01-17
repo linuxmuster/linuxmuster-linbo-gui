@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QWidget>
 
-#include "qmoderndialog.h"
-#include "qmodernpushbutton.h"
+#include "linbodialog.h"
+#include "linbotoolbutton.h"
 
-class LinboConfirmationDialog : public QModernDialog
+class LinboConfirmationDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -17,8 +17,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QModernPushButton* yesButton;
-    QModernPushButton* noButton;
     QLabel* questionLabel;
 
 signals:

@@ -48,9 +48,12 @@ LinboGui::LinboGui()
     // create the backend
     this->backend = new LinboBackend(this);
 
+    // create the theme
+    this->theme = new LinboGuiTheme(this->backend, this, this);
+
     // set bakground
     // linuxmuster background color: #394f5e
-    this->setStyleSheet( "QMainWindow { background: " + this->backend->getConfig()->getBackgroundColor() + "; }"
+    this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboGuiTheme::BackgroundColor).name() + "; }"
                          "QLabel { color: " "black" "; }");
 
     // attach translator

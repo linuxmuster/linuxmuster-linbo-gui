@@ -12,7 +12,7 @@ initcache()
     if [[ "${server}" != "10.0.0.1" ]] \
       || [[ "${cachedev}" != "/dev/sda4" ]] \
       || [[ "${downloadtype}" != "torrent" ]] \
-      || [[ "${images}" != "opensuse-cpqmini.cloop" ]]; then
+      || [[ "${images}" == "" ]]; then
         echo "Wrong parameters: «${parameters}»"
         return 1
     fi

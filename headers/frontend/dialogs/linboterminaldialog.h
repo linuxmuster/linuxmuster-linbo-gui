@@ -10,11 +10,11 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
-#include "qmoderndialog.h"
-#include "qmodernlineedit.h"
-#include "qmoderntextbrowser.h"
+#include "linbodialog.h"
+#include "linbolineedit.h"
+#include "linbotextbrowser.h"
 
-class LinboTerminalDialog : public QModernDialog
+class LinboTerminalDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -25,7 +25,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QModernTextBrowser* textBrowser;
+    LinboTextBrowser* textBrowser;
     QLineEdit* lineEdit;
     QVBoxLayout* mainLayout;
     QProcess* process;

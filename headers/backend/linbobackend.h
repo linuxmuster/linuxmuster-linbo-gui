@@ -97,6 +97,7 @@ public:
     LinboConfig* getConfig();
     QList<LinboImage*> getImages();
     QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true);
+    LinboImage* getImageByName(QString name);
     QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();
     void setCurrentOs(LinboOs* os);
@@ -215,6 +216,7 @@ signals:
 
 };
 
+extern LinboBackend* gBackend;
 Q_DECLARE_OPERATORS_FOR_FLAGS(LinboBackend::LinboPostProcessActions)
 
 #endif // LINBOBACKEND_H

@@ -28,11 +28,11 @@
 // This class automatically enables and disabled the QGraphicsOpacityEffect as needed, to prevent
 // "QPainter::begin: A paint device can only be painted by one painter at a time." Error messages
 // When applying a QGraphicalEffect to the parent
-class QModernPushButtonOverlay : public QObject
+class LinboPushButtonOverlay : public QObject
 {
     Q_OBJECT
 public:
-    friend class QModernPushButton;
+    friend class LinboPushButton;
 
     enum OverlayType {
         Background,
@@ -41,7 +41,7 @@ public:
         OnChecked
     };
 
-    explicit QModernPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);
+    explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);
 
     void setVisible(bool visible);
     void setVisibleAnimated(bool visible);

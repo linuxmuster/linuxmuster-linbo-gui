@@ -32,6 +32,7 @@
 
 #include "linbomainpage.h"
 #include "linbobackend.h"
+#include "linboguitheme.h"
 
 class LinboGui : public QMainWindow
 {
@@ -43,6 +44,7 @@ public:
 
 private:
     LinboBackend* backend;
+    LinboGuiTheme* theme;
     LinboMainPage* startPage;
 
 };

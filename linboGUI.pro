@@ -4,7 +4,7 @@ VERSION = 7.0.1-Alpha05
 DEFINES += GUI_VERSION=\"\\\"$${VERSION}\\\"\"
 
 CONFIG += static
-QT += gui widgets svg
+QT += gui widgets svg xml
 
 # Include Linux framebuffer plugin
 QTPLUGIN.platforms = qlinuxfb
@@ -34,12 +34,18 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
-    headers/frontend/components/qmoderncheckbox.h \
-    headers/frontend/components/qmoderndialog.h \
-    headers/frontend/components/qmodernlineedit.h \
-    headers/frontend/components/qmodernradiobutton.h \
-    headers/frontend/components/qmodernsvgwidget.h \
-    headers/frontend/components/qmoderntextbrowser.h \
+    headers/frontend/components/linbocheckbox.h \
+    headers/frontend/components/linbocombobox.h \
+    headers/frontend/components/linbodialog.h \
+    headers/frontend/components/linbolineedit.h \
+    headers/frontend/components/linboprogressbar.h \
+    headers/frontend/components/linbopushbutton.h \
+    headers/frontend/components/linbopushbuttonoverlay.h \
+    headers/frontend/components/linboradiobutton.h \
+    headers/frontend/components/linbostackedwidget.h \
+    headers/frontend/components/linbosvgwidget.h \
+    headers/frontend/components/linbotextbrowser.h \
+    headers/frontend/components/linbotoolbutton.h \
     headers/frontend/dialogs/linboconfirmationdialog.h \
     headers/frontend/dialogs/linboimagecreationdialog.h \
     headers/frontend/dialogs/linboimageuploaddialog.h \
@@ -48,15 +54,12 @@ HEADERS += \
     headers/frontend/dialogs/linboterminaldialog.h \
     headers/frontend/dialogs/linboupdatecachedialog.h \
     headers/frontend/linboclientinfo.h \
+    headers/frontend/linboguitheme.h \
     headers/frontend/linbomainactions.h \
     headers/frontend/linbomainpage.h \
     headers/linbogui.h \
     headers/frontend/linboosselectbutton.h \
-    headers/frontend/linboosselectionrow.h \
-    headers/frontend/components/qmodernprogressbar.h \
-    headers/frontend/components/qmodernpushbutton.h \
-    headers/frontend/components/qmodernpushbuttonoverlay.h \
-    headers/frontend/components/qmodernstackedwidget.h
+    headers/frontend/linboosselectionrow.h
 
 SOURCES += \
     sources/backend/linboconfig.cpp \
@@ -65,12 +68,18 @@ SOURCES += \
     sources/backend/linbologger.cpp \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
-    sources/frontend/components/qmoderncheckbox.cpp \
-    sources/frontend/components/qmoderndialog.cpp \
-    sources/frontend/components/qmodernlineedit.cpp \
-    sources/frontend/components/qmodernradiobutton.cpp \
-    sources/frontend/components/qmodernsvgwidget.cpp \
-    sources/frontend/components/qmoderntextbrowser.cpp \
+    sources/frontend/components/linbocheckbox.cpp \
+    sources/frontend/components/linbocombobox.cpp \
+    sources/frontend/components/linbodialog.cpp \
+    sources/frontend/components/linbolineedit.cpp \
+    sources/frontend/components/linboprogressbar.cpp \
+    sources/frontend/components/linbopushbutton.cpp \
+    sources/frontend/components/linbopushbuttonoverlay.cpp \
+    sources/frontend/components/linboradiobutton.cpp \
+    sources/frontend/components/linbostackedwidget.cpp \
+    sources/frontend/components/linbosvgwidget.cpp \
+    sources/frontend/components/linbotextbrowser.cpp \
+    sources/frontend/components/linbotoolbutton.cpp \
     sources/frontend/dialogs/linboconfirmationdialog.cpp \
     sources/frontend/dialogs/linboimagecreationdialog.cpp \
     sources/frontend/dialogs/linboimageuploaddialog.cpp \
@@ -79,16 +88,13 @@ SOURCES += \
     sources/frontend/dialogs/linboterminaldialog.cpp \
     sources/frontend/dialogs/linboupdatecachedialog.cpp \
     sources/frontend/linboclientinfo.cpp \
+    sources/frontend/linboguitheme.cpp \
     sources/frontend/linbomainactions.cpp \
     sources/frontend/linbomainpage.cpp \
     sources/linbogui.cpp \
     sources/frontend/linboosselectbutton.cpp \
     sources/frontend/linboosselectionrow.cpp \
-    sources/main.cpp \
-    sources/frontend/components/qmodernprogressbar.cpp \
-    sources/frontend/components/qmodernpushbutton.cpp \
-    sources/frontend/components/qmodernpushbuttonoverlay.cpp \
-    sources/frontend/components/qmodernstackedwidget.cpp
+    sources/main.cpp
 
 RESOURCES += \
     resources/linbo.qrc \

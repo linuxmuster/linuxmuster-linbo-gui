@@ -22,8 +22,11 @@
 
 #include "linbobackend.h"
 
+LinboBackend* gBackend = nullptr;
+
 LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 {
+    gBackend = this;
     this->currentOs = nullptr;
     this->logger = nullptr;
     this->rootPassword = "";
@@ -535,6 +538,13 @@ QList<LinboImage*> LinboBackend::getImagesOfOs(LinboOs* os, bool includeImagesWi
     filteredImages.append(imagesWithoutOs);
 
     return filteredImages;
+}
+
+LinboImage* LinboBackend::getImageByName(QString name) {
+    if(this->images.contains(name))
+        return this->images[name];
+    else
+        return nullptr;
 }
 
 QList<LinboOs*> LinboBackend::getOperatingSystems() {

@@ -43,29 +43,29 @@
         <file>icons/light/sync.svg</file>
         <file>icons/light/terminal.svg</file>
         <file>icons/light/upload.svg</file>
-        <file>icons/universal/imageBg.svg</file>
-        <file>icons/universal/infoBg.svg</file>
-        <file>icons/universal/overlayHovered.svg</file>
         <file>icons/universal/overlayImage.svg</file>
-        <file>icons/universal/overlayPressed.svg</file>
         <file>icons/universal/overlayReinstall.svg</file>
         <file>icons/universal/overlayStart.svg</file>
         <file>icons/universal/overlaySync.svg</file>
-        <file>icons/universal/reinstallBg.svg</file>
-        <file>icons/universal/startBg.svg</file>
-        <file>icons/universal/syncBg.svg</file>
-        <file>icons/universal/uploadBg.svg</file>
-        <file>icons/dark/by_linuxmuster.net.svg</file>
-        <file>icons/dark/linbo_logo_unbranded.svg</file>
-        <file>icons/light/by_linuxmuster.net.svg</file>
-        <file>icons/light/linbo_logo_unbranded.svg</file>
-        <file>icons/dark/checkboxChecked.svg</file>
-        <file>icons/dark/checkboxUnchecked.svg</file>
         <file>icons/dark/radioButtonChecked.svg</file>
         <file>icons/dark/radioButtonUnchecked.svg</file>
-        <file>icons/light/checkboxChecked.svg</file>
-        <file>icons/light/checkboxUnchecked.svg</file>
         <file>icons/light/radioButtonChecked.svg</file>
         <file>icons/light/radioButtonUnchecked.svg</file>
+        <file>icons/dark/checkBoxChecked.svg</file>
+        <file>icons/dark/checkBoxUnchecked.svg</file>
+        <file>icons/dark/overlayHovered.svg</file>
+        <file>icons/dark/overlayPressed.svg</file>
+        <file>icons/light/checkBoxChecked.svg</file>
+        <file>icons/light/checkBoxUnchecked.svg</file>
+        <file>icons/light/overlayHovered.svg</file>
+        <file>icons/light/overlayPressed.svg</file>
+        <file>icons/universal/reinstallLegacy.svg</file>
+        <file>icons/universal/startLegacy.svg</file>
+        <file>icons/universal/syncLegacy.svg</file>
+        <file>icons/universal/uploadLegacy.svg</file>
+        <file>icons/dark/brandBottom.svg</file>
+        <file>icons/dark/brandTop.svg</file>
+        <file>icons/light/brandBottom.svg</file>
+        <file>icons/light/brandTop.svg</file>
     </qresource>
 </RCC>

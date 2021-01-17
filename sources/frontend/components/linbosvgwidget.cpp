@@ -1,6 +1,6 @@
-#include "qmodernsvgwidget.h"
+#include "linbosvgwidget.h"
 
-QModernSvgWidget::QModernSvgWidget(int height, QString path, QWidget* parent) : QLabel(parent)
+LinboSvgWidget::LinboSvgWidget(int height, QString path, QWidget* parent) : QLabel(parent)
 {
     QSvgRenderer* renderer = new QSvgRenderer(QString(path));
     renderer->setAspectRatioMode(Qt::KeepAspectRatio);

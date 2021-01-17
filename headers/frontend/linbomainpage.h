@@ -31,11 +31,11 @@
 
 #include "linbobackend.h"
 #include "linboosselectbutton.h"
-#include "qmodernprogressbar.h"
+#include "linboprogressbar.h"
 #include "linboosselectionrow.h"
 #include "linbomainactions.h"
 #include "linboclientinfo.h"
-#include "qmodernsvgwidget.h"
+#include "linbosvgwidget.h"
 
 #include "linbologindialog.h"
 #include "linboimageuploaddialog.h"
@@ -51,9 +51,9 @@ private:
     LinboOsSelectionRow* osSelectionRow;
     LinboMainActions* mainActions;
     LinboClientInfo* clientInfo;
-    QModernPushButton* rootActionButton;
-    QModernPushButton* logoutActionButton;
-    QList<QModernPushButton*> powerActionButtons;
+    LinboPushButton* rootActionButton;
+    LinboPushButton* logoutActionButton;
+    QList<LinboPushButton*> powerActionButtons;
 
     LinboLoginDialog* loginDialog;
     LinboTerminalDialog* terminalDialog;

@@ -1,39 +1,35 @@
 #include "linboconfirmationdialog.h"
 
-LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question, QWidget* parent) : QModernDialog(parent)
+LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question, QWidget* parent) : LinboDialog(parent)
 {
     this->setTitle(title);
     this->questionLabel = new QLabel(question, this);
     this->questionLabel->setAlignment(Qt::AlignCenter);
 
     //= yes
-    this->yesButton = new QModernPushButton("", tr("yes"), this);
-    connect(this->yesButton, SIGNAL(clicked()), this, SIGNAL(accepted()));
-    connect(this->yesButton, SIGNAL(clicked()), this, SLOT(autoClose()));
+    LinboToolButton* toolButtonCache = new LinboToolButton(tr("yes"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(accepted()));
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
     //= no
-    this->noButton = new QModernPushButton("", tr("no"), this);
-    connect(this->noButton, SIGNAL(clicked()), this, SLOT(autoClose()));
-    connect(this->noButton, SIGNAL(clicked()), this, SIGNAL(rejected()));
+    toolButtonCache = new LinboToolButton(tr("no"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(rejected()));
 
     connect(this, SIGNAL(closedByUser()), this, SIGNAL(rejected()));
 }
 
 
 void LinboConfirmationDialog::resizeEvent(QResizeEvent *event) {
-    QModernDialog::resizeEvent(event);
+    LinboDialog::resizeEvent(event);
 
-    int buttonHeight = this->parentWidget()->height() * 0.06;
-    int margins = buttonHeight * 0.4;
-    int questionLabelHeight = this->height() - buttonHeight - margins;
+    int rowHeight = gTheme->getSize(LinboGuiTheme::RowHeight);
+    int margins = gTheme->getSize(LinboGuiTheme::Margins);
 
-    this->questionLabel->setGeometry(0, 0, this->width(), questionLabelHeight);
+    this->questionLabel->setGeometry(0, (this->height() - rowHeight) / 2, this->width() - margins * 2, rowHeight);
     QFont font = this->questionLabel->font();
-    font.setPixelSize(buttonHeight * 0.4);
+    font.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
     this->questionLabel->setFont(font);
-
-    this->yesButton->setGeometry(margins, this->height() - buttonHeight - margins, this->width() * 0.5 - 2 * margins, buttonHeight);
-    this->yesButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    this->noButton->setGeometry(this->width() * 0.5 + margins, this->height() - buttonHeight - margins, this->width() * 0.5 - 2 * margins, buttonHeight);
-    this->noButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
 }

@@ -1,15 +1,16 @@
-#include "qmoderntextbrowser.h"
+#include "linbotextbrowser.h"
 
-QModernTextBrowser::QModernTextBrowser(QWidget* parent) : QTextBrowser(parent)
+LinboTextBrowser::LinboTextBrowser(QWidget* parent) : QTextBrowser(parent)
 {
     this->setStyleSheet("QTextBrowser {"
                         "border: 0 0 0 0;"
-                        "border-bottom: 1px solid #ddd;"
-                        "background: #f8f8f8;"
+                        "border-bottom: 1px solid " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";"
+                        "background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
                         "padding-left: 5px;"
+                        "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
                         "}"
                         "QTextBrowser:focus {"
-                        "border-bottom: 1px solid #f59c00;"
+                        "border-bottom: 1px solid " + gTheme->getColor(LinboGuiTheme::AccentColor).name() + ";"
                         "}"
                         "QScrollBar:vertical {"
                         "    background:lightgrey;"

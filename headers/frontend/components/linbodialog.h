@@ -10,18 +10,19 @@
 #include <QtDebug>
 #include <QHBoxLayout>
 
-#include "qmodernpushbutton.h"
+#include "linboguitheme.h"
+#include "linbotoolbutton.h"
 
 class ModalOverlay;
 
-class QModernDialog : public QWidget
+class LinboDialog : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(double scale READ getScale WRITE setScale)
     Q_PROPERTY(QString title READ getTitle WRITE setTitle)
 
 public:
-    QModernDialog(QWidget* parent);
+    LinboDialog(QWidget* parent);
 
     virtual void setTitle(QString title);
     virtual QString getTitle();
@@ -32,6 +33,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     virtual void setVisibleAnimated(bool visible);
     virtual bool isFrameless();
+    void addToolButton(LinboToolButton* toolButton);
 
 private:
     double scale;
@@ -46,12 +48,17 @@ private:
     QRect originalGeometry;
 
     QWidget* toolBarWidget;
-    QWidget* toolBarLineWidget;
     QHBoxLayout* toolBarLayout;
     QLabel* titleLabel;
-    QModernPushButton* closeButton;
+    LinboToolButton* closeButton;
     QGraphicsOpacityEffect* toolBarOpacityEffect;
     QPropertyAnimation* toolBarOopacityEffectAnimation;
+
+    QWidget* bottomToolBarWidget;
+    QHBoxLayout* bottomToolBarLayout;
+    QGraphicsOpacityEffect* bottomToolBarOpacityEffect;
+    QPropertyAnimation* bottomToolBarOopacityEffectAnimation;
+    QList<LinboToolButton*> toolButtons;
 
 public slots:
     void open();
@@ -74,7 +81,7 @@ class ModalOverlay : public QWidget {
     Q_PROPERTY(QColor color READ getColor WRITE setColor)
 
 public:
-    friend class QModernDialog;
+    friend class LinboDialog;
 
 protected:
     void mouseReleaseEvent (QMouseEvent* event) override;

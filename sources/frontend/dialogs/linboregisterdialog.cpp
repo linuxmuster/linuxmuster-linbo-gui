@@ -1,6 +1,6 @@
 #include "linboregisterdialog.h"
 
-LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent) : QModernDialog(parent)
+LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
     this->backend = backend;
 
@@ -11,18 +11,18 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 
     //= room
     this->mainLayout->addWidget(new QLabel(tr("Room")));
-    roomEdit = new QModernLineEdit();
+    roomEdit = new LinboLineEdit();
     connect(roomEdit, SIGNAL(textChanged(const QString&)), this, SLOT(handleRoomChanged(const QString&)));
     this->mainLayout->addWidget(roomEdit);
 
     //= hostname
     this->mainLayout->addWidget(new QLabel(tr("Hostname")));
-    hostnameEdit = new QModernLineEdit();
+    hostnameEdit = new LinboLineEdit();
     this->mainLayout->addWidget(hostnameEdit);
 
     //= ip
     this->mainLayout->addWidget(new QLabel(tr("IP-Address")));
-    ipAddressEdit = new QModernLineEdit();
+    ipAddressEdit = new LinboLineEdit();
     QString prefilledIp = "";
 
     QStringList subnetMask = backend->getConfig()->getSubnetMask().split(".");
@@ -40,26 +40,12 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 
     //= group
     this->mainLayout->addWidget(new QLabel(tr("Host group")));
-    hostGroupEdit = new QModernLineEdit();
+    hostGroupEdit = new LinboLineEdit();
     this->mainLayout->addWidget(hostGroupEdit);
 
     //= dialog_register_clientRole
     this->mainLayout->addWidget(new QLabel(tr("Client role")));
-    this->roleSelectBox = new QComboBox();
-
-    this->roleSelectBox->setStyleSheet(
-                "QComboBox {"
-                    "border: 0 0 0 0;"
-                    "border-bottom: 1px solid #ddd;"
-                    "background-color: #f8f8f8;"
-                "selection-color: #ffffff;"
-                "selection-background-color: #394f5e;"
-                "}"
-                "QComboBox:focus {"
-                    "border-bottom: 1px solid #f59c00;"
-                "}"
-                );
-
+    this->roleSelectBox = new LinboComboBox();
 
     //= dialog_register_clientRole_classroomStudent
     this->roleSelectBox->addItem(tr("Classroom student computer"), LinboBackend::ClassroomStudentComputerRole);
@@ -77,21 +63,15 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 
     this->mainLayout->addStretch();
 
-    buttonLayout = new QHBoxLayout();
-
     //= dialog_register_button_resgister
-    QModernPushButton* registerButton = new QModernPushButton("", tr("register"));
-    registerButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(registerButton, SIGNAL(clicked()), this, SLOT(registerClient()));
-    buttonLayout->addWidget(registerButton);
+    LinboToolButton* toolButtonCache = new LinboToolButton(tr("register"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(registerClient()));
 
     //= cancel
-    QModernPushButton* cancelButton = new QModernPushButton("", tr("cancel"));
-    cancelButton->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(autoClose()));
-    buttonLayout->addWidget(cancelButton);
-
-    this->mainLayout->addLayout(buttonLayout);
+    toolButtonCache = new LinboToolButton(tr("cancel"));
+    this->addToolButton(toolButtonCache);
+    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 }
 
 void LinboRegisterDialog::registerClient() {
@@ -110,33 +90,28 @@ void LinboRegisterDialog::handleRoomChanged(const QString& newText) {
 }
 
 void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
-    QModernDialog::resizeEvent(event);
+    LinboDialog::resizeEvent(event);
 
-    int buttonHeight = this->parentWidget()->height() * 0.06;
-    int margins = buttonHeight * 0.4;
+    int margins = gTheme->getSize(LinboGuiTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
+
     for(int i = 0; i < 10; i++) {
         QWidget* item = this->mainLayout->itemAt(i)->widget();
 
         // make lables smaller
         if(i % 2 == 0)
-            item->setFixedSize(this->width() - margins * 2, buttonHeight * 0.6);
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowLabelHeight));
         else
-            item->setFixedSize(this->width() - margins * 2, buttonHeight* 0.8);
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
 
         QFont font = item->font();
-        font.setPixelSize(item->height() * 0.5);
+        font.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
 
         // make lables bold
         if(i % 2 == 0)
             font.setBold(true);
 
         item->setFont(font);
-    }
-
-    this->buttonLayout->setContentsMargins(0,0,0,0);
-    for(int i = 0; i < 2; i++) {
-        this->buttonLayout->itemAt(i)->widget()->setFixedSize(this->width() * 0.5 - margins * 1.5, buttonHeight);
     }
 }

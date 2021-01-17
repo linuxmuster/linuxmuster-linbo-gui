@@ -16,9 +16,9 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "qmodernpushbuttonoverlay.h"
+#include "linbopushbuttonoverlay.h"
 
-QModernPushButtonOverlay::QModernPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent) : QObject(parent)
+LinboPushButtonOverlay::LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent) : QObject(parent)
 {
     this->shouldBeVisible = false;
     this->managedAutomatically = managedAutomatically;
@@ -41,11 +41,11 @@ QModernPushButtonOverlay::QModernPushButtonOverlay(OverlayType type, QWidget* ov
 }
 
 
-void QModernPushButtonOverlay::setAnimationDuration(int duration) {
+void LinboPushButtonOverlay::setAnimationDuration(int duration) {
     this->animation->setDuration(duration);
 }
 
-void QModernPushButtonOverlay::setVisible(bool visible) {
+void LinboPushButtonOverlay::setVisible(bool visible) {
     if(this->shouldBeVisible == visible)
         return;
 
@@ -55,7 +55,7 @@ void QModernPushButtonOverlay::setVisible(bool visible) {
     this->widget->setVisible(visible);
 }
 
-void QModernPushButtonOverlay::setVisibleAnimated(bool visible) {
+void LinboPushButtonOverlay::setVisibleAnimated(bool visible) {
     if(this->shouldBeVisible == visible)
         return;
 
@@ -68,7 +68,7 @@ void QModernPushButtonOverlay::setVisibleAnimated(bool visible) {
     this->animation->start();
 }
 
-void QModernPushButtonOverlay::setEffectEnabled(bool enabled) {
+void LinboPushButtonOverlay::setEffectEnabled(bool enabled) {
     if(enabled) {
         this->effect->setEnabled(true);
         this->widget->setVisible(true);
@@ -79,7 +79,7 @@ void QModernPushButtonOverlay::setEffectEnabled(bool enabled) {
     }
 }
 
-void QModernPushButtonOverlay::handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State) {
+void LinboPushButtonOverlay::handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State) {
     switch (newState) {
     case QAbstractAnimation::Running:
         this->setEffectEnabled(true);
@@ -92,6 +92,6 @@ void QModernPushButtonOverlay::handleAnimationStateChanged(QAbstractAnimation::S
     }
 }
 
-QModernPushButtonOverlay::OverlayType QModernPushButtonOverlay::getType() {
+LinboPushButtonOverlay::OverlayType LinboPushButtonOverlay::getType() {
     return this->type;
 }

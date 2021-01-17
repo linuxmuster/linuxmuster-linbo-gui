@@ -26,9 +26,9 @@
 #include <QList>
 #include <QLabel>
 
-#include "qmodernstackedwidget.h"
-#include "qmodernpushbutton.h"
-#include "qmodernprogressbar.h"
+#include "linbostackedwidget.h"
+#include "linbopushbutton.h"
+#include "linboprogressbar.h"
 
 #include "linbobackend.h"
 #include "linbologger.h"
@@ -51,32 +51,32 @@ protected:
 private:
     LinboBackend* backend;
 
-    QModernStackedWidget* stackView;
+    LinboStackedWidget* stackView;
 
     QWidget* buttonWidget;
-    QModernPushButton* startOsButton;
-    QModernPushButton* syncOsButton;
-    QModernPushButton* reinstallOsButton;
-    QList<QModernPushButton*> actionButtons;
+    LinboPushButton* startOsButton;
+    LinboPushButton* syncOsButton;
+    LinboPushButton* reinstallOsButton;
+    QList<LinboPushButton*> actionButtons;
     QLabel* noBaseImageLabel;
 
     QWidget* progressBarWidget;
-    QModernProgressBar* progressBar;
+    LinboProgressBar* progressBar;
     QLabel* logLabel;
     QLabel* passedTimeLabel;
     QTimer* passedTimeTimer;
     double processStartedAt;
-    QModernPushButton* cancelButton;
+    LinboPushButton* cancelButton;
 
     QWidget* messageWidget;
     QVBoxLayout* messageLayout;
     QLabel* messageLabel;
     QLabel* messageDetailsLabel;
-    QModernPushButton* resetMessageButton;
+    LinboPushButton* resetMessageButton;
 
     QWidget* rootWidget;
     QVBoxLayout* rootLayout;
-    QList<QModernPushButton*> rootActionButtons;
+    QList<LinboPushButton*> rootActionButtons;
 
     QWidget* emptyWidget;
 

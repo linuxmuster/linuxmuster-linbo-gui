@@ -5,11 +5,13 @@
 #include <QObject>
 #include <QWidget>
 
-class QModernRadioButton : public QRadioButton
+#include "linboguitheme.h"
+
+class LinboRadioButton : public QRadioButton
 {
     Q_OBJECT
 public:
-    QModernRadioButton(QString label = "", bool darkMode = false, QWidget* parent = nullptr);
+    LinboRadioButton(QString label = "", QWidget* parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;

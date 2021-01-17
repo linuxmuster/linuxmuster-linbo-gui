@@ -9,14 +9,14 @@
 #include <QCheckBox>
 #include <QButtonGroup>
 
-#include "qmoderndialog.h"
-#include "qmodernpushbutton.h"
-#include "qmodernradiobutton.h"
-#include "qmoderncheckbox.h"
+#include "linbodialog.h"
+#include "linbopushbutton.h"
+#include "linboradiobutton.h"
+#include "linbocheckbox.h"
 
 #include "linbobackend.h"
 
-class LinboUpdateCacheDialog : public QModernDialog
+class LinboUpdateCacheDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -28,8 +28,7 @@ private:
     LinboBackend* backend;
     QButtonGroup* updateTypeButtonGroup;
     QVBoxLayout* mainLayout;
-    QModernCheckBox* formatCheckBox;
-    QHBoxLayout* buttonLayout;
+    LinboCheckBox* formatCheckBox;
 
 private slots:
     void updateCache();

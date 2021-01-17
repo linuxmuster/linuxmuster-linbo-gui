@@ -16,9 +16,9 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "qmodernprogressbar.h"
+#include "linboprogressbar.h"
 
-QModernProgressBar::QModernProgressBar(QWidget* parent) : QProgressBar(parent)
+LinboProgressBar::LinboProgressBar(QWidget* parent) : QProgressBar(parent)
 {
     this->refreshTimer = new QTimer();
     this->refreshTimer->setSingleShot(false);
@@ -36,7 +36,7 @@ QModernProgressBar::QModernProgressBar(QWidget* parent) : QProgressBar(parent)
     this->setValue(0);
 }
 
-void QModernProgressBar::setIndeterminate(bool indeterminate) {
+void LinboProgressBar::setIndeterminate(bool indeterminate) {
     if(this->indeterminate == indeterminate)
         return;
 
@@ -60,7 +60,7 @@ void QModernProgressBar::setIndeterminate(bool indeterminate) {
     }
 }
 
-void QModernProgressBar::setReversed(bool reversed) {
+void LinboProgressBar::setReversed(bool reversed) {
     if(this->reversed == reversed)
         return;
 
@@ -68,19 +68,19 @@ void QModernProgressBar::setReversed(bool reversed) {
     this->update();
 }
 
-bool QModernProgressBar::getIndeterminate() {
+bool LinboProgressBar::getIndeterminate() {
     return this->indeterminate;
 }
 
-void QModernProgressBar::updateIndeterminate() {
+void LinboProgressBar::updateIndeterminate() {
     qDebug() << "update indeterminate";
 }
 
-void QModernProgressBar::paintEvent(QPaintEvent *e) {
+void LinboProgressBar::paintEvent(QPaintEvent *e) {
     QPainter painter;
     painter.begin(this);
     // background
-    painter.fillRect(e->rect(), QColor("#c7c7c7"));
+    painter.fillRect(e->rect(), gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor));
 
     double from = 0;
     double to = 0;
@@ -109,7 +109,7 @@ void QModernProgressBar::paintEvent(QPaintEvent *e) {
 
     }
 
-    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), QColor(0,0,0));
+    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), gTheme->getColor(LinboGuiTheme::AccentColor));
 
     painter.end();
 

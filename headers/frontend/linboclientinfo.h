@@ -10,6 +10,7 @@
 #include <QtDebug>
 
 #include "linboconfig.h"
+#include "linboguitheme.h"
 
 class LinboClientInfo : public QWidget
 {

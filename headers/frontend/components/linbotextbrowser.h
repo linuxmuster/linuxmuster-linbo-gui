@@ -5,11 +5,13 @@
 #include <QObject>
 #include <QWidget>
 
-class QModernTextBrowser : public QTextBrowser
+#include "linboguitheme.h"
+
+class LinboTextBrowser : public QTextBrowser
 {
     Q_OBJECT
 public:
-    QModernTextBrowser(QWidget* parent = nullptr);
+    LinboTextBrowser(QWidget* parent = nullptr);
 };
 
 #endif // QMODERNTEXTBROWSER_H

@@ -25,11 +25,11 @@
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 
-class QModernStackedWidget : public QStackedWidget
+class LinboStackedWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
-    QModernStackedWidget(QWidget* parent = nullptr);
+    LinboStackedWidget(QWidget* parent = nullptr);
 
     void setCurrentWidgetAnimated(QWidget* widget);
 

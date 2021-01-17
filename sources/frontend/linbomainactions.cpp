@@ -26,23 +26,22 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     connect(this->backend, SIGNAL(autostartTimeoutProgressChanged()), this, SLOT(handleAutostartTimeoutProgressChanged()));
     connect(this->backend->getLogger(), SIGNAL(latestLogChanged(const LinboLogger::LinboLog&)), this, SLOT(handleLatestLogChanged(const LinboLogger::LinboLog&)));
 
-    this->stackView = new QModernStackedWidget(this);
+    this->stackView = new LinboStackedWidget(this);
 
     this->inited = false;
 
     this->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
 
     // Action Buttons
-    QString iconType = backend->getConfig()->isBackgroundColorDark() ? "light":"dark";
     this->buttonWidget = new QWidget();
 
-    this->startOsButton = new QModernPushButton(":/icons/" + iconType + "/start.svg", this->buttonWidget);
+    this->startOsButton = new LinboToolButton(LinboGuiTheme::StartIcon, this->buttonWidget);
     connect(this->startOsButton, SIGNAL(clicked()), this->backend, SLOT(startCurrentOs()));
 
-    this->syncOsButton = new QModernPushButton(":/icons/" + iconType + "/sync.svg", this->buttonWidget);
+    this->syncOsButton = new LinboToolButton(LinboGuiTheme::SyncIcon, this->buttonWidget);
     connect(this->syncOsButton, SIGNAL(clicked()), this->backend, SLOT(syncCurrentOs()));
 
-    this->reinstallOsButton = new QModernPushButton(":/icons/" + iconType + "/reinstall.svg", this->buttonWidget);
+    this->reinstallOsButton = new LinboToolButton(LinboGuiTheme::ReinstallIcon, this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
     //= main_noBaseImage
@@ -55,7 +54,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     // Progress bar
     this->progressBarWidget = new QWidget();
-    this->progressBar = new QModernProgressBar(this->progressBarWidget);
+    this->progressBar = new LinboProgressBar(this->progressBarWidget);
     this->progressBar->setRange(0,1000);
     this->progressBar->setIndeterminate(true);
 
@@ -76,7 +75,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->passedTimeTimer->setInterval(1000);
     this->processStartedAt = QDateTime::currentSecsSinceEpoch();
 
-    this->cancelButton = new QModernPushButton(":/icons/" + iconType + "/cancel.svg", this->progressBarWidget);
+    this->cancelButton = new LinboToolButton(LinboGuiTheme::CancelIcon, this->progressBarWidget);
     connect(this->cancelButton, SIGNAL(clicked()), this->backend, SLOT(cancelCurrentAction()));
 
     this->stackView->addWidget(this->progressBarWidget);
@@ -90,7 +89,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->messageDetailsLabel->setAlignment(Qt::AlignLeft);
     //this->messageDetailsLabel->setWordWrap(true);
 
-    this->resetMessageButton = new QModernPushButton(":/icons/" + iconType + "/back.svg", this->messageWidget);
+    this->resetMessageButton = new LinboToolButton(LinboGuiTheme::BackIcon, this->messageWidget);
     connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
 
     this->stackView->addWidget(this->messageWidget);
@@ -100,39 +99,39 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->rootLayout = new QVBoxLayout(this->rootWidget);
     this->rootLayout->setAlignment(Qt::AlignCenter);
 
-    QModernPushButton* buttonCache;
+    LinboPushButton* buttonCache;
 
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         //= main_root_button_createImage
-        buttonCache = new QModernPushButton(":/icons/" + iconType + "/image.svg", tr("Create image"));
+        buttonCache = new LinboToolButton(tr("Create image"), LinboGuiTheme::ImageIcon, LinboGuiTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
-        connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
+        connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //= main_root_button_uploadImage
-        buttonCache = new QModernPushButton(":/icons/" + iconType + "/upload.svg", tr("Upload image"));
+        buttonCache = new LinboToolButton(tr("Upload image"), LinboGuiTheme::UploadIcon, LinboGuiTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
-        connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
+        connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
     //= main_root_button_openTerminal
-    buttonCache = new QModernPushButton(":/icons/" + iconType + "/terminal.svg", tr("Open terminal"));
-    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::terminalRequested);
+    buttonCache = new LinboToolButton(tr("Open terminal"), LinboGuiTheme::TerminalIcon, LinboGuiTheme::TextColor);
+    connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::terminalRequested);
     this->rootActionButtons.append(buttonCache);
 
     //= main_root_button_updateCache
-    buttonCache = new QModernPushButton(":/icons/" + iconType + "/sync.svg", tr("Update cache"));
+    buttonCache = new LinboToolButton(tr("Update cache"), LinboGuiTheme::SyncIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
+    connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //= main_root_button_partitionDrive
-    buttonCache = new QModernPushButton(":/icons/" + iconType + "/partition.svg", tr("Partition drive"));
+    buttonCache = new LinboToolButton(tr("Partition drive"), LinboGuiTheme::PartitionIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
+    connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
     //= main_root_button_register
-    buttonCache = new QModernPushButton(":/icons/" + iconType + "/register.svg", tr("Register"));
+    buttonCache = new LinboToolButton(tr("Register"), LinboGuiTheme::RegisterIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
-    connect(buttonCache, &QModernPushButton::clicked, this, &LinboMainActions::registrationRequested);
+    connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
     QHBoxLayout* horizontalRootLayoutCache;
 
@@ -147,7 +146,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     if(this->backend->getConfig()->getUseMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
-        separatorLine->setStyleSheet("QFrame {color: #cccccc;}");
+        separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";}");
         separatorLine->setFrameShape(QFrame::HLine);
         this->rootLayout->insertWidget(1, separatorLine);
     }
@@ -345,7 +344,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     int rootActionButtonHeight = this->height() / (this->rootActionButtons.length() / 2) - this->height() * 0.03;
     this->rootLayout->setSpacing(defaultSpacing);
 
-    for(QModernPushButton* button : this->rootActionButtons) {
+    for(LinboPushButton* button : this->rootActionButtons) {
         button->setFixedHeight(rootActionButtonHeight);
         button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     }

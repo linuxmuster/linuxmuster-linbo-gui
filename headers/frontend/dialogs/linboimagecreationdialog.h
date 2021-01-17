@@ -9,15 +9,15 @@
 #include <QHBoxLayout>
 #include <QRadioButton>
 
-#include "qmoderndialog.h"
-#include "qmodernpushbutton.h"
-#include "qmodernlineedit.h"
-#include "qmoderntextbrowser.h"
-#include "qmodernradiobutton.h"
+#include "linbodialog.h"
+#include "linbotoolbutton.h"
+#include "linbolineedit.h"
+#include "linbotextbrowser.h"
+#include "linboradiobutton.h"
 
 #include "linbobackend.h"
 
-class LinboImageCreationDialog : public QModernDialog
+class LinboImageCreationDialog : public LinboDialog
 {
     Q_OBJECT
 public:
@@ -30,13 +30,11 @@ private:
     LinboBackend* backend;
     QVBoxLayout* mainLayout;
     QButtonGroup* actionButtonGroup;
-    QModernLineEdit* imageNameLineEdit;
-    QModernTextBrowser* imageDescriptionTextBrowser;
+    LinboLineEdit* imageNameLineEdit;
+    LinboTextBrowser* imageDescriptionTextBrowser;
 
     QButtonGroup* postProcessActionButtonGroup;
     QHBoxLayout* postProcessActionLayout;
-
-    QHBoxLayout* buttonLayout;
 
 private slots:
     void refreshPathAndDescription();
