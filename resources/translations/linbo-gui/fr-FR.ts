@@ -33,11 +33,11 @@
     <name>LinboConfirmationDialog</name>
     <message id="yes">
       <source>yes</source>
-      <translation type="unfinished"/>
+      <translation>oui</translation>
     </message>
     <message id="no">
       <source>no</source>
-      <translation type="unfinished"/>
+      <translation>non</translation>
     </message>
   </context>
   <context>
@@ -101,6 +101,21 @@
     </message>
   </context>
   <context>
+    <name>LinboImageUploadDialog</name>
+    <message id="dialog_uploadImage_title">
+      <source>Upload image</source>
+      <translation type="unfinished"/>
+    </message>
+    <message id="dialog_uploadImage_selection_title">
+      <source>The image to upload:</source>
+      <translation type="unfinished"/>
+    </message>
+    <message id="dialog_uploadImage_button_upload">
+      <source>upload</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
+  <context>
     <name>LinboLoginDialog</name>
     <message id="dialog_login_title">
       <source>Please enter password:</source>
@@ -112,7 +127,7 @@
     </message>
     <message id="dialog_login_button_login">
       <source>login</source>
-      <translation type="unfinished"/>
+      <translation>identifiant</translation>
     </message>
   </context>
   <context>
@@ -170,6 +185,10 @@
       <source>The process %1 finished successfully.</source>
       <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
       <translation>Processus %1 terminé avec succès.</translation>
+    </message>
+    <message>
+      <source>Starting</source>
+      <translation type="unfinished"/>
     </message>
   </context>
   <context>
