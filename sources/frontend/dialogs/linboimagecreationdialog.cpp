@@ -39,7 +39,6 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //= dialog_createImage_action_current
     LinboRadioButton* replaceImage = new LinboRadioButton(tr("replace current image"));
     this->mainLayout->addWidget(replaceImage);
-    replaceImage->setChecked(true);
     this->actionButtonGroup->addButton(replaceImage, 0);
 
     //= dialog_createImage_action_new
@@ -116,7 +115,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
-    connect(this, SIGNAL(opened()), this, SLOT(refreshPathAndDescription()));
+    connect(this, &LinboDialog::opened, [=]{ this->refreshPathAndDescription(true); });
 }
 
 void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
@@ -159,7 +158,20 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
     }
 }
 
-void LinboImageCreationDialog::refreshPathAndDescription() {
+void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
+    if(this->backend->getCurrentOs()->getBaseImage() == nullptr) {
+        this->actionButtonGroup->buttons()[1]->setChecked(true);
+        this->actionButtonGroup->buttons()[0]->setChecked(false);
+        this->actionButtonGroup->buttons()[0]->setEnabled(false);
+    }
+    else {
+        this->actionButtonGroup->buttons()[0]->setEnabled(true);
+        if(isOpening) {
+            this->actionButtonGroup->buttons()[0]->setChecked(true);
+            this->actionButtonGroup->buttons()[1]->setChecked(false);
+        }
+    }
+
     if(this->actionButtonGroup->checkedId() == 0) {
         this->imageNameLineEdit->setText(this->backend->getCurrentOs()->getBaseImage()->getName());
         this->imageDescriptionTextBrowser->setText(this->backend->getCurrentOs()->getBaseImage()->getDescription());

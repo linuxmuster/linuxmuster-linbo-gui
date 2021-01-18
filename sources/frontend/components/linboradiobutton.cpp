@@ -38,6 +38,9 @@ void LinboRadioButton::paintEvent(QPaintEvent *e) {
                         "QRadioButton::indicator:checked {"
                         "image: url(" + gTheme->getIconPath(LinboGuiTheme::RadioButtonCheckedIcon) + ");"
                         "}"
+                         "QRadioButton::indicator:disabled {"
+                         "image: url(" + gTheme->getIconPath(LinboGuiTheme::RadioButtonDisabledIcon) + ");"
+                         "}"
                         "");
 
     QRadioButton::paintEvent(e);

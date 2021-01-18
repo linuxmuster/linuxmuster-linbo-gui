@@ -67,5 +67,7 @@
         <file>icons/dark/brandTop.svg</file>
         <file>icons/light/brandBottom.svg</file>
         <file>icons/light/brandTop.svg</file>
+        <file>icons/dark/radioButtonDisabled.svg</file>
+        <file>icons/light/radioButtonDisabled.svg</file>
     </qresource>
 </RCC>

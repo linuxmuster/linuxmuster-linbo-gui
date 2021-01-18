@@ -95,6 +95,21 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             emit this->imageUploadRequested();
         });
         this->rootActionButtons.append(actionButton);
+
+        // OS name label
+        this->osNameLabel = new QLabel(this);
+        if(this->os->getBaseImage() != nullptr) {
+            this->osNameLabel->setText(this->os->getName());
+            this->osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + "}");
+        }
+        else {
+            //= main_noBaseImage
+            this->osNameLabel->setText(tr("No baseimage defined"));
+            this->osNameLabel->setStyleSheet("QLabel {color: red}");
+        }
+
+        this->osNameLabel->setWordWrap(true);
+        this->osNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     }
     else {
         connect(this->button, &LinboPushButton::hovered, [=]{this->button->setChecked(true);});
@@ -136,6 +151,7 @@ LinboOs* LinboOsSelectButton::getOs() {
 void LinboOsSelectButton::setVisibleAnimated(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisibleAnimated(visible);
+    this->osNameLabel->setVisible(visible);
 
     this->updateActionButtonVisibility();
 }
@@ -162,9 +178,9 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         int spacing = this->width() * 0.04;
         int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
 
-        if(actionButtonSize < 0) {
+        if(actionButtonSize <= 0) {
             // only the big button is visible
-            actionButtonSize = 0;
+            actionButtonSize = 2;
             x = 0;
             spacing = 0;
         }
@@ -183,6 +199,11 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }
+
+        this->osNameLabel->setGeometry(this->height() + spacing, 0, this->width() - this->height() - spacing * 2, actionButtonSize);
+        QFont fontCache = this->osNameLabel->font();
+        fontCache.setPixelSize(actionButtonSize * 0.5);
+        this->osNameLabel->setFont(fontCache);
     }
 
     this->updateActionButtonVisibility();
@@ -225,7 +246,7 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 
 void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
 
-    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root;
+    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root && this->os->getBaseImage() != nullptr;
     bool rootActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root;
 
     if(this->inited && !doNotAnimate) {

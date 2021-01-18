@@ -25,6 +25,7 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QEventLoop>
+#include <QLabel>
 
 #include "linbopushbutton.h"
 #include "linboos.h"
@@ -54,13 +55,14 @@ private:
     bool shouldBeVisible;
     bool showDefaultAction;
 
+    LinboOs* os;
     LinboPushButton* button;
     QList<LinboPushButton*> startActionButtons;
     QList<LinboPushButton*> rootActionButtons;
     LinboPushButtonOverlay* defaultStartActionOverlay;
     LinboPushButtonOverlay* defaultRootActionOverlay;
     QButtonGroup* buttonGroup;
-    LinboOs* os;
+    QLabel* osNameLabel;
 
 private slots:
     void handleBackendStateChange(LinboBackend::LinboState state);

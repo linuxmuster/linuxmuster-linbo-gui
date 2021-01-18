@@ -73,7 +73,8 @@ public:
         CheckBoxCheckedIcon,
         CheckBoxUncheckedIcon,
         RadioButtonCheckedIcon,
-        RadioButtonUncheckedIcon
+        RadioButtonUncheckedIcon,
+        RadioButtonDisabledIcon
     };
     Q_ENUM(LinboGuiIcon)
 

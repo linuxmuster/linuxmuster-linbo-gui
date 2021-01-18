@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="500"
+   width="500"
+   id="svg4"
+   version="1.1"
+   viewBox="0 0 500 500"
+   role="img"
+   class="svg-inline--fa fa-minus-circle fa-w-16"
+   data-icon="minus-circle"
+   data-prefix="fas"
+   focusable="false"
+   aria-hidden="true"
+   sodipodi:docname="radioButtonDisabled.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="0.472"
+     inkscape:cx="-132.41525"
+     inkscape:cy="245.76271"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <path
+     style="fill:#cccccc;stroke-width:1.00806451;fill-opacity:1"
+     id="path2"
+     d="M 250,0 C 111.89516,0 0,111.89516 0,250 0,388.10484 111.89516,500 250,500 388.10484,500 500,388.10484 500,250 500,111.89516 388.10484,0 250,0 Z M 116.93548,290.32258 c -6.65322,0 -12.09677,-5.44355 -12.09677,-12.09677 v -56.45162 c 0,-6.65322 5.44355,-12.09677 12.09677,-12.09677 h 266.12904 c 6.65322,0 12.09677,5.44355 12.09677,12.09677 v 56.45162 c 0,6.65322 -5.44355,12.09677 -12.09677,12.09677 z" />
+</svg>

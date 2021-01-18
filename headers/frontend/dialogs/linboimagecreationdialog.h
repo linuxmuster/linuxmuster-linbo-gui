@@ -55,7 +55,7 @@ private:
     QHBoxLayout* postProcessActionLayout;
 
 private slots:
-    void refreshPathAndDescription();
+    void refreshPathAndDescription(bool isOpening = false);
     void createImage(LinboBackend::LinboPostProcessActions postProcessActions);
 };
 
