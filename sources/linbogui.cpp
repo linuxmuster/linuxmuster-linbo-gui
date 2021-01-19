@@ -63,10 +63,13 @@ LinboGui::LinboGui()
         QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
         localeName = tmpLocaleName[0] + "-";
         localeName += tmpLocaleName[1].toUpper();
-        qDebug() << "Locale: " << localeName;
 
         QTranslator* translator = new QTranslator(this);
-        translator->load(":/" + localeName + ".qm");
+
+        // fallback to en-GB!
+        if(!translator->load(":/" + localeName + ".qm"))
+            translator->load(":/en-GB.qm");
+
         QApplication::installTranslator(translator);
     }
 
