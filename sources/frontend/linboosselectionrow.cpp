@@ -58,20 +58,20 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     }
 
     if(this->osButtons.length() == 0) {
-        //= osSelection_noOperatingSystems
-        this->noOsLabel = new QLabel(tr("No Operating system configured in start.conf"), this);
+        //% "No Operating system configured in start.conf"
+        this->noOsLabel = new QLabel(qtTrId("osSelection_noOperatingSystems"), this);
         this->noOsLabel->hide();
         this->noOsLabel->setAlignment(Qt::AlignCenter);
         this->noOsLabelFont.setBold(true);
         this->noOsLabel->setFont(this->noOsLabelFont);
 
         QString environmentValuesText;
-        //= hostname
-        environmentValuesText += tr("Hostname") + ":  " + this->backend->getConfig()->getHostname() + "\n";
-        //= ip
-        environmentValuesText += tr("IP-Address") + ":  " + this->backend->getConfig()->getIpAddress() + "\n";
-        //= client_info_mac
-        environmentValuesText += tr("Mac") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
+        //% "Hostname"
+        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->getConfig()->getHostname() + "\n";
+        //% "IP-Address"
+        environmentValuesText += qtTrId("ip") + ":  " + this->backend->getConfig()->getIpAddress() + "\n";
+        //% "Mac"
+        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
 
         this->environmentValuesLabel = new QLabel(environmentValuesText, this);
         this->environmentValuesLabel->hide();

@@ -165,10 +165,10 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
             this->terminalDialog, &LinboImageCreationDialog::open);
 
     this->confirmationDialog = new LinboConfirmationDialog(
-                //= dialog_partition_title
-                tr("Partition drive"),
-                //= dialog_partition_question
-                tr("Are you sure? This will delete all data on your drive!"),
+                //% "Partition drive"
+                qtTrId("dialog_partition_title"),
+                //% "Are you sure? This will delete all data on your drive!"
+                qtTrId("dialog_partition_question"),
                 parent);
     this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
     this->confirmationDialog->centerInParent();

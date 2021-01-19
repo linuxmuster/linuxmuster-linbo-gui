@@ -103,8 +103,8 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             this->osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + "}");
         }
         else {
-            //= main_noBaseImage
-            this->osNameLabel->setText(tr("No baseimage defined"));
+            //% "No baseimage defined"
+            this->osNameLabel->setText(qtTrId("main_noBaseImage"));
             this->osNameLabel->setStyleSheet("QLabel {color: red}");
         }
 

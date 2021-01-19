@@ -22,24 +22,24 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 {
     this->backend = backend;
 
-    //= dialog_register_title
-    this->setTitle(tr("Register client"));
+    //% "Register client"
+    this->setTitle(qtTrId("dialog_register_title"));
 
     this->mainLayout = new QVBoxLayout(this);
 
-    //= room
-    this->mainLayout->addWidget(new QLabel(tr("Room")));
+    //% "Room"
+    this->mainLayout->addWidget(new QLabel(qtTrId("room")));
     roomEdit = new LinboLineEdit();
     connect(roomEdit, SIGNAL(textChanged(const QString&)), this, SLOT(handleRoomChanged(const QString&)));
     this->mainLayout->addWidget(roomEdit);
 
-    //= hostname
-    this->mainLayout->addWidget(new QLabel(tr("Hostname")));
+    //% "Hostname"
+    this->mainLayout->addWidget(new QLabel(qtTrId("hostname")));
     hostnameEdit = new LinboLineEdit();
     this->mainLayout->addWidget(hostnameEdit);
 
-    //= ip
-    this->mainLayout->addWidget(new QLabel(tr("IP-Address")));
+    //% "IP-Address"
+    this->mainLayout->addWidget(new QLabel(qtTrId("ip")));
     ipAddressEdit = new LinboLineEdit();
     QString prefilledIp = "";
 
@@ -56,38 +56,38 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     ipAddressEdit->setText(prefilledIp);
     this->mainLayout->addWidget(ipAddressEdit);
 
-    //= group
-    this->mainLayout->addWidget(new QLabel(tr("Host group")));
+    //% "Host group"
+    this->mainLayout->addWidget(new QLabel(qtTrId("group")));
     hostGroupEdit = new LinboLineEdit();
     this->mainLayout->addWidget(hostGroupEdit);
 
-    //= dialog_register_clientRole
-    this->mainLayout->addWidget(new QLabel(tr("Client role")));
+    //% "Client role"
+    this->mainLayout->addWidget(new QLabel(qtTrId("dialog_register_clientRole")));
     this->roleSelectBox = new LinboComboBox();
 
-    //= dialog_register_clientRole_classroomStudent
-    this->roleSelectBox->addItem(tr("Classroom student computer"), LinboBackend::ClassroomStudentComputerRole);
+    //% "Classroom student computer"
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomStudent"), LinboBackend::ClassroomStudentComputerRole);
 
-    //= dialog_register_clientRole_classroomTeacher
-    this->roleSelectBox->addItem(tr("Classroom teacher computer"), LinboBackend::ClassroomTeacherComputerRole);
+    //% "Classroom teacher computer"
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomTeacher"), LinboBackend::ClassroomTeacherComputerRole);
 
-    //= dialog_register_clientRole_facultyTeacher
-    this->roleSelectBox->addItem(tr("Faculty teacher computer"), LinboBackend::FacultyTeacherComputerRole);
+    //% "Faculty teacher computer"
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_facultyTeacher"), LinboBackend::FacultyTeacherComputerRole);
 
-    //= dialog_register_clientRole_staffComputer
-    this->roleSelectBox->addItem(tr("Staff computer"), LinboBackend::StaffComputerRole);
+    //% "Staff computer"
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_staffComputer"), LinboBackend::StaffComputerRole);
 
     this->mainLayout->addWidget(this->roleSelectBox);
 
     this->mainLayout->addStretch();
 
-    //= dialog_register_button_resgister
-    LinboToolButton* toolButtonCache = new LinboToolButton(tr("register"));
+    //% "register"
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_register_button_resgister"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(registerClient()));
 
-    //= cancel
-    toolButtonCache = new LinboToolButton(tr("cancel"));
+    //% "cancel"
+    toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 }

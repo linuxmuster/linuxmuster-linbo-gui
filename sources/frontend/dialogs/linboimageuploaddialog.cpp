@@ -22,22 +22,22 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
 {
     this->backend = backend;
 
-    //= dialog_uploadImage_title
-    this->setTitle(tr("Upload image"));
+    //% "Upload image"
+    this->setTitle(qtTrId("dialog_uploadImage_title"));
 
     this->mainLayout = new QVBoxLayout(this);
     this->mainLayout->addStretch();
 
-    //= dialog_uploadImage_selection_title
-    this->mainLayout->addWidget(new QLabel("<b>" + tr("The image to upload:") + "</b>"));
+    //% "The image to upload:"
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_uploadImage_selection_title") + "</b>"));
 
     this->imageSelectBox = new LinboComboBox();
 
     this->mainLayout->addWidget(this->imageSelectBox);
 
     // Post process actions
-    //= dialog_createImage_postActionQuestion
-    mainLayout->addWidget(new QLabel("<b>" + tr("What to do after the process has finished?") + "</b>"));
+    //% "What to do after the process has finished?"
+    mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_postActionQuestion") + "</b>"));
 
     this->postProcessActionButtonGroup = new QButtonGroup(this);
     this->postProcessActionButtonGroup->setExclusive(true);
@@ -45,24 +45,24 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     this->postProcessActionLayout = new QHBoxLayout();
     this->mainLayout->addLayout(this->postProcessActionLayout);
 
-    //= dialog_createImage_postaction_nothing
-    LinboRadioButton* buttonCache = new LinboRadioButton(tr("nothing"));
+    //% "nothing"
+    LinboRadioButton* buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_nothing"));
     buttonCache->setChecked(true);
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
 
-    //= dialog_createImage_postaction_shutdown
-    buttonCache = new LinboRadioButton(tr("shutdown"));
+    //% "shutdown"
+    buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_shutdown"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
 
-    //= dialog_createImage_postaction_reboot
-    buttonCache = new LinboRadioButton(tr("reboot"));
+    //% "reboot"
+    buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_reboot"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
 
-    //= dialog_createImage_postaction_logout
-    buttonCache = new LinboRadioButton(tr("logout"));
+    //% "logout"
+    buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_logout"));
     this->postProcessActionLayout->addWidget(buttonCache);
     this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
 
@@ -70,8 +70,8 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
 
     // Toolbuttons
 
-    //= dialog_uploadImage_button_upload
-    LinboToolButton* toolButtonCache = new LinboToolButton(tr("upload"));
+    //% "upload"
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, &LinboPushButton::clicked, [=](){
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
@@ -79,8 +79,8 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
         this->autoClose();
     });
 
-    //= cancel
-    toolButtonCache = new LinboToolButton(tr("cancel"));
+    //% "cancel"
+    toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 

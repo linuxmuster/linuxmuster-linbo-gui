@@ -22,21 +22,21 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
 {
     this->backend = backend;
 
-    //= dialog_login_title
-    this->setTitle(tr("Please enter password:"));
+    //% "Please enter password:"
+    this->setTitle(qtTrId("dialog_login_title"));
 
     this->passwordInput = new LinboLineEdit();
     this->passwordInput->setEchoMode(QLineEdit::NoEcho);
     this->passwordInput->setAlignment(Qt::AlignCenter);
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
-    //= cancel
-    LinboToolButton* toolButtonCache = new LinboToolButton(tr("cancel"));
+    //% "cancel"
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(close()));
 
-    //= dialog_login_button_login
-    toolButtonCache = new LinboToolButton(tr("login"));
+    //% "login"
+    toolButtonCache = new LinboToolButton(qtTrId("dialog_login_button_login"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(inputFinished()));
 
@@ -62,8 +62,8 @@ void LinboLoginDialog::inputFinished() {
         this->close();
     }
     else {
-        //= dialog_login_title_wrong
-        this->setTitle(tr("Wrong password!"));
+        //% "Wrong password!"
+        this->setTitle(qtTrId("dialog_login_title_wrong"));
     }
 
     this->passwordInput->clear();
@@ -71,8 +71,8 @@ void LinboLoginDialog::inputFinished() {
 
 void LinboLoginDialog::setVisibleAnimated(bool visible) {
     if(!visible) {
-        //= dialog_login_title
-        this->setTitle(tr("Please enter password:"));
+        //% "Please enter password:"
+        this->setTitle(qtTrId("dialog_login_title"));
         this->passwordInput->clear();
     }
     else {

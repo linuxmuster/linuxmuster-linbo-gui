@@ -23,8 +23,8 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
     this->currentHistoryIndex = -1;
     this->commandBeforeHistorySwitch.clear();
 
-    //= dialog_terminal_title
-    this->setTitle(tr("Terminal"));
+    //% "Terminal"
+    this->setTitle(qtTrId("dialog_terminal_title"));
 
     this->textBrowser = new LinboTextBrowser();
     this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);

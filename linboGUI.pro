@@ -101,4 +101,5 @@ RESOURCES += \
     resources/translations/linbo-gui/translations.qrc
 
 TRANSLATIONS += \
-    resources/translations/linbo-gui/blank.ts
+    resources/translations/linbo-gui/blank.ts \
+    resources/translations/linbo-gui/de-DE.ts

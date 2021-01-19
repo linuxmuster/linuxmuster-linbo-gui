@@ -44,8 +44,8 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->reinstallOsButton = new LinboToolButton(LinboGuiTheme::ReinstallIcon, this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
-    //= main_noBaseImage
-    this->noBaseImageLabel = new QLabel(tr("No baseimage defined"), this->buttonWidget);
+    //% "No baseimage defined"
+    this->noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->buttonWidget);
     this->noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
     this->noBaseImageLabel->hide();
     this->noBaseImageLabel->setAlignment(Qt::AlignCenter);
@@ -102,34 +102,34 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     LinboPushButton* buttonCache;
 
     if(this->backend->getConfig()->getUseMinimalLayout()) {
-        //= main_root_button_createImage
-        buttonCache = new LinboToolButton(tr("Create image"), LinboGuiTheme::ImageIcon, LinboGuiTheme::TextColor);
+        //% "Create image"
+        buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboGuiTheme::ImageIcon, LinboGuiTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
-        //= main_root_button_uploadImage
-        buttonCache = new LinboToolButton(tr("Upload image"), LinboGuiTheme::UploadIcon, LinboGuiTheme::TextColor);
+        //% "Upload image"
+        buttonCache = new LinboToolButton(qtTrId("main_root_button_uploadImage"), LinboGuiTheme::UploadIcon, LinboGuiTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
-    //= main_root_button_openTerminal
-    buttonCache = new LinboToolButton(tr("Open terminal"), LinboGuiTheme::TerminalIcon, LinboGuiTheme::TextColor);
+    //% "Open terminal"
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_openTerminal"), LinboGuiTheme::TerminalIcon, LinboGuiTheme::TextColor);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::terminalRequested);
     this->rootActionButtons.append(buttonCache);
 
-    //= main_root_button_updateCache
-    buttonCache = new LinboToolButton(tr("Update cache"), LinboGuiTheme::SyncIcon, LinboGuiTheme::TextColor);
+    //% "Update cache"
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboGuiTheme::SyncIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
-    //= main_root_button_partitionDrive
-    buttonCache = new LinboToolButton(tr("Partition drive"), LinboGuiTheme::PartitionIcon, LinboGuiTheme::TextColor);
+    //% "Partition drive"
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboGuiTheme::PartitionIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
-    //= main_root_button_register
-    buttonCache = new LinboToolButton(tr("Register"), LinboGuiTheme::RegisterIcon, LinboGuiTheme::TextColor);
+    //% "Register"
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_register"), LinboGuiTheme::RegisterIcon, LinboGuiTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
@@ -399,25 +399,25 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
-        //= main_message_processCrashed
-        this->messageLabel->setText(tr("The process %1 crashed:").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
+        //% "The process %1 crashed:"
+        this->messageLabel->setText(qtTrId("main_message_processCrashed").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
         QString errorDetails;
         if(chaperLogs.length() == 0)
-            //= main_message_noLogs
-            errorDetails = "<b>" + tr("No logs before this crash") + "</b>";
+            //% "No logs before this crash"
+            errorDetails = "<b>" + qtTrId("main_message_noLogs") + "</b>";
         else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0){
-            //= main_message_lastLogs
-            errorDetails = "<b>" + tr("The last logs before the crash were:") + "</b><br>";
+            //% "The last logs before the crash were:"
+            errorDetails = "<b>" + qtTrId("main_message_lastLogs") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
         }
         else {
-            //= main_message_lastErrors
-            errorDetails = "<b>" + tr("The last errors before the crash were:") + "</b><br>";
+            //% "The last errors before the crash were:"
+            errorDetails = "<b>" + qtTrId("main_message_lastErrors") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::LinboGuiError | LinboLogger::StdErr), 8).join("<br>");
         }
 
-        //= main_message_askForHelp
-        errorDetails += "<br><br><b>" + tr("Please ask your system administrator for help.") + "</b>";
+        //% "Please ask your system administrator for help."
+        errorDetails += "<br><br><b>" + qtTrId("main_message_askForHelp") + "</b>";
 
         this->messageDetailsLabel->setText("<html>" + errorDetails + "</html>");
         this->messageLabel->setStyleSheet("QLabel { color : red; }");
@@ -429,8 +429,8 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 
     case LinboBackend::RootActionSuccess: {
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
-        //= main_message_processFinishedSuccessfully
-        this->messageLabel->setText(tr("The process %1 finished successfully.").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
+        //% "The process %1 finished successfully."
+        this->messageLabel->setText(qtTrId("main_message_processFinishedSuccessfully").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
         this->messageDetailsLabel->setText("");
         this->messageLabel->setStyleSheet("QLabel { color : green; }");
         currentWidget = this->messageWidget;
@@ -472,10 +472,9 @@ void LinboMainActions::handleAutostartTimeoutProgressChanged() {
 
     this->progressBar->setValue(1000 - this->backend->getAutostartTimeoutProgress() * 1000);
 
-    //=main_autostart_label
-    this->logLabel->setText(tr("Starting") + " " + this->backend->getCurrentOs()->getName());
+    //% "Starting"
+    this->logLabel->setText(qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->getName());
 
-    //=main_autostart_counter
     int passedSecs = this->backend->getAutostartTimeoutRemainingSeconds();
     QString passedTime =
             QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))

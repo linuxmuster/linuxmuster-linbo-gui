@@ -22,27 +22,27 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
 {
     this->backend = backend;
 
-    //= dialog_updateCache_title
-    this->setTitle(tr("Update cache"));
+    //% "Update cache"
+    this->setTitle(qtTrId("dialog_updateCache_title"));
 
     this->mainLayout = new QVBoxLayout(this);
 
     this->updateTypeButtonGroup = new QButtonGroup(this);
 
-    //= dialog_updateCache_updateType_rsync
-    LinboRadioButton* rsyncButton = new LinboRadioButton(tr("Update using rsync"));
+    //% "Update using rsync"
+    LinboRadioButton* rsyncButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_rsync"));
     rsyncButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Rsync);
     this->mainLayout->addWidget(rsyncButton);
     this->updateTypeButtonGroup->addButton(rsyncButton, int(LinboConfig::Rsync));
 
-    //= dialog_updateCache_updateType_multicast
-    LinboRadioButton* multicastButton = new LinboRadioButton(tr("Update using multicast"));
+    //% "Update using multicast"
+    LinboRadioButton* multicastButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_multicast"));
     multicastButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Multicast);
     this->mainLayout->addWidget(multicastButton);
     this->updateTypeButtonGroup->addButton(multicastButton, int(LinboConfig::Multicast));
 
-    //= dialog_updateCache_updateType_torrent
-    LinboRadioButton* torrentButton = new LinboRadioButton(tr("Update using torrent"));
+    //% "Update using torrent"
+    LinboRadioButton* torrentButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_torrent"));
     torrentButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Torrent);
     this->mainLayout->addWidget(torrentButton);
     this->updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
@@ -52,19 +52,19 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     separatorLine->setFrameShape(QFrame::HLine);
     this->mainLayout->addWidget(separatorLine);
 
-    //= dialog_updateCache_formatPartition
-    formatCheckBox = new LinboCheckBox(tr("Format cache partition"));
+    //% "Format cache partition"
+    formatCheckBox = new LinboCheckBox(qtTrId("dialog_updateCache_formatPartition"));
     this->mainLayout->addWidget(formatCheckBox);
 
     this->mainLayout->addStretch();
 
-    //= dialog_updateCache_button_update
-    LinboToolButton* toolButtonCache = new LinboToolButton(tr("update"));
+    //% "update"
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_updateCache_button_update"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(updateCache()));
 
-    //= cancel
-    toolButtonCache = new LinboToolButton(tr("cancel"));
+    //% "cancel"
+    toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 }

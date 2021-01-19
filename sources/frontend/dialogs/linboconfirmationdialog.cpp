@@ -24,14 +24,14 @@ LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question
     this->questionLabel = new QLabel(question, this);
     this->questionLabel->setAlignment(Qt::AlignCenter);
 
-    //= yes
-    LinboToolButton* toolButtonCache = new LinboToolButton(tr("yes"));
+    //% "yes"
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("yes"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(accepted()));
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
-    //= no
-    toolButtonCache = new LinboToolButton(tr("no"));
+    //% "no"
+    toolButtonCache = new LinboToolButton(qtTrId("no"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
     connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(rejected()));
