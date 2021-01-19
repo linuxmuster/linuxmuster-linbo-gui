@@ -151,7 +151,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_noLogs">
-        <source>No logs before this crash</source>
+        <source></source>
+        <oldsource>No logs before this crash</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_lastLogs">

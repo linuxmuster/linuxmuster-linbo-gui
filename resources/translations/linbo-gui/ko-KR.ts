@@ -2,35 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" sourcelanguage="en" language="ko">
   <context>
-    <name>LinboClientInfo</name>
-    <message id="client_info_mac">
-      <source>Mac</source>
-      <oldsource>Mac:</oldsource>
-      <translation type="unfinished"/>
-    </message>
-    <message id="client_info_hdd">
-      <source>HDD</source>
-      <oldsource>HDD:</oldsource>
-      <translation type="unfinished"/>
-    </message>
-    <message id="client_info_cache">
-      <source>Cache</source>
-      <oldsource>Cache:</oldsource>
-      <translation type="unfinished"/>
-    </message>
-    <message id="client_info_cpu">
-      <source>CPU</source>
-      <oldsource>CPU:</oldsource>
-      <translation type="unfinished"/>
-    </message>
-    <message id="client_info_ram">
-      <source>RAM</source>
-      <oldsource>RAM:</oldsource>
-      <translation type="unfinished"/>
-    </message>
-  </context>
-  <context>
-    <name>LinboConfirmationDialog</name>
+    <name/>
     <message id="yes">
       <source>yes</source>
       <translation type="unfinished"/>
@@ -39,9 +11,6 @@
       <source>no</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboImageCreationDialog</name>
     <message id="dialog_createImage_title">
       <source>Create image</source>
       <translation type="unfinished"/>
@@ -99,9 +68,31 @@
       <source>cancel</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboImageUploadDialog</name>
+    <message id="client_info_mac">
+      <source>Mac</source>
+      <oldsource>Mac:</oldsource>
+      <translation type="unfinished"/>
+    </message>
+    <message id="client_info_hdd">
+      <source>HDD</source>
+      <oldsource>HDD:</oldsource>
+      <translation type="unfinished"/>
+    </message>
+    <message id="client_info_cache">
+      <source>Cache</source>
+      <oldsource>Cache:</oldsource>
+      <translation type="unfinished"/>
+    </message>
+    <message id="client_info_cpu">
+      <source>CPU</source>
+      <oldsource>CPU:</oldsource>
+      <translation type="unfinished"/>
+    </message>
+    <message id="client_info_ram">
+      <source>RAM</source>
+      <oldsource>RAM:</oldsource>
+      <translation type="unfinished"/>
+    </message>
     <message id="dialog_uploadImage_title">
       <source>Upload image</source>
       <translation type="unfinished"/>
@@ -114,9 +105,6 @@
       <source>upload</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboLoginDialog</name>
     <message id="dialog_login_title">
       <source>Please enter password:</source>
       <translation type="unfinished"/>
@@ -129,9 +117,6 @@
       <source>login</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboMainActions</name>
     <message id="main_noBaseImage">
       <source>No baseimage defined</source>
       <translation type="unfinished"/>
@@ -165,8 +150,9 @@
       <oldsource>The process &quot;%1&quot; crashed:</oldsource>
       <translation type="unfinished"/>
     </message>
-    <message>
-      <source>No logs before this crash</source>
+    <message id="main_message_noLogs">
+      <source/>
+      <oldsource>No logs before this crash</oldsource>
       <translation type="unfinished"/>
     </message>
     <message id="main_message_lastLogs">
@@ -186,13 +172,6 @@
       <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
       <translation type="unfinished"/>
     </message>
-    <message>
-      <source>Starting</source>
-      <translation type="unfinished"/>
-    </message>
-  </context>
-  <context>
-    <name>LinboMainPage</name>
     <message id="dialog_partition_title">
       <source>Partition drive</source>
       <translation type="unfinished"/>
@@ -201,16 +180,10 @@
       <source>Are you sure? This will delete all data on your drive!</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboOsSelectionRow</name>
     <message id="osSelection_noOperatingSystems">
       <source>No Operating system configured in start.conf</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboRegisterDialog</name>
     <message id="dialog_register_title">
       <source>Register client</source>
       <translation type="unfinished"/>
@@ -255,16 +228,10 @@
       <source>register</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboTerminalDialog</name>
     <message id="dialog_terminal_title">
       <source>Terminal</source>
       <translation type="unfinished"/>
     </message>
-  </context>
-  <context>
-    <name>LinboUpdateCacheDialog</name>
     <message id="dialog_updateCache_title">
       <source>Update cache</source>
       <translation type="unfinished"/>
@@ -287,6 +254,10 @@
     </message>
     <message id="dialog_updateCache_button_update">
       <source>update</source>
+      <translation type="unfinished"/>
+    </message>
+    <message id="main_autostart_label">
+      <source>Starting</source>
       <translation type="unfinished"/>
     </message>
   </context>

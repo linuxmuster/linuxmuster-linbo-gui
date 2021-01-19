@@ -1,263 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
-<context>
-    <name></name>
+<TS version="2.1" sourcelanguage="en" language="de">
+  <context>
+    <name/>
     <message id="yes">
-        <source>yes</source>
-        <translation type="unfinished">ja</translation>
+      <source>yes</source>
+      <translation>ja</translation>
     </message>
     <message id="no">
-        <source>no</source>
-        <translation type="unfinished">nein</translation>
+      <source>no</source>
+      <translation>nein</translation>
     </message>
     <message id="dialog_createImage_title">
-        <source>Create image</source>
-        <translation type="unfinished">Image erstellen</translation>
+      <source>Create image</source>
+      <translation>Image erstellen</translation>
     </message>
     <message id="dialog_createImage_action_title">
-        <source>The action to perfom:</source>
-        <translation type="unfinished">Auszuführende Aktion:</translation>
+      <source>The action to perfom:</source>
+      <translation>Auszuführende Aktion:</translation>
     </message>
     <message id="dialog_createImage_action_current">
-        <source>replace current image</source>
-        <translation type="unfinished">aktuelles Image ersetzen</translation>
+      <source>replace current image</source>
+      <translation>aktuelles Image ersetzen</translation>
     </message>
     <message id="dialog_createImage_action_new">
-        <source>create a new image</source>
-        <translation type="unfinished">neues Image erstellen</translation>
+      <source>create a new image</source>
+      <translation>neues Image erstellen</translation>
     </message>
     <message id="dialog_createImage_imageName">
-        <source>Image name:</source>
-        <translation type="unfinished">Image name:</translation>
+      <source>Image name:</source>
+      <translation>Image Name:</translation>
     </message>
     <message id="dialog_createImage_imageDescription">
-        <source>Image description:</source>
-        <translation type="unfinished">Image Beschreibung:</translation>
+      <source>Image description:</source>
+      <translation>Image Beschreibung:</translation>
     </message>
     <message id="dialog_createImage_postActionQuestion">
-        <source>What to do after the process has finished?</source>
-        <oldsource>What to do after the processes has finished?</oldsource>
-        <translation type="unfinished">Was soll nach dem Ende des Prozesses passieren?</translation>
+      <source>What to do after the process has finished?</source>
+      <oldsource>What to do after the processes has finished?</oldsource>
+      <translation>Was soll nach dem Ende des Prozesses passieren?</translation>
     </message>
     <message id="dialog_createImage_postaction_nothing">
-        <source>nothing</source>
-        <translation type="unfinished">nichts</translation>
+      <source>nothing</source>
+      <translation>nichts</translation>
     </message>
     <message id="dialog_createImage_postaction_shutdown">
-        <source>shutdown</source>
-        <translation type="unfinished">herunterfahren</translation>
+      <source>shutdown</source>
+      <translation>herunterfahren</translation>
     </message>
     <message id="dialog_createImage_postaction_reboot">
-        <source>reboot</source>
-        <translation type="unfinished">neu starten</translation>
+      <source>reboot</source>
+      <translation>neu starten</translation>
     </message>
     <message id="dialog_createImage_postaction_logout">
-        <source>logout</source>
-        <translation type="unfinished">abmelden</translation>
+      <source>logout</source>
+      <translation>abmelden</translation>
     </message>
     <message id="dialog_createImage_button_create">
-        <source>create</source>
-        <translation type="unfinished">erstellen</translation>
+      <source>create</source>
+      <translation>erstellen</translation>
     </message>
     <message id="dialog_createImage_button_createAndUpload">
-        <source>create + upload</source>
-        <translation type="unfinished">erstellen + hochladen</translation>
+      <source>create + upload</source>
+      <translation>erstellen + hochladen</translation>
     </message>
     <message id="cancel">
-        <source>cancel</source>
-        <translation type="unfinished">abbrechen</translation>
+      <source>cancel</source>
+      <translation>abbrechen</translation>
     </message>
     <message id="client_info_mac">
-        <source>Mac</source>
-        <oldsource>Mac:</oldsource>
-        <translation type="unfinished">Mac</translation>
+      <source>Mac</source>
+      <oldsource>Mac:</oldsource>
+      <translation>Mac</translation>
     </message>
     <message id="client_info_hdd">
-        <source>HDD</source>
-        <oldsource>HDD:</oldsource>
-        <translation type="unfinished">HDD</translation>
+      <source>HDD</source>
+      <oldsource>HDD:</oldsource>
+      <translation>HDD</translation>
     </message>
     <message id="client_info_cache">
-        <source>Cache</source>
-        <oldsource>Cache:</oldsource>
-        <translation type="unfinished">Cache</translation>
+      <source>Cache</source>
+      <oldsource>Cache:</oldsource>
+      <translation>Cache</translation>
     </message>
     <message id="client_info_cpu">
-        <source>CPU</source>
-        <oldsource>CPU:</oldsource>
-        <translation type="unfinished">CPU</translation>
+      <source>CPU</source>
+      <oldsource>CPU:</oldsource>
+      <translation>CPU</translation>
     </message>
     <message id="client_info_ram">
-        <source>RAM</source>
-        <oldsource>RAM:</oldsource>
-        <translation type="unfinished">RAM</translation>
+      <source>RAM</source>
+      <oldsource>RAM:</oldsource>
+      <translation>RAM</translation>
     </message>
     <message id="dialog_uploadImage_title">
-        <source>Upload image</source>
-        <translation type="unfinished">Image hochladen</translation>
+      <source>Upload image</source>
+      <translation>Image hochladen</translation>
     </message>
     <message id="dialog_uploadImage_selection_title">
-        <source>The image to upload:</source>
-        <translation type="unfinished"></translation>
+      <source>The image to upload:</source>
+      <translation>Hochzuladendes Image:</translation>
     </message>
     <message id="dialog_uploadImage_button_upload">
-        <source>upload</source>
-        <translation type="unfinished"></translation>
+      <source>upload</source>
+      <translation>hochladen</translation>
     </message>
     <message id="dialog_login_title">
-        <source>Please enter password:</source>
-        <translation type="unfinished">Bitte Passwort eingeben:</translation>
+      <source>Please enter password:</source>
+      <translation>Bitte Passwort eingeben:</translation>
     </message>
     <message id="dialog_login_title_wrong">
-        <source>Wrong password!</source>
-        <translation type="unfinished">Falsches Passwort!</translation>
+      <source>Wrong password!</source>
+      <translation>Falsches Passwort!</translation>
     </message>
     <message id="dialog_login_button_login">
-        <source>login</source>
-        <translation type="unfinished">anmelden</translation>
+      <source>login</source>
+      <translation>anmelden</translation>
     </message>
     <message id="main_noBaseImage">
-        <source>No baseimage defined</source>
-        <translation type="unfinished">Kein Basisimage definiert</translation>
+      <source>No baseimage defined</source>
+      <translation>Kein Basisimage definiert</translation>
     </message>
     <message id="main_root_button_createImage">
-        <source>Create image</source>
-        <translation type="unfinished">Image erstellen</translation>
+      <source>Create image</source>
+      <translation>Image erstellen</translation>
     </message>
     <message id="main_root_button_uploadImage">
-        <source>Upload image</source>
-        <translation type="unfinished">Image hochladen</translation>
+      <source>Upload image</source>
+      <translation>Image hochladen</translation>
     </message>
     <message id="main_root_button_openTerminal">
-        <source>Open terminal</source>
-        <translation type="unfinished">Terminal öffnen</translation>
+      <source>Open terminal</source>
+      <translation>Terminal öffnen</translation>
     </message>
     <message id="main_root_button_updateCache">
-        <source>Update cache</source>
-        <translation type="unfinished">Cache aktualisieren</translation>
+      <source>Update cache</source>
+      <translation>Cache aktualisieren</translation>
     </message>
     <message id="main_root_button_partitionDrive">
-        <source>Partition drive</source>
-        <translation type="unfinished">Festplatte partitionieren</translation>
+      <source>Partition drive</source>
+      <translation>Festplatte partitionieren</translation>
     </message>
     <message id="main_root_button_register">
-        <source>Register</source>
-        <translation type="unfinished">Registrieren</translation>
+      <source>Register</source>
+      <translation>Registrieren</translation>
     </message>
     <message id="main_message_processCrashed">
-        <source>The process %1 crashed:</source>
-        <oldsource>The process &quot;%1&quot; crashed:</oldsource>
-        <translation type="unfinished">Der Prozess %1 ist abgestürzt:</translation>
+      <source>The process %1 crashed:</source>
+      <oldsource>The process &quot;%1&quot; crashed:</oldsource>
+      <translation>Der Prozess %1 ist abgestürzt:</translation>
     </message>
     <message id="main_message_noLogs">
-        <source>No logs before this crash</source>
-        <translation type="unfinished">Keine Meldungen vor diesem Absturz</translation>
+      <source/>
+      <oldsource>No logs before this crash</oldsource>
+      <translation type="unfinished"/>
     </message>
     <message id="main_message_lastLogs">
-        <source>The last logs before the crash were:</source>
-        <translation type="unfinished">Die letzten Meldungen vor dem Absturz waren:</translation>
+      <source>The last logs before the crash were:</source>
+      <translation>Die letzten Meldungen vor dem Absturz waren:</translation>
     </message>
     <message id="main_message_lastErrors">
-        <source>The last errors before the crash were:</source>
-        <translation type="unfinished">Die letzten Fehler vor dem Absturz waren:</translation>
+      <source>The last errors before the crash were:</source>
+      <translation>Die letzten Fehler vor dem Absturz waren:</translation>
     </message>
     <message id="main_message_askForHelp">
-        <source>Please ask your system administrator for help.</source>
-        <translation type="unfinished">Bitten sie ihren Systemadministrator um Hilfe.</translation>
+      <source>Please ask your system administrator for help.</source>
+      <translation>Bitten sie ihren Systemadministrator um Hilfe.</translation>
     </message>
     <message id="main_message_processFinishedSuccessfully">
-        <source>The process %1 finished successfully.</source>
-        <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
-        <translation type="unfinished">Der Prozess %1 wurde erfolgreich abgeschlossen.</translation>
+      <source>The process %1 finished successfully.</source>
+      <oldsource>The process &quot;%s&quot; finished successfully.</oldsource>
+      <translation>Der Prozess %1 wurde erfolgreich abgeschlossen.</translation>
     </message>
     <message id="dialog_partition_title">
-        <source>Partition drive</source>
-        <translation type="unfinished">Festplatte partitionieren</translation>
+      <source>Partition drive</source>
+      <translation>Festplatte partitionieren</translation>
     </message>
     <message id="dialog_partition_question">
-        <source>Are you sure? This will delete all data on your drive!</source>
-        <translation type="unfinished">Sind Sie sicher? Dadurch werden alle Daten auf Ihrem Laufwerk gelöscht!</translation>
+      <source>Are you sure? This will delete all data on your drive!</source>
+      <translation>Sind Sie sicher? Dadurch werden alle Daten auf Ihrem Laufwerk gelöscht!</translation>
     </message>
     <message id="osSelection_noOperatingSystems">
-        <source>No Operating system configured in start.conf</source>
-        <translation type="unfinished">Kein Betriebssystem in der start.conf konfiguriert</translation>
+      <source>No Operating system configured in start.conf</source>
+      <translation>Kein Betriebssystem in der start.conf konfiguriert</translation>
     </message>
     <message id="dialog_register_title">
-        <source>Register client</source>
-        <translation type="unfinished">Client registrieren</translation>
+      <source>Register client</source>
+      <translation>Client registrieren</translation>
     </message>
     <message id="room">
-        <source>Room</source>
-        <translation type="unfinished">Raum</translation>
+      <source>Room</source>
+      <translation>Raum</translation>
     </message>
     <message id="hostname">
-        <source>Hostname</source>
-        <translation type="unfinished">Hostname</translation>
+      <source>Hostname</source>
+      <translation>Hostname</translation>
     </message>
     <message id="ip">
-        <source>IP-Address</source>
-        <translation type="unfinished">IP-Adresse</translation>
+      <source>IP-Address</source>
+      <translation>IP-Adresse</translation>
     </message>
     <message id="group">
-        <source>Host group</source>
-        <translation type="unfinished">Host-Gruppe</translation>
+      <source>Host group</source>
+      <translation>Host-Gruppe</translation>
     </message>
     <message id="dialog_register_clientRole">
-        <source>Client role</source>
-        <translation type="unfinished">Client-Rolle</translation>
+      <source>Client role</source>
+      <translation>Client-Rolle</translation>
     </message>
     <message id="dialog_register_clientRole_classroomStudent">
-        <source>Classroom student computer</source>
-        <translation type="unfinished">Schüler-PC im Klassenzimmer</translation>
+      <source>Classroom student computer</source>
+      <translation>Schüler-PC im Klassenzimmer</translation>
     </message>
     <message id="dialog_register_clientRole_classroomTeacher">
-        <source>Classroom teacher computer</source>
-        <translation type="unfinished">Lehrer-PC im Klassenzimmer</translation>
+      <source>Classroom teacher computer</source>
+      <translation>Lehrer-PC im Klassenzimmer</translation>
     </message>
     <message id="dialog_register_clientRole_facultyTeacher">
-        <source>Faculty teacher computer</source>
-        <translation type="unfinished">Fachbereich-Lehrer-PC</translation>
+      <source>Faculty teacher computer</source>
+      <translation>Fachbereich-Lehrer-PC</translation>
     </message>
     <message id="dialog_register_clientRole_staffComputer">
-        <source>Staff computer</source>
-        <translation type="unfinished">Personalcomputer</translation>
+      <source>Staff computer</source>
+      <translation>Personalcomputer</translation>
     </message>
     <message id="dialog_register_button_resgister">
-        <source>register</source>
-        <translation type="unfinished">registrieren</translation>
+      <source>register</source>
+      <translation>registrieren</translation>
     </message>
     <message id="dialog_terminal_title">
-        <source>Terminal</source>
-        <translation type="unfinished">Terminal</translation>
+      <source>Terminal</source>
+      <translation>Terminal</translation>
     </message>
     <message id="dialog_updateCache_title">
-        <source>Update cache</source>
-        <translation type="unfinished">Cache aktualisieren</translation>
+      <source>Update cache</source>
+      <translation>Cache aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_rsync">
-        <source>Update using rsync</source>
-        <translation type="unfinished">Mit Rsync aktualisieren</translation>
+      <source>Update using rsync</source>
+      <translation>Mit Rsync aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_multicast">
-        <source>Update using multicast</source>
-        <translation type="unfinished">Mit Multicast aktualisieren</translation>
+      <source>Update using multicast</source>
+      <translation>Mit Multicast aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_updateType_torrent">
-        <source>Update using torrent</source>
-        <translation type="unfinished">Mit Torrent aktualisieren</translation>
+      <source>Update using torrent</source>
+      <translation>Mit Torrent aktualisieren</translation>
     </message>
     <message id="dialog_updateCache_formatPartition">
-        <source>Format cache partition</source>
-        <translation type="unfinished">Cache-Partition formatieren</translation>
+      <source>Format cache partition</source>
+      <translation>Cache-Partition formatieren</translation>
     </message>
     <message id="dialog_updateCache_button_update">
-        <source>update</source>
-        <translation type="unfinished">aktualisieren</translation>
+      <source>update</source>
+      <translation>aktualisieren</translation>
     </message>
     <message id="main_autostart_label">
-        <source>Starting</source>
-        <translation type="unfinished"></translation>
+      <source>Starting</source>
+      <translation>Starte</translation>
     </message>
-</context>
+  </context>
 </TS>
