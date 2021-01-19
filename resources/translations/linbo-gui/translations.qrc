@@ -29,5 +29,6 @@
         <file>vi-VN.qm</file>
         <file>zh-CN.qm</file>
         <file>zh-TW.qm</file>
+        <file>en-GB.qm</file>
     </qresource>
 </RCC>

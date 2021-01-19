@@ -58,11 +58,14 @@ LinboGui::LinboGui()
 
     // attach translator
     QString localeName = this->backend->getConfig()->getLocale();
-    if(!localeName.isEmpty() && localeName.length() == 5 && localeName[2] == "-") {
-        // correct case (de-de -> de-DE)
-        QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
-        localeName = tmpLocaleName[0] + "-";
-        localeName += tmpLocaleName[1].toUpper();
+    if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
+
+        if(!localeName.isEmpty()){
+            // correct case (de-de -> de-DE)
+            QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
+            localeName = tmpLocaleName[0] + "-";
+            localeName += tmpLocaleName[1].toUpper();
+        }
 
         QTranslator* translator = new QTranslator(this);
 
