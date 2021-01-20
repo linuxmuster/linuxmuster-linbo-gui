@@ -1,7 +1,6 @@
-name: Updload translatable strings to Crowdin
+name: Upload translatable strings to Crowdin
 
-on:
-  workflow_dispatch
+on: push
 
 jobs:
   updload_translatable_strings:
