@@ -38,12 +38,16 @@ jobs:
 
     - name: Release translations
       run: |
+        mv ./resources/translations/linbo-gui/blank.ts ./resources/translations/linbo-gui/en-GB.ts
         TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts)
         while read lang; do
           echo "Releasing $lang"
           lrelease -idbased $lang
         done <<< "$TRANSLATIONS"
           
+    - name: Delete .ts files
+      run: |
+        rm ./resources/translations/linbo-gui/*.ts
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
