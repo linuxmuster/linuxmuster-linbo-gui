@@ -18,8 +18,8 @@ jobs:
        
     - name: Clean old translations
       run: |
-        rm ./resources/translations/linbo-gui/*-*.ts
-        rm ./resources/translations/linbo-gui/*.qm
+        rm -f ./resources/translations/linbo-gui/*-*.ts
+        rm -f ./resources/translations/linbo-gui/*.qm
        
     - name: Update translations
       run: lupdate ./linboGUI.pro
