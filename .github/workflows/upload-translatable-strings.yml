@@ -1,4 +1,4 @@
-name: Sync translations with Crowdin
+name: Updload translatable strings to Crowdin
 
 on:
   workflow_dispatch
