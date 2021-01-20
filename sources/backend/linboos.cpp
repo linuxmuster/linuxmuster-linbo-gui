@@ -25,7 +25,7 @@ LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
     this->autostartEnabled = false;
     this->autostartTimeout = 0;
     this->hidden = false;
-    this->defaultAction = SyncOs;
+    this->defaultAction = UnknownAction;
     this->iconName = QString("defaultIcon.svg");
     this->baseImage = nullptr;
 }
@@ -57,6 +57,14 @@ bool LinboOs::getActionEnabled(LinboOsStartAction action) {
     case ReinstallOs: return this->getReinstallActionEnabled();
     default: return false;
     }
+}
+
+
+LinboOs::LinboOsStartAction LinboOs::getDefaultAction() {
+    if(this->baseImage != nullptr)
+        return this->defaultAction;
+    else
+        return StartOs;
 }
 
 LinboOs::LinboOsStartAction LinboOs::startActionFromString(const QString& name) {

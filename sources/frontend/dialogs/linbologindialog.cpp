@@ -30,6 +30,9 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
     this->passwordInput->setAlignment(Qt::AlignCenter);
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
+    //% "Please enter password:"
+    connect(passwordInput, &QLineEdit::textChanged, [=]{this->setTitle(qtTrId("dialog_login_title"));});
+
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
@@ -58,21 +61,21 @@ void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
 
 
 void LinboLoginDialog::inputFinished() {
+
     if(this->backend->login(this->passwordInput->text())) {
+        this->passwordInput->clear();
         this->close();
     }
     else {
+        this->passwordInput->clear();
         //% "Wrong password!"
         this->setTitle(qtTrId("dialog_login_title_wrong"));
     }
 
-    this->passwordInput->clear();
 }
 
 void LinboLoginDialog::setVisibleAnimated(bool visible) {
     if(!visible) {
-        //% "Please enter password:"
-        this->setTitle(qtTrId("dialog_login_title"));
         this->passwordInput->clear();
     }
     else {

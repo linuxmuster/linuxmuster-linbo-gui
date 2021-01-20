@@ -85,7 +85,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 // --------------------
 
 void LinboBackend::executeAutostart() {
-    if(this->currentOs->getDefaultAction() == LinboOs::UnknownAction) {
+    if(!this->currentOs->getActionEnabled(this->currentOs->getDefaultAction())) {
         this->setState(Idle);
         return;
     }
@@ -576,7 +576,8 @@ int LinboBackend::getAutostartTimeoutRemainingSeconds() {
 // -----------
 
 QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStringList commandArgs, int* returnCode) {
-    this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
+    // args are not logged for security
+    this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command, LinboLogger::LinboGuiInfo);
 
     if(waitForFinished) {
         // clear old output

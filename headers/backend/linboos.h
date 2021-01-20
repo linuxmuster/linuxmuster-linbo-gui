@@ -54,11 +54,11 @@ public:
     const QString& getInitrd() const {return this->initrd;}
     const QString& getKernelOptions() const {return this->kernelOptions;}
     bool getSyncActionEnabled() const {return this->baseImage != nullptr && this->syncButtonEnabled;}
-    bool getStartActionEnabled() const {return this->baseImage != nullptr && this->startButtonEnabled;}
+    bool getStartActionEnabled() const {return this->startButtonEnabled;}
     bool getReinstallActionEnabled() const {return this->baseImage != nullptr && this->reinstallButtonEnabled;}
     bool getAutostartEnabled() const {return this->baseImage != nullptr && this->autostartEnabled;}
     const int& getAutostartTimeout() const {return this->autostartTimeout;}
-    const LinboOsStartAction& getDefaultAction() const {return this->defaultAction;}
+    LinboOsStartAction getDefaultAction();
     const bool& getHidden() const {return this->hidden;}
 
     bool getActionEnabled(LinboOsStartAction action);

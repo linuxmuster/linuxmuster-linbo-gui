@@ -277,7 +277,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
         fontCache = this->noBaseImageLabel->font();
         fontCache.setPixelSize(noBaseImageLabelHeight <= 0 ? 1:noBaseImageLabelHeight * 0.8);
         this->noBaseImageLabel->setFont(fontCache);
-        this->noBaseImageLabel->setGeometry(0, (this->buttonWidget->height() - noBaseImageLabelHeight) / 2, this->buttonWidget->width(), noBaseImageLabelHeight);
+        this->noBaseImageLabel->setGeometry(0, defaultButtonHeight * 1.1, this->buttonWidget->width(), noBaseImageLabelHeight);
         this->noBaseImageLabel->show();
     }
     else {

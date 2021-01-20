@@ -35,7 +35,7 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height());
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width());
 #endif
-#
+
     // Load segoe font
     QFontDatabase::addApplicationFont(":/fonts/PTSans-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/PTSans-BoldItalic.ttf");

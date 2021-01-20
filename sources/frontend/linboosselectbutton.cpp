@@ -26,6 +26,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->os = os;
     this->shouldBeVisible = true;
     this->showDefaultAction = true;
+    this->osNameLabel = nullptr;
 
     connect(os->getBackend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
@@ -37,14 +38,18 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     };
 
     LinboPushButtonOverlay* checkedOverlay= new LinboPushButtonOverlay (
-                    LinboPushButtonOverlay::OnChecked,
-                    new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayCheckedIcon)),
-                    false
-                    );
+                LinboPushButtonOverlay::OnChecked,
+                new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayCheckedIcon)),
+                false
+                );
+
+    QString defaultActionOverlayPath = defaultStartActionOverlayPaths[this->os->getDefaultAction()];
+    if(!this->os->getActionEnabled(this->os->getDefaultAction()))
+        defaultActionOverlayPath = "";
 
     this->defaultStartActionOverlay = new LinboPushButtonOverlay (
                 LinboPushButtonOverlay::Background,
-                new QSvgWidget(defaultStartActionOverlayPaths[this->os->getDefaultAction()]),
+                new QSvgWidget(defaultActionOverlayPath),
             false
             );
 
@@ -69,7 +74,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
             QString startActionIconPath = startActionButtonIcons[startAction];
             bool disabled = !this->os->getActionEnabled(startAction) || this->os->getDefaultAction() == startAction;
-
+            qDebug() << "OS " << this->os->getName() << " has action " << startAction << " enabled: " << !disabled;
             if(disabled)
                 continue;
 
@@ -151,6 +156,7 @@ LinboOs* LinboOsSelectButton::getOs() {
 void LinboOsSelectButton::setVisibleAnimated(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisibleAnimated(visible);
+    if(this->osNameLabel != nullptr)
     this->osNameLabel->setVisible(visible);
 
     this->updateActionButtonVisibility();
@@ -159,6 +165,8 @@ void LinboOsSelectButton::setVisibleAnimated(bool visible) {
 void LinboOsSelectButton::setVisible(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisible(visible);
+    if(this->osNameLabel != nullptr)
+    this->osNameLabel->setVisible(visible);
 
     this->updateActionButtonVisibility(true);
 }
@@ -246,7 +254,7 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 
 void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
 
-    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root && this->os->getBaseImage() != nullptr;
+    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root;
     bool rootActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root;
 
     if(this->inited && !doNotAnimate) {
