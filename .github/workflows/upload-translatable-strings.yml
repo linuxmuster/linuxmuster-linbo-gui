@@ -13,7 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
        
-    - name: Install Qt
+    - name: Install lupdate
       run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
        
     - name: Clean old translations
@@ -21,10 +21,10 @@ jobs:
         rm -f ./resources/translations/linbo-gui/*-*.ts
         rm -f ./resources/translations/linbo-gui/*.qm
        
-    - name: Update translations
+    - name: Update translatable strings
       run: lupdate ./linboGUI.pro
        
-    - name: Sync translations with crowdin
+    - name: Upload translatable strings to Crowdin
       uses: crowdin/github-action@1.0.16
       with:
         token: ${{ secrets.CROWDIN_API_TOKEN }}
