@@ -54,7 +54,7 @@ jobs:
         
   github-release:
     needs: deb-package
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v*')
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     name: GitHub Release
     runs-on: ubuntu-18.04
     steps:
@@ -86,7 +86,7 @@ jobs:
     name: Packageserver upload
     needs: deb-package
     runs-on: ubuntu-18.04
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v*')
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
