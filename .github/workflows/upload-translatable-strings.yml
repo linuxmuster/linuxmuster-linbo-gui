@@ -1,6 +1,12 @@
 name: Upload translatable strings to Crowdin
 
-on: push
+on: 
+  push:
+    branches: 
+      - 'master'
+    paths:
+      - 'sources/**'
+      - '!sources/backend/**'
 
 jobs:
   updload_translatable_strings:
