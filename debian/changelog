@@ -1,3 +1,12 @@
+linuxmuster-linbo-gui7 (7.0.0-Beta01) lmn7-testing; urgency=low
+
+  * CodeCrafter912:
+    - Added variable background color
+    - Implemented image upload
+    - some more minor fixes
+
+ -- Dorian Zedler <dorian@itsblue.de>  Thu, 21 Jan 2021 11:01:44 +0100
+
 linuxmuster-linbo-gui7 (0.6-0) lmn7-testing; urgency=low
 
   * CodeCrafter912:
@@ -6,7 +15,6 @@ linuxmuster-linbo-gui7 (0.6-0) lmn7-testing; urgency=low
     - New Design in backend
 
  -- Dorian Zedler <dorian@itsblue.de>  Sat, 2 Jan 2021 11:01:44 +0100
-
 
 linuxmuster-linbo-gui7 (0.5-0) lmn7-testing; urgency=low
 
