@@ -17,11 +17,15 @@ This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) bas
 
 # Releases
 The latest release can be found [here](https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/latest)  
-The attached file archives.zip contains the `linuxmuster-linbo-gui7_*.deb` Package which you can install on your server.
+The attached file `linuxmuster-linbo-gui7_*.deb` is the Package which you can install on your server.
+Please note: the prebuilt packages do not contain a 32-bit version.
 
 # Building yourself
 For your convenience there is a script to build the package: [build.sh](./build.sh)  
 You have to invoke it in the build root.  
+If you want to build the 32-bit version, you will have to insert `32` in the following places:
+- In the file `/build.sh`: Line 64 change `(64)` to `(64 32)`
+- In the file `/debian/mkarchives.sh`: Line 24 change `for bits in 64; do` to `for bits in 32 64; do`
 Please note: It will take a long time to build the first time you do it.  
 
 # Screenshots

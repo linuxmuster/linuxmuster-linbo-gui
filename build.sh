@@ -79,9 +79,6 @@ do
 
 	cd ..
 
-	# copy icons into linbofs folder
-	cp -r ./icons  ./linbofs$ARCH
-
 	echo "------------------------------------------------"
 	echo "- linbo_gui7 for $ARCH was built successfully! -"
 	echo "------------------------------------------------"
@@ -106,7 +103,7 @@ echo "-   Now building debian package      -"
 echo "--------------------------------------"
 
 sudo apt update
-sudo apt install debhelper zip -y
+sudo apt install debhelper -y
 
 cd ..
 ./debian/mkdeb.sh

@@ -74,6 +74,9 @@ install: build
 	# create gui archives
 	debian/mkarchives.sh
 
+	# copy icons into place
+	debian/mkicons.sh
+
 # Build architecture-independent files here.
 # Pass -i to all debhelper commands in this target to reduce clutter.
 binary-indep: build install

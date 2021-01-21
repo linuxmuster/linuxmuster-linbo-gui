@@ -233,4 +233,7 @@ ldd ./build/linbo_gui | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}
 mkdir -p ./linbofs/usr/share/X11/
 cp -r /usr/share/X11/xkb/ ./linbofs/usr/share/X11/
 
+# OS-Icons
+cp -r ../../resources/os-icons ./linbofs/icons
+
 exit 0
