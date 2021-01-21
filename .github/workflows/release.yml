@@ -103,7 +103,8 @@ jobs:
           path: archives
 
       - name: Set repo to experimental
-        run: sed -i "/^Distribution:/s/:.*/: lmn7-experimental/" archives/*.changes
+        run: |
+          sed -i "/^Distribution:/s/:.*/: lmn7-experimental/" archives/*.changes
 
       - name: Copy package to lmn archive
         uses: appleboy/scp-action@master
