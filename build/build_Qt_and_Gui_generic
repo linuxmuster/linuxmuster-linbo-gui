@@ -74,7 +74,7 @@ fi
 if test ! -f "$QT_ARCHIVE"
 then
     echo "Qt archive is not present, downloading it now ..."
-    wget -O $QT_ARCHIVE "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
+    wget -O $QT_ARCHIVE "http://ftp.fau.de/qtproject/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
 fi
 
 if [ ! -d "Qt5" ]
