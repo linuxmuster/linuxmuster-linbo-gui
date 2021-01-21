@@ -17,10 +17,30 @@
 ##
 ## This script will build the linbo GUI for 32 and 64 bit.
 
+# Check ubuntu version
+if [[ $(lsb_release -rs) != "18.04" ]]; then
+	echo "--------------------------------"
+	echo "- Incompatible ubuntu version! -"
+	echo "-   You have to be on 18.04    -"
+	echo "--------------------------------"
+	exit 1
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
 cd build
+
+BUILD_DEB=1
+
+while test $# -gt 0
+do
+    case "$1" in
+        --nodeb) BUILD_DEB=0
+            ;;
+    esac
+    shift
+done
 
 Architecures=(64 32)
 
@@ -43,7 +63,7 @@ do
 		sed -i "/## $NOT_ARCH: /d" build.sh
 	done
 
-	./build.sh "$1" "$2"
+	./build.sh "$@"
 
 	if [[ $? -ne 0 ]]; then
 	   echo "There was an error when building linbo_gui for $ARCH!"
@@ -73,7 +93,14 @@ mv linbofs32 linbofs
 
 echo "--------------------------------------"
 echo "- linbo_gui7 was built successfully! -"
-echo "-   Now building debian packages     -"
+
+if [[ $BUILD_DEB -ne 1 ]]; then
+	echo "- Not building deb package, exiting  -"
+	echo "--------------------------------------"
+	exit 0
+fi
+
+echo "-   Now building debian package      -"
 echo "--------------------------------------"
 
 sudo apt update
@@ -82,8 +109,13 @@ sudo apt install debhelper zip -y
 cd ..
 ./debian/mkdeb.sh
 
+if [[ $? -ne 0 ]]; then
+	echo "There was an error when building the deb package!"
+	exit 1
+fi
+
 # copy all archives to a common dir and zip them
 mkdir archives
 cp ../linuxmuster-linbo-gui7_* ./archives
-cd archives
-zip -r ./allAssets.zip *
+
+exit 0
