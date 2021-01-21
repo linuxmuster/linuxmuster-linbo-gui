@@ -48,6 +48,7 @@ public:
         OverlayCheckedIcon,
         OverlayPressedIcon,
         OverlayHoveredIcon,
+        OverlayKeyboardFocusIcon,
         OverlayStartIcon,
         OverlaySyncIcon,
         OverlayReinstallIcon,
@@ -110,13 +111,13 @@ public:
     };
 
     const QMap<LinboGuiColorRole, QColor> lightColors = {
-      {TextColor, "#ffffff"},
+        {TextColor, "#ffffff"},
         {ToolButtonColor, "#f59c00"},
         {AccentColor, "#f59c00"}
     };
 
     const QMap<LinboGuiColorRole, QColor> darkColors = {
-      {TextColor, "#000000"},
+        {TextColor, "#000000"},
         {ToolButtonColor, "#394f5e"},
         {AccentColor, "#f59c00"}
     };

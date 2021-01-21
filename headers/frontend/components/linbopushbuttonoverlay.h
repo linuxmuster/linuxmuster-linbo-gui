@@ -38,7 +38,8 @@ public:
         Background,
         OnHover,
         OnPressed,
-        OnChecked
+        OnChecked,
+        OnKeyboardFocus
     };
 
     explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);

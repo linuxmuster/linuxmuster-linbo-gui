@@ -239,6 +239,8 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
     case LinboBackend::Reinstalling:
     case LinboBackend::CreatingImage:
     case LinboBackend::UploadingImage:
+        for(LinboOsSelectButton* osButton : this->osButtons)
+            osButton->setEnabled(false);
         this->setShowOnlySelectedButton(true);
         break;
 

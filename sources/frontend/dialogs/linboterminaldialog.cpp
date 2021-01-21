@@ -55,6 +55,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
                                      "    subcontrol-position: top;"
                                      "    subcontrol-origin: margin;"
                                      "}");
+    this->textBrowser->setFocusPolicy(Qt::NoFocus);
 
     this->lineEdit = new LinboLineEdit();
     this->lineEdit->installEventFilter(this);

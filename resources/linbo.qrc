@@ -69,5 +69,7 @@
         <file>icons/light/brandTop.svg</file>
         <file>icons/dark/radioButtonDisabled.svg</file>
         <file>icons/light/radioButtonDisabled.svg</file>
+        <file>icons/dark/overlayKeyboardFocus.svg</file>
+        <file>icons/light/overlayKeyboardFocus.svg</file>
     </qresource>
 </RCC>

@@ -51,10 +51,12 @@ public:
     void setOverlayTypeMuted(LinboPushButtonOverlay::OverlayType overlayType, bool muted);
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
+    void focusInEvent(QFocusEvent *e) override;
+    void focusOutEvent(QFocusEvent *e) override;
     void enterEvent(QEvent *e) override;
     void leaveEvent(QEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
@@ -64,6 +66,7 @@ protected:
 private:
     bool shouldBeVisible;
     bool isHovered;
+    bool isFocused;
     bool isPressed;
     QPropertyAnimation* geometryAnimation;
     QList<LinboPushButtonOverlay*> overlays;
@@ -82,6 +85,7 @@ private slots:
 signals:
     void checked();
     void hovered();
+    void defocused();
     void doubleClicked();
 };
 

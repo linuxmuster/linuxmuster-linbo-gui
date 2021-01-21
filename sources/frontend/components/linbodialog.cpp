@@ -23,6 +23,8 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
 {
     this->scale = 1;
     this->busy = false;
+    this->firstChild = nullptr;
+    this->setWindowFlags(Qt::Widget);
     this->modalOverlayWidget = new ModalOverlay(parent);
     this->modalOverlayWidget->setVisible(false);
     connect(this->modalOverlayWidget, SIGNAL(clicked()), this, SLOT(autoClose()));
@@ -153,8 +155,8 @@ QString LinboDialog::getTitle() {
     return this->title;
 }
 
-void LinboDialog::resizeEvent(QResizeEvent *event) {
-    QWidget::resizeEvent(event);
+void LinboDialog::resizeEvent(QResizeEvent *e) {
+    QWidget::resizeEvent(e);
 
     int rowHeight = gTheme->getSize(LinboGuiTheme::RowHeight);
     int margins = gTheme->getSize(LinboGuiTheme::Margins);
@@ -184,6 +186,53 @@ void LinboDialog::resizeEvent(QResizeEvent *event) {
         contentMargins.setTop(0);
         this->setContentsMargins(contentMargins);
     }
+}
+
+
+void LinboDialog::paintEvent(QPaintEvent *e) {
+    QWidgetList widgets = this->findChildren<QWidget*>();
+
+    QWidget* latestWidget = nullptr;
+    QWidget* firstWidget = nullptr;
+
+    for(QWidget* widget : widgets) {
+        if(widget->focusPolicy() != Qt::NoFocus) {
+            if(latestWidget != nullptr)
+                QWidget::setTabOrder(latestWidget, widget);
+
+            if(firstWidget == nullptr)
+                firstWidget = widget;
+
+            latestWidget = widget;
+        }
+    }
+
+    this->firstChild = firstWidget;
+    if(this->firstChild == nullptr)
+        this->firstChild = this->closeButton;
+
+    for(LinboToolButton* widget: this->toolButtons) {
+        if(widget->focusPolicy() != Qt::NoFocus) {
+            if(latestWidget != nullptr)
+                QWidget::setTabOrder(latestWidget, widget);
+
+            if(firstWidget == nullptr)
+                firstWidget = widget;
+
+            latestWidget = widget;
+        }
+    }
+
+    QWidget::setTabOrder(latestWidget, this->closeButton);
+    connect(this->closeButton, &LinboPushButton::defocused, [=]{firstWidget->setFocus();});
+
+    return QWidget::paintEvent(e);
+}
+
+void LinboDialog::keyPressEvent(QKeyEvent *ev)
+{
+    if(ev->key() == Qt::Key_Escape)
+        this->autoClose();
 }
 
 void LinboDialog::setVisibleAnimated(bool visible) {
@@ -234,6 +283,9 @@ void LinboDialog::animationFinished() {
     this->toolBarOpacityEffect->setEnabled(false);
     this->bottomToolBarOpacityEffect->setEnabled(false);
     this->busy = false;
+
+    if(this->firstChild != nullptr)
+        this->firstChild->setFocus();
 }
 
 bool LinboDialog::isFrameless() {

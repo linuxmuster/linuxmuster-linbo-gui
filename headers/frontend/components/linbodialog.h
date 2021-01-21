@@ -48,7 +48,9 @@ public:
     virtual void centerInParent();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void keyPressEvent(QKeyEvent *ev) override;
     virtual void setVisibleAnimated(bool visible);
     virtual bool isFrameless();
     void addToolButton(LinboToolButton* toolButton);
@@ -77,6 +79,8 @@ private:
     QGraphicsOpacityEffect* bottomToolBarOpacityEffect;
     QPropertyAnimation* bottomToolBarOopacityEffectAnimation;
     QList<LinboToolButton*> toolButtons;
+
+    QWidget* firstChild;
 
 public slots:
     void open();

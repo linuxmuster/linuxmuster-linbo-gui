@@ -180,8 +180,6 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     else {
         this->button->setGeometry(0, 0, event->size().height(), event->size().height());
 
-        //qDebug() << "OS " << this->os->getName() << " Width: " << this->width() << " Height: " << this->height();
-
         int x = this->height();
         int spacing = this->width() * 0.04;
         int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
@@ -193,17 +191,22 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
             spacing = 0;
         }
 
-        //qDebug() << "OS " << this->os->getName() << " X: " << x << " spacing: " << spacing << " actionButtonSize: " << actionButtonSize << " Button length: ";
-
         for(LinboPushButton* actionButton : this->startActionButtons) {
+            if(actionButtonSize == 2)
+                actionButton->setDisabled(true);
+            else
+                actionButton->setDisabled(false);
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
-            //qDebug() << "Setting geometry to: " << actionButton->geometry();
             x += actionButtonSize + spacing;
         }
 
         x = this->height();
 
         for(LinboPushButton* actionButton : this->rootActionButtons) {
+            if(actionButtonSize == 2)
+                actionButton->setDisabled(true);
+            else
+                actionButton->setDisabled(false);
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }
