@@ -21,7 +21,7 @@ mkdir -p "$tmp_dir"
 libs_ex_any="libc.so.6\nlibpthread.so.0"
 libs_ex="$tmp_dir/libs_ex"
 
-for bits in 32 64; do
+for bits in 64; do
   case "$bits" in
     64) b="$bits" ;;
     *) b="" ;;

@@ -42,9 +42,10 @@ do
     shift
 done
 
-Architecures=(64 32)
+AllArchitecures=(64 32)
+BuildArchitecures=(64)
 
-for ARCH in "${Architecures[@]}"
+for ARCH in "${BuildArchitecures[@]}"
 do
     echo "Building linbo_gui7 for $ARCH"
 
@@ -58,7 +59,7 @@ do
 	sed -i "s/## $ARCH: //g" build.sh
 
 	# remove all other architectures to prevent errors
-	for NOT_ARCH in "${Architecures[@]}"
+	for NOT_ARCH in "${AllArchitecures[@]}"
 	do
 		sed -i "/## $NOT_ARCH: /d" build.sh
 	done
