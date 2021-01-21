@@ -89,6 +89,7 @@ do
 
 done
 
+rm -rf linbofs
 mv linbofs32 linbofs
 
 echo "--------------------------------------"

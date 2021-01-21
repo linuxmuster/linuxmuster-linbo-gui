@@ -3,18 +3,65 @@ on:
     # Sequence of patterns matched against refs/tags
     tags:
     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    
+  workflow_dispatch:
 
 name: Build Release
 
 jobs:
   build:
-    name: Build Release
+    name: Build
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project
-        run: ./build.sh
+
+      - name: Build
+        run: ./build.sh --nodeb
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linbofs
+          path: build/linbofs*
+        
+  deb-package:
+    needs: build
+    name: DEB-Package
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install debhelper -y
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: linbofs
+          path: build
+
+      - name: Build
+        run: debian/mkdeb.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: deb-package
+          path: ../linuxmuster-linbo-gui7_*
+        
+  release:
+    needs: deb-package
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v*')
+    name: GitHub Release
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: deb-package
+          path: .
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -32,4 +79,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.create_release.outputs.id }}
-          assets_path: ./archives/
+          assets_path: .
