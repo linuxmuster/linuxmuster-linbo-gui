@@ -113,7 +113,7 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-# copy all archives to a common dir and zip them
+# copy all archives to a common dir
 mkdir archives
 cp ../linuxmuster-linbo-gui7_* ./archives
 

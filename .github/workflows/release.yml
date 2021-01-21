@@ -45,11 +45,14 @@ jobs:
       - name: Build
         run: debian/mkdeb.sh
 
+      - name: Copy artifacts
+        run: mkdir archives && cp ../linuxmuster-linbo-gui7_* ./archives
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: deb-package
-          path: ../linuxmuster-linbo-gui7_*
+          path: archives/*
         
   release:
     needs: deb-package
@@ -61,7 +64,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: deb-package
-          path: .
 
       - name: Create Release
         id: create_release
