@@ -1,0 +1,33 @@
+name: Deploy Release
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy_latest_release_to_lmn_archive:
+   runs-on: ubuntu-18.04
+    steps:
+      - name: Download assets from latest release
+        uses: Itsblue/download-release-assets-action@v1
+        with:
+          file: .*
+          path: ./archives
+
+      - name: Copy package to lmn archive
+        uses: appleboy/scp-action@master
+        with:
+          host: archive.linuxmuster.net
+          username: dorian
+          key: ${{ secrets.REPO_SSH_KEY }}
+          port: 22
+          source: "archives/*"
+          target: "/srv/repo/mini-dinstall/incoming"
+
+      - name: Publish package on lmn archive
+        uses: appleboy/ssh-action@master
+        with:
+          host: archive.linuxmuster.net
+          username: dorian
+          key: ${{ secrets.REPO_SSH_KEY }}
+          port: 22
+          script: /usr/local/bin/publish-debs
