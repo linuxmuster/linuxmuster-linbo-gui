@@ -10,8 +10,8 @@ jobs:
       - name: Download assets from latest release
         uses: Itsblue/download-release-assets-action@v1
         with:
-          file: .*
-          path: ./archives
+          file: ".*"
+          path: "."
 
       - name: Copy package to lmn archive
         uses: appleboy/scp-action@master
@@ -20,7 +20,7 @@ jobs:
           username: dorian
           key: ${{ secrets.REPO_SSH_KEY }}
           port: 22
-          source: "archives/*"
+          source: "./*"
           target: "/srv/repo/mini-dinstall/incoming"
 
       - name: Publish package on lmn archive
