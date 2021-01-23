@@ -34,7 +34,8 @@ void LinboTerminalDialog::setVisibleAnimated(bool visible) {
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    this->terminal->setGeometry(0,0,this->width(), this->height());
+    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    this->terminal->setGeometry(margins, margins, this->width() - 2 * margins, this->height() - 2 * margins);
     //QFont font = this->lineEdit->font();
     //font.setPixelSize(this->lineEdit->height() * 0.5);
     //this->lineEdit->setFont(font);

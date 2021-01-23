@@ -9,6 +9,8 @@
 #include <QProcess>
 #include <QScrollBar>
 
+#include "linboguitheme.h"
+
 class LinboTerminal : public QTextEdit
 {
     Q_OBJECT

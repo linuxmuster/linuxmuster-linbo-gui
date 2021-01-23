@@ -5,20 +5,21 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->currentHistoryIndex = -1;
     this->commandBeforeHistorySwitch.clear();
 
-    this->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     this->setStyleSheet("QTextEdit {"
                         "border: 0 0 0 0;"
-                        "background: black;"
+                        "background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
                         "padding-left: 5px;"
-                        "color: white;"
-                        "}"
+                        "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+                        "}");
+
+    this->verticalScrollBar()->setStyleSheet(
                         "QScrollBar:vertical {"
-                        "    background: black;"
+                        "    background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
                         "    width:10px;    "
                         "    margin: 0px 0px 0px 0px;"
                         "}"
                         "QScrollBar::handle:vertical {"
-                        "    background: lightgrey;"
+                        "    background: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
                         "    min-height: 0px;"
                         "}"
                         "QScrollBar::add-line:vertical {"
@@ -35,8 +36,9 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
                         "}");
 
     this->setCursorWidth(8);
-
     this->setFont(QFont("Ubuntu Mono"));
+
+    connect(this, &QTextEdit::cursorPositionChanged, this, &LinboTerminal::handleCursorPositionChanged);
 
     this->process = new QProcess(this);
     this->process->setProcessChannelMode(QProcess::MergedChannels);
@@ -100,7 +102,9 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
         accept = false;
     }
     else {
-        accept = textCursor().position() >= fixedPosition;
+        if(textCursor().position() < fixedPosition)
+            this->moveCursor(QTextCursor::End);
+        accept = true;
     }
 
     if (accept) {
@@ -153,6 +157,9 @@ void LinboTerminal::handleCursorPositionChanged()
 {
     //qDebug() << "Cursor position changed position: " << textCursor().position() << " fixed position " << fixedPosition;
     if (textCursor().position() < fixedPosition) {
-        //this->moveCursor(QTextCursor::End);
+        this->setCursorWidth(0);
+    }
+    else {
+        this->setCursorWidth(8);
     }
 }
