@@ -1,3 +1,11 @@
+linuxmuster-linbo-gui7 (7.0.0-Beta02) lmn7-testing; urgency=low
+
+  * CodeCrafter912:
+    - Fixed isse that wont let the GUI start
+    - Fixed issues that made the Terminal dialog crash sometimes
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sat, 23 Jan 2021 11:01:44 +0100
+
 linuxmuster-linbo-gui7 (7.0.0-Beta01) lmn7-testing; urgency=low
 
   * CodeCrafter912:
