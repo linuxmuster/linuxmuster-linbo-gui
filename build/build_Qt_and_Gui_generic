@@ -216,6 +216,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 strip linbo_gui
+chmod +x linbo_gui
 
 # Deploy all files to the linbofs folder
 cd ..

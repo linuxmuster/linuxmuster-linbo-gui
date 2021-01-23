@@ -82,7 +82,7 @@ void LinboTerminalDialog::setVisibleAnimated(bool visible) {
     if(visible)
         this->process->start("sh", QStringList("-i"));
     else
-        this->process->kill();
+        this->process->write(QString("exit\n").toUtf8());
 }
 
 

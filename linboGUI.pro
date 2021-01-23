@@ -1,6 +1,6 @@
 TARGET = linbo_gui
 
-VERSION = 7.0.0-Beta01
+VERSION = 7.0.0-Beta02
 DEFINES += GUI_VERSION=\"\\\"$${VERSION}\\\"\"
 
 CONFIG += static

@@ -255,6 +255,9 @@ void LinboPushButton::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void LinboPushButton::focusInEvent(QFocusEvent *e)  {
+    if(e->reason() == Qt::ActiveWindowFocusReason)
+        return QAbstractButton::focusInEvent(e);
+
     emit this->hovered();
     this->isFocused = true;
     return QAbstractButton::focusInEvent(e);
