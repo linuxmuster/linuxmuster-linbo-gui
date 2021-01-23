@@ -98,7 +98,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: deb-package
-          path: archives
 
       - name: Set repo to experimental
         run: |
@@ -111,7 +110,7 @@ jobs:
           username: dorian
           key: ${{ secrets.REPO_SSH_KEY }}
           port: 22
-          source: "archives/*"
+          source: "./*"
           target: "/srv/repo/mini-dinstall/incoming"
 
       - name: Publish package on lmn archive
