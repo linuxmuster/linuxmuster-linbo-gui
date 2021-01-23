@@ -1,17 +1,17 @@
-name: Deploy Release
+name: Publish Release
 
 on:
   workflow_dispatch
 
 jobs:
-  deploy_latest_release_to_lmn_archive:
-   runs-on: ubuntu-18.04
+  publish_latest_release_to_lmn_archive:
+    runs-on: ubuntu-18.04
     steps:
       - name: Download assets from latest release
         uses: Itsblue/download-release-assets-action@v1
         with:
-          file: .*
-          path: .
+          file: ".*"
+          path: "."
 
       - name: Copy package to lmn archive
         uses: appleboy/scp-action@master
