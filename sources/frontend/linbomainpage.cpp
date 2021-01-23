@@ -25,7 +25,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    //this->backend->login("Muster!");
+    this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -159,7 +159,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
             this->imageUploadDialog, &LinboImageUploadDialog::open);
 
     this->terminalDialog = new LinboTerminalDialog(parent);
-    this->terminalDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->terminalDialog->setGeometry(0, 0, std::min(dialogWidth * 2, int(this->width() * 0.9)), dialogHeight);
     this->terminalDialog->centerInParent();
     connect(this->mainActions, &LinboMainActions::terminalRequested,
             this->terminalDialog, &LinboImageCreationDialog::open);

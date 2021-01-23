@@ -29,8 +29,7 @@
 #include <QKeyEvent>
 
 #include "linbodialog.h"
-#include "linbolineedit.h"
-#include "linbotextbrowser.h"
+#include "linboterminal.h"
 
 class LinboTerminalDialog : public LinboDialog
 {
@@ -43,19 +42,8 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboTextBrowser* textBrowser;
-    QLineEdit* lineEdit;
-    QVBoxLayout* mainLayout;
-    QProcess* process;
-    QString commandBeforeHistorySwitch;
-    QStringList commandHistory;
-    int currentHistoryIndex;
+    LinboTerminal* terminal;
 
-protected slots:
-    void readOutput();
-    void handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void execute();
-    bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 #endif // LINBOTERMINALDIALOG_H

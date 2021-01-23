@@ -7,8 +7,6 @@
         <file>images/linbo_logo_small.svg</file>
         <file>images/by_linuxmuster.net.svg</file>
         <file>images/linbo_logo_unbranded.svg</file>
-        <file>images/linbo_logo_small_2.svg</file>
-        <file>images/linbo_logo_small_3.svg</file>
         <file>icons/dark/back.svg</file>
         <file>icons/dark/cancel.svg</file>
         <file>icons/dark/desktop.svg</file>
@@ -71,5 +69,9 @@
         <file>icons/light/radioButtonDisabled.svg</file>
         <file>icons/dark/overlayKeyboardFocus.svg</file>
         <file>icons/light/overlayKeyboardFocus.svg</file>
+        <file>fonts/UbuntuMono-RI.ttf</file>
+        <file>fonts/UbuntuMono-R.ttf</file>
+        <file>fonts/UbuntuMono-BI.ttf</file>
+        <file>fonts/UbuntuMono-B.ttf</file>
     </qresource>
 </RCC>

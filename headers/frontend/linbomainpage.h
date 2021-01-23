@@ -28,6 +28,7 @@
 #include <QInputDialog>
 #include <QPropertyAnimation>
 #include <QSvgRenderer>
+#include <algorithm>
 
 #include "linbobackend.h"
 #include "linboosselectbutton.h"

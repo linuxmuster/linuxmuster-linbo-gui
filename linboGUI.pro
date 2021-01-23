@@ -44,6 +44,7 @@ HEADERS += \
     headers/frontend/components/linboradiobutton.h \
     headers/frontend/components/linbostackedwidget.h \
     headers/frontend/components/linbosvgwidget.h \
+    headers/frontend/components/linboterminal.h \
     headers/frontend/components/linbotextbrowser.h \
     headers/frontend/components/linbotoolbutton.h \
     headers/frontend/dialogs/linboconfirmationdialog.h \
@@ -78,6 +79,7 @@ SOURCES += \
     sources/frontend/components/linboradiobutton.cpp \
     sources/frontend/components/linbostackedwidget.cpp \
     sources/frontend/components/linbosvgwidget.cpp \
+    sources/frontend/components/linboterminal.cpp \
     sources/frontend/components/linbotextbrowser.cpp \
     sources/frontend/components/linbotoolbutton.cpp \
     sources/frontend/dialogs/linboconfirmationdialog.cpp \

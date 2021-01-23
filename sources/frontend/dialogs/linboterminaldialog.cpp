@@ -20,151 +20,22 @@
 
 LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
 {
-    this->currentHistoryIndex = -1;
-    this->commandBeforeHistorySwitch.clear();
-
     //% "Terminal"
     this->setTitle(qtTrId("dialog_terminal_title"));
-
-    this->textBrowser = new LinboTextBrowser();
-    this->textBrowser->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    this->textBrowser->setStyleSheet("QTextBrowser {"
-                                     "border: 0 0 0 0;"
-                                     "background: black;"
-                                     "padding-left: 5px;"
-                                     "color: white;"
-                                     "}"
-                                     "QScrollBar:vertical {"
-                                     "    background: black;"
-                                     "    width:10px;    "
-                                     "    margin: 0px 0px 0px 0px;"
-                                     "}"
-                                     "QScrollBar::handle:vertical {"
-                                     "    background: lightgrey;"
-                                     "    min-height: 0px;"
-                                     "}"
-                                     "QScrollBar::add-line:vertical {"
-                                     "    background: grey;"
-                                     "    height: 0px;"
-                                     "    subcontrol-position: bottom;"
-                                     "    subcontrol-origin: margin;"
-                                     "}"
-                                     "QScrollBar::sub-line:vertical {"
-                                     "    background: grey;"
-                                     "    height: 0 px;"
-                                     "    subcontrol-position: top;"
-                                     "    subcontrol-origin: margin;"
-                                     "}");
-    this->textBrowser->setFocusPolicy(Qt::NoFocus);
-
-    this->lineEdit = new LinboLineEdit();
-    this->lineEdit->installEventFilter(this);
-    connect(this->lineEdit, SIGNAL(returnPressed()), this, SLOT(execute()));
-
-    this->mainLayout = new QVBoxLayout(this);
-    this->mainLayout->addWidget(this->textBrowser);
-    this->mainLayout->addWidget(this->lineEdit);
-
-    this->process = new QProcess(this);
-    this->process->setProcessChannelMode(QProcess::MergedChannels);
-
-    connect(this->process, SIGNAL(readyReadStandardOutput()),
-             this, SLOT(readOutput()) );
-    connect(this->process, SIGNAL(readyReadStandardError()),
-             this, SLOT(readOutput()) );
-    connect(this->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
+    this->terminal = new LinboTerminal(this);
+    connect(this->terminal, &LinboTerminal::processExited, this, &LinboDialog::autoClose);
 }
 
 void LinboTerminalDialog::setVisibleAnimated(bool visible) {
     //this->textBrowser->setVisible(visible);
     LinboDialog::setVisibleAnimated(visible);
-    if(visible)
-        this->process->start("sh", QStringList("-i"));
-    else
-        this->process->write(QString("exit\n").toUtf8());
 }
-
-
-void LinboTerminalDialog::readOutput() {
-    QString output = this->process->readAll();
-    this->textBrowser->append(output);
-}
-
-void LinboTerminalDialog::handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
-    Q_UNUSED(exitCode)
-    Q_UNUSED(exitStatus)
-
-    this->textBrowser->clear();
-    this->close();
-}
-
-void LinboTerminalDialog::execute() {
-    QString command = this->lineEdit->text();
-
-    // handle history
-    this->commandHistory.insert(0, command);
-    this->currentHistoryIndex = -1;
-
-    // handle ui
-    this->textBrowser->insertPlainText(command);
-    this->process->write((command + "\n").toUtf8());
-    this->lineEdit->clear();
-
-    // scroll to bottom
-    QScrollBar* sb = this->textBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-}
-
-bool LinboTerminalDialog::eventFilter(QObject* obj, QEvent* event) {
-    if(obj == this->lineEdit) {
-        if(event != nullptr && event->type() == QEvent::KeyPress) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-
-            if(keyEvent->key() != Qt::Key_Up && keyEvent->key() != Qt::Key_Down)
-                return LinboDialog::eventFilter(obj, event);
-
-            int oldHistoryIndex = this->currentHistoryIndex;
-
-            if(keyEvent->key() == Qt::Key_Up) {
-                this->currentHistoryIndex += 1;
-            }
-            else if(keyEvent->key() == Qt::Key_Down) {
-                this->currentHistoryIndex -= 1;
-            }
-
-            if(this->currentHistoryIndex >= 0 && this->commandHistory.length() > this->currentHistoryIndex) {
-                if(oldHistoryIndex == -1)
-                    // store current command before bringing up the history
-                    this->commandBeforeHistorySwitch = this->lineEdit->text();
-
-                // show requested history command
-                this->lineEdit->setText(this->commandHistory[this->currentHistoryIndex]);
-            }
-            else if(this->currentHistoryIndex == -1) {
-                // show last typed command (is not in history yet, as it was not yet executed)
-                this->lineEdit->setText(this->commandBeforeHistorySwitch);
-                this->commandBeforeHistorySwitch.clear();
-            }
-            else if(this->commandHistory.length() <= this->currentHistoryIndex) {
-                // don't go above history length
-                this->currentHistoryIndex = this->commandHistory.length() -1;
-            }
-            else {
-                // don't do below -1
-                this->currentHistoryIndex = -1;
-            }
-        }
-    }
-    return LinboDialog::eventFilter(obj, event);
-}
-
 
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    this->lineEdit->setFixedHeight(this->parentWidget()->height() * 0.06);
-    QFont font = this->lineEdit->font();
-    font.setPixelSize(this->lineEdit->height() * 0.5);
-    this->lineEdit->setFont(font);
+    this->terminal->setGeometry(0,0,this->width(), this->height());
+    //QFont font = this->lineEdit->font();
+    //font.setPixelSize(this->lineEdit->height() * 0.5);
+    //this->lineEdit->setFont(font);
 }

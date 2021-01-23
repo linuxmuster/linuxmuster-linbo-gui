@@ -24,8 +24,8 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9 );
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().height() * 1.25 * 0.9 );
 
-    this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
-    this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
+    //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
+    //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
 
     //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.5);
     //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.5);
@@ -39,11 +39,17 @@ LinboGui::LinboGui()
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width());
 #endif
 
-    // Load segoe font
+    // Load PTSans font
     QFontDatabase::addApplicationFont(":/fonts/PTSans-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/PTSans-BoldItalic.ttf");
     QFontDatabase::addApplicationFont(":/fonts/PTSans-Italic.ttf");
     QFontDatabase::addApplicationFont(":/fonts/PTSans-Regular.ttf");
+
+    // Load UbuntuMono font
+    QFontDatabase::addApplicationFont(":/fonts/UbuntuMono-B.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/UbuntuMono-BI.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/UbuntuMono-R.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/UbuntuMono-RI.ttf");
 
     QFont defaultFont ("PTSans");
     QApplication::setFont(defaultFont);
