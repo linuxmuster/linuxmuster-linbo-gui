@@ -55,6 +55,11 @@ jobs:
         
     - name: Commit files
       run: |
+        if [ -z $(git status --porcelain) ];
+        then
+          echo "... No changes"
+          exit 0
+        fi
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
