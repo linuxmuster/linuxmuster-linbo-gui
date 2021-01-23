@@ -1,27 +1,31 @@
 name: Sync translations with Crowdin
 
 on:
-  workflow_dispatch
+  push:
+    branches: 
+      - 'master'
+    paths:
+      - 'sources/**'
+      - '!sources/backend/**'
 
 jobs:
-  update_and_sync_translatable_strings:
+  sync_translatable_strings:
    runs-on: ubuntu-18.04
    
    steps:
-    - uses: actions/checkout@master
       
     - name: Checkout
       uses: actions/checkout@v2
        
-    - name: Install Qt
+    - name: Install lupdate and lrelease
       run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
        
     - name: Clean old translations
       run: |
-        rm ./resources/translations/linbo-gui/*-*.ts
-        rm ./resources/translations/linbo-gui/*.qm
+        rm -f ./resources/translations/linbo-gui/*-*.ts
+        rm -f ./resources/translations/linbo-gui/*.qm
        
-    - name: Update translations
+    - name: Update translatable strings
       run: lupdate ./linboGUI.pro
        
     - name: Sync translations with crowdin
@@ -48,6 +52,7 @@ jobs:
     - name: Delete .ts files
       run: |
         rm ./resources/translations/linbo-gui/*.ts
+        
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
