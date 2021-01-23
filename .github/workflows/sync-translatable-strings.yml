@@ -7,6 +7,7 @@ on:
     paths:
       - 'sources/**'
       - '!sources/backend/**'
+  workflow_dispatch
 
 jobs:
   sync_translatable_strings:
