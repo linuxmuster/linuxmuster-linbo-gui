@@ -23,7 +23,16 @@ jobs:
           source: "./*"
           target: "/srv/repo/mini-dinstall/incoming"
 
-      - name: Publish package on lmn archive
+      - name: Publish package on lmn archive 1
+        uses: appleboy/ssh-action@master
+        with:
+          host: archive.linuxmuster.net
+          username: dorian
+          key: ${{ secrets.REPO_SSH_KEY }}
+          port: 22
+          script: /usr/local/bin/publish-debs
+
+      - name: Publish package on lmn archive 2
         uses: appleboy/ssh-action@master
         with:
           host: archive.linuxmuster.net
