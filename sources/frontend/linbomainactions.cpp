@@ -469,27 +469,31 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
 }
 
 void LinboMainActions::handleTimeoutProgressChanged() {
-    qDebug() << "timout changed 1";
     if(this->backend->getState() != LinboBackend::Autostarting && this->backend->getState() != LinboBackend::RootTimeout)
         return;
-    qDebug() << "timeout changed 2";
 
     double progress = 0;
     int remaningSeconds = 0;
+    QString label = "";
 
     if(this->backend->getState() == LinboBackend::Autostarting) {
         progress = this->backend->getAutostartTimeoutProgress();
         remaningSeconds = this->backend->getAutostartTimeoutRemainingSeconds();
+
+        //% "Starting"
+        label = qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->getName();
     }
     else {
         progress = this->backend->getRootTimeoutProgress();
         remaningSeconds = this->backend->getRootTimeoutRemainingSeconds();
+
+        //% "Logging out automatically"
+        label = qtTrId("main_rootTimeout_label");
     }
 
     this->progressBar->setValue(1000 - progress * 1000);
 
-    //% "Starting"
-    this->logLabel->setText(qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->getName());
+    this->logLabel->setText(label);
 
     QString remaningTime =
             QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
