@@ -314,21 +314,21 @@ bool LinboBackend::writeImageDescription(QString imageName, QString newDescripti
                 this->buildCommand("writefile", this->config->getCachePath(), imageName + ".desc"));
 
     if(!process.waitForStarted()) {
-        qDebug() << "Not started: " << process.exitCode();
+        this->logger->log("Description writer didn't start: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
     process.write(newDescription.toUtf8());
 
     if(!process.waitForBytesWritten()) {
-        qDebug() << "Not written";
+        this->logger->log("Description writer didn't write: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
     process.closeWriteChannel();
 
     if(!process.waitForFinished()) {
-        qDebug() << "Not finished";
+        this->logger->log("Description writer didn't finish: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
@@ -710,8 +710,6 @@ void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
             if(thisLine.length() == 0)
                 continue;
 
-            //qDebug() << "reading line: " << thisLine;
-
             if(thisLine.startsWith("[")) {
                 // we found a new section!
                 currentSection = thisLine;
@@ -842,8 +840,6 @@ void LinboBackend::loadEnvironmentValues() {
         if(!existingImage.isEmpty() && !this->images.contains(existingImage))
             this->images.insert(existingImage, new LinboImage(existingImage, this));
     }
-
-    qDebug() << this->images;
 
     this->logger->log("Finished loading environment values", LinboLogger::LinboGuiInfo);
 }

@@ -21,6 +21,7 @@
 LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
+    this->showClientInfo = false;
 
     this->backend = backend;
 

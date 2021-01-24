@@ -3,6 +3,7 @@
 LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
 {
     this->currentHistoryIndex = -1;
+    this->fixedPosition = 0;
     this->commandBeforeHistorySwitch.clear();
 
     this->setStyleSheet("QTextEdit {"
@@ -51,6 +52,8 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
             this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
 
     this->process->start("sh", QStringList("-i"));
+    this->process->write("export PS1='$(whoami)@$(hostname):$(pwd)$ '\n");
+    this->moveCursor(QTextCursor::End);
 }
 
 void LinboTerminal::keyPressEvent(QKeyEvent *event)
@@ -126,6 +129,7 @@ void LinboTerminal::setCurrentCommand(QString command) {
 void LinboTerminal::readOutput() {
     QString output = this->process->readAll();
     this->append(output);
+    this->moveCursor(QTextCursor::End);
     fixedPosition = textCursor().position();
 }
 
@@ -147,6 +151,7 @@ void LinboTerminal::execute(QString command) {
     // execute command
     if(command == "clear") {
         this->clear();
+        this->fixedPosition = 0;
         command = "";
     }
 
