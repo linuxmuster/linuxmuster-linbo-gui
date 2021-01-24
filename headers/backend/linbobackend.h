@@ -24,7 +24,6 @@
 #include <QtDebug>
 #include <QProcess>
 #include <QTimer>
-#include <QElapsedTimer>
 #include <QFile>
 #include <QSettings>
 
@@ -70,6 +69,7 @@ public:
         Partitioning,
         UpdatingCache,
         Updating,
+        RootTimeout,
         RootActionError,    /*!< The last root action failed, the resetMessage() function will reset to Root */
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
     };
@@ -101,9 +101,13 @@ public:
     QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();
     void setCurrentOs(LinboOs* os);
+    void restartRootTimeout();
 
     double getAutostartTimeoutProgress();
     int getAutostartTimeoutRemainingSeconds();
+
+    double getRootTimeoutProgress();
+    int getRootTimeoutRemainingSeconds();
 
 protected:
     void loadStartConfiguration(QString startConfFilePath);
@@ -131,9 +135,9 @@ private:
     QList<LinboOs*> operatingSystems;
     QList<LinboDiskPartition*> diskPartitions;
 
-    QElapsedTimer* autostartElapsedTimer;
     QTimer* autostartTimer;
-    QTimer* autostartRemainingTimeRefreshTimer;
+    QTimer* rootTimeoutTimer;
+    QTimer* timeoutRemainingTimeRefreshTimer;
 
     LinboOs* currentOs;
 #ifdef TEST_ENV
@@ -205,6 +209,7 @@ private slots:
 
     void executeAutostart();
     void handleAutostartTimerTimeout();
+    void handleRootTimerTimeout();
     void readFromStdout();
     void readFromStderr();
     void handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -213,6 +218,7 @@ signals:
     void stateChanged(LinboBackend::LinboState state);
     void currentOsChanged(LinboOs* os);
     void autostartTimeoutProgressChanged();
+    void rootTimeoutProgressChanged();
 
 };
 

@@ -51,8 +51,8 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     connect(this->process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
 
+    this->process->setEnvironment({"PS1=$(whoami)@$(hostname):$(pwd)$ "});
     this->process->start("sh", QStringList("-i"));
-    this->process->write("export PS1='$(whoami)@$(hostname):$(pwd)$ '\n");
     this->moveCursor(QTextCursor::End);
 }
 
@@ -128,6 +128,7 @@ void LinboTerminal::setCurrentCommand(QString command) {
 
 void LinboTerminal::readOutput() {
     QString output = this->process->readAll();
+    //if(output == "")
     this->append(output);
     this->moveCursor(QTextCursor::End);
     fixedPosition = textCursor().position();

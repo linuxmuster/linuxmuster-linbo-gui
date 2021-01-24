@@ -44,13 +44,23 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     connect(this->autostartTimer, SIGNAL(timeout()),
             this, SLOT(handleAutostartTimerTimeout()));
 
-    this->autostartRemainingTimeRefreshTimer = new QTimer(this);
-    this->autostartRemainingTimeRefreshTimer->setSingleShot(false);
-    this->autostartRemainingTimeRefreshTimer->setInterval(10);
-    connect(this->autostartRemainingTimeRefreshTimer, SIGNAL(timeout()),
-            this, SIGNAL(autostartTimeoutProgressChanged()));
+    // root timeout timer
+    this->rootTimeoutTimer = new QTimer(this);
+    this->rootTimeoutTimer->setSingleShot(true);
+    connect(this->rootTimeoutTimer, SIGNAL(timeout()),
+            this, SLOT(handleRootTimerTimeout()));
 
-    this->autostartElapsedTimer = new QElapsedTimer();
+    // timeout progress refresh timer
+    this->timeoutRemainingTimeRefreshTimer = new QTimer(this);
+    this->timeoutRemainingTimeRefreshTimer->setSingleShot(false);
+    this->timeoutRemainingTimeRefreshTimer->setInterval(10);
+    connect(this->timeoutRemainingTimeRefreshTimer, &QTimer::timeout,
+            [=]{
+        if(this->state == Autostarting)
+            emit this->autostartTimeoutProgressChanged();
+        else if(this->state == RootTimeout)
+            emit this->rootTimeoutProgressChanged();
+    });
 
     // Processes
     this->asynchronosProcess = new QProcess(this);
@@ -94,13 +104,11 @@ void LinboBackend::executeAutostart() {
     this->logger->log("Beginning autostart timeout for " + this->currentOs->getName(), LinboLogger::LinboGuiInfo);
     this->autostartTimer->setInterval(this->currentOs->getAutostartTimeout() * 1000);
     this->autostartTimer->start();
-    this->autostartElapsedTimer->restart();
-    this->autostartRemainingTimeRefreshTimer->start();
+    this->timeoutRemainingTimeRefreshTimer->start();
 }
 
 void LinboBackend::handleAutostartTimerTimeout() {
-    this->autostartElapsedTimer->invalidate();
-    this->autostartRemainingTimeRefreshTimer->stop();
+    this->timeoutRemainingTimeRefreshTimer->stop();
     this->logger->log("Executing autostart for " + this->currentOs->getName(), LinboLogger::LinboGuiInfo);
 
     LinboOs::LinboOsStartAction defaultAction = this->currentOs->getDefaultAction();
@@ -122,6 +130,25 @@ void LinboBackend::handleAutostartTimerTimeout() {
         this->logger->log("Executed autostart successfully!", LinboLogger::LinboGuiInfo);
     else
         this->logger->log("An error occured when executing autostart for " + this->currentOs->getName(), LinboLogger::LinboGuiError);
+}
+
+void LinboBackend::handleRootTimerTimeout() {
+    this->timeoutRemainingTimeRefreshTimer->stop();
+    qDebug() << "timeout stop";
+    if(this->state == Root) {
+        // timeout for the first time -> switch to timeout state
+        this->restartRootTimeout();
+        this->setState(RootTimeout);
+    }
+    else if(this->state == RootTimeout) {
+        // timeout for the second time -> logout
+        this->logout();
+    }
+    else if(this->state > Root){
+        // non-matching state
+        this->restartRootTimeout();
+    }
+
 }
 
 void LinboBackend::shutdown() {
@@ -223,6 +250,7 @@ bool LinboBackend::login(QString password) {
     if(successfull) {
         this->rootPassword = password;
         this->setState(Root);
+        this->restartRootTimeout();
     }
 
     this->logger->log("Authentication " + QString(successfull ? "OK":"FAILED"), LinboLogger::LinboLogChapterEnd);
@@ -231,11 +259,18 @@ bool LinboBackend::login(QString password) {
 }
 
 void LinboBackend::logout() {
-    if(this->state != Root)
+    if(this->state != Root && this->state != RootTimeout)
         return;
 
     this->rootPassword.clear();
     this->setState(Idle);
+}
+
+void LinboBackend::restartRootTimeout() {
+    if(this->state == Root) {
+        this->rootTimeoutTimer->start((this->config->getRootTimeout() * 1000) / 2);
+        this->timeoutRemainingTimeRefreshTimer->start();
+    }
 }
 
 bool LinboBackend::replaceImageOfCurrentOs(QString description, LinboPostProcessActions postProcessAction) {
@@ -362,32 +397,6 @@ bool LinboBackend::uploadImagePrivate(const LinboImage* image, LinboPostProcessA
     return true;
 }
 
-/*
-
-reading and writing .desc:
-
-    command = LINBO_CMD("readfile");
-    saveappend( command, config.get_cache() );
-    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
-    saveappend( command, ( QString("/tmp/") + elements[i].get_baseimage() + QString(".desc") ) );
-    infoBrowser->setLoadCommand( command );
-
-    command = LINBO_CMD("writefile");
-    saveappend( command, config.get_cache() );
-    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
-    saveappend( command, ( QString("/tmp/") + elements[i].get_baseimage() + QString(".desc") ) );
-    infoBrowser->setSaveCommand( command );
-
-    command = LINBO_CMD("upload");
-    saveappend( command, config.get_server() );
-    saveappend( command, QString("linbo") );
-    saveappend( command, QString("password") );
-    saveappend( command, config.get_cache() );
-    saveappend( command, ( elements[i].get_baseimage() + QString(".desc") ) );
-    infoBrowser->setUploadCommand( command );
-
-*/
-
 bool LinboBackend::partitionDrive(bool format) {
     if(this->state != Root)
         return false;
@@ -467,8 +476,7 @@ bool LinboBackend::cancelCurrentAction() {
     case Autostarting:
         this->logger->log("Cancelling autostart", LinboLogger::LinboGuiInfo);
         this->autostartTimer->stop();
-        this->autostartRemainingTimeRefreshTimer->stop();
-        this->autostartElapsedTimer->invalidate();
+        this->timeoutRemainingTimeRefreshTimer->stop();
         this->setState(Idle);
         return true;
 
@@ -478,6 +486,12 @@ bool LinboBackend::cancelCurrentAction() {
         this->logger->log("Cancelling current start action: " + QString::number(this->state), LinboLogger::LinboGuiInfo);
         this->asynchronosProcess->kill();
         this->setState(Idle);
+        return true;
+
+    case RootTimeout:
+        this->logger->log("Cancelling root timeout", LinboLogger::LinboGuiInfo);
+        this->setState(Root);
+        this->restartRootTimeout();
         return true;
 
     case Partitioning:
@@ -564,12 +578,21 @@ void LinboBackend::setCurrentOs(LinboOs* os) {
 }
 
 double LinboBackend::getAutostartTimeoutProgress() {
-    return this->autostartTimer->isActive() ? double(this->autostartElapsedTimer->elapsed()) / double(this->autostartTimer->interval()) : 1;
+    return this->autostartTimer->isActive() ? 1 - double(this->autostartTimer->remainingTime()) / double(this->autostartTimer->interval()) : 1;
 }
 
 int LinboBackend::getAutostartTimeoutRemainingSeconds() {
-    return this->autostartTimer->isActive() ? (this->autostartTimer->interval() - this->autostartElapsedTimer->elapsed()) / 1000 : 0;
+    return this->autostartTimer->isActive() ? this->autostartTimer->remainingTime() / 1000 : 0;
 }
+
+double LinboBackend::getRootTimeoutProgress() {
+    return this->rootTimeoutTimer->isActive() ? 1 - double(this->rootTimeoutTimer->remainingTime()) / double(this->rootTimeoutTimer->interval()) : 1;
+}
+
+int LinboBackend::getRootTimeoutRemainingSeconds() {
+    return this->rootTimeoutTimer->isActive() ? this->rootTimeoutTimer->remainingTime() / 1000 : 0;
+}
+
 
 // -----------
 // - Helpers -

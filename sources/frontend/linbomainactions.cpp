@@ -23,7 +23,8 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->backend = backend;
     connect(this->backend, SIGNAL(currentOsChanged(LinboOs*)), this, SLOT(handleCurrentOsChanged(LinboOs*)));
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
-    connect(this->backend, SIGNAL(autostartTimeoutProgressChanged()), this, SLOT(handleAutostartTimeoutProgressChanged()));
+    connect(this->backend, SIGNAL(autostartTimeoutProgressChanged()), this, SLOT(handleTimeoutProgressChanged()));
+    connect(this->backend, SIGNAL(rootTimeoutProgressChanged()), this, SLOT(handleTimeoutProgressChanged()));
     connect(this->backend->getLogger(), SIGNAL(latestLogChanged(const LinboLogger::LinboLog&)), this, SLOT(handleLatestLogChanged(const LinboLogger::LinboLog&)));
 
     this->stackView = new LinboStackedWidget(this);
@@ -369,6 +370,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 
     switch (newState) {
     case LinboBackend::Autostarting:
+    case LinboBackend::RootTimeout:
         this->progressBar->setIndeterminate(false);
         this->progressBar->setReversed(true);
         this->progressBar->setValue(0);
@@ -466,19 +468,32 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
     this->logLabel->setText(latestLog.message);
 }
 
-void LinboMainActions::handleAutostartTimeoutProgressChanged() {
-    if(this->backend->getState() != LinboBackend::Autostarting)
+void LinboMainActions::handleTimeoutProgressChanged() {
+    qDebug() << "timout changed 1";
+    if(this->backend->getState() != LinboBackend::Autostarting && this->backend->getState() != LinboBackend::RootTimeout)
         return;
+    qDebug() << "timeout changed 2";
 
-    this->progressBar->setValue(1000 - this->backend->getAutostartTimeoutProgress() * 1000);
+    double progress = 0;
+    int remaningSeconds = 0;
+
+    if(this->backend->getState() == LinboBackend::Autostarting) {
+        progress = this->backend->getAutostartTimeoutProgress();
+        remaningSeconds = this->backend->getAutostartTimeoutRemainingSeconds();
+    }
+    else {
+        progress = this->backend->getRootTimeoutProgress();
+        remaningSeconds = this->backend->getRootTimeoutRemainingSeconds();
+    }
+
+    this->progressBar->setValue(1000 - progress * 1000);
 
     //% "Starting"
     this->logLabel->setText(qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->getName());
 
-    int passedSecs = this->backend->getAutostartTimeoutRemainingSeconds();
-    QString passedTime =
-            QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
+    QString remaningTime =
+            QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
             + ":"
-            + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
-    this->passedTimeLabel->setText(passedTime);
+            + QStringLiteral("%1").arg(remaningSeconds % 60, 2, 10, QLatin1Char('0'));
+    this->passedTimeLabel->setText(remaningTime);
 }

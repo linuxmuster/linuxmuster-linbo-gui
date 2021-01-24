@@ -85,17 +85,21 @@ LinboGui::LinboGui()
         QApplication::installTranslator(translator);
     }
 
+    // attach eventFilter
+    qApp->installEventFilter(this);
+
     // create start page
     this->startPage = new LinboMainPage(this->backend, this);
 
 }
 
-// prevent closing (eg. by pressing escape key)
-/*void LinboGui::done(int r) {
+bool LinboGui::eventFilter(QObject *obj, QEvent *event) {
+    Q_UNUSED(obj)
 
-#ifdef TEST_ENV
-    QDialog::done(r);
-#else
-    Q_UNUSED(r)
-#endif
-}*/
+    if (event->type() == QEvent::MouseMove)
+    {
+        // reset root timer whenever the mouse moves
+        this->backend->restartRootTimeout();
+    }
+    return false;
+}

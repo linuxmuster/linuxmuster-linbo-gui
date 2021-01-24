@@ -248,6 +248,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
     case LinboBackend::Registering:
+    case LinboBackend::RootTimeout:
         osSelectionRowHeight = this->height() * 0;
         startActionsWidgetHeight = this->height() * 0.2;
         break;

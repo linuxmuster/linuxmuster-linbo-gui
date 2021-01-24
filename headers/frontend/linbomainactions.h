@@ -87,7 +87,7 @@ private slots:
     void handleCurrentOsChanged(LinboOs* newOs);
     void handleLinboStateChanged(LinboBackend::LinboState newState);
     void handleLatestLogChanged(const LinboLogger::LinboLog& latestLog);
-    void handleAutostartTimeoutProgressChanged();
+    void handleTimeoutProgressChanged();
 
 signals:
     void imageCreationRequested();
