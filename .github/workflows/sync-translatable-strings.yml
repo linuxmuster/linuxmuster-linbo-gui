@@ -8,6 +8,8 @@ on:
       - 'sources/**'
       - '!sources/backend/**'
 
+  workflow_dispatch:
+
 jobs:
   sync_translatable_strings:
    runs-on: ubuntu-18.04
