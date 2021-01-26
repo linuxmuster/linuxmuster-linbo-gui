@@ -85,7 +85,8 @@ public:
         LineColor,
         AccentColor,
         TextColor,
-        ToolButtonColor
+        ToolButtonColor,
+        DisabledToolButtonColor
     };
     Q_ENUM(LinboGuiColorRole)
 
@@ -113,12 +114,14 @@ public:
     const QMap<LinboGuiColorRole, QColor> lightColors = {
         {TextColor, "#ffffff"},
         {ToolButtonColor, "#f59c00"},
+        {DisabledToolButtonColor, "#94753e"},
         {AccentColor, "#f59c00"}
     };
 
     const QMap<LinboGuiColorRole, QColor> darkColors = {
         {TextColor, "#000000"},
         {ToolButtonColor, "#394f5e"},
+        {DisabledToolButtonColor, "#7b909e"},
         {AccentColor, "#f59c00"}
     };
 

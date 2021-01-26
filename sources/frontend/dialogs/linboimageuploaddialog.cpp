@@ -71,16 +71,16 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     // Toolbuttons
 
     //% "upload"
-    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
-    this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, &LinboPushButton::clicked, [=](){
+    this->uploadButton = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
+    this->addToolButton(this->uploadButton);
+    connect(this->uploadButton, &LinboPushButton::clicked, [=]() {
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
         this->backend->uploadImage(this->backend->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
         this->autoClose();
     });
 
     //% "cancel"
-    toolButtonCache = new LinboToolButton(qtTrId("cancel"));
+    LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
     connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
@@ -118,6 +118,19 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
 void LinboImageUploadDialog::refreshImageList() {
     this->imageSelectBox->clear();
 
-    for(LinboImage* image : this->backend->getImagesOfOs(this->backend->getCurrentOs(), true))
+    bool imagesWereFound = false;
+    for(LinboImage* image : this->backend->getImagesOfOs(this->backend->getCurrentOs(), true, false)) {
         this->imageSelectBox->addItem(image->getName());
+        imagesWereFound = true;
+    }
+
+    if(!imagesWereFound) {
+        //% "No uploadable images"
+        this->imageSelectBox->addItem(qtTrId("dialog_uploadImage_noImages"));
+        this->imageSelectBox->setEnabled(false);
+        this->uploadButton->setEnabled(false);
+    }
+    else {
+        this->uploadButton->setEnabled(true);
+    }
 }

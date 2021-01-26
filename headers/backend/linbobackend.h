@@ -96,7 +96,7 @@ public:
     LinboLogger* getLogger();
     LinboConfig* getConfig();
     QList<LinboImage*> getImages();
-    QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true);
+    QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true, bool includeNonExistantImages = true);
     LinboImage* getImageByName(QString name);
     QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();

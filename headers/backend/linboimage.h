@@ -36,21 +36,38 @@ public:
     friend class LinboOs;
 
     QString getDescription();
-    const QString& getName() const {return this->name;}
-    LinboOs* getOs() {return this->os;}
-    bool hasOs() {return this->os != nullptr;}
+    const QString& getName() const {
+        return this->_name;
+    }
+    LinboOs* getOs() {
+        return this->_os;
+    }
+    bool hasOs() {
+        return this->_os != nullptr;
+    }
+    bool existsOnDisk() {
+        return this->_existsOnDisk;
+    }
 
 protected:
     explicit LinboImage(QString name, LinboBackend *parent = nullptr);
 
     bool setDescription (const QString& description);
-    void setName(const QString& name) {this->name = name;}
-    void setOs(LinboOs* os) {this->os = os;}
+    void setName(const QString& name) {
+        this->_name = name;
+    }
+    void setOs(LinboOs* os) {
+        this->_os = os;
+    }
+    void setExistsOnDisk(bool existsOnDisk) {
+        this->_existsOnDisk = existsOnDisk;
+    }
 
 private:
-    LinboBackend* backend;
-    LinboOs* os;
-    QString name;
+    LinboBackend* _backend;
+    LinboOs* _os;
+    QString _name;
+    bool _existsOnDisk;
 };
 
 #endif // LINBOIMAGE_H

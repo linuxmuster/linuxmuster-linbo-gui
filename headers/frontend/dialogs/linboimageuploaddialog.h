@@ -48,6 +48,8 @@ private:
 
     QButtonGroup* postProcessActionButtonGroup;
     QHBoxLayout* postProcessActionLayout;
+
+    LinboToolButton* uploadButton;
 };
 
 #endif // LINBOIMAGEUPLOADDIALOG_H

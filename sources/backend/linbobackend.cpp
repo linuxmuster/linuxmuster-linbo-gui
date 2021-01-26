@@ -55,7 +55,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     this->timeoutRemainingTimeRefreshTimer->setSingleShot(false);
     this->timeoutRemainingTimeRefreshTimer->setInterval(10);
     connect(this->timeoutRemainingTimeRefreshTimer, &QTimer::timeout,
-            [=]{
+    [=] {
         if(this->state == Autostarting)
             emit this->autostartTimeoutProgressChanged();
         else if(this->state == RootTimeout)
@@ -123,7 +123,8 @@ void LinboBackend::handleAutostartTimerTimeout() {
     case LinboOs::ReinstallOs:
         wasSuccessfull = this->reinstallCurrentOs();
         break;
-    default: break;
+    default:
+        break;
     }
 
     if(wasSuccessfull)
@@ -144,7 +145,7 @@ void LinboBackend::handleRootTimerTimeout() {
         // timeout for the second time -> logout
         this->logout();
     }
-    else if(this->state > Root){
+    else if(this->state > Root) {
         // non-matching state
         this->restartRootTimeout();
     }
@@ -170,15 +171,15 @@ bool LinboBackend::startCurrentOs() {
     this->setState(Starting);
 
     this->executeCommand(
-                false,
-                "start",
-                os->getBootPartition(),
-                os->getRootPartition(),
-                os->getKernel(),
-                os->getInitrd(),
-                os->getKernelOptions(),
-                this->config->getCachePath()
-                );
+        false,
+        "start",
+        os->getBootPartition(),
+        os->getRootPartition(),
+        os->getKernel(),
+        os->getInitrd(),
+        os->getKernelOptions(),
+        this->config->getCachePath()
+    );
 
     return true;
 }
@@ -194,18 +195,18 @@ bool LinboBackend::syncCurrentOs() {
     this->setState(Syncing);
 
     this->executeCommand(
-                false,
-                "syncstart",
-                this->config->getServerIpAddress(),
-                this->config->getCachePath(),
-                os->getBaseImage()->getName(),
-                "",
-                os->getBootPartition(),
-                os->getRootPartition(),
-                os->getKernel(),
-                os->getInitrd(),
-                os->getKernelOptions()
-                );
+        false,
+        "syncstart",
+        this->config->getServerIpAddress(),
+        this->config->getCachePath(),
+        os->getBaseImage()->getName(),
+        "",
+        os->getBootPartition(),
+        os->getRootPartition(),
+        os->getKernel(),
+        os->getInitrd(),
+        os->getKernelOptions()
+    );
 
     return true;
 }
@@ -221,19 +222,19 @@ bool LinboBackend::reinstallCurrentOs() {
     this->setState(Reinstalling);
 
     this->executeCommand(
-                false,
-                "syncr",
-                this->config->getServerIpAddress(),
-                this->config->getCachePath(),
-                os->getBaseImage()->getName(),
-                "",
-                os->getBootPartition(),
-                os->getRootPartition(),
-                os->getKernel(),
-                os->getInitrd(),
-                os->getKernelOptions(),
-                QString("force")
-                );
+        false,
+        "syncr",
+        this->config->getServerIpAddress(),
+        this->config->getCachePath(),
+        os->getBaseImage()->getName(),
+        "",
+        os->getBootPartition(),
+        os->getRootPartition(),
+        os->getKernel(),
+        os->getInitrd(),
+        os->getKernelOptions(),
+        QString("force")
+    );
 
     return true;
 }
@@ -300,16 +301,16 @@ bool LinboBackend::createImageOfCurrentOS(QString name, QString description, Lin
 
     this->logger->log("Beginning image creation...", LinboLogger::LinboGuiInfo);
     this->executeCommand(
-                false,
-                "create",
-                this->config->getCachePath(),
-                name,
-                name,
-                this->currentOs->getBootPartition(),
-                this->currentOs->getRootPartition(),
-                this->currentOs->getKernel(),
-                this->currentOs->getInitrd()
-                );
+        false,
+        "create",
+        this->config->getCachePath(),
+        name,
+        name,
+        this->currentOs->getBootPartition(),
+        this->currentOs->getRootPartition(),
+        this->currentOs->getKernel(),
+        this->currentOs->getInitrd()
+    );
 
     return true;
 }
@@ -318,10 +319,10 @@ QString LinboBackend::readImageDescription(LinboImage* image) {
     QProcess readProcess;
     int exitCode = -1;
     QString description = this->executeCommand(
-                true,
-                this->linboCmdCommand,
-                this->buildCommand("readfile", this->config->getCachePath(), image->getName() + ".desc"),
-                &exitCode);
+                              true,
+                              this->linboCmdCommand,
+                              this->buildCommand("readfile", this->config->getCachePath(), image->getName() + ".desc"),
+                              &exitCode);
 
     if(exitCode == 0)
         return description;
@@ -345,8 +346,8 @@ bool LinboBackend::writeImageDescription(QString imageName, QString newDescripti
 
     QProcess process;
     process.start(
-                this->linboCmdCommand,
-                this->buildCommand("writefile", this->config->getCachePath(), imageName + ".desc"));
+        this->linboCmdCommand,
+        this->buildCommand("writefile", this->config->getCachePath(), imageName + ".desc"));
 
     if(!process.waitForStarted()) {
         this->logger->log("Description writer didn't start: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
@@ -378,6 +379,9 @@ bool LinboBackend::uploadImagePrivate(const LinboImage* image, LinboPostProcessA
     if(this->state != Root && !(this->state == CreatingImage && allowCreatingImageState))
         return false;
 
+    if(image == nullptr)
+        return false;
+
     this->postProcessActions = postProcessActions;
 
     this->logger->log("Uploading image", LinboLogger::LinboLogChapterBeginning);
@@ -385,14 +389,14 @@ bool LinboBackend::uploadImagePrivate(const LinboImage* image, LinboPostProcessA
     this->setState(UploadingImage);
 
     this->executeCommand(
-                false,
-                "upload",
-                this->config->getServerIpAddress(),
-                "linbo",
-                this->rootPassword,
-                this->config->getCachePath(),
-                image->getName()
-                );
+        false,
+        "upload",
+        this->config->getServerIpAddress(),
+        "linbo",
+        this->rootPassword,
+        this->config->getCachePath(),
+        image->getName()
+    );
 
     return true;
 }
@@ -409,14 +413,14 @@ bool LinboBackend::partitionDrive(bool format) {
     for( int i=0; i < this->diskPartitions.length(); i++) {
         LinboDiskPartition* p = this->diskPartitions[i];
         commandArgs.append(
-                    this->buildCommand(
-                        p->getPath(),
-                        QString::number(p->getSize()),
-                        p->getId(),
-                        QString((p->getBootable())?"bootable":"\" \""),
-                        p->getFstype()
-                        )
-                    );
+            this->buildCommand(
+                p->getPath(),
+                QString::number(p->getSize()),
+                p->getId(),
+                QString((p->getBootable())?"bootable":"\" \""),
+                p->getFstype()
+            )
+        );
     }
 
     this->executeCommand(false, this->linboCmdCommand, commandArgs);
@@ -539,12 +543,14 @@ LinboConfig* LinboBackend::getConfig() {
 QList<LinboImage*> LinboBackend::getImages() {
     return this->images.values();
 }
-QList<LinboImage*> LinboBackend::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs) {
+QList<LinboImage*> LinboBackend::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {
     QList<LinboImage*> filteredImages;
     QList<LinboImage*> imagesWithoutOs;
 
     for(LinboImage* image : this->images)
-        if(image->getOs() == os)
+        if(!image->existsOnDisk() && !includeNonExistantImages)
+            continue;
+        else if(image->getOs() == os)
             filteredImages.append(image);
         else if(includeImagesWithoutOs && !image->hasOs())
             imagesWithoutOs.append(image);
@@ -858,10 +864,19 @@ void LinboBackend::loadEnvironmentValues() {
 
     // Load all existing images
     QStringList existingImageNames = this->executeCommand(true, "listimages", this->config->getCachePath()).split("\n");
-    for(QString existingImage : existingImageNames) {
-        existingImage = existingImage.split("/").last();
-        if(!existingImage.isEmpty() && !this->images.contains(existingImage))
-            this->images.insert(existingImage, new LinboImage(existingImage, this));
+    for(QString existingImageName : existingImageNames) {
+        existingImageName = existingImageName.split("/").last();
+        LinboImage* existingImage = nullptr;
+        if(!existingImageName.isEmpty() && !this->images.contains(existingImageName)) {
+            existingImage = new LinboImage(existingImageName, this);
+            this->images.insert(existingImageName, existingImage);
+        }
+        else if(this->images.contains(existingImageName)) {
+            existingImage = this->images[existingImageName];
+        }
+
+        if(existingImage != nullptr)
+            existingImage->setExistsOnDisk(true);
     }
 
     this->logger->log("Finished loading environment values", LinboLogger::LinboGuiInfo);

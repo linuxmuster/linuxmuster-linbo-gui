@@ -21,15 +21,16 @@
 
 LinboImage::LinboImage(QString name, LinboBackend *parent) : QObject(parent)
 {
-    this->backend = parent;
-    this->os = nullptr;
+    this->_backend = parent;
+    this->_os = nullptr;
+    this->_existsOnDisk = false;
     this->setName(name);
 }
 
 QString LinboImage::getDescription() {
-    return this->backend->readImageDescription(this);
+    return this->_backend->readImageDescription(this);
 }
 
 bool LinboImage::setDescription (const QString& description) {
-    return this->backend->writeImageDescription(this, description);
+    return this->_backend->writeImageDescription(this, description);
 }

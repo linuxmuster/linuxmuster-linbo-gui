@@ -31,20 +31,40 @@ class LinboDiskPartition : public QObject
 public:
     friend class LinboBackend;
 
-    const QString& getPath() const {return this->path;}
-    const QString& getId() const {return this->id;}
-    const QString& getFstype() const {return this->fstype;}
-    const unsigned int& getSize() const {return this->size;}
-    const bool& getBootable() const {return this->bootable;}
+    const QString& getPath() const {
+        return this->path;
+    }
+    const QString& getId() const {
+        return this->id;
+    }
+    const QString& getFstype() const {
+        return this->fstype;
+    }
+    const unsigned int& getSize() const {
+        return this->size;
+    }
+    const bool& getBootable() const {
+        return this->bootable;
+    }
 
 private:
     explicit LinboDiskPartition(QObject *parent = nullptr);
 
-    void setPath( const QString& path ) {this->path = path;}
-    void setId( const QString& id ) {this->id = id;}
-    void setFstype( const QString& fstype ) {this->fstype = fstype;}
-    void setSize( const unsigned int& size ) {this->size = size;}
-    void setBootable( const bool& bootable ) {this->bootable = bootable;}
+    void setPath( const QString& path ) {
+        this->path = path;
+    }
+    void setId( const QString& id ) {
+        this->id = id;
+    }
+    void setFstype( const QString& fstype ) {
+        this->fstype = fstype;
+    }
+    void setSize( const unsigned int& size ) {
+        this->size = size;
+    }
+    void setBootable( const bool& bootable ) {
+        this->bootable = bootable;
+    }
 
     QString path;
     QString id;
