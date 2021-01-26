@@ -269,6 +269,9 @@ void LinboMainActions::resizeAndPositionAllItems() {
             this->actionButtons[i]->setVisible(positionsEnabled[i]);
             this->actionButtons[i]->setGeometry(geometries[i]);
         }
+
+        if(i < 2)
+            QWidget::setTabOrder(this->actionButtons[i], this->actionButtons[i+1]);
     }
 
     QFont fontCache;
