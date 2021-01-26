@@ -125,7 +125,7 @@ void LinboImageUploadDialog::refreshImageList() {
     }
 
     if(!imagesWereFound) {
-        //% "No uploadable images"
+        //% "No image found"
         this->imageSelectBox->addItem(qtTrId("dialog_uploadImage_noImages"));
         this->imageSelectBox->setEnabled(false);
         this->uploadButton->setEnabled(false);
