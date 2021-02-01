@@ -310,7 +310,7 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
         if(keyEvent->key() == Qt::Key_F1) {
             this->f1Pressed = true;
         }
-        else if(keyEvent->key() == Qt::Key_Escape && this->backend->getState() == LinboBackend::Autostarting)
+        else if(keyEvent->key() == Qt::Key_Escape && (this->backend->getState() == LinboBackend::Autostarting || this->backend->getState() == LinboBackend::RootTimeout))
             this->backend->cancelCurrentAction();
     }
     else if(event->type() == QEvent::KeyRelease) {

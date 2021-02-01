@@ -54,6 +54,8 @@ public:
         OverlayReinstallIcon,
         OverlayImageIcon,
 
+        DefaultOsIcon,
+
         DesktopIcon,
         NetworkIcon,
 
@@ -108,7 +110,8 @@ public:
         StartLegacyIcon,
         SyncLegacyIcon,
         ReinstallLegacyIcon,
-        UploadLegacyIcon
+        UploadLegacyIcon,
+        DefaultOsIcon
     };
 
     const QMap<LinboGuiColorRole, QColor> lightColors = {

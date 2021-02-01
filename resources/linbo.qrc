@@ -73,5 +73,6 @@
         <file>fonts/UbuntuMono-R.ttf</file>
         <file>fonts/UbuntuMono-BI.ttf</file>
         <file>fonts/UbuntuMono-B.ttf</file>
+        <file>icons/universal/defaultOs.svg</file>
     </qresource>
 </RCC>

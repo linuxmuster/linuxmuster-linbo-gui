@@ -28,6 +28,10 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->showDefaultAction = true;
     this->osNameLabel = nullptr;
 
+    if(!QFile::exists(icon)) {
+        icon = gTheme->getIconPath(LinboGuiTheme::DefaultOsIcon);
+    }
+
     connect(os->getBackend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
     QMap<LinboOs::LinboOsStartAction, QString> defaultStartActionOverlayPaths = {
@@ -38,26 +42,26 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     };
 
     LinboPushButtonOverlay* checkedOverlay= new LinboPushButtonOverlay (
-                LinboPushButtonOverlay::OnChecked,
-                new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayCheckedIcon)),
-                false
-                );
+        LinboPushButtonOverlay::OnChecked,
+        new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayCheckedIcon)),
+        false
+    );
 
     QString defaultActionOverlayPath = defaultStartActionOverlayPaths[this->os->getDefaultAction()];
     if(!this->os->getActionEnabled(this->os->getDefaultAction()))
         defaultActionOverlayPath = "";
 
     this->defaultStartActionOverlay = new LinboPushButtonOverlay (
-                LinboPushButtonOverlay::Background,
-                new QSvgWidget(defaultActionOverlayPath),
-            false
-            );
+        LinboPushButtonOverlay::Background,
+        new QSvgWidget(defaultActionOverlayPath),
+        false
+    );
 
     this->defaultRootActionOverlay = new LinboPushButtonOverlay (
-                LinboPushButtonOverlay::Background,
-                new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayImageIcon)),
-                false
-                );
+        LinboPushButtonOverlay::Background,
+        new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayImageIcon)),
+        false
+    );
 
     this->button = new LinboPushButton(icon, "", {checkedOverlay, this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
     this->setToolTip(this->os->getDescription());
@@ -84,10 +88,17 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             this->startActionButtons.append(actionButton);
 
             switch (startAction) {
-            case LinboOs::StartOs: connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::start); break;
-            case LinboOs::SyncOs: connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::sync); break;
-            case LinboOs::ReinstallOs: connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::reinstall); break;
-            default: break;
+            case LinboOs::StartOs:
+                connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::start);
+                break;
+            case LinboOs::SyncOs:
+                connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::sync);
+                break;
+            case LinboOs::ReinstallOs:
+                connect(actionButton, &LinboPushButton::clicked, this->os, &LinboOs::reinstall);
+                break;
+            default:
+                break;
             }
         }
 
@@ -95,7 +106,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboGuiTheme::UploadLegacyIcon), this);
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
-        connect(actionButton, &LinboPushButton::clicked, [=]{
+        connect(actionButton, &LinboPushButton::clicked, [=] {
             this->os->getBackend()->setCurrentOs(this->os);
             emit this->imageUploadRequested();
         });
@@ -117,7 +128,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         this->osNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     }
     else {
-        connect(this->button, &LinboPushButton::hovered, [=]{this->button->setChecked(true);});
+        connect(this->button, &LinboPushButton::hovered, [=] {this->button->setChecked(true);});
         connect(this->button, &LinboPushButton::doubleClicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
     }
 
@@ -143,7 +154,7 @@ void LinboOsSelectButton::handlePrimaryButtonClicked() {
         default:
             break;
         }
-    else if (this->os->getBackend()->getState() == LinboBackend::Root){
+    else if (this->os->getBackend()->getState() == LinboBackend::Root) {
         this->os->getBackend()->setCurrentOs(this->os);
         emit this->imageCreationRequested();
     }
@@ -157,7 +168,7 @@ void LinboOsSelectButton::setVisibleAnimated(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisibleAnimated(visible);
     if(this->osNameLabel != nullptr)
-    this->osNameLabel->setVisible(visible);
+        this->osNameLabel->setVisible(visible);
 
     this->updateActionButtonVisibility();
 }
@@ -166,7 +177,7 @@ void LinboOsSelectButton::setVisible(bool visible) {
     this->shouldBeVisible = visible;
     this->button->setVisible(visible);
     if(this->osNameLabel != nullptr)
-    this->osNameLabel->setVisible(visible);
+        this->osNameLabel->setVisible(visible);
 
     this->updateActionButtonVisibility(true);
 }
@@ -175,7 +186,7 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
 
     if(!this->showActionButtons || this->os->getBackend()->getConfig()->getUseMinimalLayout()) {
-        this->button->setGeometry((this->width() - this->height()) / 2 , 0, this->height(), this->height());
+        this->button->setGeometry((this->width() - this->height()) / 2, 0, this->height(), this->height());
     }
     else {
         this->button->setGeometry(0, 0, event->size().height(), event->size().height());
