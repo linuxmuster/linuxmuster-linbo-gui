@@ -66,7 +66,7 @@ jobs:
           name: deb-package
 
       - name: Extract current changes
-        run: cat debian/changelog | sed 1d | sed '/ -- .*/Q' | sed '/^$/d' | tail >> ./current-changes
+        run: cat *.changes | sed '0,/^Changes:$/d' | sed '/Checksums.*/Q' | sed '1,2d' | tail >> ./current-changes
 
       - name: Create Release
         id: create_release
@@ -79,6 +79,9 @@ jobs:
           draft: false
           prerelease: false
           body_path: ./current-changes
+
+      - name: Delete current changes file
+        run: rm ./current-changes
 
       - name: Upload Release Assets
         id: upload-release-assets
