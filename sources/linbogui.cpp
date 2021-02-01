@@ -69,7 +69,7 @@ LinboGui::LinboGui()
     QString localeName = this->backend->getConfig()->getLocale();
     if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
 
-        if(!localeName.isEmpty()){
+        if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)
             QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
             localeName = tmpLocaleName[0] + "-";
@@ -85,21 +85,7 @@ LinboGui::LinboGui()
         QApplication::installTranslator(translator);
     }
 
-    // attach eventFilter
-    qApp->installEventFilter(this);
-
     // create start page
     this->startPage = new LinboMainPage(this->backend, this);
 
-}
-
-bool LinboGui::eventFilter(QObject *obj, QEvent *event) {
-    Q_UNUSED(obj)
-
-    if (event->type() == QEvent::MouseMove)
-    {
-        // reset root timer whenever the mouse moves
-        this->backend->restartRootTimeout();
-    }
-    return false;
 }

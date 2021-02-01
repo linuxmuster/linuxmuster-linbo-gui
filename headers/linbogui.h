@@ -47,10 +47,6 @@ private:
     LinboGuiTheme* theme;
     LinboMainPage* startPage;
 
-public slots:
-    bool eventFilter(QObject *obj, QEvent *event);
-
-
 };
 
 #endif // LINBOGUI_H

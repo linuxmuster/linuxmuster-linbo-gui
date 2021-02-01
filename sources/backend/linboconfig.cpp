@@ -23,7 +23,7 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
 {
     autoPartition = 0;
     autoInitCache = 0;
-    backgroundColor = "#ffffff";
+    backgroundColor = "#2a4457";
     locale = "";
     downloadMethod = LinboConfig::Rsync;
     autoFormat = 0;

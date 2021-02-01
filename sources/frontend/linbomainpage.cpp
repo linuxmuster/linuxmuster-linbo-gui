@@ -22,6 +22,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 {
     this->inited = false;
     this->showClientInfo = false;
+    this->f1Pressed = false;
 
     this->backend = backend;
 
@@ -166,11 +167,11 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
             this->terminalDialog, &LinboImageCreationDialog::open);
 
     this->confirmationDialog = new LinboConfirmationDialog(
-                //% "Partition drive"
-                qtTrId("dialog_partition_title"),
-                //% "Are you sure? This will delete all data on your drive!"
-                qtTrId("dialog_partition_question"),
-                parent);
+        //% "Partition drive"
+        qtTrId("dialog_partition_title"),
+        //% "Are you sure? This will delete all data on your drive!"
+        qtTrId("dialog_partition_question"),
+        parent);
     this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
     this->confirmationDialog->centerInParent();
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
@@ -189,7 +190,8 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
             this->updateCacheDialog, &LinboImageCreationDialog::open);
 
-
+    // attach eventFilter
+    qApp->installEventFilter(this);
     this->handleLinboStateChanged(this->backend->getState());
 }
 
@@ -203,7 +205,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     switch (newState) {
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError:
-        if(useMinimalLayout){
+        if(useMinimalLayout) {
             osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.4;
         }
@@ -214,7 +216,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
 
     case LinboBackend::Idle:
-        if(useMinimalLayout){
+        if(useMinimalLayout) {
             osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.2;
         }
@@ -230,7 +232,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
 
     case LinboBackend::Root:
-        if(useMinimalLayout){
+        if(useMinimalLayout) {
             osSelectionRowHeight = this->height() * 0.2;
             startActionsWidgetHeight = this->height() * 0.25;
         }
@@ -294,22 +296,45 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     this->inited = true;
 }
 
-void LinboMainPage::keyPressEvent(QKeyEvent *ev)
-{
-    if(ev->key() == Qt::Key_F1 && (this->backend->getState() == LinboBackend::Idle || this->backend->getState() == LinboBackend::Root)) {
-        this->showClientInfo = !this->showClientInfo;
+bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
+    Q_UNUSED(obj)
 
-        if(this->showClientInfo) {
-            this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-            this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
-            this->clientInfoAnimation->start();
+    if (event->type() == QEvent::MouseMove)
+    {
+        this->backend->restartRootTimeout();
+    }
+    else if(event->type() == QEvent::KeyPress) {
+        this->backend->restartRootTimeout();
+
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if(keyEvent->key() == Qt::Key_F1) {
+            this->f1Pressed = true;
         }
-        else {
-            this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-            this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
-            this->clientInfoAnimation->start();
+        else if(keyEvent->key() == Qt::Key_Escape && this->backend->getState() == LinboBackend::Autostarting)
+            this->backend->cancelCurrentAction();
+    }
+    else if(event->type() == QEvent::KeyRelease) {
+        this->backend->restartRootTimeout();
+
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if(keyEvent->key() == Qt::Key_F1) {
+            if(this->backend->getState() == LinboBackend::Idle || this->backend->getState() == LinboBackend::Root) {
+                this->showClientInfo = !this->showClientInfo;
+
+                if(this->showClientInfo) {
+                    this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
+                    this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
+                    this->clientInfoAnimation->start();
+                }
+                else {
+                    this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
+                    this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
+                    this->clientInfoAnimation->start();
+                }
+            }
+            this->f1Pressed = false;
         }
     }
-    else if(ev->key() == Qt::Key_Escape && this->backend->getState() == LinboBackend::Autostarting)
-        this->backend->cancelCurrentAction();
+    return false;
 }
+

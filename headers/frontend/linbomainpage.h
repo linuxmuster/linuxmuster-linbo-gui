@@ -69,11 +69,12 @@ private:
 
     bool inited;
     bool showClientInfo;
+    bool f1Pressed;
 
 private slots:
     void handleLinboStateChanged(LinboBackend::LinboState newState);
 
-    void keyPressEvent(QKeyEvent *ev) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 signals:
 
 };

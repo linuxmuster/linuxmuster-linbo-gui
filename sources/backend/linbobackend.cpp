@@ -605,8 +605,11 @@ int LinboBackend::getRootTimeoutRemainingSeconds() {
 // -----------
 
 QString LinboBackend::executeCommand(bool waitForFinished, QString command, QStringList commandArgs, int* returnCode) {
-    // args are not logged for security
-    this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command, LinboLogger::LinboGuiInfo);
+    if(this->state >= Root)
+        // args are not logged for security
+        this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command, LinboLogger::LinboGuiInfo);
+    else
+        this->logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
 
     if(waitForFinished) {
         // clear old output
@@ -731,8 +734,6 @@ void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
 
             // Remove comments
             thisLine = thisLine.split("#")[0];
-            // ignore capitalization
-            thisLine = thisLine.toLower();
             // remove empty characters
             thisLine = thisLine.simplified();
             // ignore empty lines
@@ -741,7 +742,7 @@ void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
 
             if(thisLine.startsWith("[")) {
                 // we found a new section!
-                currentSection = thisLine;
+                currentSection = thisLine.toLower();
                 firstLineOfSection = true;
                 continue;
             }
@@ -757,7 +758,7 @@ void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
             if(keyValueList.length() < 2)
                 continue;
 
-            QString key = keyValueList[0].simplified();
+            QString key = keyValueList[0].simplified().toLower();
             QString value = keyValueList[1].simplified();
 
             // ignore empty keys and values
@@ -841,7 +842,7 @@ void LinboBackend::loadEnvironmentValues() {
     this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));
 
     // Version
-    this->config->setLinboVersion(this->executeCommand(true, "version").simplified().replace("\n", "").split("|").first());
+    this->config->setLinboVersion(this->executeCommand(true, "version").simplified().replace("\n", "").split("[").first());
 
     // hostname
     this->config->setHostname(this->executeCommand(true, "hostname").replace("\n", ""));
@@ -942,16 +943,16 @@ bool LinboBackend::stringToBool(const QString& value) {
     QStringList trueWords("yes");
     trueWords.append("true");
     trueWords.append("enable");
-    return trueWords.contains(value.simplified());
+    return trueWords.contains(value.simplified().toLower());
 }
 
 
 LinboConfig::DownloadMethod LinboBackend::stringToDownloadMethod(const QString& value) {
-    if(value == "rsync")
+    if(value.toLower() == "rsync")
         return LinboConfig::Rsync;
-    else if(value == "multicast")
+    else if(value.toLower() == "multicast")
         return LinboConfig::Multicast;
-    else if(value == "torrent")
+    else if(value.toLower() == "torrent")
         return LinboConfig::Torrent;
     else
         return LinboConfig::Rsync;
