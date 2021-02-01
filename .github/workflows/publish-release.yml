@@ -30,13 +30,4 @@ jobs:
           username: dorian
           key: ${{ secrets.REPO_SSH_KEY }}
           port: 22
-          script: /usr/local/bin/publish-debs
-
-      - name: Publish package on lmn archive 2
-        uses: appleboy/ssh-action@master
-        with:
-          host: archive.linuxmuster.net
-          username: dorian
-          key: ${{ secrets.REPO_SSH_KEY }}
-          port: 22
-          script: /usr/local/bin/publish-debs
+          script: cd /srv/userhomes/dorian && /usr/local/bin/publish-debs
