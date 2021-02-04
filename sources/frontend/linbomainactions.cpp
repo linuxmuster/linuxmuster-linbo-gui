@@ -65,13 +65,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->passedTimeLabel->setAlignment(Qt::AlignCenter);
 
     this->passedTimeTimer = new QTimer(this->progressBarWidget);
-    connect(this->passedTimeTimer, &QTimer::timeout, [=](){
-       int passedSecs = QDateTime::currentSecsSinceEpoch() - this->processStartedAt;
-       QString passedTime =
-               QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
-               + ":"
-               + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
-       this->passedTimeLabel->setText(passedTime);
+    connect(this->passedTimeTimer, &QTimer::timeout, [=]() {
+        int passedSecs = QDateTime::currentSecsSinceEpoch() - this->processStartedAt;
+        QString passedTime =
+            QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
+            + ":"
+            + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
+        this->passedTimeLabel->setText(passedTime);
     });
     this->passedTimeTimer->setInterval(1000);
     this->processStartedAt = QDateTime::currentSecsSinceEpoch();
@@ -173,6 +173,11 @@ void LinboMainActions::resizeAndPositionAllItems() {
     int defaultSpacing = this->height() * 0.03;
 
     // Action buttons
+    // set tooltips:
+    this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->getName()));
+    this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->getName()));
+    this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->getName()));
+
     // bring buttons in correct order:
     LinboOs* selectedOs = this->backend->getCurrentOs();
     LinboOs::LinboOsStartAction defaultAction = LinboOs::UnknownAction;
@@ -234,27 +239,27 @@ void LinboMainActions::resizeAndPositionAllItems() {
     if(positionsEnabled[1] && positionsEnabled[2]) {
         // place buttons besides each other
         geometries[1] = QRect(
-                    this->buttonWidget->width() / 2 - secondaryButtonHeight - buttonSpacing / 2,
-                    defaultButtonHeight + buttonSpacing,
-                    secondaryButtonHeight,
-                    secondaryButtonHeight
-                    );
+                            this->buttonWidget->width() / 2 - secondaryButtonHeight - buttonSpacing / 2,
+                            defaultButtonHeight + buttonSpacing,
+                            secondaryButtonHeight,
+                            secondaryButtonHeight
+                        );
 
         geometries[2] = QRect(
-                    this->buttonWidget->width() / 2 + buttonSpacing / 2,
-                    defaultButtonHeight + buttonSpacing,
-                    secondaryButtonHeight,
-                    secondaryButtonHeight
-                    );
+                            this->buttonWidget->width() / 2 + buttonSpacing / 2,
+                            defaultButtonHeight + buttonSpacing,
+                            secondaryButtonHeight,
+                            secondaryButtonHeight
+                        );
     }
     else {
         // place buttons on top of each other
         geometries[1] = QRect(
-                    this->buttonWidget->width() / 2 - secondaryButtonHeight / 2,
-                    defaultButtonHeight + buttonSpacing,
-                    secondaryButtonHeight,
-                    secondaryButtonHeight
-                    );
+                            this->buttonWidget->width() / 2 - secondaryButtonHeight / 2,
+                            defaultButtonHeight + buttonSpacing,
+                            secondaryButtonHeight,
+                            secondaryButtonHeight
+                        );
 
         geometries[2] = geometries[1];
     }
@@ -410,7 +415,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         if(chaperLogs.length() == 0)
             //% "No logs before this crash"
             errorDetails = "<b>" + qtTrId("main_message_noLogs") + "</b>";
-        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0){
+        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0) {
             //% "The last logs before the crash were:"
             errorDetails = "<b>" + qtTrId("main_message_lastLogs") + "</b><br>";
             errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
@@ -499,8 +504,8 @@ void LinboMainActions::handleTimeoutProgressChanged() {
     this->logLabel->setText(label);
 
     QString remaningTime =
-            QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
-            + ":"
-            + QStringLiteral("%1").arg(remaningSeconds % 60, 2, 10, QLatin1Char('0'));
+        QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
+        + ":"
+        + QStringLiteral("%1").arg(remaningSeconds % 60, 2, 10, QLatin1Char('0'));
     this->passedTimeLabel->setText(remaningTime);
 }

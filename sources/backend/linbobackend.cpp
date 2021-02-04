@@ -867,6 +867,9 @@ void LinboBackend::loadEnvironmentValues() {
     QStringList existingImageNames = this->executeCommand(true, "listimages", this->config->getCachePath()).split("\n");
     for(QString existingImageName : existingImageNames) {
         existingImageName = existingImageName.split("/").last();
+        if(!existingImageName.endsWith(".cloop"))
+            continue;
+
         LinboImage* existingImage = nullptr;
         if(!existingImageName.isEmpty() && !this->images.contains(existingImageName)) {
             existingImage = new LinboImage(existingImageName, this);

@@ -28,7 +28,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->showDefaultAction = true;
     this->osNameLabel = nullptr;
 
-    if(!QFile::exists(icon)) {
+    if(!QFile::exists(icon) || !icon.endsWith(".svg")) {
         icon = gTheme->getIconPath(LinboGuiTheme::DefaultOsIcon);
     }
 
@@ -69,20 +69,25 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     if(!os->getBackend()->getConfig()->getUseMinimalLayout()) {
         connect(this->button, &LinboPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
-        QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
-            {LinboOs::StartOs, gTheme->getIconPath(LinboGuiTheme::StartLegacyIcon)},
-            {LinboOs::SyncOs, gTheme->getIconPath(LinboGuiTheme::SyncLegacyIcon)},
-            {LinboOs::ReinstallOs, gTheme->getIconPath(LinboGuiTheme::ReinstallLegacyIcon)}
+        QMap<LinboOs::LinboOsStartAction, QStringList> startActionButtonIcons = {
+            //% "Start %1"
+            {LinboOs::StartOs, {gTheme->getIconPath(LinboGuiTheme::StartLegacyIcon), qtTrId("startOS")}},
+            //% "Sync and start %1"
+            {LinboOs::SyncOs, {gTheme->getIconPath(LinboGuiTheme::SyncLegacyIcon), qtTrId("syncOS")}},
+            //% "Reinstall %1"
+            {LinboOs::ReinstallOs, {gTheme->getIconPath(LinboGuiTheme::ReinstallLegacyIcon), qtTrId("reinstallOS")}}
         };
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
-            QString startActionIconPath = startActionButtonIcons[startAction];
+            QString startActionIconPath = startActionButtonIcons[startAction][0];
             bool disabled = !this->os->getActionEnabled(startAction) || this->os->getDefaultAction() == startAction;
-            qDebug() << "OS " << this->os->getName() << " has action " << startAction << " enabled: " << !disabled;
+
             if(disabled)
                 continue;
 
             LinboPushButton* actionButton = new LinboPushButton(startActionIconPath, this);
+            actionButton->setToolTip(startActionButtonIcons[startAction][1].arg(this->os->getName()));
+
             actionButton->setEnabled(!disabled);
             actionButton->setVisible(false);
             this->startActionButtons.append(actionButton);
@@ -203,10 +208,14 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         }
 
         for(LinboPushButton* actionButton : this->startActionButtons) {
-            if(actionButtonSize == 2)
+            if(actionButtonSize == 2) {
+                actionButton->setVisible(false);
                 actionButton->setDisabled(true);
-            else
+            }
+            else {
+                actionButton->setVisible(false);
                 actionButton->setDisabled(false);
+            }
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }
@@ -214,10 +223,15 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         x = this->height();
 
         for(LinboPushButton* actionButton : this->rootActionButtons) {
-            if(actionButtonSize == 2)
+            if(actionButtonSize == 2) {
+                actionButton->setVisible(false);
                 actionButton->setDisabled(true);
-            else
+            }
+            else {
+                actionButton->setVisible(false);
                 actionButton->setDisabled(false);
+            }
+
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }
