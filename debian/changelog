@@ -1,3 +1,11 @@
+linuxmuster-linbo-gui7 (7.0.0-rc03) lmn7-testing; urgency=low
+
+  * Added tooltips to startaction buttons (#42)
+  * Disable gui when in remote mode (#43)
+  * Add a tiny hint "F1" to remind people to press F1 to show client details (#44)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 5 Feb 2021 19:01:00 +0100
+
 linuxmuster-linbo-gui7 (7.0.0-rc02) lmn7-testing; urgency=low
 
   * Fixed issues with images containing uppercase letters (#41)
