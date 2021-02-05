@@ -21,13 +21,14 @@
 
 LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
 {
-    autoPartition = 0;
-    autoInitCache = 0;
-    backgroundColor = "#2a4457";
-    locale = "";
-    downloadMethod = LinboConfig::Rsync;
-    autoFormat = 0;
+    this->autoPartition = 0;
+    this->autoInitCache = 0;
+    this->backgroundColor = "#2a4457";
+    this->locale = "";
+    this->downloadMethod = LinboConfig::Rsync;
+    this->autoFormat = 0;
     this->useMinimalLayout = false;
+    this->guiDisabled = false;
 }
 
 bool LinboConfig::isBackgroundColorDark() {
