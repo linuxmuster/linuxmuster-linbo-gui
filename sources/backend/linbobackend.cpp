@@ -83,8 +83,12 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 #endif
     this->loadEnvironmentValues();
 
+    if(this->config->getGuiDisabled()) {
+        this->setState(Disabled);
+        this->logger->log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
+    }
     // triger autostart if necessary
-    if(this->currentOs != nullptr && this->currentOs->getAutostartEnabled())
+    else if(this->currentOs != nullptr && this->currentOs->getAutostartEnabled())
         this->executeAutostart();
     else
         this->setState(Idle);
@@ -900,6 +904,7 @@ void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig
         else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
         else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
         else if(key == "locale") linboConfig->setLocale(value);
+        else if(key == "guidisabled") linboConfig->setGuiDisabled(this->stringToBool(value));
     }
 }
 

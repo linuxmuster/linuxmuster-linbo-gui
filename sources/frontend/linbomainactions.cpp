@@ -391,6 +391,12 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
             currentWidget = this->emptyWidget;
         break;
 
+
+    case LinboBackend::Disabled:
+        this->cancelButton->hide();
+        //% "This client is controlled remotely. Please don't power it off."
+        this->logLabel->setText(qtTrId("main_message_disabled"));
+    // fall through
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
     case LinboBackend::CreatingImage:

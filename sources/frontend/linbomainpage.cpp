@@ -70,7 +70,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress());
+    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress() + " - F1");
     versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
@@ -251,6 +251,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     case LinboBackend::UpdatingCache:
     case LinboBackend::Registering:
     case LinboBackend::RootTimeout:
+    case LinboBackend::Disabled:
         osSelectionRowHeight = this->height() * 0;
         startActionsWidgetHeight = this->height() * 0.2;
         break;

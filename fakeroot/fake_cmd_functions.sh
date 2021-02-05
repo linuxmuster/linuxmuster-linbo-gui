@@ -249,7 +249,7 @@ update()
 # linbo_cmd version
 version()
 {
-    echo "LINBO 2.4.2 | 21st Century Schizoid Man"
+    echo "LINBO 2.4.2 [21st Century Schizoid Man]"
 }
 
 # linbo_cmd writefile /dev/sda4 filename

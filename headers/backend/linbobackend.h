@@ -56,6 +56,7 @@ public:
      */
     enum LinboState {
         Initializing,
+        Disabled,
         Autostarting,
         Idle,
         Starting,
