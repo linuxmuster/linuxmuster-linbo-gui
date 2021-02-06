@@ -118,7 +118,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     logoutActionButton->setFixedHeight(buttonWidth);
     logoutActionButton->setFixedWidth(buttonWidth);
     logoutActionButton->setVisible(false);
-    //% "Loug out"
+    //% "Log out"
     logoutActionButton->setToolTip(qtTrId("logout"));
 
     LinboPushButton* rebootActionButton = new LinboToolButton(LinboGuiTheme::RebootIcon);
