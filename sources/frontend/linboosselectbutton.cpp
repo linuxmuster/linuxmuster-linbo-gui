@@ -69,24 +69,24 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     if(!os->getBackend()->getConfig()->getUseMinimalLayout()) {
         connect(this->button, &LinboPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
-        QMap<LinboOs::LinboOsStartAction, QStringList> startActionButtonIcons = {
+        QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
             //% "Start %1"
-            {LinboOs::StartOs, {gTheme->getIconPath(LinboGuiTheme::StartLegacyIcon), qtTrId("startOS")}},
+            {LinboOs::StartOs, gTheme->getIconPath(LinboGuiTheme::StartLegacyIcon)},
             //% "Sync and start %1"
-            {LinboOs::SyncOs, {gTheme->getIconPath(LinboGuiTheme::SyncLegacyIcon), qtTrId("syncOS")}},
+            {LinboOs::SyncOs, gTheme->getIconPath(LinboGuiTheme::SyncLegacyIcon)},
             //% "Reinstall %1"
-            {LinboOs::ReinstallOs, {gTheme->getIconPath(LinboGuiTheme::ReinstallLegacyIcon), qtTrId("reinstallOS")}}
+            {LinboOs::ReinstallOs, gTheme->getIconPath(LinboGuiTheme::ReinstallLegacyIcon)}
         };
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
-            QString startActionIconPath = startActionButtonIcons[startAction][0];
+            QString startActionIconPath = startActionButtonIcons[startAction];
             bool disabled = !this->os->getActionEnabled(startAction) || this->os->getDefaultAction() == startAction;
 
             if(disabled)
                 continue;
 
             LinboPushButton* actionButton = new LinboPushButton(startActionIconPath, this);
-            actionButton->setToolTip(startActionButtonIcons[startAction][1].arg(this->os->getName()));
+            actionButton->setToolTip(this->getTooltipContentForAction(startAction));
 
             actionButton->setEnabled(!disabled);
             actionButton->setVisible(false);
@@ -111,6 +111,8 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboGuiTheme::UploadLegacyIcon), this);
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
+        //% "Upload image of %1"
+        actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->os->getName()));
         connect(actionButton, &LinboPushButton::clicked, [=] {
             this->os->getBackend()->setCurrentOs(this->os);
             emit this->imageUploadRequested();
@@ -263,9 +265,16 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 
     switch (state) {
     case LinboBackend::Idle:
+        this->button->setToolTip(this->getTooltipContentForAction(this->os->getDefaultAction()));
+        if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
+            this->showDefaultAction = true;
+        break;
     case LinboBackend::Root:
         if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
             this->showDefaultAction = true;
+
+        //% "Create image of %1"
+        this->button->setToolTip(qtTrId("createImageOfOS"));
 
         checkedOverlayMuted = false;
         break;
@@ -278,6 +287,19 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 
     this->button->setOverlayTypeMuted(LinboPushButtonOverlay::OnChecked, checkedOverlayMuted);
     this->updateActionButtonVisibility();
+}
+
+QString LinboOsSelectButton::getTooltipContentForAction(LinboOs::LinboOsStartAction action) {
+    QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
+        //% "Start %1"
+        {LinboOs::StartOs, qtTrId("startOS")},
+        //% "Sync and start %1"
+        {LinboOs::SyncOs, qtTrId("syncOS")},
+        //% "Reinstall %1"
+        {LinboOs::ReinstallOs, qtTrId("reinstallOS")}
+    };
+
+    return startActionButtonIcons[action].arg(this->os->getName());
 }
 
 void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {

@@ -27,7 +27,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    this->backend->login("Muster!");
+    //this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -109,6 +109,8 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->powerActionButtons.append(rootActionButton);
     rootActionButton->setFixedHeight(buttonWidth);
     rootActionButton->setFixedWidth(buttonWidth);
+    //% "Settings"
+    rootActionButton->setToolTip(qtTrId("settings"));
 
     logoutActionButton = new LinboToolButton(LinboGuiTheme::LogoutIcon);
     connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
@@ -116,18 +118,24 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     logoutActionButton->setFixedHeight(buttonWidth);
     logoutActionButton->setFixedWidth(buttonWidth);
     logoutActionButton->setVisible(false);
+    //% "Loug out"
+    logoutActionButton->setToolTip(qtTrId("logout"));
 
     LinboPushButton* rebootActionButton = new LinboToolButton(LinboGuiTheme::RebootIcon);
     connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
     this->powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
     rebootActionButton->setFixedWidth(buttonWidth);
+    //% "Reboot"
+    rebootActionButton->setToolTip(qtTrId("reboot"));
 
     LinboPushButton* shutdownActionButton = new LinboToolButton(LinboGuiTheme::ShutdownIcon);
     connect(shutdownActionButton, SIGNAL(clicked()), this->backend, SLOT(shutdown()));
     this->powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
     shutdownActionButton->setFixedWidth(buttonWidth);
+    //% "Shutdown"
+    shutdownActionButton->setToolTip(qtTrId("shutdown"));
 
     QVBoxLayout* powerActionsLayout = new QVBoxLayout(powerActionsLayoutWidget);
     powerActionsLayout->setSpacing(0);

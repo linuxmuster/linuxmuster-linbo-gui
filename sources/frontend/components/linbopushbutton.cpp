@@ -58,23 +58,23 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     // Hover
     this->hoveredOverlay = new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayHoveredIcon));
     this->overlays.append(
-                new LinboPushButtonOverlay(
-                    LinboPushButtonOverlay::OnHover,
-                    this->hoveredOverlay,
-                    true
-                    )
-                );
+        new LinboPushButtonOverlay(
+            LinboPushButtonOverlay::OnHover,
+            this->hoveredOverlay,
+            true
+        )
+    );
 
     this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::OnHover, extraOverlays));
 
     // Pressed
     this->overlays.append(
-                new LinboPushButtonOverlay(
-                    LinboPushButtonOverlay::OnPressed,
-                    new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayPressedIcon)),
-                    true
-                    )
-                );
+        new LinboPushButtonOverlay(
+            LinboPushButtonOverlay::OnPressed,
+            new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayPressedIcon)),
+            true
+        )
+    );
 
     this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::OnPressed, extraOverlays));
 
@@ -84,12 +84,12 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     // KeyboardFocus
     QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayKeyboardFocusIcon));
     this->overlays.append(
-                new LinboPushButtonOverlay {
-                    LinboPushButtonOverlay::OnKeyboardFocus,
-                    keyboardFocusOverlay,
-                    true
-                }
-                );
+    new LinboPushButtonOverlay {
+        LinboPushButtonOverlay::OnKeyboardFocus,
+        keyboardFocusOverlay,
+        true
+    }
+    );
 
     // set defaults
     for(LinboPushButtonOverlay* overlay : this->overlays) {
@@ -191,7 +191,7 @@ void LinboPushButton::setVisibleAnimated(bool visible) {
 
         // if the button is still supposed to be hidden after 400ms (the default animation duration)
         // -> hide the button to prevent it from overlaying other stuff
-        QTimer::singleShot(400, [=]{
+        QTimer::singleShot(400, [=] {
             if(!this->shouldBeVisible)
                 this->setVisible(false);
         });

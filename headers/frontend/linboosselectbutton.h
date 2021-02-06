@@ -68,6 +68,7 @@ private slots:
     void handleBackendStateChange(LinboBackend::LinboState state);
     void updateActionButtonVisibility(bool doNotAnimate = false);
     void handlePrimaryButtonClicked();
+    QString getTooltipContentForAction(LinboOs::LinboOsStartAction action);
 
 signals:
     void imageCreationRequested();
