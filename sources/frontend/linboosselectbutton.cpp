@@ -266,15 +266,18 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
     switch (state) {
     case LinboBackend::Idle:
         this->button->setToolTip(this->getTooltipContentForAction(this->os->getDefaultAction()));
-        if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
-            this->showDefaultAction = true;
-        break;
-    case LinboBackend::Root:
+
         if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
             this->showDefaultAction = true;
 
+        checkedOverlayMuted = false;
+        break;
+    case LinboBackend::Root:
         //% "Create image of %1"
         this->button->setToolTip(qtTrId("createImageOfOS").arg(this->os->getName()));
+
+        if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
+            this->showDefaultAction = true;
 
         checkedOverlayMuted = false;
         break;
