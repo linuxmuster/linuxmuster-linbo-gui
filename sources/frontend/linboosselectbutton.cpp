@@ -274,7 +274,7 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
             this->showDefaultAction = true;
 
         //% "Create image of %1"
-        this->button->setToolTip(qtTrId("createImageOfOS"));
+        this->button->setToolTip(qtTrId("createImageOfOS").arg(this->os->getName()));
 
         checkedOverlayMuted = false;
         break;
