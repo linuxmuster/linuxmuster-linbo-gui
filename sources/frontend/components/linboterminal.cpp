@@ -61,6 +61,7 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
 void LinboTerminal::keyPressEvent(QKeyEvent *event)
 {
     bool accept;
+
     int key = event->key();
     if (key == Qt::Key_Backspace || event->key() == Qt::Key_Left) {
         accept = textCursor().position() > fixedPosition;
@@ -109,10 +110,10 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
     }
     else if( key == Qt::Key_C) {
         accept = false;
-        if(event->nativeModifiers() == 5)
+        if(event->modifiers().testFlag(Qt::ControlModifier) && event->modifiers().testFlag(Qt::ShiftModifier))
             // copy on ctrl+shift+c
             this->copy();
-        else if(event->nativeModifiers() == 4)
+        else if(event->modifiers().testFlag(Qt::ControlModifier))
             // restart process on ctrl+c
             this->restartProcess();
         else
@@ -120,8 +121,7 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
     }
     else if(key == Qt::Key_V) {
         accept = false;
-        qDebug() << event->nativeModifiers();
-        if(event->nativeModifiers() == 5)
+        if(event->modifiers().testFlag(Qt::ShiftModifier))
             // paste on ctrl+shift+v
             this->paste();
         else
