@@ -1,0 +1,6 @@
+{
+    "editor.lineNumbers": "off",
+    "ltex.enabled": [
+        "debian-changelog"
+    ]
+}

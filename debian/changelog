@@ -1,3 +1,10 @@
+linuxmuster-linbo-gui7 (7.0.0-rc04) lmn7-testing; urgency=low
+
+  * Added tooltips to all buttons and made them took better
+  * Some impro vements to terminal (#45)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sun, 7 Feb 2021 08:30:00 +0100
+
 linuxmuster-linbo-gui7 (7.0.0-rc03) lmn7-testing; urgency=low
 
   * Added tooltips to startaction buttons (#42)

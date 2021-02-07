@@ -49,3 +49,15 @@ All of the SVG icons in this Gui were taken from one of the following sources an
 - The Debian icon was taken from [debian.org](https://www.debian.org/logos/)
 - The Windows 7 icon was taken from [Wikipedia](https://commons.wikimedia.org/wiki/File:Windows_logo_-_2002%E2%80%932012_(Black).svg)
 - All other icons were taken from [fontawesome.com](https://fontawesome.com/license) and are licensed under the [Creative Commons Attribution 4.0 International license](https://fontawesome.com/license).
+
+# Creating a release
+The following steps have to be followed to create a release:
+1. Update the changelog file
+2. Update the version code in the .pro file
+3. Create a git tag in the format v+VERSION (eg. v7.0.0): `git tag vVERSION`
+4. Do a git push: `git push`
+5. Push tags: `git push --tags`
+
+In case of a mistake, the tag can be deleted:
+1. Locally: `git tag -d vVERSION`
+2. Remotely: `git push --delete origin vVERSION`

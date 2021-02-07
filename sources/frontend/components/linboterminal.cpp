@@ -7,12 +7,13 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->commandBeforeHistorySwitch.clear();
     this->doNotExitOnProcessExit = false;
 
-    this->setStyleSheet("QTextEdit {"
-                        "border: 0 0 0 0;"
-                        "background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
-                        "padding-left: 5px;"
-                        "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
-                        "}");
+    this->setStyleSheet(
+        "QTextEdit {"
+        "   border: 0 0 0 0;"
+        "   background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
+        "   padding-left: 5px;"
+        "   color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+        "}");
 
     this->verticalScrollBar()->setStyleSheet(
         "QScrollBar:vertical {"
@@ -193,6 +194,7 @@ void LinboTerminal::execute(QString command) {
 }
 
 void LinboTerminal::restartProcess() {
+    this->setCurrentCommand("^C");
     this->doNotExitOnProcessExit = true;
     this->process->kill();
 }
