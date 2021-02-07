@@ -5,6 +5,7 @@ on:
 
 jobs:
   publish_latest_release_to_lmn_archive:
+    name: Publish latest release to lmn archive
     runs-on: ubuntu-18.04
     steps:
       - name: Download assets from latest release
@@ -30,4 +31,6 @@ jobs:
           username: dorian
           key: ${{ secrets.REPO_SSH_KEY }}
           port: 22
-          script: cd /srv/userhomes/dorian && /usr/local/bin/publish-debs
+          script: |
+            cd /srv/userhomes/dorian 
+            /usr/local/bin/publish-debs
