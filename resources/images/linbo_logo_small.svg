@@ -12,8 +12,11 @@
    viewBox="146 75 350.56015 119.66712"
    version="1.1"
    id="svg25"
-   sodipodi:docname="LinboLogoSmall.svg"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+   sodipodi:docname="linbo_logo_small.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/dorian/Documents/git/linuxmuster-linbo-gui/resources/images/linbo_logo_small.png"
+   inkscape:export-xdpi="400"
+   inkscape:export-ydpi="400">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -27,13 +30,13 @@
      inkscape:window-height="1016"
      id="namedview66"
      showgrid="false"
-     inkscape:zoom="2.0423384"
-     inkscape:cx="110.01052"
-     inkscape:cy="54.363978"
+     inkscape:zoom="1.4441513"
+     inkscape:cx="298.75375"
+     inkscape:cy="65.934098"
      inkscape:window-x="72"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g972-2" />
+     inkscape:current-layer="g907" />
   <metadata
      id="metadata29">
     <rdf:RDF>
@@ -78,8 +81,28 @@
      transform="translate(-58.040566,-80.226958)"
      style="display:inline">
     <g
+       aria-label="GUI"
+       style="font-style:normal;font-weight:normal;font-size:34.06716919px;line-height:27.71512032px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.85167927"
+       id="text902">
+      <path
+         d="m 485.82638,266.17287 v -4.08806 h 6.7453 v 12.02571 q -4.87161,0.78355 -7.90359,0.78355 -5.41668,0 -7.46071,-2.89571 -2.00996,-2.89571 -2.00996,-9.19814 0,-6.30243 2.11217,-9.09593 2.11216,-2.79351 7.18817,-2.79351 3.16824,0 6.8475,0.71541 l 1.22642,0.23847 -0.13627,3.64519 q -4.08806,-0.44288 -6.71123,-0.44288 -2.58911,0 -3.64519,0.61321 -1.05608,0.61321 -1.56709,2.2825 -0.47694,1.63523 -0.47694,5.65515 0,3.98586 0.98795,5.58702 0.98794,1.60116 4.08806,1.60116 l 2.82757,-0.13627 v -4.49687 z"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Titillium Web';-inkscape-font-specification:'Titillium Web';fill:#0c2842;fill-opacity:1;stroke-width:0.85167927"
+         id="path906"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 501.49721,266.75201 q 0,4.054 4.12213,4.054 4.12213,0 4.12213,-4.054 v -15.43243 h 4.70127 v 15.33023 q 0,4.2584 -2.21437,6.26836 -2.1803,1.9759 -6.60903,1.9759 -4.42873,0 -6.6431,-1.9759 -2.1803,-2.00996 -2.1803,-6.26836 v -15.33023 h 4.70127 z"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Titillium Web';-inkscape-font-specification:'Titillium Web';fill:#0c2842;fill-opacity:1;stroke-width:0.85167927"
+         id="path908"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 519.28025,274.48526 v -23.16568 h 4.70127 v 23.16568 z"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Titillium Web';-inkscape-font-specification:'Titillium Web';fill:#0c2842;fill-opacity:1;stroke-width:0.85167927"
+         id="path910"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
        id="g972-2"
-       transform="matrix(1.0327911,0,0,1.0327911,52.404919,58.83441)"
+       transform="matrix(1.032796,0,0,1.032796,52.404192,58.833375)"
        style="display:inline">
       <g
          transform="matrix(0.26004226,0,0,0.26004226,137.75699,166.32294)"
