@@ -24,6 +24,7 @@ private:
     QStringList commandHistory;
     int currentHistoryIndex;
     void keyPressEvent (QKeyEvent * event) override;
+    bool doNotExitOnProcessExit;
 
 private slots:
     QString getCurrentCommand();
@@ -32,6 +33,7 @@ private slots:
     void readOutput();
     void handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void execute(QString command);
+    void restartProcess();
 
 signals:
     void processExited();
