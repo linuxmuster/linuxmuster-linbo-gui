@@ -18,7 +18,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: archive.linuxmuster.net
-          username: dorian
+          username: github-action-user
           key: ${{ secrets.REPO_SSH_KEY }}
           port: 22
           source: "./*"
@@ -28,5 +28,5 @@ jobs:
         run: |
           echo "${{ secrets.REPO_SSH_KEY }}" > key
           chmod 600 key
-          ssh -o "StrictHostKeyChecking no" -i ./key dorian@archive.linuxmuster.net -tt /usr/local/bin/publish-debs
+          ssh -o "StrictHostKeyChecking no" -i ./key github-action-user@archive.linuxmuster.net -tt /usr/local/bin/publish-debs
           rm key
