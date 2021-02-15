@@ -24,13 +24,9 @@ jobs:
           source: "./*"
           target: "/srv/repo/mini-dinstall/incoming"
 
-      - name: Publish package on lmn archive 1
-        uses: appleboy/ssh-action@master
-        with:
-          host: archive.linuxmuster.net
-          username: dorian
-          key: ${{ secrets.REPO_SSH_KEY }}
-          port: 22
-          script: |
-            cd /srv/userhomes/dorian 
-            /usr/local/bin/publish-debs
+      - name: Execute publish debs script
+        run: |
+          echo "${{ secrets.REPO_SSH_KEY }}" > key
+          chmod 600 key
+          ssh -o "StrictHostKeyChecking no" -i ./key dorian@archive.linuxmuster.net -tt /usr/local/bin/publish-debs
+          rm key
