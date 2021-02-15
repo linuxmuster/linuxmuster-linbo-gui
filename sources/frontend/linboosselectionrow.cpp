@@ -64,6 +64,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->noOsLabel->setAlignment(Qt::AlignCenter);
         this->noOsLabelFont.setBold(true);
         this->noOsLabel->setFont(this->noOsLabelFont);
+        this->noOsLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + " }");
 
         QString environmentValuesText;
         //% "Hostname"
@@ -77,6 +78,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->environmentValuesLabel->hide();
         this->environmentValuesLabel->setAlignment(Qt::AlignCenter);
         this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
+        this->environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + " }");
     }
 
     this->handleLinboStateChanged(this->backend->getState());
@@ -176,7 +178,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
     else {
         int infoLabelHeight = heightOverride;
         int infoLabelWidth = widthOverride * 0.8;
-        int noOsLabelHeight = heightOverride * 0.2;
+        int noOsLabelHeight = heightOverride * 0.15;
         this->noOsLabelFont.setPixelSize(int(noOsLabelHeight * 0.8) <= 0 ? 1:noOsLabelHeight * 0.8);
         this->noOsLabel->setFont(this->noOsLabelFont);
         this->noOsLabel->setGeometry((widthOverride - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
@@ -262,8 +264,8 @@ void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
         this->resizeAndPositionAllButtons();
         this->sizeAnimation->setStartValue(this->size());
         this->sizeAnimation->setEndValue(size);
-        connect(this->sizeAnimation, &QPropertyAnimation::finished, [=]{this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
-        QTimer::singleShot(300, [=]{this->sizeAnimation->start();});
+        connect(this->sizeAnimation, &QPropertyAnimation::finished, [=] {this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
+        QTimer::singleShot(300, [=] {this->sizeAnimation->start();});
     }
     else {
         if(this->sizeOverride != nullptr) {

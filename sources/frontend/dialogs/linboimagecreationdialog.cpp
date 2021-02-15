@@ -95,7 +95,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     LinboToolButton* pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_create"));
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, &LinboToolButton::clicked, [=](){
+    connect(pushButtonCache, &LinboToolButton::clicked, [=]() {
         this->createImage(LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId()));
     });
 
@@ -103,7 +103,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_createAndUpload"));
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, &LinboPushButton::clicked, [=](){
+    connect(pushButtonCache, &LinboPushButton::clicked, [=]() {
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
         postProcessActions.setFlag(LinboBackend::NoAction, false);
         this->createImage( LinboBackend::UploadImage | postProcessActions);
@@ -115,7 +115,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
 
-    connect(this, &LinboDialog::opened, [=]{ this->refreshPathAndDescription(true); });
+    connect(this, &LinboDialog::opened, [=] { this->refreshPathAndDescription(true); });
 }
 
 void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
@@ -173,10 +173,12 @@ void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
     }
 
     if(this->actionButtonGroup->checkedId() == 0) {
+        this->imageNameLineEdit->setEnabled(false);
         this->imageNameLineEdit->setText(this->backend->getCurrentOs()->getBaseImage()->getName());
         this->imageDescriptionTextBrowser->setText(this->backend->getCurrentOs()->getBaseImage()->getDescription());
     }
     else {
+        this->imageNameLineEdit->setEnabled(true);
         this->imageNameLineEdit->setText("");
         this->imageDescriptionTextBrowser->setText("");
     }

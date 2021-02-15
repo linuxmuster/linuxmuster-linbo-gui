@@ -174,9 +174,11 @@ void LinboMainActions::resizeAndPositionAllItems() {
 
     // Action buttons
     // set tooltips:
-    this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->getName()));
-    this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->getName()));
-    this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->getName()));
+    if(this->backend->getCurrentOs() != nullptr) {
+        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->getName()));
+        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->getName()));
+        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->getName()));
+    }
 
     // bring buttons in correct order:
     LinboOs* selectedOs = this->backend->getCurrentOs();

@@ -24,8 +24,8 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9 );
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().height() * 1.25 * 0.9 );
 
-    this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
-    this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
+    //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
+    //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
 
     //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.5);
     //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.5);
