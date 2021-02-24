@@ -7,7 +7,7 @@ Build-Depends: debhelper
 
 Package: linuxmuster-linbo-gui7
 Architecture: all
-Depends: linuxmuster-linbo-common7 (>= 2.4.0)
+Depends: linuxmuster-linbo7 (>= 2.4.0)
 Description: Linuxmuster Linbo GUI
  This package contains the GUI for the Linux-based Network Boot
  (LINBO) boot/install/repair system.
