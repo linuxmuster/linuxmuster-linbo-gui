@@ -1,7 +1,17 @@
+linuxmuster-linbo-gui7 (7.0.0-rc05) lmn7-testing; urgency=low
+
+  * Update dependencies (#50)
+  * Fixed an Error that made the gui crash on unregistered clients (#49)
+  * Fixed graphical bugs in legacy layout (#48)
+  * Fixed graphical issues with the not registered text (#47)
+  * The image name field in the image creation dialog is now disabled when replacing an existing image (#46)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sun, 1 Mar 2021 15:11:00 +0100
+
 linuxmuster-linbo-gui7 (7.0.0-rc04) lmn7-testing; urgency=low
 
-  * Added tooltips to all buttons and made them took better
-  * Some impro vements to terminal (#45)
+  * Added tooltips to all buttons and made them look better
+  * Some improovements to terminal (#45)
 
  -- Dorian Zedler <dorian@itsblue.de>  Sun, 7 Feb 2021 08:30:00 +0100
 
