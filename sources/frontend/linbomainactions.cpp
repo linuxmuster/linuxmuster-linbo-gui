@@ -470,7 +470,6 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         this->stackView->setCurrentWidget(currentWidget);
 }
 
-
 void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
     if(this->backend->getState() == LinboBackend::Idle)
         return;

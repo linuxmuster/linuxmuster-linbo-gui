@@ -202,22 +202,14 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         int spacing = this->width() * 0.04;
         int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
 
-        if(actionButtonSize <= 0) {
+        if(this->width() / this->height() < 1.1) {
             // only the big button is visible
-            actionButtonSize = 2;
+            actionButtonSize = 0;
             x = 0;
             spacing = 0;
         }
 
         for(LinboPushButton* actionButton : this->startActionButtons) {
-            if(actionButtonSize == 2) {
-                actionButton->setVisible(false);
-                actionButton->setDisabled(true);
-            }
-            else {
-                actionButton->setVisible(false);
-                actionButton->setDisabled(false);
-            }
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }
@@ -225,15 +217,6 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         x = this->height();
 
         for(LinboPushButton* actionButton : this->rootActionButtons) {
-            if(actionButtonSize == 2) {
-                actionButton->setVisible(false);
-                actionButton->setDisabled(true);
-            }
-            else {
-                actionButton->setVisible(false);
-                actionButton->setDisabled(false);
-            }
-
             actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
             x += actionButtonSize + spacing;
         }

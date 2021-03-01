@@ -27,7 +27,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    this->backend->login("Muster!");
+    //this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));

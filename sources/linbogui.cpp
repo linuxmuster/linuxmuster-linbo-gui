@@ -72,7 +72,6 @@ LinboGui::LinboGui()
                          "font-size: " + QString::number(gTheme->getSize(LinboGuiTheme::RowFontSize)) + "px;"
                          "}");
 
-
     // attach translator
     QString localeName = this->backend->getConfig()->getLocale();
     if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
