@@ -131,6 +131,7 @@ public:
     QString getIconPath(LinboGuiIcon icon);
     QColor getColor(LinboGuiColorRole colorRole);
     int getSize(LinboGuiSizeRole sizeRole);
+    int toFontSize(int size);
 
 private:
     LinboBackend* backend;

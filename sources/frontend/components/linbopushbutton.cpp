@@ -130,7 +130,7 @@ void LinboPushButton::resizeEvent(QResizeEvent *event) {
         this->label->setFixedHeight(this->height());
 
         QFont font = this->label->font();
-        font.setPixelSize(int(this->height() * 0.5) <= 0 ? 1 : this->height() * 0.5);
+        font.setPixelSize(gTheme->toFontSize(this->height() * 0.5));
         this->label->setFont(font);
 
         if(this->svgIcon != nullptr) {

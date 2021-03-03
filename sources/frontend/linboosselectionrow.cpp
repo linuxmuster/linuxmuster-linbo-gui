@@ -179,12 +179,12 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
         int infoLabelHeight = heightOverride;
         int infoLabelWidth = widthOverride * 0.8;
         int noOsLabelHeight = heightOverride * 0.15;
-        this->noOsLabelFont.setPixelSize(int(noOsLabelHeight * 0.8) <= 0 ? 1:noOsLabelHeight * 0.8);
+        this->noOsLabelFont.setPixelSize(gTheme->toFontSize(noOsLabelHeight * 0.8));
         this->noOsLabel->setFont(this->noOsLabelFont);
         this->noOsLabel->setGeometry((widthOverride - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
         this->noOsLabel->show();
 
-        this->environmentValuesLabelFont.setPixelSize(int(infoLabelHeight * 0.1) <= 0 ? 1:infoLabelHeight * 0.1);
+        this->environmentValuesLabelFont.setPixelSize(gTheme->toFontSize(infoLabelHeight * 0.1));
         this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
         this->environmentValuesLabel->setGeometry((widthOverride - infoLabelWidth) / 2, noOsLabelHeight, infoLabelWidth, infoLabelHeight);
         this->environmentValuesLabel->show();

@@ -87,7 +87,7 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
         label->setMaximumWidth(this->width() * 0.2);
 
         QFont labelFont = label->font();
-        labelFont.setPixelSize(int(this->height() * 0.2) <= 0 ? 1:this->height() * 0.2);
+        labelFont.setPixelSize(gTheme->toFontSize(this->height() * 0.2));
         label->setFont(labelFont);
     }
 }

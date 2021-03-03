@@ -286,7 +286,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     if(selectedOs != nullptr && selectedOs->getBaseImage() == nullptr) {
         int noBaseImageLabelHeight = this->buttonWidget->height() * 0.2;
         fontCache = this->noBaseImageLabel->font();
-        fontCache.setPixelSize(noBaseImageLabelHeight <= 0 ? 1:noBaseImageLabelHeight * 0.8);
+        fontCache.setPixelSize(gTheme->toFontSize(noBaseImageLabelHeight * 0.8));
         this->noBaseImageLabel->setFont(fontCache);
         this->noBaseImageLabel->setGeometry(0, defaultButtonHeight * 1.1, this->buttonWidget->width(), noBaseImageLabelHeight);
         this->noBaseImageLabel->show();
@@ -304,14 +304,14 @@ void LinboMainActions::resizeAndPositionAllItems() {
     int cancelButtonWidth = this->progressBarWidget->height() * 0.4;
 
     fontCache = this->logLabel->font();
-    fontCache.setPixelSize(logLabelHeight <= 0 ? 1:logLabelHeight * 0.8);
+    fontCache.setPixelSize(gTheme->toFontSize(logLabelHeight * 0.8));
     this->logLabel->setFont(fontCache);
     this->logLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, 0, logLabelWidth, logLabelHeight);
 
     progressBar->setGeometry((this->progressBarWidget->width() - progressBarWidth) / 2, this->logLabel->y() + logLabelHeight + defaultSpacing, progressBarWidth, progressBarHeight);
 
     fontCache = this->passedTimeLabel->font();
-    fontCache.setPixelSize(logLabelHeight <= 0 ? 1:logLabelHeight * 0.8);
+    fontCache.setPixelSize(gTheme->toFontSize(logLabelHeight * 0.8));
     this->passedTimeLabel->setFont(fontCache);
     this->passedTimeLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, this->progressBar->y() + progressBarHeight + defaultSpacing, logLabelWidth, logLabelHeight);
 
@@ -325,12 +325,12 @@ void LinboMainActions::resizeAndPositionAllItems() {
 
         int messageDetailsFontHeight = this->height() * 0.6;
         QFont messageDetailsFont = this->messageDetailsLabel->font();
-        messageDetailsFont.setPixelSize(int(messageDetailsFontHeight / 12.5) <= 0 ? 1:messageDetailsFontHeight / 12.5);
+        messageDetailsFont.setPixelSize(gTheme->toFontSize(messageDetailsFontHeight / 12.5));
         this->messageDetailsLabel->setFont(messageDetailsFont);
 
         QFont messageFont = this->messageLabel->font();
         messageFont.setBold(true);
-        messageFont.setPixelSize(messageDetailsFont.pixelSize() * 1.5);
+        messageFont.setPixelSize(gTheme->toFontSize(messageDetailsFont.pixelSize() * 1.5));
         this->messageLabel->setFont(messageFont);
 
         this->messageDetailsLabel->setMaximumWidth(this->width() * 0.8);
@@ -340,7 +340,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     else {
         QFont messageFont = this->messageLabel->font();
         messageFont.setBold(true);
-        messageFont.setPixelSize(int(this->height() * 0.1) <= 0 ? 1:this->height() * 0.1);
+        messageFont.setPixelSize(gTheme->toFontSize(this->height() * 0.1));
         this->messageLabel->setFont(messageFont);
         this->messageLabel->setGeometry(0, 0, this->width(), this->height());
     }

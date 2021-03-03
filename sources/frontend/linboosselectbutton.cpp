@@ -202,7 +202,7 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
         int spacing = this->width() * 0.04;
         int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
 
-        if(this->width() / this->height() < 1.1) {
+        if(this->height() <= 0 || this->width() / this->height() < 1.1) {
             // only the big button is visible
             actionButtonSize = 0;
             x = 0;
@@ -223,7 +223,7 @@ void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
 
         this->osNameLabel->setGeometry(this->height() + spacing, 0, this->width() - this->height() - spacing * 2, actionButtonSize);
         QFont fontCache = this->osNameLabel->font();
-        fontCache.setPixelSize(actionButtonSize * 0.5);
+        fontCache.setPixelSize(gTheme->toFontSize(actionButtonSize * 0.5));
         this->osNameLabel->setFont(fontCache);
     }
 

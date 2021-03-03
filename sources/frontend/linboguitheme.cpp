@@ -93,3 +93,10 @@ int LinboGuiTheme::getSize(LinboGuiTheme::LinboGuiSizeRole sizeRole) {
     }
     return 0;
 }
+
+int LinboGuiTheme::toFontSize(int size) {
+    if(size <= 0)
+        return 1;
+    else
+        return size;
+}

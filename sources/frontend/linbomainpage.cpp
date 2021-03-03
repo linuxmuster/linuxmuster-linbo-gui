@@ -27,7 +27,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    //this->backend->login("Muster!");
+    this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -180,11 +180,12 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
         //% "Are you sure? This will delete all data on your drive!"
         qtTrId("dialog_partition_question"),
         parent);
+
     this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
     this->confirmationDialog->centerInParent();
     connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
     connect(this->mainActions, &LinboMainActions::drivePartitioningRequested,
-            this->confirmationDialog, &LinboImageCreationDialog::open);
+            this->confirmationDialog, &LinboDialog::open);
 
     this->registerDialog = new LinboRegisterDialog(backend, parent);
     this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.7);
@@ -326,7 +327,7 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
         this->backend->restartRootTimeout();
 
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key() == Qt::Key_F1) {
+        if(keyEvent->key() == Qt::Key_F1 && this->clientInfoAnimation->state() != QPropertyAnimation::Running) {
             if(this->backend->getState() == LinboBackend::Idle || this->backend->getState() == LinboBackend::Root) {
                 this->showClientInfo = !this->showClientInfo;
 
