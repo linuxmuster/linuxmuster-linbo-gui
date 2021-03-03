@@ -2,7 +2,7 @@ linuxmuster-linbo-gui7 (7.0.0-rc06) lmn7-testing; urgency=low
 
   * Fix critical Error that lead to the GUI crashing in many scenarios (#51)
   
- -- Dorian Zedler <dorian@itsblue.de>  Sun, 1 Mar 2021 15:11:00 +0100
+ -- Dorian Zedler <dorian@itsblue.de>  Tue, 3 Mar 2021 10:13:00 +0100
 
 linuxmuster-linbo-gui7 (7.0.0-rc05) lmn7-testing; urgency=low
 
