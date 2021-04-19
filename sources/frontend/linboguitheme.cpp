@@ -90,6 +90,10 @@ int LinboGuiTheme::getSize(LinboGuiTheme::LinboGuiSizeRole sizeRole) {
         return rootHeight * 0.8;
     case DialogHeight:
         return rootHeight * 0.8;
+    case TopLogoHeight:
+        return rootHeight * 0.08; // original 0.13
+    case BottomLogoHeight:
+        return rootHeight * 0.04; // original 0.06
     }
     return 0;
 }

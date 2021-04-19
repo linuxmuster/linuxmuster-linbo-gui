@@ -98,7 +98,9 @@ public:
         RowLabelHeight,
         RowFontSize,
         DialogWidth,
-        DialogHeight
+        DialogHeight,
+        TopLogoHeight,
+        BottomLogoHeight
     };
     Q_ENUM(LinboGuiSizeRole)
 

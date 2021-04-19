@@ -27,7 +27,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->backend = backend;
 
 #ifdef TEST_ENV
-    this->backend->login("Muster!");
+    //this->backend->login("Muster!");
 #endif
 
     connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
@@ -44,7 +44,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addSpacerItem(new QSpacerItem(this->width(), mainLayout->spacing()));
 
     // Linbo logo
-    int linboLogoHeight = this->height() * 0.13;
+    int linboLogoHeight = gTheme->getSize(LinboGuiTheme::TopLogoHeight);
 
     LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandTopIcon));
     mainLayout->addWidget(linboLogo);
@@ -77,7 +77,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
 
     // Linuxmuster logo
-    double linuxmusterLogoHeight = this->height() * 0.06;
+    double linuxmusterLogoHeight = gTheme->getSize(LinboGuiTheme::BottomLogoHeight);
 
     LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandBottomIcon));
     mainLayout->addWidget(linuxmusterLogo);
