@@ -25,7 +25,7 @@ Maintainer organisation |  Linuxmuster.net e.V.
 Primary maintainer | dorian@itsblue.de  
 
 
-** The linuxmuster community consits of people who are nice and happy to help. They are not directly involed in the development though, and might not be able to help in any case.
+** The linuxmuster community consits of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in any case.
 
 # Releases
 The latest release can be found [here](https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/latest)  
