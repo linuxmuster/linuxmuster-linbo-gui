@@ -15,6 +15,18 @@
 
 This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt5!
 
+# Maintainance Details
+    
+Linuxmuster.net official | ![#c5f015](https://via.placeholder.com/15/f03c15/000000?text=+)  YES
+:---: | :---: 
+[Community support](https://ask.linuxmuster.net) | ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)  YES**
+Actively developed | ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)  YES
+Maintainer organisation |  Netzint GmbH  
+Primary maintainer | dorian@itsblue.de  
+
+
+** The linuxmuster community consits of people who are nice and happy to help. They are not directly involed in the development though, and might not be able to help in any case.
+
 # Releases
 The latest release can be found [here](https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/latest)  
 The attached file `linuxmuster-linbo-gui7_*.deb` is the Package which you can install on your server.
