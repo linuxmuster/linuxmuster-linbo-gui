@@ -272,7 +272,7 @@ void LinboBackend::logout() {
 }
 
 void LinboBackend::restartRootTimeout() {
-    if(this->state == Root) {
+    if(this->state == Root && this->config->getRootTimeout() > 0) {
         this->rootTimeoutTimer->start((this->config->getRootTimeout() * 1000) / 2);
         this->timeoutRemainingTimeRefreshTimer->start();
     }
