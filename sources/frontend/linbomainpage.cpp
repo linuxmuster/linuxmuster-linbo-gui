@@ -234,9 +234,6 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
             startActionsWidgetHeight = this->height() * 0;
         }
 
-        if(this->showClientInfo)
-            clientInfoHeight = this->height() * 0.1;
-
         powerActionButtonsVisible = true;
         break;
 
@@ -249,9 +246,6 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
             osSelectionRowHeight = this->height() * 0.3;
             startActionsWidgetHeight = this->height() * 0.15;
         }
-
-        if(this->showClientInfo)
-            clientInfoHeight = this->height() * 0.1;
 
         powerActionButtonsVisible = true;
         break;
@@ -285,6 +279,9 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
             powerActionButton->setVisible(false);
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
+
+    if(this->showClientInfo)
+        clientInfoHeight = this->height() * 0.1;
 
     if(this->inited) {
         this->startActionWidgetAnimation->setStartValue(QSize(this->width(), this->mainActions->height()));
@@ -320,28 +317,46 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
         if(keyEvent->key() == Qt::Key_F1) {
             this->f1Pressed = true;
         }
-        else if(keyEvent->key() == Qt::Key_Escape && (this->backend->getState() == LinboBackend::Autostarting || this->backend->getState() == LinboBackend::RootTimeout))
-            this->backend->cancelCurrentAction();
+        else if(keyEvent->key() == Qt::Key_Escape) {
+            switch (this->backend->getState()) {
+            case LinboBackend::Autostarting:
+            case LinboBackend::RootTimeout:
+                this->backend->cancelCurrentAction();
+                break;
+
+            case LinboBackend::StartActionError:
+            case LinboBackend::RootActionError:
+            case LinboBackend::RootActionSuccess:
+                this->backend->resetMessage();
+                break;
+
+            case LinboBackend::Root:
+                this->backend->logout();
+                break;
+
+            default:
+                break;
+            }
+        }
     }
     else if(event->type() == QEvent::KeyRelease) {
         this->backend->restartRootTimeout();
 
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key() == Qt::Key_F1 && this->clientInfoAnimation->state() != QPropertyAnimation::Running) {
-            if(this->backend->getState() == LinboBackend::Idle || this->backend->getState() == LinboBackend::Root) {
-                this->showClientInfo = !this->showClientInfo;
+        if(keyEvent->key() == Qt::Key_F1 && this->clientInfoAnimation->state() == QPropertyAnimation::Stopped) {
+            this->showClientInfo = !this->showClientInfo;
 
-                if(this->showClientInfo) {
-                    this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-                    this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
-                    this->clientInfoAnimation->start();
-                }
-                else {
-                    this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-                    this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
-                    this->clientInfoAnimation->start();
-                }
+            if(this->showClientInfo) {
+                this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
+                this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
+                this->clientInfoAnimation->start();
             }
+            else {
+                this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
+                this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
+                this->clientInfoAnimation->start();
+            }
+
             this->f1Pressed = false;
         }
     }
