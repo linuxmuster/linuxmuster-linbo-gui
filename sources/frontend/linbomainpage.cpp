@@ -287,7 +287,6 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
 
-    qDebug() << "Show client info: " << this->showClientInfo;
     if(this->showClientInfo)
         clientInfoHeight = this->height() * 0.1;
 

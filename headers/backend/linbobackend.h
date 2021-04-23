@@ -43,7 +43,7 @@ class LinboBackend : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(LinboBackend::LinboState state READ getState NOTIFY stateChanged)
-    Q_PROPERTY(LinboOs* currentOs READ getCurrentOs WRITE setCurrentOs NOTIFY currentOsChanged)
+    Q_PROPERTY(LinboOs* _currentOs READ getCurrentOs WRITE setCurrentOs NOTIFY currentOsChanged)
     Q_PROPERTY(double autostartTimeoutProgress READ getAutostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
     Q_PROPERTY(int autostartTimeoutRemainingSeconds READ getAutostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
 
@@ -119,7 +119,7 @@ private:
     QTimer* _rootTimeoutTimer;
     QTimer* _timeoutRemainingTimeRefreshTimer;
 
-    LinboOs* currentOs;
+    LinboOs* _currentOs;
 #ifdef TEST_ENV
     QString const _linboCmdCommand = TEST_ENV"/linbo_cmd";
 #else

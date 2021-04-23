@@ -1,3 +1,10 @@
+linuxmuster-linbo-gui7 (7.0.1-rc02) lmn7-testing; urgency=low
+
+  * Fix segfault issue from rc01
+  * Hide "partition" and "init cache" buttons when not registered
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 23 Mar 2021 16:30:00 +0100 
+
 linuxmuster-linbo-gui7 (7.0.1-rc01) lmn7-testing; urgency=low
 
   * Implemented "AutoPartition" and "AutoInitcache" functionality (#56)

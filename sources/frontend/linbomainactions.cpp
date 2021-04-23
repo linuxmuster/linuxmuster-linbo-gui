@@ -122,11 +122,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     //% "Update cache"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboGuiTheme::SyncIcon, LinboGuiTheme::TextColor);
+    buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //% "Partition drive"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboGuiTheme::PartitionIcon, LinboGuiTheme::TextColor);
+    buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
@@ -135,7 +137,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
-    QHBoxLayout* horizontalRootLayoutCache;
+    QHBoxLayout* horizontalRootLayoutCache = nullptr;
 
     for(int i = 0; i < this->rootActionButtons.length(); i++) {
         if(i % 2 == 0)

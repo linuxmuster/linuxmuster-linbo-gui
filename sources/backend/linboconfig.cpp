@@ -30,6 +30,9 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_useMinimalLayout = false;
     this->_guiDisabled = false;
     this->_rootTimeout = 0;
+    this->_autoPartition = false;
+    this->_autoFormat = false;
+    this->_operatingSystems = {};
 }
 
 bool LinboConfig::isBackgroundColorDark() {
