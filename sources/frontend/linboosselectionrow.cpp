@@ -42,7 +42,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
 #ifdef TEST_ENV
         LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->iconName(), os, this->osButtonGroup, this);
 #else
-        LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->getIconName(), os, this->osButtonGroup, this);
+        LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->iconName(), os, this->osButtonGroup, this);
 #endif
         connect(osButton->button, SIGNAL(toggled(bool)), this, SLOT(handleButtonToggled(bool)));
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
