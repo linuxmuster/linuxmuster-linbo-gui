@@ -55,6 +55,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //% "Image description:"
     this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageDescription") + "</b>"));
     this->imageDescriptionTextBrowser = new LinboTextBrowser();
+    this->imageDescriptionTextBrowser->setTabChangesFocus(true);
     this->mainLayout->addWidget(this->imageDescriptionTextBrowser);
     this->imageDescriptionTextBrowser->setReadOnly(false);
 

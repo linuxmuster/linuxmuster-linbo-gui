@@ -224,7 +224,12 @@ void LinboDialog::paintEvent(QPaintEvent *e) {
     }
 
     QWidget::setTabOrder(latestWidget, this->closeButton);
-    connect(this->closeButton, &LinboPushButton::defocused, [=]{firstWidget->setFocus();});
+    connect(this->closeButton, &LinboPushButton::defocused, [=](Qt::FocusReason reason) {
+        if(reason == Qt::TabFocusReason)
+            firstWidget->setFocus();
+        else if(reason == Qt::BacktabFocusReason)
+            latestWidget->setFocus();
+    });
 
     return QWidget::paintEvent(e);
 }

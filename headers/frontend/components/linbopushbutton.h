@@ -85,7 +85,7 @@ private slots:
 signals:
     void checked();
     void hovered();
-    void defocused();
+    void defocused(Qt::FocusReason reason);
     void doubleClicked();
 };
 

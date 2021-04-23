@@ -65,12 +65,11 @@
         <file>icons/light/brandTop.svg</file>
         <file>icons/dark/radioButtonDisabled.svg</file>
         <file>icons/light/radioButtonDisabled.svg</file>
-        <file>icons/dark/overlayKeyboardFocus.svg</file>
-        <file>icons/light/overlayKeyboardFocus.svg</file>
         <file>fonts/UbuntuMono-RI.ttf</file>
         <file>fonts/UbuntuMono-R.ttf</file>
         <file>fonts/UbuntuMono-BI.ttf</file>
         <file>fonts/UbuntuMono-B.ttf</file>
         <file>icons/universal/defaultOs.svg</file>
+        <file>icons/universal/overlayKeyboardFocus.svg</file>
     </qresource>
 </RCC>

@@ -113,7 +113,8 @@ public:
         SyncLegacyIcon,
         ReinstallLegacyIcon,
         UploadLegacyIcon,
-        DefaultOsIcon
+        DefaultOsIcon,
+        OverlayKeyboardFocusIcon
     };
 
     const QMap<LinboGuiColorRole, QColor> lightColors = {

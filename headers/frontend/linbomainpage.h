@@ -63,6 +63,7 @@ private:
     LinboUpdateCacheDialog* updateCacheDialog;
     LinboImageCreationDialog* imageCreationDialog;
     LinboImageUploadDialog* imageUploadDialog;
+    QList<LinboDialog*> allDialogs;
 
     QPropertyAnimation* startActionWidgetAnimation;
     QPropertyAnimation* clientInfoAnimation;
