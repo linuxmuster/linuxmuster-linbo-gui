@@ -32,6 +32,7 @@
 #include "linboos.h"
 #include "linboimage.h"
 #include "linbodiskpartition.h"
+#include "linboconfigreader.h"
 
 /**
  * @brief The LinboBackend class is used to execute Linbo commands (control linbo_cmd) very comfortable.
@@ -50,6 +51,7 @@ public:
     explicit LinboBackend(QObject *parent = nullptr);
 
     friend class LinboImage;
+    friend class LinboConfigReader;
 
     /**
      * @brief The LinboState enum contains all possible states of Linbo
@@ -75,14 +77,6 @@ public:
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
     };
 
-    enum LinboDeviceRole {
-        ClassroomStudentComputerRole,
-        ClassroomTeacherComputerRole,
-        FacultyTeacherComputerRole,
-        StaffComputerRole,
-        DeviceRoleCount
-    };
-
     enum LinboPostProcessAction {
         NoAction = 1,
         Shutdown = 2,
@@ -96,10 +90,6 @@ public:
     LinboState getState();
     LinboLogger* getLogger();
     LinboConfig* getConfig();
-    QList<LinboImage*> getImages();
-    QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true, bool includeNonExistantImages = true);
-    LinboImage* getImageByName(QString name);
-    QList<LinboOs*> getOperatingSystems();
     LinboOs* getCurrentOs();
     void setCurrentOs(LinboOs* os);
     void restartRootTimeout();
@@ -111,18 +101,6 @@ public:
     int getRootTimeoutRemainingSeconds();
 
 protected:
-    void loadStartConfiguration(QString startConfFilePath);
-    void loadEnvironmentValues();
-
-    void writeToLinboConfig(QMap<QString, QString> config, LinboConfig* linboConfig);
-    void writeToPartitionConfig(QMap<QString, QString> config, LinboDiskPartition* partition);
-    void writeToOsConfig(QMap<QString, QString> config, LinboOs* os);
-
-    bool stringToBool(const QString& value);
-    LinboConfig::DownloadMethod stringToDownloadMethod(const QString& value);
-    QString downloadMethodToString(const LinboConfig::DownloadMethod& value);
-    QString deviceRoleToString(const LinboDeviceRole& deviceRole);
-
     QString readImageDescription(LinboImage* image);
     bool writeImageDescription(LinboImage* image, QString newDescription);
     bool writeImageDescription(QString imageName, QString newDescription);
@@ -130,11 +108,9 @@ protected:
 private:
     LinboState state;
     LinboLogger* logger;
+    LinboConfigReader* configReader;
     LinboConfig* config;
     QStringList linboCommandCache;
-    QMap<QString, LinboImage*> images;
-    QList<LinboOs*> operatingSystems;
-    QList<LinboDiskPartition*> diskPartitions;
 
     QTimer* autostartTimer;
     QTimer* rootTimeoutTimer;
@@ -200,7 +176,7 @@ public slots:
     bool partitionDrive(bool format = true);
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false);
     bool updateLinbo();
-    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboDeviceRole deviceRole);
+    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
 
     bool cancelCurrentAction();
     bool resetMessage();

@@ -47,12 +47,12 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     QStringList ipAddress = backend->getConfig()->getIpAddress().split(".");
 
     if(subnetMask.length() == 4 && ipAddress.length() == 4)
-    for(int i = 0; i < 4; i++) {
-        QString block = subnetMask[i];
-        if(block == "255") {
-            prefilledIp.append(ipAddress[i] + ".");
+        for(int i = 0; i < 4; i++) {
+            QString block = subnetMask[i];
+            if(block == "255") {
+                prefilledIp.append(ipAddress[i] + ".");
+            }
         }
-    }
     ipAddressEdit->setText(prefilledIp);
     this->mainLayout->addWidget(ipAddressEdit);
 
@@ -66,16 +66,16 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     this->roleSelectBox = new LinboComboBox();
 
     //% "Classroom student computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomStudent"), LinboBackend::ClassroomStudentComputerRole);
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomStudent"), LinboConfig::ClassroomStudentComputerRole);
 
     //% "Classroom teacher computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomTeacher"), LinboBackend::ClassroomTeacherComputerRole);
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomTeacher"), LinboConfig::ClassroomTeacherComputerRole);
 
     //% "Faculty teacher computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_facultyTeacher"), LinboBackend::FacultyTeacherComputerRole);
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_facultyTeacher"), LinboConfig::FacultyTeacherComputerRole);
 
     //% "Staff computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_staffComputer"), LinboBackend::StaffComputerRole);
+    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_staffComputer"), LinboConfig::StaffComputerRole);
 
     this->mainLayout->addWidget(this->roleSelectBox);
 
@@ -93,7 +93,7 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
 }
 
 void LinboRegisterDialog::registerClient() {
-    this->backend->registerClient(this->roomEdit->text(), this->hostnameEdit->text(), this->ipAddressEdit->text(), this->hostGroupEdit->text(), LinboBackend::LinboDeviceRole(this->roleSelectBox->currentData().toInt()));
+    this->backend->registerClient(this->roomEdit->text(), this->hostnameEdit->text(), this->ipAddressEdit->text(), this->hostGroupEdit->text(), LinboConfig::LinboDeviceRole(this->roleSelectBox->currentData().toInt()));
     this->setVisibleAnimated(false);
 }
 

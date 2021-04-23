@@ -29,6 +29,7 @@ INCLUDEPATH += \
 
 HEADERS += \
     headers/backend/linboconfig.h \
+    headers/backend/linboconfigreader.h \
     headers/backend/linbodiskpartition.h \
     headers/backend/linboimage.h \
     headers/backend/linbologger.h \
@@ -64,6 +65,7 @@ HEADERS += \
 
 SOURCES += \
     sources/backend/linboconfig.cpp \
+    sources/backend/linboconfigreader.cpp \
     sources/backend/linbodiskpartition.cpp \
     sources/backend/linboimage.cpp \
     sources/backend/linbologger.cpp \

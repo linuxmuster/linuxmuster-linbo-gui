@@ -32,6 +32,7 @@ class LinboLogger : public QObject
 public:
 
     friend class LinboBackend;
+    friend class LinboConfigReader;
 
     enum LinboLogType {
         UnknownLogType = -1,
@@ -59,10 +60,19 @@ public:
     static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterType);
     static QStringList logsToStacktrace(QList<LinboLog> logs, int limit);
 
+protected slots:
+    void info(QString logText);
+    void error(QString logText);
+    void chapterBeginning(QString logText);
+    void chapterEnd(QString logText);
+    void stdErr(QString logText);
+    void stdOut(QString logText);
+
 private:
     explicit LinboLogger(QString logFilePath, QObject *parent = nullptr);
 
     void log(QString logText, LinboLogType logType);
+
     bool writeToLogFile(QString text);
 
     QString logFilePath;

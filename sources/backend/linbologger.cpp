@@ -56,6 +56,30 @@ void LinboLogger::log(QString logText, LinboLogType logType) {
     emit this->latestLogChanged(latestLog);
 }
 
+void LinboLogger::info(QString logText) {
+    this->log(logText, LinboLogger::LinboGuiInfo);
+}
+
+void LinboLogger::error(QString logText) {
+    this->log(logText, LinboLogger::LinboGuiError);
+}
+
+void LinboLogger::chapterBeginning(QString logText) {
+    this->log(logText, LinboLogger::LinboLogChapterBeginning);
+}
+
+void LinboLogger::chapterEnd(QString logText) {
+    this->log(logText, LinboLogger::LinboLogChapterEnd);
+}
+
+void LinboLogger::stdErr(QString logText) {
+    this->log(logText, LinboLogger::StdErr);
+}
+
+void LinboLogger::stdOut(QString logText) {
+    this->log(logText, LinboLogger::StdOut);
+}
+
 bool LinboLogger::writeToLogFile(QString text) {
     // write to logfile
     QFile logfile(this->logFilePath);

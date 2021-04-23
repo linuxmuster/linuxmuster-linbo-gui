@@ -21,7 +21,7 @@
 LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
-    this->showClientInfo = false;
+    this->showClientInfo = backend->getConfig()->getClientDetailsVisibleByDefault();
     this->f1Pressed = false;
 
     this->backend = backend;
@@ -93,8 +93,6 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->clientInfoAnimation = new QPropertyAnimation(clientInfo, "minimumSize");
     this->clientInfoAnimation->setDuration(400);
     this->clientInfoAnimation->setEasingCurve(QEasingCurve::InOutQuad);
-
-    this->showClientInfo = false;
 
     // power and settings Buttons
 
@@ -280,6 +278,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
 
+    qDebug() << "Show client info: " << this->showClientInfo;
     if(this->showClientInfo)
         clientInfoHeight = this->height() * 0.1;
 

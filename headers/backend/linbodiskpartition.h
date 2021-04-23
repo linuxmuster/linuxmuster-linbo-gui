@@ -29,7 +29,7 @@ class LinboDiskPartition : public QObject
 {
     Q_OBJECT
 public:
-    friend class LinboBackend;
+    friend class LinboConfigReader;
 
     const QString& getPath() const {
         return this->path;

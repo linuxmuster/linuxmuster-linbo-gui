@@ -25,16 +25,28 @@
 #include <QObject>
 #include <QColor>
 
+#include "linboimage.h"
+#include "linbodiskpartition.h"
+#include "linboos.h"
+
 class LinboConfig : public QObject
 {
     Q_OBJECT
 public:
-    friend class LinboBackend;
+    friend class LinboConfigReader;
 
     enum DownloadMethod {
         Rsync,
         Multicast,
         Torrent
+    };
+
+    enum LinboDeviceRole {
+        ClassroomStudentComputerRole,
+        ClassroomTeacherComputerRole,
+        FacultyTeacherComputerRole,
+        StaffComputerRole,
+        DeviceRoleCount
     };
 
     const QString& getServerIpAddress() const {
@@ -53,7 +65,7 @@ public:
         return this->macAddress;
     }
     const QString& getLinboVersion() const {
-        return this->LinboVersion;
+        return this->linboVersion;
     }
     const QString& getHostname() const {
         return this->hostname;
@@ -70,7 +82,6 @@ public:
     const QString& getHddSize() const {
         return this->hddSize;
     }
-
     const QString& getCachePath() const {
         return this->cachePath;
     }
@@ -89,7 +100,6 @@ public:
     const QString& getBackgroundColor() {
         return this->backgroundColor;
     }
-    bool isBackgroundColorDark();
     const DownloadMethod& getDownloadMethod() {
         return this->downloadMethod;
     }
@@ -99,93 +109,48 @@ public:
     const bool& getUseMinimalLayout() {
         return this->useMinimalLayout;
     }
-
+    const bool& getClientDetailsVisibleByDefault() {
+        return this->clientDetailsVisibleByDefault;
+    }
     const QString& getLocale() const {
         return this->locale;
     }
-
     bool getGuiDisabled() {
         return this->guiDisabled;
     }
 
+    QMap<QString, LinboImage*> images() {
+        return this->_images;
+    }
+    QList<LinboOs*> operatingSystems() {
+        return this->_operatingSystems;
+    }
+    QList<LinboDiskPartition*> diskPartitions() {
+        return this->_diskPartitions;
+    }
+
+    bool isBackgroundColorDark();
+
+    QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true, bool includeNonExistantImages = true);
+    LinboImage* getImageByName(QString name);
+
+    static LinboConfig::DownloadMethod stringToDownloadMethod(const QString& value);
+    static QString downloadMethodToString(const LinboConfig::DownloadMethod& value);
+    static QString deviceRoleToString(const LinboConfig::LinboDeviceRole& deviceRole);
+
 private:
     explicit LinboConfig(QObject *parent = nullptr);
 
-    void setServerIpAddress( const QString& serverIpAddress ) {
-        this->serverIpAddress = serverIpAddress;
-    }
-    void setIpAddress( const QString& ipAddress ) {
-        this->ipAddress = ipAddress;
-    }
-    void setSubnetMask(const QString& subnetMask) {
-        this->subnetMask = subnetMask;
-    }
-    void setSubnetBitmask(const QString& subnetBitmask) {
-        this->subnetBitmask = subnetBitmask;
-    }
-    void setMacAddress( const QString& macAddress ) {
-        this->macAddress = macAddress;
-    }
-    void setLinboVersion( const QString& linboVersion ) {
-        this->LinboVersion = linboVersion;
-    }
-    void setHostname( const QString& hostname ) {
-        this->hostname = hostname;
-    }
-    void setCpuModel( const QString& cpuModel ) {
-        this->cpuModel = cpuModel;
-    }
-    void setRamSize( const QString& ramSize ) {
-        this->ramSize = ramSize;
-    }
-    void setCacheSize( const QString& cacheSize ) {
-        this->cacheSize = cacheSize;
-    }
-    void setHddSize( const QString& hddSize ) {
-        this->hddSize = hddSize;
-    }
-    void setCachePath( const QString& cachePath ) {
-        this->cachePath = cachePath;
-    }
-    void setHostGroup( const QString& hostGroup ) {
-        this->hostGroup = hostGroup;
-    }
-    void setRootTimeout( const unsigned int& rootTimeout ) {
-        this->rootTimeout = rootTimeout;
-    }
-    void setAutoPartition( const bool& autoPartition ) {
-        this->autoPartition = autoPartition;
-    }
-    void setAutoInitCache( const bool& autoInitCache ) {
-        this->autoInitCache = autoInitCache;
-    }
-    void setBackgroundColor( const QString& backgroundColor ) {
-        this->backgroundColor = backgroundColor;
-    }
-    void setDownloadMethod( const DownloadMethod& downloadMethod ) {
-        this->downloadMethod = downloadMethod;
-    }
-    void setAutoFormat( const bool& autoFormat ) {
-        this->autoFormat = autoFormat;
-    }
-    void setUseMinimalLayout(const bool& useMinimalLayout) {
-        this->useMinimalLayout = useMinimalLayout;
-    }
-
-    void setLocale( const QString& locale ) {
-        this->locale = locale;
-    }
-
-    void setGuiDisabled(bool guiDisabled) {
-        this->guiDisabled = guiDisabled;
-    }
+    QMap<QString, LinboImage*> _images;
+    QList<LinboOs*> _operatingSystems;
+    QList<LinboDiskPartition*> _diskPartitions;
 
     QString serverIpAddress;
     QString ipAddress;
     QString subnetMask;
     QString subnetBitmask;
     QString macAddress;
-    QString LinboVersion;
+    QString linboVersion;
     QString hostname;
     QString cpuModel;
     QString ramSize;
@@ -202,6 +167,7 @@ private:
     bool autoFormat;
     bool useMinimalLayout;
     bool guiDisabled;
+    bool clientDetailsVisibleByDefault;
 
 signals:
 

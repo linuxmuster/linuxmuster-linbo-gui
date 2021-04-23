@@ -34,9 +34,23 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     this->state = Initializing;
     this->postProcessActions = NoAction;
 
-    // Init some objects
     this->logger = new LinboLogger("/tmp/linbo.log", this);
-    this->config = new LinboConfig(this);
+
+    // Processes
+    this->asynchronosProcess = new QProcess(this);
+    // ascynchorons commands are logged to logger
+    connect( asynchronosProcess, SIGNAL(readyReadStandardOutput()),
+             this, SLOT(readFromStdout()) );
+    connect( asynchronosProcess, SIGNAL(readyReadStandardError()),
+             this, SLOT(readFromStderr()) );
+    connect(this->asynchronosProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
+
+    // synchronos commands are not logged
+    this->synchronosProcess = new QProcess(this);
+
+    this->configReader = new LinboConfigReader(this);
+    this->config = this->configReader->readConfig();
 
     // autostart timers
     this->autostartTimer = new QTimer(this);
@@ -62,33 +76,23 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
             emit this->rootTimeoutProgressChanged();
     });
 
-    // Processes
-    this->asynchronosProcess = new QProcess(this);
-    // ascynchorons commands are logged to logger
-    connect( asynchronosProcess, SIGNAL(readyReadStandardOutput()),
-             this, SLOT(readFromStdout()) );
-    connect( asynchronosProcess, SIGNAL(readyReadStandardError()),
-             this, SLOT(readFromStderr()) );
-    connect(this->asynchronosProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
-
-    // synchronos commands are not logged
-    this->synchronosProcess = new QProcess(this);
-
-    // load all configuration
-#ifdef TEST_ENV
-    this->loadStartConfiguration(TEST_ENV"/start.conf");
-#else
-    this->loadStartConfiguration("start.conf");
-#endif
-    this->loadEnvironmentValues();
-
     if(this->config->getGuiDisabled()) {
         this->setState(Disabled);
         this->logger->log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
     }
+
     // triger autostart if necessary
-    else if(this->currentOs != nullptr && this->currentOs->getAutostartEnabled())
+    for(LinboOs* os : this->config->operatingSystems())
+        if(os->getAutostartEnabled() && this->currentOs == nullptr)
+            // If the autostart of this OS is enabled and there is
+            // no other OS active yet -> set this OS as current OS
+            this->currentOs = os;
+
+    // default select first OS if no other OS has been selected yet
+    if(config->operatingSystems().length() > 0 && this->currentOs == nullptr)
+        this->currentOs = this->config->operatingSystems()[0];
+
+    if(this->currentOs != nullptr && this->currentOs->getAutostartEnabled())
         this->executeAutostart();
     else
         this->setState(Idle);
@@ -170,7 +174,7 @@ bool LinboBackend::startCurrentOs() {
     if(os == nullptr || (this->state != Idle && this->state != Autostarting) || !os->getActionEnabled(LinboOs::StartOs))
         return false;
 
-    this->logger->log("Starting " + this->currentOs->name, LinboLogger::LinboLogChapterBeginning);
+    this->logger->log("Starting " + this->currentOs->getName(), LinboLogger::LinboLogChapterBeginning);
 
     this->setState(Starting);
 
@@ -194,7 +198,7 @@ bool LinboBackend::syncCurrentOs() {
     if(os == nullptr || (this->state != Idle && this->state != Autostarting) || !os->getActionEnabled(LinboOs::SyncOs))
         return false;
 
-    this->logger->log("Syncing " + this->currentOs->name, LinboLogger::LinboLogChapterBeginning);
+    this->logger->log("Syncing " + this->currentOs->getName(), LinboLogger::LinboLogChapterBeginning);
 
     this->setState(Syncing);
 
@@ -221,7 +225,7 @@ bool LinboBackend::reinstallCurrentOs() {
     if(os == nullptr || (this->state != Idle && this->state != Autostarting) || !os->getActionEnabled(LinboOs::ReinstallOs))
         return false;
 
-    this->logger->log("Reinstalling " + this->currentOs->name, LinboLogger::LinboLogChapterBeginning);
+    this->logger->log("Reinstalling " + this->currentOs->getName(), LinboLogger::LinboLogChapterBeginning);
 
     this->setState(Reinstalling);
 
@@ -340,14 +344,6 @@ bool LinboBackend::writeImageDescription(LinboImage* image, QString newDescripti
 
 bool LinboBackend::writeImageDescription(QString imageName, QString newDescription) {
 
-    // substitute umlauts (they will otherwhise crash the WebUI
-    newDescription.replace("ä", "ae");
-    newDescription.replace("Ä", "Ae");
-    newDescription.replace("ö", "oe");
-    newDescription.replace("Ö", "Oe");
-    newDescription.replace("ü", "ue");
-    newDescription.replace("Ü", "Ue");
-
     QProcess process;
     process.start(
         this->linboCmdCommand,
@@ -414,8 +410,8 @@ bool LinboBackend::partitionDrive(bool format) {
     this->setState(Partitioning);
 
     QStringList commandArgs = QStringList(format ? "partition":"partition_noformat");
-    for( int i=0; i < this->diskPartitions.length(); i++) {
-        LinboDiskPartition* p = this->diskPartitions[i];
+    for( int i=0; i < this->config->diskPartitions().length(); i++) {
+        LinboDiskPartition* p = this->config->diskPartitions()[i];
         commandArgs.append(
             this->buildCommand(
                 p->getPath(),
@@ -442,12 +438,12 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
     QStringList commandArgs = this->buildCommand(format ? "initcache_format":"initcache", config->getServerIpAddress(), config->getCachePath());
 
     if( downloadMethod < LinboConfig::Rsync || downloadMethod > LinboConfig::Torrent )
-        commandArgs.append(this->downloadMethodToString(this->config->getDownloadMethod()));
+        commandArgs.append(LinboConfig::downloadMethodToString(this->config->getDownloadMethod()));
     else
-        commandArgs.append(this->downloadMethodToString(downloadMethod));
+        commandArgs.append(LinboConfig::downloadMethodToString(downloadMethod));
 
-    for(int i = 0; i < this->operatingSystems.length(); i++) {
-        LinboOs* os = this->operatingSystems[i];
+    for(int i = 0; i < this->config->operatingSystems().length(); i++) {
+        LinboOs* os = this->config->operatingSystems()[i];
         commandArgs.append(this->buildCommand(os->getBaseImage()->getName()));
         commandArgs.append(this->buildCommand(""));
     }
@@ -466,7 +462,7 @@ bool LinboBackend::updateLinbo() {
     return true;
 }
 
-bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboDeviceRole deviceRole) {
+bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole) {
     if(this->state != Root)
         return false;
 
@@ -474,7 +470,7 @@ bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddr
 
     this->setState(Registering);
 
-    this->executeCommand(false, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup, this->deviceRoleToString(deviceRole));
+    this->executeCommand(false, "register", this->config->getServerIpAddress(), "linbo", this->rootPassword, room, hostname, ipAddress, hostGroup, LinboConfig::deviceRoleToString(deviceRole));
 
     return true;
 }
@@ -544,43 +540,12 @@ LinboConfig* LinboBackend::getConfig() {
     return this->config;
 }
 
-QList<LinboImage*> LinboBackend::getImages() {
-    return this->images.values();
-}
-QList<LinboImage*> LinboBackend::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {
-    QList<LinboImage*> filteredImages;
-    QList<LinboImage*> imagesWithoutOs;
-
-    for(LinboImage* image : this->images)
-        if(!image->existsOnDisk() && !includeNonExistantImages)
-            continue;
-        else if(image->getOs() == os)
-            filteredImages.append(image);
-        else if(includeImagesWithoutOs && !image->hasOs())
-            imagesWithoutOs.append(image);
-
-    filteredImages.append(imagesWithoutOs);
-
-    return filteredImages;
-}
-
-LinboImage* LinboBackend::getImageByName(QString name) {
-    if(this->images.contains(name))
-        return this->images[name];
-    else
-        return nullptr;
-}
-
-QList<LinboOs*> LinboBackend::getOperatingSystems() {
-    return this->operatingSystems;
-}
-
 LinboOs* LinboBackend::getCurrentOs() {
     return this->currentOs;
 }
 
 void LinboBackend::setCurrentOs(LinboOs* os) {
-    if((this->state != Idle && this->state != Root) || !this->operatingSystems.contains(os) || this->currentOs == os)
+    if((this->state != Idle && this->state != Root) || !this->config->operatingSystems().contains(os) || this->currentOs == os)
         return;
 
     this->currentOs = os;
@@ -717,280 +682,4 @@ void LinboBackend::setState(LinboState state) {
 
     if(this->logger != nullptr)
         this->logger->log("Linbo state changed to: " + QString::number(state), LinboLogger::LinboGuiInfo);
-}
-
-void LinboBackend::loadStartConfiguration(QString startConfFilePath) {
-    // read start.conf
-    this->logger->log("Starting to parse start.conf", LinboLogger::LinboGuiInfo);
-
-    QFile inputFile(startConfFilePath);
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-        QTextStream input(&inputFile);
-        QString currentSection;
-        QMap<QString, QString> linboConfig;
-        QList<QMap<QString, QString>> partitionConfigs;
-        QList<QMap<QString, QString>> osConfigs;
-        bool firstLineOfSection = false;
-
-        while(!input.atEnd()) {
-            QString thisLine = input.readLine();
-
-            // Remove comments
-            thisLine = thisLine.split("#")[0];
-            // remove empty characters
-            thisLine = thisLine.simplified();
-            // ignore empty lines
-            if(thisLine.length() == 0)
-                continue;
-
-            if(thisLine.startsWith("[")) {
-                // we found a new section!
-                currentSection = thisLine.toLower();
-                firstLineOfSection = true;
-                continue;
-            }
-
-            // parse key value pair
-            // ignore invalid lines
-            if(!thisLine.contains("=") || thisLine.startsWith("="))
-                continue;
-
-            // split string at
-            QStringList keyValueList = thisLine.split("=");
-
-            if(keyValueList.length() < 2)
-                continue;
-
-            QString key = keyValueList[0].simplified().toLower();
-            QString value = keyValueList[1].simplified();
-
-            // ignore empty keys and values
-            if(key.isEmpty() || value.isEmpty())
-                continue;
-
-            // insert the values into our internal objects
-            if(currentSection == "[linbo]") {
-                // we are parsing the linbo config
-                linboConfig.insert(key, value);
-            }
-            else if(currentSection == "[partition]") {
-                // we are parsing a partition block
-                if(firstLineOfSection)
-                    partitionConfigs.append(QMap<QString, QString>());
-
-                partitionConfigs.last().insert(key, value);
-            }
-            else if(currentSection == "[os]") {
-                // we are parsing an os block
-                if(firstLineOfSection)
-                    osConfigs.append(QMap<QString, QString>());
-
-                osConfigs.last().insert(key, value);
-            }
-            // ignore everything else
-
-            firstLineOfSection = false;
-        }
-
-        inputFile.close();
-
-        // write the config our internal objects
-        this->writeToLinboConfig(linboConfig, this->config);
-
-        for(QMap<QString, QString> partitionConfig : partitionConfigs) {
-            LinboDiskPartition* tmpPartition = new LinboDiskPartition(this);
-            this->writeToPartitionConfig(partitionConfig, tmpPartition);
-            if(tmpPartition->getPath() != "")
-                this->diskPartitions.append(tmpPartition);
-            else
-                tmpPartition->deleteLater();
-        }
-
-        for(QMap<QString, QString> osConfig : osConfigs) {
-            LinboOs* tmpOs = new LinboOs(this);
-            this->writeToOsConfig(osConfig, tmpOs);
-            if(tmpOs->getName() != "") {
-                this->operatingSystems.append(tmpOs);
-                if(tmpOs->getAutostartEnabled() && this->currentOs == nullptr)
-                    // If the autostart of this OS is enabled and there is
-                    // no other OS active yet -> set this OS as current OS
-                    this->currentOs = tmpOs;
-            }
-            else
-                tmpOs->deleteLater();
-        }
-
-        // default select first OS if no other OS has been selected yet
-        if(this->operatingSystems.length() > 0 && this->currentOs == nullptr)
-            this->currentOs = this->operatingSystems[0];
-    }
-    else
-        this->logger->log("Error opening the start configuration file: " + startConfFilePath, LinboLogger::LinboGuiError);
-
-    this->logger->log("Finished parsing start.conf", LinboLogger::LinboGuiInfo);
-}
-
-void LinboBackend::loadEnvironmentValues() {
-    this->logger->log("Loading environment values", LinboLogger::LinboGuiInfo);
-    //  client ip
-    this->config->setIpAddress(this->executeCommand(true, "ip").replace("\n", ""));
-
-    // subnet mask
-    this->config->setSubnetMask(this->executeCommand(true, "netmask").replace("\n", ""));
-
-    // subnet bitmask
-    this->config->setSubnetBitmask(this->executeCommand(true, "bitmask").replace("\n", ""));
-
-    // mac address
-    this->config->setMacAddress(this->executeCommand(true, "mac").replace("\n", ""));
-
-    // Version
-    this->config->setLinboVersion(this->executeCommand(true, "version").simplified().replace("\n", "").split("[").first());
-
-    // hostname
-    this->config->setHostname(this->executeCommand(true, "hostname").replace("\n", ""));
-
-    // CPU
-    this->config->setCpuModel(this->executeCommand(true, "cpu").replace("\n", ""));
-
-    // Memory
-    this->config->setRamSize(this->executeCommand(true, "memory").replace("\n", ""));
-
-    // Cache Size
-    this->config->setCacheSize(this->executeCommand(true, "size", this->config->getCachePath()).replace("\n", ""));
-
-    // Harddisk Size
-    QRegExp *removePartition = new QRegExp("[0-9]{1,2}");
-    QString hd = this->config->getCachePath();
-    // e.g. turn /dev/sda1 into /dev/sda
-    hd.remove( *removePartition );
-    this->config->setHddSize(this->executeCommand(true, "size", hd).replace("\n", ""));
-
-    // Load all existing images
-    QStringList existingImageNames = this->executeCommand(true, "listimages", this->config->getCachePath()).split("\n");
-    for(QString existingImageName : existingImageNames) {
-        existingImageName = existingImageName.split("/").last();
-        if(!existingImageName.endsWith(".cloop"))
-            continue;
-
-        LinboImage* existingImage = nullptr;
-        if(!existingImageName.isEmpty() && !this->images.contains(existingImageName)) {
-            existingImage = new LinboImage(existingImageName, this);
-            this->images.insert(existingImageName, existingImage);
-        }
-        else if(this->images.contains(existingImageName)) {
-            existingImage = this->images[existingImageName];
-        }
-
-        if(existingImage != nullptr)
-            existingImage->setExistsOnDisk(true);
-    }
-
-    this->logger->log("Finished loading environment values", LinboLogger::LinboGuiInfo);
-}
-
-void LinboBackend::writeToLinboConfig(QMap<QString, QString> config, LinboConfig* linboConfig) {
-    for(QString key : config.keys()) {
-        QString value = config[key];
-        if(key == "server")  linboConfig->setServerIpAddress(value);
-        else if(key == "cache")   linboConfig->setCachePath(value);
-        else if(key == "roottimeout")   linboConfig->setRootTimeout((unsigned int)value.toInt());
-        else if(key == "group")   linboConfig->setHostGroup(value);
-        else if(key == "autopartition")  linboConfig->setAutoPartition(stringToBool(value));
-        else if(key == "autoinitcache")  linboConfig->setAutoInitCache(stringToBool(value));
-        else if(key == "autoformat")  linboConfig->setAutoFormat(stringToBool(value));
-        else if(key == "backgroundcolor" && QRegExp("^([a-fA-F0-9]{6})$").exactMatch(value)) linboConfig->setBackgroundColor("#" + value);
-        else if(key == "downloadtype")  linboConfig->setDownloadMethod(this->stringToDownloadMethod(value));
-        else if(key == "useminimallayout") linboConfig->setUseMinimalLayout(this->stringToBool(value));
-        else if(key == "locale") linboConfig->setLocale(value);
-        else if(key == "guidisabled") linboConfig->setGuiDisabled(this->stringToBool(value));
-    }
-}
-
-void LinboBackend::writeToPartitionConfig(QMap<QString, QString> config, LinboDiskPartition* partition) {
-    for(QString key : config.keys()) {
-        QString value = config[key];
-        if(key == "dev") partition->setPath(value);
-        else if(key == "size")  partition->setSize(value.toInt());
-        else if(key == "id")  partition->setId(value);
-        else if(key == "fstype")  partition->setFstype(value);
-        else if(key.startsWith("bootable"))  partition->setBootable(stringToBool(value));
-    }
-}
-
-void LinboBackend::writeToOsConfig(QMap<QString, QString> config, LinboOs* os) {
-    for(QString key : config.keys()) {
-        QString value = config[key];
-        if(key == "name")               os->setName(value);
-        else if(key == "description")   os->setDescription(value);
-        else if(key == "version")       os->setVersion(value);
-        else if(key == "iconname")      os->setIconName(value);
-        //else if(key == "image")         os->setDifferentialImage(new LinboImage(value, LinboImage::DifferentialImage, os));
-        else if(key == "boot")          os->setBootPartition(value);
-        else if(key == "root")          os->setRootPartition(value);
-        else if(key == "kernel")        os->setKernel(value);
-        else if(key == "initrd")        os->setInitrd(value);
-        else if(key == "append")        os->setKernelOptions(value);
-        else if(key == "syncenabled")   os->setSyncButtonEnabled(stringToBool(value));
-        else if(key == "startenabled")  os->setStartButtonEnabled(stringToBool(value));
-        else if((key == "remotesyncenabled") || (key == "newenabled"))   os->setReinstallButtonEnabled(stringToBool(value));
-        else if(key == "defaultaction") os->setDefaultAction(os->startActionFromString(value));
-        else if(key == "autostart")     os->setAutostartEnabled(stringToBool(value));
-        else if(key == "autostarttimeout")   os->setAutostartTimeout(value.toInt());
-        else if(key == "hidden")        os->setHidden(stringToBool(value));
-        else if(key == "baseimage") {
-            if(!this->images.contains(value))
-                this->images.insert(value, new LinboImage(value, this));
-            os->setBaseImage(this->images[value]);
-        }
-    }
-}
-
-bool LinboBackend::stringToBool(const QString& value) {
-    QStringList trueWords("yes");
-    trueWords.append("true");
-    trueWords.append("enable");
-    return trueWords.contains(value.simplified().toLower());
-}
-
-
-LinboConfig::DownloadMethod LinboBackend::stringToDownloadMethod(const QString& value) {
-    if(value.toLower() == "rsync")
-        return LinboConfig::Rsync;
-    else if(value.toLower() == "multicast")
-        return LinboConfig::Multicast;
-    else if(value.toLower() == "torrent")
-        return LinboConfig::Torrent;
-    else
-        return LinboConfig::Rsync;
-}
-
-QString LinboBackend::downloadMethodToString(const LinboConfig::DownloadMethod& value) {
-    switch (value) {
-    case LinboConfig::Rsync:
-        return "rsync";
-    case LinboConfig::Multicast:
-        return "multicast";
-    case LinboConfig::Torrent:
-        return "torrent";
-    default:
-        return "rsync";
-    }
-}
-
-
-QString LinboBackend::deviceRoleToString(const LinboDeviceRole& deviceRole) {
-    switch (deviceRole) {
-    case ClassroomStudentComputerRole:
-        return "classroom-studentcomputer";
-    case ClassroomTeacherComputerRole:
-        return "classroom-teachercomputer";
-    case FacultyTeacherComputerRole:
-        return "faculty-teachercomputer";
-    case StaffComputerRole:
-        return "staffcomputer";
-    default:
-        return "";
-    }
 }

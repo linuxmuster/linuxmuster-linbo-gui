@@ -35,7 +35,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->osButtonGroup = new QButtonGroup();
     this->osButtonGroup->setExclusive(true);
 
-    for(LinboOs* os : backend->getOperatingSystems()) {
+    for(LinboOs* os : backend->getConfig()->operatingSystems()) {
         if(this->osButtons.length() >= 4)
             break;
 

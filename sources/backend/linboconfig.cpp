@@ -38,3 +38,67 @@ bool LinboConfig::isBackgroundColorDark() {
     backgroundColor.getHsv(&h, &s, &v);
     return v < 210;
 }
+
+QList<LinboImage*> LinboConfig::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {
+    QList<LinboImage*> filteredImages;
+    QList<LinboImage*> imagesWithoutOs;
+
+    for(LinboImage* image : this->_images)
+        if(!image->existsOnDisk() && !includeNonExistantImages)
+            continue;
+        else if(image->getOs() == os)
+            filteredImages.append(image);
+        else if(includeImagesWithoutOs && !image->hasOs())
+            imagesWithoutOs.append(image);
+
+    filteredImages.append(imagesWithoutOs);
+
+    return filteredImages;
+}
+
+LinboImage* LinboConfig::getImageByName(QString name) {
+    if(this->_images.contains(name))
+        return this->_images[name];
+    else
+        return nullptr;
+}
+
+LinboConfig::DownloadMethod LinboConfig::stringToDownloadMethod(const QString& value) {
+    if(value.toLower() == "rsync")
+        return LinboConfig::Rsync;
+    else if(value.toLower() == "multicast")
+        return LinboConfig::Multicast;
+    else if(value.toLower() == "torrent")
+        return LinboConfig::Torrent;
+    else
+        return LinboConfig::Rsync;
+}
+
+QString LinboConfig::downloadMethodToString(const LinboConfig::DownloadMethod& value) {
+    switch (value) {
+    case LinboConfig::Rsync:
+        return "rsync";
+    case LinboConfig::Multicast:
+        return "multicast";
+    case LinboConfig::Torrent:
+        return "torrent";
+    default:
+        return "rsync";
+    }
+}
+
+
+QString LinboConfig::deviceRoleToString(const LinboConfig::LinboDeviceRole& deviceRole) {
+    switch (deviceRole) {
+    case LinboConfig::ClassroomStudentComputerRole:
+        return "classroom-studentcomputer";
+    case LinboConfig::ClassroomTeacherComputerRole:
+        return "classroom-teachercomputer";
+    case LinboConfig::FacultyTeacherComputerRole:
+        return "faculty-teachercomputer";
+    case LinboConfig::StaffComputerRole:
+        return "staffcomputer";
+    default:
+        return "";
+    }
+}

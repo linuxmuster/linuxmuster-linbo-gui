@@ -32,6 +32,7 @@ class LinboImage : public QObject
 {
     Q_OBJECT
 public:
+    friend class LinboConfigReader;
     friend class LinboBackend;
     friend class LinboOs;
 
