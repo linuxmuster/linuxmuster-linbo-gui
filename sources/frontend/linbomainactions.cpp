@@ -86,9 +86,10 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->messageLabel = new QLabel("", this->messageWidget);
     this->messageLabel->setAlignment(Qt::AlignCenter);
 
-    this->messageDetailsLabel = new QLabel("", this->messageWidget);
-    this->messageDetailsLabel->setAlignment(Qt::AlignLeft);
-    //this->messageDetailsLabel->setWordWrap(true);
+    this->messageDetailsTextBrowser = new LinboTextBrowser(this->messageWidget);
+    this->messageDetailsTextBrowser->setReadOnly(true);
+    this->messageDetailsTextBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->messageDetailsTextBrowser->setLineWrapMode(QTextEdit::NoWrap);
 
     this->resetMessageButton = new LinboToolButton(LinboGuiTheme::BackIcon, this->messageWidget);
     connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
@@ -320,22 +321,22 @@ void LinboMainActions::resizeAndPositionAllItems() {
     // Message widget
     this->messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
-    if(this->messageDetailsLabel->isVisible()) {
+    if(this->messageDetailsTextBrowser->isVisible()) {
         this->messageLabel->setGeometry(0,0, this->width(), this->height() * 0.2);
 
         int messageDetailsFontHeight = this->height() * 0.6;
-        QFont messageDetailsFont = this->messageDetailsLabel->font();
+        QFont messageDetailsFont = this->messageDetailsTextBrowser->font();
         messageDetailsFont.setPixelSize(gTheme->toFontSize(messageDetailsFontHeight / 12.5));
-        this->messageDetailsLabel->setFont(messageDetailsFont);
+        this->messageDetailsTextBrowser->setFont(messageDetailsFont);
 
         QFont messageFont = this->messageLabel->font();
         messageFont.setBold(true);
         messageFont.setPixelSize(gTheme->toFontSize(messageDetailsFont.pixelSize() * 1.5));
         this->messageLabel->setFont(messageFont);
 
-        this->messageDetailsLabel->setMaximumWidth(this->width() * 0.8);
-        this->messageDetailsLabel->move((this->width() - this->messageDetailsLabel->width()) / 2, this->messageLabel->height());
-        this->messageDetailsLabel->setFixedHeight(messageDetailsFontHeight);
+        this->messageDetailsTextBrowser->setFixedWidth(this->width() * 0.8);
+        this->messageDetailsTextBrowser->move((this->width() - this->messageDetailsTextBrowser->width()) / 2, this->messageLabel->height());
+        this->messageDetailsTextBrowser->setFixedHeight(messageDetailsFontHeight);
     }
     else {
         QFont messageFont = this->messageLabel->font();
@@ -423,24 +424,18 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         if(chaperLogs.length() == 0)
             //% "No logs before this crash"
             errorDetails = "<b>" + qtTrId("main_message_noLogs") + "</b>";
-        else if(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::StdErr).length() == 0) {
+        else {
             //% "The last logs before the crash were:"
             errorDetails = "<b>" + qtTrId("main_message_lastLogs") + "</b><br>";
-            errorDetails += LinboLogger::logsToStacktrace(chaperLogs, 8).join("<br>");
-        }
-        else {
-            //% "The last errors before the crash were:"
-            errorDetails = "<b>" + qtTrId("main_message_lastErrors") + "</b><br>";
-            errorDetails += LinboLogger::logsToStacktrace(LinboLogger::getFilterLogs(chaperLogs, LinboLogger::LinboGuiError | LinboLogger::StdErr), 8).join("<br>");
+            errorDetails += LinboLogger::logsToStacktrace(chaperLogs).join("<br>");
         }
 
         //% "Please ask your system administrator for help."
         errorDetails += "<br><br><b>" + qtTrId("main_message_askForHelp") + "</b>";
 
-        this->messageDetailsLabel->setText("<html>" + errorDetails + "</html>");
+        this->messageDetailsTextBrowser->setText("<html>" + errorDetails + "</html>");
         this->messageLabel->setStyleSheet("QLabel { color : red; }");
-        this->messageDetailsLabel->setStyleSheet("QLabel { color : red; }");
-        this->messageDetailsLabel->setVisible(true);
+        this->messageDetailsTextBrowser->setVisible(true);
         currentWidget = this->messageWidget;
         break;
     }
@@ -449,10 +444,10 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
         //% "The process %1 finished successfully."
         this->messageLabel->setText(qtTrId("main_message_processFinishedSuccessfully").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
-        this->messageDetailsLabel->setText("");
+        this->messageDetailsTextBrowser->setText("");
         this->messageLabel->setStyleSheet("QLabel { color : green; }");
         currentWidget = this->messageWidget;
-        this->messageDetailsLabel->setVisible(false);
+        this->messageDetailsTextBrowser->setVisible(false);
         break;
     }
 

@@ -38,6 +38,7 @@
 #include "linboregisterdialog.h"
 #include "linboupdatecachedialog.h"
 #include "linboimagecreationdialog.h"
+#include "linbotextbrowser.h"
 
 class LinboMainActions : public QWidget
 {
@@ -71,7 +72,7 @@ private:
     QWidget* messageWidget;
     QVBoxLayout* messageLayout;
     QLabel* messageLabel;
-    QLabel* messageDetailsLabel;
+    LinboTextBrowser* messageDetailsTextBrowser;
     LinboPushButton* resetMessageButton;
 
     QWidget* rootWidget;

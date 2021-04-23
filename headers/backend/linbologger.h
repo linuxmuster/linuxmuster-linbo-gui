@@ -58,7 +58,7 @@ public:
     QList<LinboLog> getLogs();
     QList<LinboLog> getLogsOfCurrentChapter();
     static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterType);
-    static QStringList logsToStacktrace(QList<LinboLog> logs, int limit);
+    static QStringList logsToStacktrace(QList<LinboLog> logs, int limit = -1);
 
 protected slots:
     void info(QString logText);

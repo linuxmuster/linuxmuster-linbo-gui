@@ -22,6 +22,7 @@
 #include <QTextBrowser>
 #include <QObject>
 #include <QWidget>
+#include <QScrollBar>
 
 #include "linboguitheme.h"
 

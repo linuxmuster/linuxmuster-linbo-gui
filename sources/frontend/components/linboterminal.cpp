@@ -23,19 +23,13 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
         "}"
         "QScrollBar::handle:vertical {"
         "    background: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
-        "    min-height: 0px;"
+        "    min-height: 10px;"
         "}"
         "QScrollBar::add-line:vertical {"
-        "    background: grey;"
         "    height: 0px;"
-        "    subcontrol-position: bottom;"
-        "    subcontrol-origin: margin;"
         "}"
         "QScrollBar::sub-line:vertical {"
-        "    background: grey;"
         "    height: 0 px;"
-        "    subcontrol-position: top;"
-        "    subcontrol-origin: margin;"
         "}");
 
     this->setCursorWidth(8);
@@ -182,7 +176,8 @@ void LinboTerminal::handleProcessFinished(int exitCode, QProcess::ExitStatus exi
 void LinboTerminal::execute(QString command) {
 
     // handle history
-    this->commandHistory.insert(0, command);
+    if (command != "")
+        this->commandHistory.insert(0, command);
     this->currentHistoryIndex = -1;
 
     // execute command

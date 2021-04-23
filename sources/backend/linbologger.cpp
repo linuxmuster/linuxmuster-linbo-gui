@@ -130,10 +130,10 @@ QList<LinboLogger::LinboLog> LinboLogger::getFilterLogs(QList<LinboLog> logs, Li
 QStringList LinboLogger::logsToStacktrace(QList<LinboLog> logs, int limit) {
     QStringList logStrings;
     for(int i = 0; i < logs.length(); i++) {
-        if(logStrings.length() >= limit)
+        if(logStrings.length() >= limit && limit > 0)
             break;
 
-        logStrings.append("#" + QString::number(logStrings.length() +1) + " [" + LinboLogger::logTypeToString(logs[i].type) + "] " + logs[i].message);
+        logStrings.append("[" + LinboLogger::logTypeToString(logs[i].type) + "] " + logs[i].message);
     }
 
     return logStrings;
