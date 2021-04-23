@@ -24,10 +24,7 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
     this->setTitle(qtTrId("dialog_terminal_title"));
     this->terminal = new LinboTerminal(this);
     connect(this->terminal, &LinboTerminal::processExited, this, &LinboDialog::autoClose);
-}
-
-void LinboTerminalDialog::setVisibleAnimated(bool visible) {
-    LinboDialog::setVisibleAnimated(visible);
+    connect(this, &LinboDialog::closedByUser, this->terminal, &LinboTerminal::clearAndRestart);
 }
 
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {

@@ -17,6 +17,9 @@ class LinboTerminal : public QTextEdit
 public:
     LinboTerminal(QWidget* parent = nullptr);
 
+public slots:
+    void clearAndRestart();
+
 private:
     int fixedPosition;
     QProcess* process;

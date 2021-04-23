@@ -113,9 +113,11 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
         if(event->modifiers().testFlag(Qt::ControlModifier) && event->modifiers().testFlag(Qt::ShiftModifier))
             // copy on ctrl+shift+c
             this->copy();
-        else if(event->modifiers().testFlag(Qt::ControlModifier))
+        else if(event->modifiers().testFlag(Qt::ControlModifier)) {
             // restart process on ctrl+c
+            this->setCurrentCommand("^C");
             this->restartProcess();
+        }
         else
             accept = true;
     }
@@ -194,7 +196,6 @@ void LinboTerminal::execute(QString command) {
 }
 
 void LinboTerminal::restartProcess() {
-    this->setCurrentCommand("^C");
     this->doNotExitOnProcessExit = true;
     this->process->kill();
 }
@@ -208,4 +209,11 @@ void LinboTerminal::handleCursorPositionChanged()
     else {
         this->setCursorWidth(8);
     }
+}
+
+void LinboTerminal::clearAndRestart() {
+    this->clear();
+    this->fixedPosition = 0;
+    this->commandHistory.clear();
+    this->restartProcess();
 }

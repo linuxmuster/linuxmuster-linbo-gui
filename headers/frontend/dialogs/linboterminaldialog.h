@@ -38,7 +38,6 @@ public:
     LinboTerminalDialog(QWidget* parent);
 
 protected:
-    virtual void setVisibleAnimated(bool visible) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private:
