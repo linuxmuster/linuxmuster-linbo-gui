@@ -1,3 +1,15 @@
+linuxmuster-linbo-gui7 (7.0.1-rc01) lmn7-testing; urgency=low
+
+  * Implemented "AutoPartition" and "AutoInitcache" functionality (#56)
+  * Improoved keyboard only usage (#59)
+  * Error logs are now fully displayed in a scrollable container (#55)
+  * Console processes are killed when the console window is closed (#57)
+  * Add start.conf option "ClientDetailsVisibleByDefault" to make the details visible by default (#54)
+  * Don't hide the client details when some task (eg. upload image) starts (#54)
+  * Fix registering clients (#53)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 23 Mar 2021 13:30:00 +0100 
+
 linuxmuster-linbo-gui7 (7.0.0) lmn7; urgency=low
 
   * Initial release to stable repo
