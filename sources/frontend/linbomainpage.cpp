@@ -21,7 +21,7 @@
 LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
-    this->showClientInfo = backend->getConfig()->getClientDetailsVisibleByDefault();
+    this->showClientInfo = backend->getConfig()->clientDetailsVisibleByDefault();
     this->f1Pressed = false;
 
     this->backend = backend;
@@ -70,7 +70,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->getLinboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->getIpAddress() + " - F1");
+    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->ipAddress() + " - F1");
     versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
@@ -213,7 +213,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
     int clientInfoHeight = 0;
-    bool useMinimalLayout = this->backend->getConfig()->getUseMinimalLayout();
+    bool useMinimalLayout = this->backend->getConfig()->useMinimalLayout();
 
     switch (newState) {
     case LinboBackend::StartActionError:
@@ -322,7 +322,6 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
         this->backend->restartRootTimeout();
 
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        qDebug() << "is Enter: " << (keyEvent->key() == Qt::Key_Enter) << " is Return: " << (keyEvent->key() == Qt::Key_Return);
         if(keyEvent->key() == Qt::Key_F1) {
             this->f1Pressed = true;
         }

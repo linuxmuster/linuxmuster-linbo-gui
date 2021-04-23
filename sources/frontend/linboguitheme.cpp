@@ -55,7 +55,7 @@ QColor LinboGuiTheme::getColor(LinboGuiColorRole colorRole) {
 
     switch (colorRole) {
     case BackgroundColor:
-        return this->backend->getConfig()->getBackgroundColor();
+        return this->backend->getConfig()->backgroundColor();
     case ElevatedBackgroundColor:
         if(isDark)
             return this->getColor(BackgroundColor).lighter(120);

@@ -21,48 +21,52 @@
 
 LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
 {
-    this->parent = parent;
-    this->autostartEnabled = false;
-    this->autostartTimeout = 0;
-    this->hidden = false;
-    this->defaultAction = UnknownAction;
-    this->iconName = QString("defaultIcon.svg");
-    this->baseImage = nullptr;
+    this->_parent = parent;
+    this->_autostartEnabled = false;
+    this->_autostartTimeout = 0;
+    this->_hidden = false;
+    this->_defaultAction = UnknownAction;
+    this->_iconName = QString("defaultIcon.svg");
+    this->_baseImage = nullptr;
 }
 
 bool LinboOs::start() {
-    this->parent->setCurrentOs(this);
-    return this->parent->startCurrentOs();
+    this->_parent->setCurrentOs(this);
+    return this->_parent->startCurrentOs();
 }
 
 bool LinboOs::sync() {
-    this->parent->setCurrentOs(this);
-    return this->parent->syncCurrentOs();
+    this->_parent->setCurrentOs(this);
+    return this->_parent->syncCurrentOs();
 }
 
 bool LinboOs::reinstall() {
-    this->parent->setCurrentOs(this);
-    return this->parent->reinstallCurrentOs();
+    this->_parent->setCurrentOs(this);
+    return this->_parent->reinstallCurrentOs();
 }
 
 void LinboOs::setBaseImage (LinboImage* baseImage) {
-    baseImage->setOs(this);
-    this->baseImage = baseImage;
+    baseImage->_os = this;
+    this->_baseImage = baseImage;
 }
 
-bool LinboOs::getActionEnabled(LinboOsStartAction action) {
+bool LinboOs::actionEnabled(LinboOsStartAction action) {
     switch (action) {
-    case StartOs: return this->getStartActionEnabled();
-    case SyncOs: return this->getSyncActionEnabled();
-    case ReinstallOs: return this->getReinstallActionEnabled();
-    default: return false;
+    case StartOs:
+        return this->startActionEnabled();
+    case SyncOs:
+        return this->syncActionEnabled();
+    case ReinstallOs:
+        return this->reinstallActionEnabled();
+    default:
+        return false;
     }
 }
 
 
-LinboOs::LinboOsStartAction LinboOs::getDefaultAction() {
-    if(this->baseImage != nullptr)
-        return this->defaultAction;
+LinboOs::LinboOsStartAction LinboOs::defaultAction() {
+    if(this->_baseImage != nullptr)
+        return this->_defaultAction;
     else
         return StartOs;
 }

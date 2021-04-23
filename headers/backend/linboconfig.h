@@ -49,74 +49,74 @@ public:
         DeviceRoleCount
     };
 
-    const QString& getServerIpAddress() const {
-        return this->serverIpAddress;
+    const QString& serverIpAddress() const {
+        return this->_serverIpAddress;
     }
-    const QString& getIpAddress() const {
-        return this->ipAddress;
+    const QString& ipAddress() const {
+        return this->_ipAddress;
     }
-    const QString& getSubnetMask() const {
-        return this->subnetMask;
+    const QString& subnetMask() const {
+        return this->_subnetMask;
     }
-    const QString& getSubnetBitmask() const {
-        return this->subnetBitmask;
+    const QString& subnetBitmask() const {
+        return this->_subnetBitmask;
     }
-    const QString& getMacAddress() const {
-        return this->macAddress;
+    const QString& macAddress() const {
+        return this->_macAddress;
     }
-    const QString& getLinboVersion() const {
-        return this->linboVersion;
+    const QString& linboVersion() const {
+        return this->_linboVersion;
     }
-    const QString& getHostname() const {
-        return this->hostname;
+    const QString& hostname() const {
+        return this->_hostname;
     }
-    const QString& getCpuModel() const {
-        return this->cpuModel;
+    const QString& cpuModel() const {
+        return this->_cpuModel;
     }
-    const QString& getRamSize() const {
-        return this->ramSize;
+    const QString& ramSize() const {
+        return this->_ramSize;
     }
-    const QString& getCacheSize() const {
-        return this->cacheSize;
+    const QString& cacheSize() const {
+        return this->_cacheSize;
     }
-    const QString& getHddSize() const {
-        return this->hddSize;
+    const QString& hddSize() const {
+        return this->_hddSize;
     }
-    const QString& getCachePath() const {
-        return this->cachePath;
+    const QString& cachePath() const {
+        return this->_cachePath;
     }
-    const QString& getHostGroup() const {
-        return this->hostGroup;
+    const QString& hostGroup() const {
+        return this->_hostGroup;
     }
-    const unsigned int& getRootTimeout() const {
-        return this->rootTimeout;
+    const unsigned int& rootTimeout() const {
+        return this->_rootTimeout;
     }
-    const bool& getAutoPartition() {
-        return this->autoPartition;
+    const bool& autoPartition() {
+        return this->_autoPartition;
     }
-    const bool& getAutoInitCache() {
-        return this->autoInitCache;
+    const bool& autoInitCache() {
+        return this->_autoInitCache;
     }
-    const QString& getBackgroundColor() {
-        return this->backgroundColor;
+    const QString& backgroundColor() {
+        return this->_backgroundColor;
     }
-    const DownloadMethod& getDownloadMethod() {
-        return this->downloadMethod;
+    const DownloadMethod& downloadMethod() {
+        return this->_downloadMethod;
     }
-    const bool& getAutoFormat() {
-        return this->autoFormat;
+    const bool& autoFormat() {
+        return this->_autoFormat;
     }
-    const bool& getUseMinimalLayout() {
-        return this->useMinimalLayout;
+    const bool& useMinimalLayout() {
+        return this->_useMinimalLayout;
     }
-    const bool& getClientDetailsVisibleByDefault() {
-        return this->clientDetailsVisibleByDefault;
+    const bool& clientDetailsVisibleByDefault() {
+        return this->_clientDetailsVisibleByDefault;
     }
-    const QString& getLocale() const {
-        return this->locale;
+    const QString& locale() const {
+        return this->_locale;
     }
-    bool getGuiDisabled() {
-        return this->guiDisabled;
+    bool guiDisabled() {
+        return this->_guiDisabled;
     }
 
     QMap<QString, LinboImage*> images() {
@@ -145,29 +145,29 @@ private:
     QList<LinboOs*> _operatingSystems;
     QList<LinboDiskPartition*> _diskPartitions;
 
-    QString serverIpAddress;
-    QString ipAddress;
-    QString subnetMask;
-    QString subnetBitmask;
-    QString macAddress;
-    QString linboVersion;
-    QString hostname;
-    QString cpuModel;
-    QString ramSize;
-    QString cacheSize;
-    QString hddSize;
-    QString cachePath;
-    QString hostGroup;
-    DownloadMethod downloadMethod;
-    QString backgroundColor;
-    QString locale;
-    unsigned int rootTimeout;
-    bool autoPartition;
-    bool autoInitCache;
-    bool autoFormat;
-    bool useMinimalLayout;
-    bool guiDisabled;
-    bool clientDetailsVisibleByDefault;
+    QString _serverIpAddress;
+    QString _ipAddress;
+    QString _subnetMask;
+    QString _subnetBitmask;
+    QString _macAddress;
+    QString _linboVersion;
+    QString _hostname;
+    QString _cpuModel;
+    QString _ramSize;
+    QString _cacheSize;
+    QString _hddSize;
+    QString _cachePath;
+    QString _hostGroup;
+    DownloadMethod _downloadMethod;
+    QString _backgroundColor;
+    QString _locale;
+    unsigned int _rootTimeout;
+    bool _autoPartition;
+    bool _autoInitCache;
+    bool _autoFormat;
+    bool _useMinimalLayout;
+    bool _guiDisabled;
+    bool _clientDetailsVisibleByDefault;
 
 signals:
 

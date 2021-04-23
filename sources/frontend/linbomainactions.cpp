@@ -103,7 +103,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     LinboPushButton* buttonCache;
 
-    if(this->backend->getConfig()->getUseMinimalLayout()) {
+    if(this->backend->getConfig()->useMinimalLayout()) {
         //% "Create image"
         buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboGuiTheme::ImageIcon, LinboGuiTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
@@ -145,7 +145,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
         horizontalRootLayoutCache->addWidget(this->rootActionButtons[i]);
     }
 
-    if(this->backend->getConfig()->getUseMinimalLayout()) {
+    if(this->backend->getConfig()->useMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
         separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";}");
@@ -176,16 +176,16 @@ void LinboMainActions::resizeAndPositionAllItems() {
     // Action buttons
     // set tooltips:
     if(this->backend->getCurrentOs() != nullptr) {
-        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->getName()));
-        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->getName()));
-        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->getName()));
+        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->name()));
+        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->name()));
+        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->name()));
     }
 
     // bring buttons in correct order:
     LinboOs* selectedOs = this->backend->getCurrentOs();
     LinboOs::LinboOsStartAction defaultAction = LinboOs::UnknownAction;
     if(selectedOs != nullptr)
-        defaultAction = selectedOs->getDefaultAction();
+        defaultAction = selectedOs->defaultAction();
 
     int syncOsPosition = 2;
     int startOsPosition = 0;
@@ -221,9 +221,9 @@ void LinboMainActions::resizeAndPositionAllItems() {
         positionsEnabled.append(false);
 
     if(selectedOs != nullptr) {
-        positionsEnabled[startOsPosition] = selectedOs->getStartActionEnabled();
-        positionsEnabled[syncOsPosition] = selectedOs->getSyncActionEnabled();
-        positionsEnabled[reinstallOsPosition] = selectedOs->getReinstallActionEnabled();
+        positionsEnabled[startOsPosition] = selectedOs->startActionEnabled();
+        positionsEnabled[syncOsPosition] = selectedOs->syncActionEnabled();
+        positionsEnabled[reinstallOsPosition] = selectedOs->reinstallActionEnabled();
     }
 
     QList<QRect> geometries;
@@ -284,7 +284,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
 
     QFont fontCache;
 
-    if(selectedOs != nullptr && selectedOs->getBaseImage() == nullptr) {
+    if(selectedOs != nullptr && selectedOs->baseImage() == nullptr) {
         int noBaseImageLabelHeight = this->buttonWidget->height() * 0.2;
         fontCache = this->noBaseImageLabel->font();
         fontCache.setPixelSize(gTheme->toFontSize(noBaseImageLabelHeight * 0.8));
@@ -388,7 +388,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         currentWidget = this->progressBarWidget;
         break;
     case LinboBackend::Idle:
-        if(this->backend->getConfig()->getUseMinimalLayout())
+        if(this->backend->getConfig()->useMinimalLayout())
             currentWidget = this->buttonWidget;
         else
             currentWidget = this->emptyWidget;
@@ -491,7 +491,7 @@ void LinboMainActions::handleTimeoutProgressChanged() {
         remaningSeconds = this->backend->getAutostartTimeoutRemainingSeconds();
 
         //% "Starting"
-        label = qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->getName();
+        label = qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->name();
     }
     else {
         progress = this->backend->getRootTimeoutProgress();

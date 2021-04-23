@@ -59,11 +59,13 @@ case "${cmd}" in
         start "$@"
         ;;
     partition_noformat)
+        echo "Partitioning (noformat)..."
         # doesn't use parameters, doesn't output something essential
         exit 0
         ;;
     partition)
         # see above
+        echo "Partitioning..."
         sleep 5
         exit 0
         ;;

@@ -31,19 +31,19 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
 
     //% "Update using rsync"
     LinboRadioButton* rsyncButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_rsync"));
-    rsyncButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Rsync);
+    rsyncButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Rsync);
     this->mainLayout->addWidget(rsyncButton);
     this->updateTypeButtonGroup->addButton(rsyncButton, int(LinboConfig::Rsync));
 
     //% "Update using multicast"
     LinboRadioButton* multicastButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_multicast"));
-    multicastButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Multicast);
+    multicastButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Multicast);
     this->mainLayout->addWidget(multicastButton);
     this->updateTypeButtonGroup->addButton(multicastButton, int(LinboConfig::Multicast));
 
     //% "Update using torrent"
     LinboRadioButton* torrentButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_torrent"));
-    torrentButton->setChecked(backend->getConfig()->getDownloadMethod() == LinboConfig::Torrent);
+    torrentButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Torrent);
     this->mainLayout->addWidget(torrentButton);
     this->updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
 

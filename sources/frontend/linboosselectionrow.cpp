@@ -40,7 +40,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
             break;
 
 #ifdef TEST_ENV
-        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->getIconName(), os, this->osButtonGroup, this);
+        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->iconName(), os, this->osButtonGroup, this);
 #else
         LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->getIconName(), os, this->osButtonGroup, this);
 #endif
@@ -48,7 +48,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
-        osButton->setShowActionButtons(!this->backend->getConfig()->getUseMinimalLayout());
+        osButton->setShowActionButtons(!this->backend->getConfig()->useMinimalLayout());
 
         // auto select current OS
         if(this->backend->getCurrentOs() == os)
@@ -68,11 +68,11 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
 
         QString environmentValuesText;
         //% "Hostname"
-        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->getConfig()->getHostname() + "\n";
+        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->getConfig()->hostname() + "\n";
         //% "IP-Address"
-        environmentValuesText += qtTrId("ip") + ":  " + this->backend->getConfig()->getIpAddress() + "\n";
+        environmentValuesText += qtTrId("ip") + ":  " + this->backend->getConfig()->ipAddress() + "\n";
         //% "Mac"
-        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->getConfig()->getMacAddress() + "\n";
+        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->getConfig()->macAddress() + "\n";
 
         this->environmentValuesLabel = new QLabel(environmentValuesText, this);
         this->environmentValuesLabel->hide();
@@ -97,7 +97,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
 
     if(this->osButtons.length() > 0) {
 
-        bool useMinimalLayout = this->backend->getConfig()->getUseMinimalLayout();
+        bool useMinimalLayout = this->backend->getConfig()->useMinimalLayout();
         int buttonCount = this->osButtons.length();
 
         int spacing;

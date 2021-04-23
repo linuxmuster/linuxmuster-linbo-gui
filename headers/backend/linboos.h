@@ -41,143 +41,95 @@ public:
         ReinstallOs
     };
 
-    const QString& getName() const {
-        return this->name;
+    const QString& name() const {
+        return this->_name;
     }
-    const QString& getDescription() const {
-        return this->description;
+    const QString& description() const {
+        return this->_description;
     }
-    const QString& getVersion() const {
-        return this->version;
+    const QString& version() const {
+        return this->_version;
     }
-    LinboImage* getBaseImage() const {
-        return this->baseImage;
+    LinboImage* baseImage() const {
+        return this->_baseImage;
     }
-    const QString& getIconName() const {
-        return this->iconName;
+    const QString& iconName() const {
+        return this->_iconName;
     }
-    const QString& getRootPartition() const {
-        return this->rootPartition;
+    const QString& rootPartition() const {
+        return this->_rootPartition;
     }
-    const QString& getBootPartition() const {
-        return this->bootPartition;
+    const QString& bootPartition() const {
+        return this->_bootPartition;
     }
-    const QString& getKernel() const {
-        return this->kernel;
+    const QString& kernel() const {
+        return this->_kernel;
     }
-    const QString& getInitrd() const {
-        return this->initrd;
+    const QString& initrd() const {
+        return this->_initrd;
     }
-    const QString& getKernelOptions() const {
-        return this->kernelOptions;
+    const QString& kernelOptions() const {
+        return this->_kernelOptions;
     }
-    bool getSyncActionEnabled() const {
-        return this->baseImage != nullptr && this->syncButtonEnabled;
+    bool syncActionEnabled() const {
+        return this->_baseImage != nullptr && this->_syncButtonEnabled;
     }
-    bool getStartActionEnabled() const {
-        return this->startButtonEnabled;
+    bool startActionEnabled() const {
+        return this->_startButtonEnabled;
     }
-    bool getReinstallActionEnabled() const {
-        return this->baseImage != nullptr && this->reinstallButtonEnabled;
+    bool reinstallActionEnabled() const {
+        return this->_baseImage != nullptr && this->_reinstallButtonEnabled;
     }
-    bool getAutostartEnabled() const {
-        return this->baseImage != nullptr && this->autostartEnabled;
+    bool autostartEnabled() const {
+        return this->_baseImage != nullptr && this->_autostartEnabled;
     }
-    const int& getAutostartTimeout() const {
-        return this->autostartTimeout;
+    const int& autostartTimeout() const {
+        return this->_autostartTimeout;
     }
-    LinboOsStartAction getDefaultAction();
+    LinboOsStartAction defaultAction();
     const bool& getHidden() const {
-        return this->hidden;
+        return this->_hidden;
     }
 
-    bool getActionEnabled(LinboOsStartAction action);
+    bool actionEnabled(LinboOsStartAction action);
     static LinboOsStartAction startActionFromString(const QString& name);
 
     bool start();
     bool sync();
     bool reinstall();
 
-    LinboBackend* getBackend() {
-        return this->parent;
+    LinboBackend* backend() {
+        return this->_parent;
     }
 
 private:
     explicit LinboOs(LinboBackend *parent = nullptr);
 
-    void setName (const QString& name) {
-        this->name = name;
-    }
-    void setDescription  (const QString& description) {
-        this->description = description;
-    }
-    void setVersion (const QString& version) {
-        this->version = version;
-    }
     void setBaseImage (LinboImage* baseImage);
-    void setIconName (const QString& iconName) {
-        this->iconName = iconName;
-    }
-    void setRootPartition (const QString& rootPartition) {
-        this->rootPartition = rootPartition;
-    }
-    void setBootPartition (const QString& bootPartition) {
-        this->bootPartition = bootPartition;
-    }
-    void setKernel (const QString& kernel) {
-        this->kernel = kernel;
-    }
-    void setInitrd (const QString& initrd) {
-        this->initrd = initrd;
-    }
-    void setKernelOptions (const QString& kernelOptions) {
-        this->kernelOptions = kernelOptions;
-    }
-    void setSyncButtonEnabled (const bool& syncButtonEnabled) {
-        this->syncButtonEnabled = syncButtonEnabled;
-    }
-    void setStartButtonEnabled (const bool& startButtonEnabled) {
-        this->startButtonEnabled = startButtonEnabled;
-    }
-    void setReinstallButtonEnabled (const bool& reinstallButtonEnabled) {
-        this->reinstallButtonEnabled = reinstallButtonEnabled;
-    }
-    void setAutostartEnabled (const bool& autostartEnabled) {
-        this->autostartEnabled = autostartEnabled;
-    }
-    void setAutostartTimeout (const int& autostartTimeout) {
-        this->autostartTimeout = autostartTimeout;
-    }
-    void setDefaultAction (const LinboOsStartAction& defaultAction) {
-        this->defaultAction = defaultAction;
-    }
-    void setHidden (const bool& hidden) {
-        this->hidden = hidden;
-    }
 
-    LinboBackend* parent;
+    LinboBackend* _parent;
 
-    QString name;
-    QString version;
-    QString description;
-    QString iconName;
-    QString rootPartition;
-    QString bootPartition;
-    QString image;
-    QString kernel;
-    QString initrd;
-    QString kernelOptions;
+    QString _name;
+    QString _version;
+    QString _description;
+    QString _iconName;
+    QString _rootPartition;
+    QString _bootPartition;
+    QString _image;
+    QString _kernel;
+    QString _initrd;
+    QString _kernelOptions;
 
-    int autostartTimeout;
+    int _autostartTimeout;
 
-    bool syncButtonEnabled;
-    bool startButtonEnabled;
-    bool reinstallButtonEnabled;
-    bool autostartEnabled;
-    bool hidden;
+    bool _syncButtonEnabled;
+    bool _startButtonEnabled;
+    bool _reinstallButtonEnabled;
+    bool _autostartEnabled;
+    bool _hidden;
 
-    LinboOsStartAction defaultAction;
-    LinboImage* baseImage;
+    LinboOsStartAction _defaultAction;
+    LinboImage* _baseImage;
 };
 
 #endif // LINBOOS_H

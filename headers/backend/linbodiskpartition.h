@@ -31,46 +31,30 @@ class LinboDiskPartition : public QObject
 public:
     friend class LinboConfigReader;
 
-    const QString& getPath() const {
-        return this->path;
+    const QString& path() const {
+        return this->_path;
     }
-    const QString& getId() const {
-        return this->id;
+    const QString& id() const {
+        return this->_id;
     }
-    const QString& getFstype() const {
-        return this->fstype;
+    const QString& fstype() const {
+        return this->_fstype;
     }
-    const unsigned int& getSize() const {
-        return this->size;
+    const unsigned int& size() const {
+        return this->_size;
     }
-    const bool& getBootable() const {
-        return this->bootable;
+    const bool& bootable() const {
+        return this->_bootable;
     }
 
 private:
     explicit LinboDiskPartition(QObject *parent = nullptr);
 
-    void setPath( const QString& path ) {
-        this->path = path;
-    }
-    void setId( const QString& id ) {
-        this->id = id;
-    }
-    void setFstype( const QString& fstype ) {
-        this->fstype = fstype;
-    }
-    void setSize( const unsigned int& size ) {
-        this->size = size;
-    }
-    void setBootable( const bool& bootable ) {
-        this->bootable = bootable;
-    }
-
-    QString path;
-    QString id;
-    QString fstype;
-    unsigned int size;
-    bool bootable;
+    QString _path;
+    QString _id;
+    QString _fstype;
+    unsigned int _size;
+    bool _bootable;
 
 signals:
 

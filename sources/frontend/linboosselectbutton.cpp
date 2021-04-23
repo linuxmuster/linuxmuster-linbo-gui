@@ -32,7 +32,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         icon = gTheme->getIconPath(LinboGuiTheme::DefaultOsIcon);
     }
 
-    connect(os->getBackend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
+    connect(os->backend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
     QMap<LinboOs::LinboOsStartAction, QString> defaultStartActionOverlayPaths = {
         {LinboOs::StartOs, gTheme->getIconPath(LinboGuiTheme::OverlayStartIcon)},
@@ -47,8 +47,8 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         false
     );
 
-    QString defaultActionOverlayPath = defaultStartActionOverlayPaths[this->os->getDefaultAction()];
-    if(!this->os->getActionEnabled(this->os->getDefaultAction()))
+    QString defaultActionOverlayPath = defaultStartActionOverlayPaths[this->os->defaultAction()];
+    if(!this->os->actionEnabled(this->os->defaultAction()))
         defaultActionOverlayPath = "";
 
     this->defaultStartActionOverlay = new LinboPushButtonOverlay (
@@ -64,9 +64,9 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     );
 
     this->button = new LinboPushButton(icon, "", {checkedOverlay, this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
-    this->setToolTip(this->os->getDescription());
+    this->setToolTip(this->os->description());
 
-    if(!os->getBackend()->getConfig()->getUseMinimalLayout()) {
+    if(!os->backend()->getConfig()->useMinimalLayout()) {
         connect(this->button, &LinboPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
         QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
@@ -80,7 +80,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
             QString startActionIconPath = startActionButtonIcons[startAction];
-            bool disabled = !this->os->getActionEnabled(startAction) || this->os->getDefaultAction() == startAction;
+            bool disabled = !this->os->actionEnabled(startAction) || this->os->defaultAction() == startAction;
 
             if(disabled)
                 continue;
@@ -112,17 +112,17 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
         //% "Upload image of %1"
-        actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->os->getName()));
+        actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->os->name()));
         connect(actionButton, &LinboPushButton::clicked, [=] {
-            this->os->getBackend()->setCurrentOs(this->os);
+            this->os->backend()->setCurrentOs(this->os);
             emit this->imageUploadRequested();
         });
         this->rootActionButtons.append(actionButton);
 
         // OS name label
         this->osNameLabel = new QLabel(this);
-        if(this->os->getBaseImage() != nullptr) {
-            this->osNameLabel->setText(this->os->getName());
+        if(this->os->baseImage() != nullptr) {
+            this->osNameLabel->setText(this->os->name());
             this->osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + "}");
         }
         else {
@@ -141,14 +141,14 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->button->setCheckable(true);
     this->buttonGroup->addButton(this->button);
-    this->handleBackendStateChange(this->os->getBackend()->getState());
+    this->handleBackendStateChange(this->os->backend()->getState());
 
     QWidget::setVisible(true);
 }
 
 void LinboOsSelectButton::handlePrimaryButtonClicked() {
-    if(this->os->getBackend()->getState() == LinboBackend::Idle)
-        switch (this->os->getDefaultAction()) {
+    if(this->os->backend()->getState() == LinboBackend::Idle)
+        switch (this->os->defaultAction()) {
         case LinboOs::StartOs:
             this->os->start();
             break;
@@ -161,8 +161,8 @@ void LinboOsSelectButton::handlePrimaryButtonClicked() {
         default:
             break;
         }
-    else if (this->os->getBackend()->getState() == LinboBackend::Root) {
-        this->os->getBackend()->setCurrentOs(this->os);
+    else if (this->os->backend()->getState() == LinboBackend::Root) {
+        this->os->backend()->setCurrentOs(this->os);
         emit this->imageCreationRequested();
     }
 }
@@ -192,7 +192,7 @@ void LinboOsSelectButton::setVisible(bool visible) {
 void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
 
-    if(!this->showActionButtons || this->os->getBackend()->getConfig()->getUseMinimalLayout()) {
+    if(!this->showActionButtons || this->os->backend()->getConfig()->useMinimalLayout()) {
         this->button->setGeometry((this->width() - this->height()) / 2, 0, this->height(), this->height());
     }
     else {
@@ -248,18 +248,18 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
 
     switch (state) {
     case LinboBackend::Idle:
-        this->button->setToolTip(this->getTooltipContentForAction(this->os->getDefaultAction()));
+        this->button->setToolTip(this->getTooltipContentForAction(this->os->defaultAction()));
 
-        if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
+        if(!this->os->backend()->getConfig()->useMinimalLayout())
             this->showDefaultAction = true;
 
         checkedOverlayMuted = false;
         break;
     case LinboBackend::Root:
         //% "Create image of %1"
-        this->button->setToolTip(qtTrId("createImageOfOS").arg(this->os->getName()));
+        this->button->setToolTip(qtTrId("createImageOfOS").arg(this->os->name()));
 
-        if(!this->os->getBackend()->getConfig()->getUseMinimalLayout())
+        if(!this->os->backend()->getConfig()->useMinimalLayout())
             this->showDefaultAction = true;
 
         checkedOverlayMuted = false;
@@ -285,13 +285,13 @@ QString LinboOsSelectButton::getTooltipContentForAction(LinboOs::LinboOsStartAct
         {LinboOs::ReinstallOs, qtTrId("reinstallOS")}
     };
 
-    return startActionButtonIcons[action].arg(this->os->getName());
+    return startActionButtonIcons[action].arg(this->os->name());
 }
 
 void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
 
-    bool startActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() < LinboBackend::Root;
-    bool rootActionVisible = this->shouldBeVisible && this->os->getBackend()->getState() >= LinboBackend::Root;
+    bool startActionVisible = this->shouldBeVisible && this->os->backend()->getState() < LinboBackend::Root;
+    bool rootActionVisible = this->shouldBeVisible && this->os->backend()->getState() >= LinboBackend::Root;
 
     if(this->inited && !doNotAnimate) {
         this->defaultStartActionOverlay->setVisibleAnimated(startActionVisible && this->showDefaultAction);
@@ -302,7 +302,7 @@ void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
         this->defaultRootActionOverlay->setVisible(rootActionVisible && this->showDefaultAction);
     }
 
-    if(this->os->getBackend()->getConfig()->getUseMinimalLayout())
+    if(this->os->backend()->getConfig()->useMinimalLayout())
         return;
 
     if(!this->showActionButtons) {

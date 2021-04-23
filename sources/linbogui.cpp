@@ -73,12 +73,12 @@ LinboGui::LinboGui()
                          "}");
 
     // attach translator
-    QString localeName = this->backend->getConfig()->getLocale();
+    QString localeName = this->backend->getConfig()->locale();
     if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
 
         if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)
-            QStringList tmpLocaleName = this->backend->getConfig()->getLocale().split("-");
+            QStringList tmpLocaleName = this->backend->getConfig()->locale().split("-");
             localeName = tmpLocaleName[0] + "-";
             localeName += tmpLocaleName[1].toUpper();
         }

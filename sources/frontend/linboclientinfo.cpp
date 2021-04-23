@@ -31,31 +31,31 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
     //% "Hostname"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("hostname") + ":</b>  " + config->getHostname()), 0, 1, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("hostname") + ":</b>  " + config->hostname()), 0, 1, 1, 1);
 
     //% "Host group"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("group") + ":</b>  " + config->getHostGroup()), 0, 2, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("group") + ":</b>  " + config->hostGroup()), 0, 2, 1, 1);
 
     //% "IP-Address"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("ip") + ":</b>  " + config->getIpAddress()), 0, 3, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("ip") + ":</b>  " + config->ipAddress()), 0, 3, 1, 1);
 
     //% "Mac"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->getMacAddress()), 0, 4, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->macAddress()), 0, 4, 1, 1);
 
     this->desktopIconWidget = new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::DesktopIcon));
     this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
     //% "HDD"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->getHddSize()), 1, 1, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->hddSize()), 1, 1, 1, 1);
 
     //% "Cache"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cache") + ":</b>  " + config->getCacheSize()), 1, 2, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cache") + ":</b>  " + config->cacheSize()), 1, 2, 1, 1);
 
     //% "CPU"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cpu") + ":</b>  " + config->getCpuModel()), 1, 3, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cpu") + ":</b>  " + config->cpuModel()), 1, 3, 1, 1);
 
     //% "RAM"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_ram") + ":</b>  " + config->getRamSize()), 1, 4, 1, 1);
+    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_ram") + ":</b>  " + config->ramSize()), 1, 4, 1, 1);
 
 
     this->setStyleSheet("QGridLayout {background: red;}");

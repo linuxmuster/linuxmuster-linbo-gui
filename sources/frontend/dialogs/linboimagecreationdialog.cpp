@@ -160,7 +160,7 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 }
 
 void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
-    if(this->backend->getCurrentOs()->getBaseImage() == nullptr) {
+    if(this->backend->getCurrentOs()->baseImage() == nullptr) {
         this->actionButtonGroup->buttons()[1]->setChecked(true);
         this->actionButtonGroup->buttons()[0]->setChecked(false);
         this->actionButtonGroup->buttons()[0]->setEnabled(false);
@@ -175,8 +175,8 @@ void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
 
     if(this->actionButtonGroup->checkedId() == 0) {
         this->imageNameLineEdit->setEnabled(false);
-        this->imageNameLineEdit->setText(this->backend->getCurrentOs()->getBaseImage()->getName());
-        this->imageDescriptionTextBrowser->setText(this->backend->getCurrentOs()->getBaseImage()->getDescription());
+        this->imageNameLineEdit->setText(this->backend->getCurrentOs()->baseImage()->getName());
+        this->imageDescriptionTextBrowser->setText(this->backend->getCurrentOs()->baseImage()->getDescription());
     }
     else {
         this->imageNameLineEdit->setEnabled(true);

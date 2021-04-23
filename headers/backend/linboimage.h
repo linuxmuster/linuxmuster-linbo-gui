@@ -54,15 +54,6 @@ protected:
     explicit LinboImage(QString name, LinboBackend *parent = nullptr);
 
     bool setDescription (const QString& description);
-    void setName(const QString& name) {
-        this->_name = name;
-    }
-    void setOs(LinboOs* os) {
-        this->_os = os;
-    }
-    void setExistsOnDisk(bool existsOnDisk) {
-        this->_existsOnDisk = existsOnDisk;
-    }
 
 private:
     LinboBackend* _backend;

@@ -21,19 +21,19 @@
 
 LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
 {
-    this->autoPartition = 0;
-    this->autoInitCache = 0;
-    this->backgroundColor = "#2a4457";
-    this->locale = "";
-    this->downloadMethod = LinboConfig::Rsync;
-    this->autoFormat = 0;
-    this->useMinimalLayout = false;
-    this->guiDisabled = false;
-    this->rootTimeout = 0;
+    this->_autoPartition = 0;
+    this->_autoInitCache = 0;
+    this->_backgroundColor = "#2a4457";
+    this->_locale = "";
+    this->_downloadMethod = LinboConfig::Rsync;
+    this->_autoFormat = 0;
+    this->_useMinimalLayout = false;
+    this->_guiDisabled = false;
+    this->_rootTimeout = 0;
 }
 
 bool LinboConfig::isBackgroundColorDark() {
-    QColor backgroundColor = QColor(this->getBackgroundColor());
+    QColor backgroundColor = QColor(this->backgroundColor());
     int h, s, v;
     backgroundColor.getHsv(&h, &s, &v);
     return v < 210;
