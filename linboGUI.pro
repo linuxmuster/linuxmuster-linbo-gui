@@ -1,6 +1,6 @@
 TARGET = linbo_gui
 
-VERSION = 7.0.1-rc02
+VERSION = 7.0.1-rc03
 DEFINES += GUI_VERSION=\"\\\"$${VERSION}\\\"\"
 
 CONFIG += static
@@ -108,3 +108,7 @@ RESOURCES += \
 
 TRANSLATIONS += \
     resources/translations/linbo-gui/blank.ts
+
+DISTFILES += \
+    debian/changelog \
+    fakeroot/start.conf
