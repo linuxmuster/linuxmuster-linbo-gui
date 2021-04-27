@@ -31,7 +31,7 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
     //% "Please enter password:"
-    connect(passwordInput, &QLineEdit::textChanged, [=]{this->setTitle(qtTrId("dialog_login_title"));});
+    connect(passwordInput, &QLineEdit::textChanged, [=] {this->setTitle(qtTrId("dialog_login_title"));});
 
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
@@ -55,8 +55,8 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
 void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    this->passwordInput->setFixedHeight(gTheme->getSize(LinboGuiTheme::RowHeight));
-    this->passwordInput->setFixedWidth(this->width() - gTheme->getSize(LinboGuiTheme::Margins) * 2);
+    this->passwordInput->setFixedHeight(gTheme->getSize(LinboTheme::RowHeight));
+    this->passwordInput->setFixedWidth(this->width() - gTheme->getSize(LinboTheme::Margins) * 2);
 }
 
 

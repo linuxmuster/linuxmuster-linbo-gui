@@ -29,21 +29,21 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->osNameLabel = nullptr;
 
     if(!QFile::exists(icon) || !icon.endsWith(".svg")) {
-        icon = gTheme->getIconPath(LinboGuiTheme::DefaultOsIcon);
+        icon = gTheme->getIconPath(LinboTheme::DefaultOsIcon);
     }
 
     connect(os->backend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::handleBackendStateChange);
 
     QMap<LinboOs::LinboOsStartAction, QString> defaultStartActionOverlayPaths = {
-        {LinboOs::StartOs, gTheme->getIconPath(LinboGuiTheme::OverlayStartIcon)},
-        {LinboOs::SyncOs, gTheme->getIconPath(LinboGuiTheme::OverlaySyncIcon)},
-        {LinboOs::ReinstallOs, gTheme->getIconPath(LinboGuiTheme::OverlayReinstallIcon)},
+        {LinboOs::StartOs, gTheme->getIconPath(LinboTheme::OverlayStartIcon)},
+        {LinboOs::SyncOs, gTheme->getIconPath(LinboTheme::OverlaySyncIcon)},
+        {LinboOs::ReinstallOs, gTheme->getIconPath(LinboTheme::OverlayReinstallIcon)},
         {LinboOs::UnknownAction, ""}
     };
 
     LinboPushButtonOverlay* checkedOverlay= new LinboPushButtonOverlay (
         LinboPushButtonOverlay::OnChecked,
-        new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayCheckedIcon)),
+        new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayCheckedIcon)),
         false
     );
 
@@ -59,7 +59,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->defaultRootActionOverlay = new LinboPushButtonOverlay (
         LinboPushButtonOverlay::Background,
-        new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::OverlayImageIcon)),
+        new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayImageIcon)),
         false
     );
 
@@ -71,11 +71,11 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
         QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
             //% "Start %1"
-            {LinboOs::StartOs, gTheme->getIconPath(LinboGuiTheme::StartLegacyIcon)},
+            {LinboOs::StartOs, gTheme->getIconPath(LinboTheme::StartLegacyIcon)},
             //% "Sync and start %1"
-            {LinboOs::SyncOs, gTheme->getIconPath(LinboGuiTheme::SyncLegacyIcon)},
+            {LinboOs::SyncOs, gTheme->getIconPath(LinboTheme::SyncLegacyIcon)},
             //% "Reinstall %1"
-            {LinboOs::ReinstallOs, gTheme->getIconPath(LinboGuiTheme::ReinstallLegacyIcon)}
+            {LinboOs::ReinstallOs, gTheme->getIconPath(LinboTheme::ReinstallLegacyIcon)}
         };
 
         for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
@@ -108,7 +108,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         }
 
         // root action button
-        LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboGuiTheme::UploadLegacyIcon), this);
+        LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboTheme::UploadLegacyIcon), this);
         actionButton->setGeometry(0,0,0,0);
         actionButton->setVisible(false);
         //% "Upload image of %1"
@@ -123,7 +123,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         this->osNameLabel = new QLabel(this);
         if(this->os->baseImage() != nullptr) {
             this->osNameLabel->setText(this->os->name());
-            this->osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + "}");
+            this->osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboTheme::TextColor).name() + "}");
         }
         else {
             //% "No baseimage defined"

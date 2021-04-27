@@ -30,15 +30,15 @@ class LinboToolButton : public LinboPushButton
     Q_OBJECT
 public:
     LinboToolButton(QString text, QWidget* parent = nullptr);
-    LinboToolButton(LinboGuiTheme::LinboGuiIcon icon, QWidget* parent = nullptr);
-    LinboToolButton(QString text, LinboGuiTheme::LinboGuiIcon icon, QWidget* parent = nullptr);
-    LinboToolButton(QString text, LinboGuiTheme::LinboGuiIcon icon, LinboGuiTheme::LinboGuiColorRole colorRole, QWidget* parent = nullptr);
+    LinboToolButton(LinboTheme::LinboThemeIcon icon, QWidget* parent = nullptr);
+    LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, QWidget* parent = nullptr);
+    LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, LinboTheme::LinboThemeColorRole colorRole, QWidget* parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    LinboGuiTheme::LinboGuiColorRole colorRole;
+    LinboTheme::LinboThemeColorRole colorRole;
 
 };
 

@@ -21,20 +21,20 @@
 LinboComboBox::LinboComboBox()
 {
     this->setStyleSheet(
-                "QComboBox {"
-                    "border: 0 0 0 0;"
-                    "border-bottom: 1px solid " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";"
-                    "background-color: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
-                    "selection-color: #ffffff;"
-                    "selection-background-color: " + gTheme->getColor(LinboGuiTheme::AccentColor).name() + ";"
-                    "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
-                "}"
-                "QComboBox QAbstractItemView {"
-                    "background-color: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
-                "}"
-                "QComboBox:focus {"
-                    "border-bottom: 1px solid " + gTheme->getColor(LinboGuiTheme::AccentColor).name() + ";"
-                "}"
-                );
+        "QComboBox {"
+        "border: 0 0 0 0;"
+        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::LineColor).name() + ";"
+        "background-color: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
+        "selection-color: #ffffff;"
+        "selection-background-color: " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
+        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
+        "}"
+        "QComboBox QAbstractItemView {"
+        "background-color: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
+        "}"
+        "QComboBox:focus {"
+        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
+        "}"
+    );
 
 }

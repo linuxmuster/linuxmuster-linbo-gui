@@ -60,16 +60,15 @@ LinboGui::LinboGui()
     // create the theme
     this->theme = new LinboGuiTheme(this->backend, this, this);
 
-    // set bakground
-    // linuxmuster background color: #394f5e
-    this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboGuiTheme::BackgroundColor).name() + "; }"
+    // set background
+    this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboTheme::BackgroundColor).name() + "; }"
                          "QLabel { color: " "black" "; }"
                          "QToolTip {"
                          "border: 0 0 0 0;"
-                         "background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
-                         "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
-                         "padding: " + QString::number(gTheme->getSize(LinboGuiTheme::RowFontSize) * 0.2) + ";"
-                         "font-size: " + QString::number(gTheme->getSize(LinboGuiTheme::RowFontSize)) + "px;"
+                         "background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
+                         "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
+                         "padding: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize) * 0.2) + ";"
+                         "font-size: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize)) + "px;"
                          "}");
 
     // attach translator

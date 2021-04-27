@@ -42,10 +42,10 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, gTheme->getColor(LinboGuiTheme::BackgroundColor));
+    pal.setColor(QPalette::Background, gTheme->getColor(LinboTheme::BackgroundColor));
     this->setAutoFillBackground(true);
     this->setPalette(pal);
-    this->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";} ");
+    this->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
 
     this->raise();
     this->setVisible(false);
@@ -56,13 +56,13 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
 
     this->titleLabel = new QLabel(this->objectName());
     this->titleLabel->setAlignment(Qt::AlignCenter);
-    this->closeButton = new LinboToolButton(LinboGuiTheme::CancelIcon);
+    this->closeButton = new LinboToolButton(LinboTheme::CancelIcon);
     connect(this->closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
 
     this->toolBarWidget = new QWidget(parent);
     this->toolBarWidget->setAutoFillBackground(true);
     this->toolBarWidget->setPalette(pal);
-    this->toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";} ");
+    this->toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
 
     this->toolBarWidget->hide();
 
@@ -90,7 +90,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->bottomToolBarWidget = new QWidget(parent);
     this->bottomToolBarWidget->setAutoFillBackground(true);
     this->bottomToolBarWidget->setPalette(pal);
-    this->bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";} ");
+    this->bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
 
     this->bottomToolBarWidget->hide();
 
@@ -158,15 +158,15 @@ QString LinboDialog::getTitle() {
 void LinboDialog::resizeEvent(QResizeEvent *e) {
     QWidget::resizeEvent(e);
 
-    int rowHeight = gTheme->getSize(LinboGuiTheme::RowHeight);
-    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    int rowHeight = gTheme->getSize(LinboTheme::RowHeight);
+    int margins = gTheme->getSize(LinboTheme::Margins);
     int toolBarHeight = rowHeight + margins ;
 
     this->toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
     this->toolBarLayout->setContentsMargins(margins, margins * 0.5, margins * 0.5, 0);
 
     QFont titleFont = this->titleLabel->font();
-    titleFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize) * 1.5);
+    titleFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize) * 1.5);
     this->titleLabel->setFont(titleFont);
     this->titleLabel->setFixedHeight(rowHeight);
     this->titleLabel->setFixedWidth(this->width() - margins);

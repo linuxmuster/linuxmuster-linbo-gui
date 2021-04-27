@@ -35,6 +35,7 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
+    headers/backend/linbotheme.h \
     headers/frontend/components/linbocheckbox.h \
     headers/frontend/components/linbocombobox.h \
     headers/frontend/components/linbodialog.h \
@@ -71,6 +72,7 @@ SOURCES += \
     sources/backend/linbologger.cpp \
     sources/backend/linboos.cpp \
     sources/backend/linbobackend.cpp \
+    sources/backend/linbotheme.cpp \
     sources/frontend/components/linbocheckbox.cpp \
     sources/frontend/components/linbocombobox.cpp \
     sources/frontend/components/linbodialog.cpp \

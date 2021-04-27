@@ -25,17 +25,17 @@ LinboCheckBox::LinboCheckBox(QString label, QWidget* parent) : QCheckBox(label, 
 void LinboCheckBox::paintEvent(QPaintEvent *e) {
     QString indicatorSize = QString::number(this->font().pixelSize());
     this->setStyleSheet("QCheckBox {"
-                        "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+                        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
                         "}"
                         "QCheckBox::indicator {"
                         "width: " + indicatorSize + "px;"
                         "height: " + indicatorSize + "px;"
                         "}"
                         "QCheckBox::indicator:unchecked {"
-                        "image: url(" + gTheme->getIconPath(LinboGuiTheme::CheckBoxUncheckedIcon) + ");"
+                        "image: url(" + gTheme->getIconPath(LinboTheme::CheckBoxUncheckedIcon) + ");"
                         "}"
                         "QCheckBox::indicator:checked {"
-                        "image: url(" + gTheme->getIconPath(LinboGuiTheme::CheckBoxCheckedIcon) + ");"
+                        "image: url(" + gTheme->getIconPath(LinboTheme::CheckBoxCheckedIcon) + ");"
                         "}"
                         "");
 

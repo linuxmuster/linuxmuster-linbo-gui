@@ -23,25 +23,28 @@ LinboGuiTheme* gTheme = nullptr;
 LinboGuiTheme::LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent) : QObject(parent)
 {
     gTheme = this;
-    this->backend = backend;
-    this->mainWindow = mainWindow;
-    this->iconMetaEnum = QMetaEnum::fromType<LinboGuiIcon>();
-    this->colorRoleMetaEnum = QMetaEnum::fromType<LinboGuiColorRole>();
+    this->_backend = backend;
+    this->_mainWindow = mainWindow;
 }
 
-
-QString LinboGuiTheme::getIconPath(LinboGuiIcon icon) {
-    if(icon == NoIcon)
+QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
+    if(icon == LinboTheme::NoIcon)
         return "";
 
+    if(
+        !this->_backend->getConfig()->theme()->getIconPath(icon).isEmpty()
+    ) {
+        return this->_backend->getConfig()->theme()->getIconPath(icon);
+    }
+
     QString iconPath = ":/icons/";
-    if(this->universalIcons.contains(icon))
+    if(this->_universalIcons.contains(icon))
         iconPath += "universal/";
     else
-        iconPath += this->backend->getConfig()->isBackgroundColorDark() ? "light/":"dark/";
+        iconPath += this->_isBackgroundColorDark() ? "light/":"dark/";
 
     // remove "Icon"
-    QString iconName = QString(this->iconMetaEnum.valueToKey(icon)).replace("Icon", "");
+    QString iconName = this->_backend->getConfig()->theme()->getIconName(icon);
     // de-capitalize first letter
     iconName.replace(0, 1, iconName.at(0).toLower());
 
@@ -49,50 +52,63 @@ QString LinboGuiTheme::getIconPath(LinboGuiIcon icon) {
     return iconPath;
 }
 
-QColor LinboGuiTheme::getColor(LinboGuiColorRole colorRole) {
+QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
 
-    bool isDark = this->backend->getConfig()->isBackgroundColorDark();
+    if(
+        this->_backend->getConfig()->theme()->getColor(colorRole).isValid()
+    ) {
+        return this->_backend->getConfig()->theme()->getColor(colorRole);
+    }
 
     switch (colorRole) {
-    case BackgroundColor:
-        return this->backend->getConfig()->backgroundColor();
-    case ElevatedBackgroundColor:
-        if(isDark)
-            return this->getColor(BackgroundColor).lighter(120);
+    case LinboTheme::PrimaryColor:
+        return this->_backend->getConfig()->theme()->getColor(LinboTheme::PrimaryColor);
+    case LinboTheme::BackgroundColor:
+        return this->getColor(LinboTheme::PrimaryColor);
+    case LinboTheme::ElevatedBackgroundColor:
+        if(this->_isBackgroundColorDark())
+            return this->getColor(LinboTheme::BackgroundColor).lighter(120);
         else
-            return this->getColor(BackgroundColor).darker(105);
-    case LineColor:
-        if(isDark)
-            return this->getColor(BackgroundColor).lighter(170);
+            return this->getColor(LinboTheme::BackgroundColor).darker(105);
+    case LinboTheme::LineColor:
+        if(this->_isBackgroundColorDark())
+            return this->getColor(LinboTheme::PrimaryColor).lighter(170);
         else
-            return this->getColor(BackgroundColor).darker(120);
+            return this->getColor(LinboTheme::PrimaryColor).darker(120);
+    case LinboTheme::ToolButtonColor:
+        return this->getColor(LinboTheme::AccentColor);
+    case LinboTheme::DisabledToolButtonColor:
+        if(this->_isBackgroundColorDark())
+            return this->getColor(LinboTheme::ToolButtonColor).lighter(170);
+        else
+            return this->getColor(LinboTheme::ToolButtonColor).darker(120);
     default:
-        if(isDark)
-            return this->lightColors[colorRole];
+        if(this->_isBackgroundColorDark())
+            return this->_lightColors[colorRole];
         else
-            return this->darkColors[colorRole];
+            return this->_darkColors[colorRole];
     }
 
 }
 
-int LinboGuiTheme::getSize(LinboGuiTheme::LinboGuiSizeRole sizeRole) {
-    int rootHeight = this->mainWindow->height();
+int LinboGuiTheme::getSize(LinboTheme::LinboThemeSizeRole sizeRole) {
+    int rootHeight = this->_mainWindow->height();
     switch (sizeRole) {
-    case Margins:
-        return this->getSize(RowHeight) * 0.4;
-    case RowHeight:
+    case LinboTheme::Margins:
+        return this->getSize(LinboTheme::RowHeight) * 0.4;
+    case LinboTheme::RowHeight:
         return rootHeight * 0.05;
-    case RowLabelHeight:
-        return this->getSize(RowHeight) * 0.8;
-    case RowFontSize:
-        return this->getSize(RowLabelHeight) * 0.5;
-    case DialogWidth:
+    case LinboTheme::RowLabelHeight:
+        return this->getSize(LinboTheme::RowHeight) * 0.8;
+    case LinboTheme::RowFontSize:
+        return this->getSize(LinboTheme::RowLabelHeight) * 0.5;
+    case LinboTheme::DialogWidth:
         return rootHeight * 0.8;
-    case DialogHeight:
+    case LinboTheme::DialogHeight:
         return rootHeight * 0.8;
-    case TopLogoHeight:
+    case LinboTheme::TopLogoHeight:
         return rootHeight * 0.08; // original 0.13
-    case BottomLogoHeight:
+    case LinboTheme::BottomLogoHeight:
         return rootHeight * 0.04; // original 0.06
     }
     return 0;
@@ -103,4 +119,11 @@ int LinboGuiTheme::toFontSize(int size) {
         return 1;
     else
         return size;
+}
+
+bool LinboGuiTheme::_isBackgroundColorDark() {
+    QColor backgroundColor = QColor(this->getColor(LinboTheme::BackgroundColor));
+    int h, s, v;
+    backgroundColor.getHsv(&h, &s, &v);
+    return v < 210;
 }

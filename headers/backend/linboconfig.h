@@ -28,6 +28,7 @@
 #include "linboimage.h"
 #include "linbodiskpartition.h"
 #include "linboos.h"
+#include "linbotheme.h"
 
 class LinboConfig : public QObject
 {
@@ -118,6 +119,9 @@ public:
     bool guiDisabled() {
         return this->_guiDisabled;
     }
+    const QString& themeConfFile() const {
+        return this->_themeConfFile;
+    }
 
     QMap<QString, LinboImage*> images() {
         return this->_images;
@@ -128,8 +132,9 @@ public:
     QList<LinboDiskPartition*> diskPartitions() {
         return this->_diskPartitions;
     }
-
-    bool isBackgroundColorDark();
+    LinboTheme* theme() {
+        return this->_theme;
+    }
 
     QList<LinboImage*> getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs = true, bool includeNonExistantImages = true);
     LinboImage* getImageByName(QString name);
@@ -144,6 +149,7 @@ private:
     QMap<QString, LinboImage*> _images;
     QList<LinboOs*> _operatingSystems;
     QList<LinboDiskPartition*> _diskPartitions;
+    LinboTheme* _theme;
 
     QString _serverIpAddress;
     QString _ipAddress;
@@ -158,6 +164,7 @@ private:
     QString _hddSize;
     QString _cachePath;
     QString _hostGroup;
+    QString _themeConfFile;
     DownloadMethod _downloadMethod;
     QString _backgroundColor;
     QString _locale;

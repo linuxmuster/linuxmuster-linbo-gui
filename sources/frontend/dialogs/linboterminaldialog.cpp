@@ -30,6 +30,6 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    int margins = gTheme->getSize(LinboTheme::Margins);
     this->terminal->setGeometry(margins, margins, this->width() - 2 * margins, this->height() - 2 * margins);
 }

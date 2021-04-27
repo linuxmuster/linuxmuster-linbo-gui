@@ -134,7 +134,7 @@ void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions
 void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    int margins = gTheme->getSize(LinboTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
 
@@ -148,13 +148,13 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 
         if(i != 6) {
             if(i % 2 == 0)
-                item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowLabelHeight));
+                item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowLabelHeight));
             else
-                item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
+                item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
         }
 
         QFont buttonFont = item->font();
-        buttonFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
+        buttonFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
         item->setFont(buttonFont);
     }
 }

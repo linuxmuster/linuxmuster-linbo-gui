@@ -25,6 +25,7 @@
 
 #include "linbobackend.h"
 #include "linboconfig.h"
+#include "linbotheme.h"
 
 class LinboGuiTheme : public QObject
 {
@@ -32,117 +33,43 @@ class LinboGuiTheme : public QObject
 public:
     explicit LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent = nullptr);
 
-    enum LinboGuiIcon {
-        NoIcon,
-
-        BrandTopIcon,
-        BrandBottomIcon,
-
-        BackIcon,
-        CancelIcon,
-        LogoutIcon,
-        RebootIcon,
-        SettingsIcon,
-        ShutdownIcon,
-
-        OverlayCheckedIcon,
-        OverlayPressedIcon,
-        OverlayHoveredIcon,
-        OverlayKeyboardFocusIcon,
-        OverlayStartIcon,
-        OverlaySyncIcon,
-        OverlayReinstallIcon,
-        OverlayImageIcon,
-
-        DefaultOsIcon,
-
-        DesktopIcon,
-        NetworkIcon,
-
-        StartIcon,
-        StartLegacyIcon,
-        SyncIcon,
-        SyncLegacyIcon,
-        ReinstallIcon,
-        ReinstallLegacyIcon,
-
-        ImageIcon,
-        UploadIcon,
-        UploadLegacyIcon,
-        PartitionIcon,
-        RegisterIcon,
-        TerminalIcon,
-
-        CheckBoxCheckedIcon,
-        CheckBoxUncheckedIcon,
-        RadioButtonCheckedIcon,
-        RadioButtonUncheckedIcon,
-        RadioButtonDisabledIcon
-    };
-    Q_ENUM(LinboGuiIcon)
-
-    enum LinboGuiColorRole {
-        BackgroundColor,
-        ElevatedBackgroundColor,
-        LineColor,
-        AccentColor,
-        TextColor,
-        ToolButtonColor,
-        DisabledToolButtonColor
-    };
-    Q_ENUM(LinboGuiColorRole)
-
-    enum LinboGuiSizeRole {
-        Margins,
-        RowHeight,
-        RowLabelHeight,
-        RowFontSize,
-        DialogWidth,
-        DialogHeight,
-        TopLogoHeight,
-        BottomLogoHeight
-    };
-    Q_ENUM(LinboGuiSizeRole)
-
-    const QList<LinboGuiIcon> universalIcons = {
-        OverlayStartIcon,
-        OverlaySyncIcon,
-        OverlayReinstallIcon,
-        OverlayImageIcon,
-        StartLegacyIcon,
-        SyncLegacyIcon,
-        ReinstallLegacyIcon,
-        UploadLegacyIcon,
-        DefaultOsIcon,
-        OverlayKeyboardFocusIcon
-    };
-
-    const QMap<LinboGuiColorRole, QColor> lightColors = {
-        {TextColor, "#ffffff"},
-        {ToolButtonColor, "#f59c00"},
-        {DisabledToolButtonColor, "#94753e"},
-        {AccentColor, "#f59c00"}
-    };
-
-    const QMap<LinboGuiColorRole, QColor> darkColors = {
-        {TextColor, "#000000"},
-        {ToolButtonColor, "#394f5e"},
-        {DisabledToolButtonColor, "#7b909e"},
-        {AccentColor, "#f59c00"}
-    };
-
-    QString getIconPath(LinboGuiIcon icon);
-    QColor getColor(LinboGuiColorRole colorRole);
-    int getSize(LinboGuiSizeRole sizeRole);
+    QString getIconPath(LinboTheme::LinboThemeIcon icon);
+    QColor getColor(LinboTheme::LinboThemeColorRole colorRole);
+    int getSize(LinboTheme::LinboThemeSizeRole sizeRole);
     int toFontSize(int size);
 
 private:
-    LinboBackend* backend;
-    QMainWindow* mainWindow;
+    QMap<LinboTheme::LinboThemeColorRole, QColor> _lightColors = {
+        {LinboTheme::TextColor, "#ffffff"},
+        {LinboTheme::ToolButtonColor, "#f59c00"},
+        {LinboTheme::DisabledToolButtonColor, "#94753e"},
+        {LinboTheme::AccentColor, "#f59c00"}
+    };
 
-    QMetaEnum iconMetaEnum;
-    QMetaEnum colorRoleMetaEnum;
+    QMap<LinboTheme::LinboThemeColorRole, QColor> _darkColors = {
+        {LinboTheme::TextColor, "#000000"},
+        {LinboTheme::ToolButtonColor, "#394f5e"},
+        {LinboTheme::DisabledToolButtonColor, "#7b909e"},
+        {LinboTheme::AccentColor, "#f59c00"}
+    };
 
+    QList<LinboTheme::LinboThemeIcon> _universalIcons = {
+        LinboTheme::OverlayStartIcon,
+        LinboTheme::OverlaySyncIcon,
+        LinboTheme::OverlayReinstallIcon,
+        LinboTheme::OverlayImageIcon,
+        LinboTheme::StartLegacyIcon,
+        LinboTheme::SyncLegacyIcon,
+        LinboTheme::ReinstallLegacyIcon,
+        LinboTheme::UploadLegacyIcon,
+        LinboTheme::DefaultOsIcon,
+        LinboTheme::OverlayKeyboardFocusIcon
+    };
+
+    LinboBackend* _backend;
+    QMainWindow* _mainWindow;
+
+    bool _isBackgroundColorDark();
 signals:
 
 };

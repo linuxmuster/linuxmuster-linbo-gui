@@ -26,20 +26,20 @@ LinboRadioButton::LinboRadioButton(QString label, QWidget* parent) : QRadioButto
 void LinboRadioButton::paintEvent(QPaintEvent *e) {
     QString indicatorSize = QString::number(this->font().pixelSize());
     this->setStyleSheet("QRadioButton {"
-                        "color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+                        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
                         "}"
                         "QRadioButton::indicator {"
                         "width: " + indicatorSize + "px;"
                         "height: " + indicatorSize + "px;"
                         "}"
                         "QRadioButton::indicator:unchecked {"
-                        "image: url(" + gTheme->getIconPath(LinboGuiTheme::RadioButtonUncheckedIcon) + ");"
+                        "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonUncheckedIcon) + ");"
                         "}"
                         "QRadioButton::indicator:checked {"
-                        "image: url(" + gTheme->getIconPath(LinboGuiTheme::RadioButtonCheckedIcon) + ");"
+                        "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonCheckedIcon) + ");"
                         "}"
                          "QRadioButton::indicator:disabled {"
-                         "image: url(" + gTheme->getIconPath(LinboGuiTheme::RadioButtonDisabledIcon) + ");"
+                         "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonDisabledIcon) + ");"
                          "}"
                         "");
 

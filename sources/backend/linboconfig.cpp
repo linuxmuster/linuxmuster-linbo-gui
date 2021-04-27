@@ -23,7 +23,7 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
 {
     this->_autoPartition = 0;
     this->_autoInitCache = 0;
-    this->_backgroundColor = "#2a4457";
+    this->_backgroundColor = "";
     this->_locale = "";
     this->_downloadMethod = LinboConfig::Rsync;
     this->_autoFormat = 0;
@@ -33,13 +33,8 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_autoPartition = false;
     this->_autoFormat = false;
     this->_operatingSystems = {};
-}
-
-bool LinboConfig::isBackgroundColorDark() {
-    QColor backgroundColor = QColor(this->backgroundColor());
-    int h, s, v;
-    backgroundColor.getHsv(&h, &s, &v);
-    return v < 210;
+    this->_themeConfFile = "";
+    this->_clientDetailsVisibleByDefault = false;
 }
 
 QList<LinboImage*> LinboConfig::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {

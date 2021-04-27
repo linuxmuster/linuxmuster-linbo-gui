@@ -22,12 +22,12 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
 {
 
     this->mainWidget = new QWidget(this);
-    this->mainWidget->setStyleSheet( "QLabel { color: " + QString(config->isBackgroundColorDark() ? "white":"black") + "; }");
+    this->mainWidget->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
 
     this->mainLayout = new QGridLayout(this->mainWidget);
     this->mainLayout->setAlignment(Qt::AlignCenter);
 
-    this->networkIconWidget = new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::NetworkIcon));
+    this->networkIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::NetworkIcon));
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
 
     //% "Hostname"
@@ -42,7 +42,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     //% "Mac"
     this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->macAddress()), 0, 4, 1, 1);
 
-    this->desktopIconWidget = new QSvgWidget(gTheme->getIconPath(LinboGuiTheme::DesktopIcon));
+    this->desktopIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::DesktopIcon));
     this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
 
     //% "HDD"

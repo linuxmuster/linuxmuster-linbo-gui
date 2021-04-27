@@ -10,19 +10,19 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->setStyleSheet(
         "QTextEdit {"
         "   border: 0 0 0 0;"
-        "   background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
+        "   background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
         "   padding-left: 5px;"
-        "   color: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+        "   color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
         "}");
 
     this->verticalScrollBar()->setStyleSheet(
         "QScrollBar:vertical {"
-        "    background: " + gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor).name() + ";"
+        "    background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
         "    width:10px;    "
         "    margin: 0px 0px 0px 0px;"
         "}"
         "QScrollBar::handle:vertical {"
-        "    background: " + gTheme->getColor(LinboGuiTheme::TextColor).name() + ";"
+        "    background: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
         "    min-height: 10px;"
         "}"
         "QScrollBar::add-line:vertical {"

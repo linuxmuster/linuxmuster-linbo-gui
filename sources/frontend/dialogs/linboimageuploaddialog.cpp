@@ -90,7 +90,7 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
 void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    int margins = gTheme->getSize(LinboTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
     this->mainLayout->setSpacing(margins * 0.5);
@@ -105,12 +105,12 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
 
         // make lables smaller
         if(i != 2)
-            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowLabelHeight));
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowLabelHeight));
         else
-            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
+            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
 
         QFont itemFont = item->font();
-        itemFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
+        itemFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
         item->setFont(itemFont);
     }
 }

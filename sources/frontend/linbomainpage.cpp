@@ -44,9 +44,9 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addSpacerItem(new QSpacerItem(this->width(), mainLayout->spacing()));
 
     // Linbo logo
-    int linboLogoHeight = gTheme->getSize(LinboGuiTheme::TopLogoHeight);
+    int linboLogoHeight = gTheme->getSize(LinboTheme::TopLogoHeight);
 
-    LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandTopIcon));
+    LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->getIconPath(LinboTheme::BrandTopIcon));
     mainLayout->addWidget(linboLogo);
     mainLayout->setAlignment(linboLogo, Qt::AlignCenter);
 
@@ -71,15 +71,15 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // version / network label
     QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->ipAddress() + " - F1");
-    versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
+    versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
 
 
     // Linuxmuster logo
-    double linuxmusterLogoHeight = gTheme->getSize(LinboGuiTheme::BottomLogoHeight);
+    double linuxmusterLogoHeight = gTheme->getSize(LinboTheme::BottomLogoHeight);
 
-    LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->getIconPath(LinboGuiTheme::BrandBottomIcon));
+    LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->getIconPath(LinboTheme::BrandBottomIcon));
     mainLayout->addWidget(linuxmusterLogo);
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
@@ -103,14 +103,14 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int buttonWidth = width * 0.6;
     powerActionsLayoutWidget->setGeometry(QRect(this->width() - (width + margins), this->height() - (height + margins), width * 1.1, height));
 
-    rootActionButton = new LinboToolButton(LinboGuiTheme::SettingsIcon);
+    rootActionButton = new LinboToolButton(LinboTheme::SettingsIcon);
     this->powerActionButtons.append(rootActionButton);
     rootActionButton->setFixedHeight(buttonWidth);
     rootActionButton->setFixedWidth(buttonWidth);
     //% "Settings"
     rootActionButton->setToolTip(qtTrId("settings"));
 
-    logoutActionButton = new LinboToolButton(LinboGuiTheme::LogoutIcon);
+    logoutActionButton = new LinboToolButton(LinboTheme::LogoutIcon);
     connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
     this->powerActionButtons.append(logoutActionButton);
     logoutActionButton->setFixedHeight(buttonWidth);
@@ -119,7 +119,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     //% "Log out"
     logoutActionButton->setToolTip(qtTrId("logout"));
 
-    LinboPushButton* rebootActionButton = new LinboToolButton(LinboGuiTheme::RebootIcon);
+    LinboPushButton* rebootActionButton = new LinboToolButton(LinboTheme::RebootIcon);
     connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
     this->powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
@@ -127,7 +127,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     //% "Reboot"
     rebootActionButton->setToolTip(qtTrId("reboot"));
 
-    LinboPushButton* shutdownActionButton = new LinboToolButton(LinboGuiTheme::ShutdownIcon);
+    LinboPushButton* shutdownActionButton = new LinboToolButton(LinboTheme::ShutdownIcon);
     connect(shutdownActionButton, SIGNAL(clicked()), this->backend, SLOT(shutdown()));
     this->powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
@@ -144,8 +144,8 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // Dialogs (for imaging stuff)
     this->loginDialog = new LinboLoginDialog(this->backend, this);
-    int dialogHeight = gTheme->getSize(LinboGuiTheme::DialogHeight);
-    int dialogWidth = gTheme->getSize(LinboGuiTheme::DialogWidth);
+    int dialogHeight = gTheme->getSize(LinboTheme::DialogHeight);
+    int dialogWidth = gTheme->getSize(LinboTheme::DialogWidth);
     this->loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
     this->loginDialog->centerInParent();
     connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(open()));

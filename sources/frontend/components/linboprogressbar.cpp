@@ -80,7 +80,7 @@ void LinboProgressBar::paintEvent(QPaintEvent *e) {
     QPainter painter;
     painter.begin(this);
     // background
-    painter.fillRect(e->rect(), gTheme->getColor(LinboGuiTheme::ElevatedBackgroundColor));
+    painter.fillRect(e->rect(), gTheme->getColor(LinboTheme::ElevatedBackgroundColor));
 
     double from = 0;
     double to = 0;
@@ -109,7 +109,7 @@ void LinboProgressBar::paintEvent(QPaintEvent *e) {
 
     }
 
-    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), gTheme->getColor(LinboGuiTheme::AccentColor));
+    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), gTheme->getColor(LinboTheme::AccentColor));
 
     painter.end();
 

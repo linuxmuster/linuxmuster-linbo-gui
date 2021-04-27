@@ -6,6 +6,7 @@
 #include "linboimage.h"
 #include "linbodiskpartition.h"
 #include "linboos.h"
+#include "linbotheme.h"
 
 class LinboBackend;
 
@@ -20,21 +21,24 @@ protected:
     LinboConfig* readConfig();
 
 private:
-    void loadStartConfiguration(QString startConfFilePath, LinboConfig* config);
-    void loadEnvironmentValues(LinboConfig* config);
+    LinboConfig* _loadStartConfiguration(QString startConfFilePath);
+    void _loadEnvironmentValues(LinboConfig* config);
+    LinboTheme* _loadThemeConfiguration(QString themeConfFilePath, LinboConfig* config);
 
-    void parseLinboConfig(QMap<QString, QString> rawLinboConfig, LinboConfig* config);
-    void parsePartitionConfig(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
-    void parseOsConfig(QMap<QString, QString> rawOsConfig, LinboConfig* config);
+    void _parseLinboConfig(QMap<QString, QString> rawLinboConfig, LinboConfig* config);
+    void _parsePartitionConfig(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
+    void _parseOsConfig(QMap<QString, QString> rawOsConfig, LinboConfig* config);
 
     bool stringToBool(const QString& value);
 
 private:
     LinboBackend* backend;
 #ifdef TEST_ENV
-    const QString configFilePath = TEST_ENV"/start.conf";
+    const QString _configFilePath = TEST_ENV"/start.conf";
+    const QString _iconBasePath = TEST_ENV"/icons";
 #else
-    const QString configFilePath = "start.conf";
+    const QString _configFilePath = "start.conf";
+    const QString _iconBasePath = "/icons";
 #endif
 
 signals:

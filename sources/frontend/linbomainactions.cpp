@@ -31,18 +31,18 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->inited = false;
 
-    this->setStyleSheet( "QLabel { color: " + QString(this->backend->getConfig()->isBackgroundColorDark() ? "white":"black") + "; }");
+    this->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
 
     // Action Buttons
     this->buttonWidget = new QWidget();
 
-    this->startOsButton = new LinboToolButton(LinboGuiTheme::StartIcon, this->buttonWidget);
+    this->startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->buttonWidget);
     connect(this->startOsButton, SIGNAL(clicked()), this->backend, SLOT(startCurrentOs()));
 
-    this->syncOsButton = new LinboToolButton(LinboGuiTheme::SyncIcon, this->buttonWidget);
+    this->syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->buttonWidget);
     connect(this->syncOsButton, SIGNAL(clicked()), this->backend, SLOT(syncCurrentOs()));
 
-    this->reinstallOsButton = new LinboToolButton(LinboGuiTheme::ReinstallIcon, this->buttonWidget);
+    this->reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->buttonWidget);
     connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
 
     //% "No baseimage defined"
@@ -76,7 +76,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->passedTimeTimer->setInterval(1000);
     this->processStartedAt = QDateTime::currentSecsSinceEpoch();
 
-    this->cancelButton = new LinboToolButton(LinboGuiTheme::CancelIcon, this->progressBarWidget);
+    this->cancelButton = new LinboToolButton(LinboTheme::CancelIcon, this->progressBarWidget);
     connect(this->cancelButton, SIGNAL(clicked()), this->backend, SLOT(cancelCurrentAction()));
 
     this->stackView->addWidget(this->progressBarWidget);
@@ -91,7 +91,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->messageDetailsTextBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->messageDetailsTextBrowser->setLineWrapMode(QTextEdit::NoWrap);
 
-    this->resetMessageButton = new LinboToolButton(LinboGuiTheme::BackIcon, this->messageWidget);
+    this->resetMessageButton = new LinboToolButton(LinboTheme::BackIcon, this->messageWidget);
     connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
 
     this->stackView->addWidget(this->messageWidget);
@@ -105,35 +105,35 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     if(this->backend->getConfig()->useMinimalLayout()) {
         //% "Create image"
-        buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboGuiTheme::ImageIcon, LinboGuiTheme::TextColor);
+        buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboTheme::ImageIcon, LinboTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //% "Upload image"
-        buttonCache = new LinboToolButton(qtTrId("main_root_button_uploadImage"), LinboGuiTheme::UploadIcon, LinboGuiTheme::TextColor);
+        buttonCache = new LinboToolButton(qtTrId("main_root_button_uploadImage"), LinboTheme::UploadIcon, LinboTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
     //% "Open terminal"
-    buttonCache = new LinboToolButton(qtTrId("main_root_button_openTerminal"), LinboGuiTheme::TerminalIcon, LinboGuiTheme::TextColor);
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_openTerminal"), LinboTheme::TerminalIcon, LinboTheme::TextColor);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::terminalRequested);
     this->rootActionButtons.append(buttonCache);
 
     //% "Update cache"
-    buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboGuiTheme::SyncIcon, LinboGuiTheme::TextColor);
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboTheme::SyncIcon, LinboTheme::TextColor);
     buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //% "Partition drive"
-    buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboGuiTheme::PartitionIcon, LinboGuiTheme::TextColor);
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboTheme::PartitionIcon, LinboTheme::TextColor);
     buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
     //% "Register"
-    buttonCache = new LinboToolButton(qtTrId("main_root_button_register"), LinboGuiTheme::RegisterIcon, LinboGuiTheme::TextColor);
+    buttonCache = new LinboToolButton(qtTrId("main_root_button_register"), LinboTheme::RegisterIcon, LinboTheme::TextColor);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
@@ -150,7 +150,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     if(this->backend->getConfig()->useMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
-        separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";}");
+        separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
         separatorLine->setFrameShape(QFrame::HLine);
         this->rootLayout->insertWidget(1, separatorLine);
     }
@@ -471,7 +471,7 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
     if(this->backend->getState() == LinboBackend::Idle)
         return;
 
-    QString logColor = this->backend->getConfig()->isBackgroundColorDark() ? "white":"black";
+    QString logColor = gTheme->getColor(LinboTheme::TextColor).name();
 
     if (latestLog.type == LinboLogger::StdErr)
         logColor = "red";

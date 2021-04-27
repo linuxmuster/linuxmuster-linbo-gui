@@ -18,27 +18,27 @@
 
 #include "linbotoolbutton.h"
 
-LinboToolButton::LinboToolButton(QString text, QWidget* parent) : LinboToolButton(text, LinboGuiTheme::NoIcon, LinboGuiTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(QString text, QWidget* parent) : LinboToolButton(text, LinboTheme::NoIcon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(LinboGuiTheme::LinboGuiIcon icon, QWidget* parent) : LinboToolButton("", icon, LinboGuiTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(LinboTheme::LinboThemeIcon icon, QWidget* parent) : LinboToolButton("", icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text, LinboGuiTheme::LinboGuiIcon icon, QWidget* parent) : LinboToolButton(text, icon, LinboGuiTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, QWidget* parent) : LinboToolButton(text, icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text, LinboGuiTheme::LinboGuiIcon icon, LinboGuiTheme::LinboGuiColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->getIconPath(icon), text, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, LinboTheme::LinboThemeColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->getIconPath(icon), text, parent)
 {
     this->colorRole = colorRole;
 }
 
 void LinboToolButton::paintEvent(QPaintEvent *e) {
     LinboPushButton::paintEvent(e);
-    if(this->colorRole == LinboGuiTheme::ToolButtonColor)
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboGuiTheme::DisabledToolButtonColor).name() + ";}");
+    if(this->colorRole == LinboTheme::ToolButtonColor)
+        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboTheme::DisabledToolButtonColor).name() + ";}");
     else
         LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + ";}");
 }

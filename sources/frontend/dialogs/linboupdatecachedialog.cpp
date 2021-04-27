@@ -48,7 +48,7 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     this->updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
 
     QFrame* separatorLine = new QFrame();
-    separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboGuiTheme::LineColor).name() + ";}");
+    separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
     separatorLine->setFrameShape(QFrame::HLine);
     this->mainLayout->addWidget(separatorLine);
 
@@ -77,7 +77,7 @@ void LinboUpdateCacheDialog::updateCache() {
 void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboGuiTheme::Margins);
+    int margins = gTheme->getSize(LinboTheme::Margins);
 
     this->mainLayout->setContentsMargins(margins, margins, margins, margins);
     for(int i = 0; i < 5; i++) {
@@ -86,9 +86,9 @@ void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
             continue;
 
         QAbstractButton* button = static_cast<QAbstractButton*>(this->mainLayout->itemAt(i)->widget());
-        button->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboGuiTheme::RowHeight));
+        button->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
         QFont buttonFont = button->font();
-        buttonFont.setPixelSize(gTheme->getSize(LinboGuiTheme::RowFontSize));
+        buttonFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
         button->setFont(buttonFont);
     }
 }
