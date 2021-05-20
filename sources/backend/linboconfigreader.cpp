@@ -169,6 +169,7 @@ LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath
     QMapIterator<LinboTheme::LinboThemeColorRole, QString> ic(themeConfig->getColorRolesAndNames());
     while (ic.hasNext()) {
         ic.next();
+        //qDebug() << qPrintable("    - `" + ic.value().toLower().replace("color", "") + "`");
         QColor colorFromConf = settingsReader.value("colors/" + ic.value().toLower().replace("color", ""), "").toString();
         if(colorFromConf.isValid()) {
             themeConfig->_colors[ic.key()] = colorFromConf;
@@ -179,6 +180,7 @@ LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath
     while (ii.hasNext()) {
         ii.next();
         QString iconConfKey = "icons/" + ii.value().toLower().replace("icon", "");
+        //qDebug() << qPrintable("    - `" + ii.value().toLower().replace("icon", "") + "`");
         QString iconFromConf = settingsReader.value(iconConfKey, "").toString();
         if(!iconFromConf.isEmpty()) {
             themeConfig->_icons[ii.key()] = this->_iconBasePath + "/" + iconFromConf;
