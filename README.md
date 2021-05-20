@@ -41,19 +41,8 @@ If you want to build the 32-bit version, you will have to insert `32` in the fol
 Please note: It will take a long time to build the first time you do it.  
 
 # Screenshots
-This is what the new GUI looks like so far:  
-Choosing an OS (minimalistic Layout):  
-![choose](/screenshots/choose.gif)  
-Choosing an OS (legacy layout):  
-![legacy](/screenshots/legacy.gif)  
-Performing a long action (eg. syncing OS):  
-![long](/screenshots/long.gif)  
-Starting an OS:  
-![start](/screenshots/start.gif)  
-Autostarting an OS:  
-![autostart](/screenshots/autostart.gif)  
-An error occurred:  
-![error](/screenshots/error.gif)  
+Some screenshots can be found here: https://github.com/linuxmuster/linuxmuster-linbo-gui/tree/master/.github/media  
+Please note that they might not be up to date though.
   
 # Icons
 All of the SVG icons in this Gui were taken from one of the following sources and slighlty modified:
