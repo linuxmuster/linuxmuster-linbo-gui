@@ -26,6 +26,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
 
     this->mainLayout = new QGridLayout(this->mainWidget);
     this->mainLayout->setAlignment(Qt::AlignCenter);
+    this->mainLayout->setContentsMargins(0,0,0,0);
 
     this->networkIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::NetworkIcon));
     this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);

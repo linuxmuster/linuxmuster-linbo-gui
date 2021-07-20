@@ -27,8 +27,8 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
 
-    //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.5);
-    //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.5);
+    this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.1);
+    this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.1);
 
 #else
     // fill whole screen
@@ -53,6 +53,9 @@ LinboGui::LinboGui()
 
     QFont defaultFont ("PTSans");
     QApplication::setFont(defaultFont);
+
+    // some debug logs
+    qDebug() << "Display width: " << this->width() << " height: " << this->height();
 
     // create the backend
     this->backend = new LinboBackend(this);

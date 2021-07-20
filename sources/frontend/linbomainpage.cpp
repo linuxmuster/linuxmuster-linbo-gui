@@ -71,6 +71,9 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // version / network label
     QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->ipAddress() + " - F1");
+    QFont versionAndNetworkLabelFont;
+    versionAndNetworkLabelFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+    versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);
     versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
@@ -101,7 +104,9 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int width = height / 3;
     int margins = width * 0.1;
     int buttonWidth = width * 0.6;
-    powerActionsLayoutWidget->setGeometry(QRect(this->width() - (width + margins), this->height() - (height + margins), width * 1.1, height));
+    int x = this->width() - (width + margins);
+    int y = this->height() - (height + margins);
+    powerActionsLayoutWidget->setGeometry(QRect(x, y, width, height));
 
     rootActionButton = new LinboToolButton(LinboTheme::SettingsIcon);
     this->powerActionButtons.append(rootActionButton);
@@ -137,6 +142,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     QVBoxLayout* powerActionsLayout = new QVBoxLayout(powerActionsLayoutWidget);
     powerActionsLayout->setSpacing(0);
+    powerActionsLayout->setContentsMargins(0,0,0,0);
     powerActionsLayout->addWidget(rootActionButton);
     powerActionsLayout->addWidget(logoutActionButton);
     powerActionsLayout->addWidget(rebootActionButton);
