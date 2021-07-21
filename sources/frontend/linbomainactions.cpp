@@ -100,6 +100,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->rootWidget = new QWidget();
     this->rootLayout = new QVBoxLayout(this->rootWidget);
     this->rootLayout->setAlignment(Qt::AlignCenter);
+    this->rootLayout->setContentsMargins(0,0,0,0);
 
     LinboPushButton* buttonCache;
 

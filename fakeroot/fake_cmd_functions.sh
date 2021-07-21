@@ -126,8 +126,7 @@ start()
       || [[ "${cache}" != "/dev/sda4" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
-    elif [[ "${append}" == "resume" ]] \
-      || [[ "${append}" == "noresume splash=silent quiet showopts klassenarbeit=1" ]]; then
+    elif [[ "${append}" == "resume=/dev/sda2 splash=silent quiet showopts" ]]; then
         return 0
     else
         echo "Wrong parameters: «$*»"

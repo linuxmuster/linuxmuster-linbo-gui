@@ -43,13 +43,8 @@ LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePat
             if(!thisLine.contains("=") || thisLine.startsWith("="))
                 continue;
 
-            QStringList keyValueList = thisLine.split("=");
-
-            if(keyValueList.length() < 2)
-                continue;
-
-            QString key = keyValueList[0].simplified().toLower();
-            QString value = keyValueList[1].simplified();
+            QString key = thisLine.section('=', 0, 0).simplified().toLower();
+            QString value = thisLine.section('=', 1).simplified();
 
             if(key.isEmpty() || value.isEmpty())
                 continue;

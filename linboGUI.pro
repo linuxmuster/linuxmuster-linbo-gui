@@ -111,4 +111,5 @@ TRANSLATIONS += \
 
 DISTFILES += \
     debian/changelog \
+    fakeroot/fake_cmd_functions.sh \
     fakeroot/start.conf
