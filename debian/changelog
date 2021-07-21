@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.0.3) lmn7; urgency=low
+
+  * Fix Kernel append options
+
+ -- Dorian Zedler <dorian@itsblue.de>  Thu, 21 Jul 2021 09:15:00 +0100
+
 linuxmuster-linbo-gui7 (7.0.2) lmn7; urgency=low
 
   * Fix sizes on very very very very small displays (<200px)
