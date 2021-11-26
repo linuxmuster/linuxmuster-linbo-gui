@@ -228,7 +228,7 @@ bool LinboBackend::createImageOfCurrentOS(QString name, QString description, Lin
     if(!this->_writeImageDescription(name, description))
         this->_logger->log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
 
-    if(this->_postProcessActions.testFlag(UploadImage) && name == this->_currentOs->baseImage()->getName()) {
+    if(this->_postProcessActions.testFlag(UploadImage) && this->_currentOs->baseImage() != nullptr && name == this->_currentOs->baseImage()->getName()) {
         this->_imageToUploadAutomatically = this->_currentOs->baseImage();
     }
     else if(this->_postProcessActions.testFlag(UploadImage)) {
