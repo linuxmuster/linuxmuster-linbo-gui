@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.0.4) lmn71; urgency=medium
+
+  * Fix crash when trying to create a new image wihout a baseimage 
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 26 Nov 2021 17:36:22 +0100
+
 linuxmuster-linbo-gui7 (7.0.3-1) lmn71; urgency=low
 
   * move to lmn71 repo
