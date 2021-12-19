@@ -190,14 +190,14 @@ void LinboDialog::resizeEvent(QResizeEvent *e) {
 
 
 void LinboDialog::paintEvent(QPaintEvent *e) {
-    QWidgetList widgets = this->findChildren<QWidget*>();
+    QWidgetList widgets = this->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
 
     QWidget* latestWidget = nullptr;
     QWidget* firstWidget = nullptr;
 
     for(QWidget* widget : widgets) {
         if(widget->focusPolicy() != Qt::NoFocus) {
-            if(latestWidget != nullptr)
+            if(latestWidget != nullptr && widget->parent() == this)
                 QWidget::setTabOrder(latestWidget, widget);
 
             if(firstWidget == nullptr)
@@ -223,7 +223,7 @@ void LinboDialog::paintEvent(QPaintEvent *e) {
         }
     }
 
-    QWidget::setTabOrder(latestWidget, this->closeButton);
+    QWidget::setTabOrder(this->toolButtons.last(), this->closeButton);
     connect(this->closeButton, &LinboPushButton::defocused, [=](Qt::FocusReason reason) {
         if(reason == Qt::TabFocusReason)
             firstWidget->setFocus();
