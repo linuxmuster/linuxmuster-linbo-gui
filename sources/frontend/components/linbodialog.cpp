@@ -21,25 +21,24 @@
 // TODO: clean redundant code
 LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
 {
-    this->scale = 1;
-    this->busy = false;
-    this->firstChild = nullptr;
+    this->_busy = false;
+    this->_firstChild = nullptr;
     this->setWindowFlags(Qt::Widget);
-    this->modalOverlayWidget = new ModalOverlay(parent);
-    this->modalOverlayWidget->setVisible(false);
-    connect(this->modalOverlayWidget, SIGNAL(clicked()), this, SLOT(autoClose()));
-    connect(this->modalOverlayWidget, SIGNAL(clicked()), this, SIGNAL(closedByUser()));
+    this->_modalOverlayWidget = new ModalOverlay(parent);
+    this->_modalOverlayWidget->setVisible(false);
+    connect(this->_modalOverlayWidget, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(this->_modalOverlayWidget, SIGNAL(clicked()), this, SIGNAL(closedByUser()));
 
-    this->opacityEffect = new QGraphicsOpacityEffect(this);
-    this->opacityEffect->setOpacity(0);
-    this->opacityEffect->setEnabled(false);
-    this->setGraphicsEffect(this->opacityEffect);
+    this->_opacityEffect = new QGraphicsOpacityEffect(this);
+    this->_opacityEffect->setOpacity(0);
+    this->_opacityEffect->setEnabled(false);
+    this->setGraphicsEffect(this->_opacityEffect);
 
-    this->opacityEffectAnimation = new QPropertyAnimation(this->opacityEffect, "opacity");
-    this->opacityEffectAnimation->setDuration(200);
-    this->opacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
-    connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
-    connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
+    this->_opacityEffectAnimation = new QPropertyAnimation(this->_opacityEffect, "opacity");
+    this->_opacityEffectAnimation->setDuration(200);
+    this->_opacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    connect(this->_opacityEffectAnimation, SIGNAL(finished()), this, SLOT(_animationFinished()));
+    connect(this->_opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
 
     QPalette pal = palette();
     pal.setColor(QPalette::Window, gTheme->getColor(LinboTheme::BackgroundColor));
@@ -54,57 +53,57 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     // - ToolBar -
     //
 
-    this->titleLabel = new QLabel(this->objectName());
-    this->titleLabel->setAlignment(Qt::AlignCenter);
-    this->closeButton = new LinboToolButton(LinboTheme::CancelIcon);
-    connect(this->closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
+    this->_titleLabel = new QLabel(this->objectName());
+    this->_titleLabel->setAlignment(Qt::AlignCenter);
+    this->_closeButton = new LinboToolButton(LinboTheme::CancelIcon);
+    connect(this->_closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
 
-    this->toolBarWidget = new QWidget(parent);
-    this->toolBarWidget->setAutoFillBackground(true);
-    this->toolBarWidget->setPalette(pal);
-    this->toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
+    this->_toolBarWidget = new QWidget(parent);
+    this->_toolBarWidget->setAutoFillBackground(true);
+    this->_toolBarWidget->setPalette(pal);
+    this->_toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
 
-    this->toolBarWidget->hide();
+    this->_toolBarWidget->hide();
 
-    this->toolBarLayout = new QHBoxLayout(this->toolBarWidget);
-    this->toolBarLayout->setContentsMargins(0,0,0,0);
-    this->toolBarLayout->addWidget(this->titleLabel);
-    this->toolBarLayout->setAlignment(this->titleLabel, Qt::AlignCenter);
-    this->toolBarLayout->addStretch();
-    this->toolBarLayout->addWidget(this->closeButton);
-    this->toolBarLayout->setAlignment(this->closeButton, Qt::AlignCenter);
+    this->_toolBarLayout = new QHBoxLayout(this->_toolBarWidget);
+    this->_toolBarLayout->setContentsMargins(0,0,0,0);
+    this->_toolBarLayout->addWidget(this->_titleLabel);
+    this->_toolBarLayout->setAlignment(this->_titleLabel, Qt::AlignCenter);
+    this->_toolBarLayout->addStretch();
+    this->_toolBarLayout->addWidget(this->_closeButton);
+    this->_toolBarLayout->setAlignment(this->_closeButton, Qt::AlignCenter);
 
-    this->toolBarOpacityEffect = new QGraphicsOpacityEffect(this->toolBarWidget);
-    this->toolBarOpacityEffect->setOpacity(0);
-    this->toolBarOpacityEffect->setEnabled(false);
-    this->toolBarWidget->setGraphicsEffect(this->toolBarOpacityEffect);
+    this->_toolBarOpacityEffect = new QGraphicsOpacityEffect(this->_toolBarWidget);
+    this->_toolBarOpacityEffect->setOpacity(0);
+    this->_toolBarOpacityEffect->setEnabled(false);
+    this->_toolBarWidget->setGraphicsEffect(this->_toolBarOpacityEffect);
 
-    this->toolBarOopacityEffectAnimation = new QPropertyAnimation(this->toolBarOpacityEffect, "opacity");
-    this->toolBarOopacityEffectAnimation->setDuration(200);
-    this->toolBarOopacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_toolBarOopacityEffectAnimation = new QPropertyAnimation(this->_toolBarOpacityEffect, "opacity");
+    this->_toolBarOopacityEffectAnimation->setDuration(200);
+    this->_toolBarOopacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
 
     //
     // - Bottom tool bar -
     //
 
-    this->bottomToolBarWidget = new QWidget(parent);
-    this->bottomToolBarWidget->setAutoFillBackground(true);
-    this->bottomToolBarWidget->setPalette(pal);
-    this->bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
+    this->_bottomToolBarWidget = new QWidget(parent);
+    this->_bottomToolBarWidget->setAutoFillBackground(true);
+    this->_bottomToolBarWidget->setPalette(pal);
+    this->_bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
 
-    this->bottomToolBarWidget->hide();
+    this->_bottomToolBarWidget->hide();
 
-    this->bottomToolBarLayout = new QHBoxLayout(this->bottomToolBarWidget);
-    this->bottomToolBarLayout->setContentsMargins(0,0,0,0);
+    this->_bottomToolBarLayout = new QHBoxLayout(this->_bottomToolBarWidget);
+    this->_bottomToolBarLayout->setContentsMargins(0,0,0,0);
 
-    this->bottomToolBarOpacityEffect = new QGraphicsOpacityEffect(this->bottomToolBarWidget);
-    this->bottomToolBarOpacityEffect->setOpacity(0);
-    this->bottomToolBarOpacityEffect->setEnabled(false);
-    this->bottomToolBarWidget->setGraphicsEffect(this->bottomToolBarOpacityEffect);
+    this->_bottomToolBarOpacityEffect = new QGraphicsOpacityEffect(this->_bottomToolBarWidget);
+    this->_bottomToolBarOpacityEffect->setOpacity(0);
+    this->_bottomToolBarOpacityEffect->setEnabled(false);
+    this->_bottomToolBarWidget->setGraphicsEffect(this->_bottomToolBarOpacityEffect);
 
-    this->bottomToolBarOopacityEffectAnimation = new QPropertyAnimation(this->bottomToolBarOpacityEffect, "opacity");
-    this->bottomToolBarOopacityEffectAnimation->setDuration(200);
-    this->bottomToolBarOopacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_bottomToolBarOopacityEffectAnimation = new QPropertyAnimation(this->_bottomToolBarOpacityEffect, "opacity");
+    this->_bottomToolBarOopacityEffectAnimation->setDuration(200);
+    this->_bottomToolBarOopacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
 }
 
 void LinboDialog::open() {
@@ -120,39 +119,18 @@ void LinboDialog::autoClose() {
 }
 
 void LinboDialog::addToolButton(LinboToolButton* toolButton) {
-    this->toolButtons.append(toolButton);
-    this->bottomToolBarLayout->addWidget(toolButton);
+    this->_toolButtons.append(toolButton);
+    this->_bottomToolBarLayout->addWidget(toolButton);
     this->repaint();
 }
 
-void LinboDialog::setScale(double scale) {
-    if(scale == this->scale)
-        return;
-
-    this->scale = scale;
-
-    if(this->originalGeometry.isEmpty())
-        this->originalGeometry = this->geometry();
-
-    QRect newGeometry;
-    newGeometry.setX(this->originalGeometry.x() + this->originalGeometry.width() * (1 - scale) * 0.5);
-    newGeometry.setY(this->originalGeometry.y() + this->originalGeometry.height() * (1 - scale) * 0.5);
-    newGeometry.setWidth(this->originalGeometry.width() * scale);
-    newGeometry.setHeight(this->originalGeometry.height() * scale);
-    this->setGeometry(newGeometry);
-}
-
-double LinboDialog::getScale() {
-    return this->scale;
-}
-
 void LinboDialog::setTitle(QString title) {
-    this->title = title;
-    this->titleLabel->setText(title);
+    this->_title = title;
+    this->_titleLabel->setText(title);
 }
 
-QString LinboDialog::getTitle() {
-    return this->title;
+QString LinboDialog::title() {
+    return this->_title;
 }
 
 void LinboDialog::resizeEvent(QResizeEvent *e) {
@@ -162,23 +140,23 @@ void LinboDialog::resizeEvent(QResizeEvent *e) {
     int margins = gTheme->getSize(LinboTheme::Margins);
     int toolBarHeight = rowHeight + margins ;
 
-    this->toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
-    this->toolBarLayout->setContentsMargins(margins, margins * 0.5, margins * 0.5, 0);
+    this->_toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
+    this->_toolBarLayout->setContentsMargins(margins, margins * 0.5, margins * 0.5, 0);
 
-    QFont titleFont = this->titleLabel->font();
+    QFont titleFont = this->_titleLabel->font();
     titleFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize) * 1.5);
-    this->titleLabel->setFont(titleFont);
-    this->titleLabel->setFixedHeight(rowHeight);
-    this->titleLabel->setFixedWidth(this->width() - margins);
+    this->_titleLabel->setFont(titleFont);
+    this->_titleLabel->setFixedHeight(rowHeight);
+    this->_titleLabel->setFixedWidth(this->width() - margins);
 
-    this->closeButton->setFixedHeight(rowHeight);
-    this->closeButton->setFixedWidth(rowHeight);
+    this->_closeButton->setFixedHeight(rowHeight);
+    this->_closeButton->setFixedWidth(rowHeight);
 
-    this->bottomToolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() + this->height(), this->geometry().width(), toolBarHeight);
-    this->bottomToolBarLayout->setSpacing(margins);
-    this->bottomToolBarLayout->setContentsMargins(margins, 0, margins, margins);
+    this->_bottomToolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() + this->height(), this->geometry().width(), toolBarHeight);
+    this->_bottomToolBarLayout->setSpacing(margins);
+    this->_bottomToolBarLayout->setContentsMargins(margins, 0, margins, margins);
 
-    for(LinboToolButton* toolButton : this->toolButtons)
+    for(LinboToolButton* toolButton : this->_toolButtons)
         toolButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     if(!this->isFrameless()) {
@@ -207,11 +185,11 @@ void LinboDialog::paintEvent(QPaintEvent *e) {
         }
     }
 
-    this->firstChild = firstWidget;
-    if(this->firstChild == nullptr)
-        this->firstChild = this->closeButton;
+    this->_firstChild = firstWidget;
+    if(this->_firstChild == nullptr)
+        this->_firstChild = this->_closeButton;
 
-    for(LinboToolButton* widget: this->toolButtons) {
+    for(LinboToolButton* widget: this->_toolButtons) {
         if(widget->focusPolicy() != Qt::NoFocus) {
             if(latestWidget != nullptr)
                 QWidget::setTabOrder(latestWidget, widget);
@@ -223,8 +201,8 @@ void LinboDialog::paintEvent(QPaintEvent *e) {
         }
     }
 
-    QWidget::setTabOrder(this->toolButtons.last(), this->closeButton);
-    connect(this->closeButton, &LinboPushButton::defocused, [=](Qt::FocusReason reason) {
+    QWidget::setTabOrder(this->_toolButtons.last(), this->_closeButton);
+    connect(this->_closeButton, &LinboPushButton::defocused, [=](Qt::FocusReason reason) {
         if(reason == Qt::TabFocusReason)
             firstWidget->setFocus();
         else if(reason == Qt::BacktabFocusReason)
@@ -241,56 +219,55 @@ void LinboDialog::keyPressEvent(QKeyEvent *ev)
 }
 
 void LinboDialog::setVisibleAnimated(bool visible) {
-    if(this->isVisible() == visible || this->busy)
+    if(this->isVisible() == visible || this->_busy)
         return;
 
-    this->busy = true;
-    this->modalOverlayWidget->setVisibleAnimated(visible);
+    this->_busy = true;
+    this->_modalOverlayWidget->setVisibleAnimated(visible);
 
     if(visible) {
-        this->setScale(1);
         this->show();
         emit this->opened();
         if(!this->isFrameless())
-            this->toolBarWidget->show();
+            this->_toolBarWidget->show();
 
-        if(this->toolButtons.length() > 0)
-            this->bottomToolBarWidget->show();
+        if(this->_toolButtons.length() > 0)
+            this->_bottomToolBarWidget->show();
     }
 
-    this->opacityEffect->setEnabled(true);
-    this->opacityEffectAnimation->setStartValue(visible ? 0:1);
-    this->opacityEffectAnimation->setEndValue(visible ? 1:0);
-    this->opacityEffectAnimation->start();
+    this->_opacityEffect->setEnabled(true);
+    this->_opacityEffectAnimation->setStartValue(visible ? 0:1);
+    this->_opacityEffectAnimation->setEndValue(visible ? 1:0);
+    this->_opacityEffectAnimation->start();
 
     if(!this->isFrameless()) {
-        this->toolBarOpacityEffect->setEnabled(true);
-        this->toolBarOopacityEffectAnimation->setStartValue(visible ? 0:1);
-        this->toolBarOopacityEffectAnimation->setEndValue(visible ? 1:0);
-        this->toolBarOopacityEffectAnimation->start();
+        this->_toolBarOpacityEffect->setEnabled(true);
+        this->_toolBarOopacityEffectAnimation->setStartValue(visible ? 0:1);
+        this->_toolBarOopacityEffectAnimation->setEndValue(visible ? 1:0);
+        this->_toolBarOopacityEffectAnimation->start();
     }
 
-    if(this->toolButtons.length() > 0) {
-        this->bottomToolBarOpacityEffect->setEnabled(true);
-        this->bottomToolBarOopacityEffectAnimation->setStartValue(visible ? 0:1);
-        this->bottomToolBarOopacityEffectAnimation->setEndValue(visible ? 1:0);
-        this->bottomToolBarOopacityEffectAnimation->start();
+    if(this->_toolButtons.length() > 0) {
+        this->_bottomToolBarOpacityEffect->setEnabled(true);
+        this->_bottomToolBarOopacityEffectAnimation->setStartValue(visible ? 0:1);
+        this->_bottomToolBarOopacityEffectAnimation->setEndValue(visible ? 1:0);
+        this->_bottomToolBarOopacityEffectAnimation->start();
     }
 }
 
-void LinboDialog::animationFinished() {
-    if(this->opacityEffect->opacity() == 0) {
+void LinboDialog::_animationFinished() {
+    if(this->_opacityEffect->opacity() == 0) {
         this->hide();
-        this->toolBarWidget->hide();
-        this->bottomToolBarWidget->hide();
+        this->_toolBarWidget->hide();
+        this->_bottomToolBarWidget->hide();
     }
-    this->opacityEffect->setEnabled(false);
-    this->toolBarOpacityEffect->setEnabled(false);
-    this->bottomToolBarOpacityEffect->setEnabled(false);
-    this->busy = false;
+    this->_opacityEffect->setEnabled(false);
+    this->_toolBarOpacityEffect->setEnabled(false);
+    this->_bottomToolBarOpacityEffect->setEnabled(false);
+    this->_busy = false;
 
-    if(this->firstChild != nullptr)
-        this->firstChild->setFocus();
+    if(this->_firstChild != nullptr)
+        this->_firstChild->setFocus();
 }
 
 bool LinboDialog::isFrameless() {
@@ -302,18 +279,18 @@ void LinboDialog::centerInParent() {
     int extraHeight = 0;
 
     if(!this->isFrameless())
-        extraHeight = this->toolBarWidget->height();
+        extraHeight = this->_toolBarWidget->height();
 
-    if(this->toolButtons.length() > 0)
-        extraHeight += this->bottomToolBarWidget->height();
+    if(this->_toolButtons.length() > 0)
+        extraHeight += this->_bottomToolBarWidget->height();
 
-    this->move((this->parentWidget()->width() - width) / 2, (this->parentWidget()->height() - this->height() - extraHeight) / 2 + this->toolBarWidget->height());
+    this->move((this->parentWidget()->width() - width) / 2, (this->parentWidget()->height() - this->height() - extraHeight) / 2 + this->_toolBarWidget->height());
 
     if(!this->isFrameless())
-        this->toolBarWidget->move(this->x(), this->y() - extraHeight / 2);
+        this->_toolBarWidget->move(this->x(), this->y() - extraHeight / 2);
 
-    if(this->toolButtons.length() > 0)
-        this->bottomToolBarWidget->move(this->x(), this->y() + this->height());
+    if(this->_toolButtons.length() > 0)
+        this->_bottomToolBarWidget->move(this->x(), this->y() + this->height());
 }
 
 // -----------------

@@ -36,14 +36,12 @@ class ModalOverlay;
 class LinboDialog : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(double scale READ getScale WRITE setScale)
-    Q_PROPERTY(QString title READ getTitle WRITE setTitle)
 
 public:
     LinboDialog(QWidget* parent);
 
     virtual void setTitle(QString title);
-    virtual QString getTitle();
+    virtual QString title();
 
     virtual void centerInParent();
 
@@ -56,42 +54,38 @@ protected:
     void addToolButton(LinboToolButton* toolButton);
 
 private:
-    double scale;
-    bool busy;
-    QString title;
+    bool _busy;
+    QString _title;
 
-    ModalOverlay* modalOverlayWidget;
+    ModalOverlay* _modalOverlayWidget;
 
-    QGraphicsOpacityEffect* opacityEffect;
-    QPropertyAnimation* opacityEffectAnimation;
+    QGraphicsOpacityEffect* _opacityEffect;
+    QPropertyAnimation* _opacityEffectAnimation;
 
-    QRect originalGeometry;
+    QRect _originalGeometry;
 
-    QWidget* toolBarWidget;
-    QHBoxLayout* toolBarLayout;
-    QLabel* titleLabel;
-    LinboToolButton* closeButton;
-    QGraphicsOpacityEffect* toolBarOpacityEffect;
-    QPropertyAnimation* toolBarOopacityEffectAnimation;
+    QWidget* _toolBarWidget;
+    QHBoxLayout* _toolBarLayout;
+    QLabel* _titleLabel;
+    LinboToolButton* _closeButton;
+    QGraphicsOpacityEffect* _toolBarOpacityEffect;
+    QPropertyAnimation* _toolBarOopacityEffectAnimation;
 
-    QWidget* bottomToolBarWidget;
-    QHBoxLayout* bottomToolBarLayout;
-    QGraphicsOpacityEffect* bottomToolBarOpacityEffect;
-    QPropertyAnimation* bottomToolBarOopacityEffectAnimation;
-    QList<LinboToolButton*> toolButtons;
+    QWidget* _bottomToolBarWidget;
+    QHBoxLayout* _bottomToolBarLayout;
+    QGraphicsOpacityEffect* _bottomToolBarOpacityEffect;
+    QPropertyAnimation* _bottomToolBarOopacityEffectAnimation;
+    QList<LinboToolButton*> _toolButtons;
 
-    QWidget* firstChild;
+    QWidget* _firstChild;
 
 public slots:
     void open();
     void close();
     void autoClose();
 
-    void setScale(double scale);
-    double getScale();
-
 private slots:
-    void animationFinished();
+    void _animationFinished();
 
 signals:
     void opened();
