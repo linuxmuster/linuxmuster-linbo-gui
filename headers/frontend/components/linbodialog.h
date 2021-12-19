@@ -100,7 +100,7 @@ signals:
 
 class ModalOverlay : public QWidget {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ getColor WRITE setColor)
+    Q_PROPERTY(QColor color READ getColor WRITE setColor NOTIFY colorChanged)
 
 public:
     friend class LinboDialog;
@@ -119,8 +119,12 @@ private:
     QPropertyAnimation* opacityAnimation;
     QColor color;
 
+    static constexpr QColor _INVISIBLE_COLOR = QColor(0,0,0,0);
+    static constexpr QColor _VISIBLE_COLOR = QColor(0,0,0,66);
+
 signals:
     void clicked();
+    void colorChanged(QColor color);
 };
 
 #endif // QMODERNDIALOG_H

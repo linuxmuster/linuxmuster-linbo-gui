@@ -42,7 +42,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Base, gTheme->getColor(LinboTheme::BackgroundColor));
+    pal.setColor(QPalette::Window, gTheme->getColor(LinboTheme::BackgroundColor));
     this->setAutoFillBackground(true);
     this->setPalette(pal);
     this->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
@@ -334,10 +334,13 @@ QColor ModalOverlay::getColor() {
 }
 
 void ModalOverlay::setColor(QColor color) {
-    this->color = color;
-    QPalette pal = palette();
-    pal.setColor(QPalette::Base, color);
-    this->setPalette(pal);
+    if(this->color != color) {
+        this->color = color;
+        QPalette pal = palette();
+        pal.setColor(QPalette::Window, color);
+        this->setPalette(pal);
+        emit this->colorChanged(color);
+    }
 }
 
 void ModalOverlay::setVisibleAnimated(bool visible) {
@@ -346,15 +349,16 @@ void ModalOverlay::setVisibleAnimated(bool visible) {
 
     if(visible) {
         disconnect(this->opacityAnimation, SIGNAL(finished()), this, SLOT(hide()));
-        this->setColor("#00000000");
+        this->opacityAnimation->setEndValue(ModalOverlay::_VISIBLE_COLOR);
+        this->setColor(ModalOverlay::_INVISIBLE_COLOR);
         this->setVisible(true);
     }
     else {
         connect(this->opacityAnimation, SIGNAL(finished()), this, SLOT(hide()));
+        this->opacityAnimation->setEndValue(ModalOverlay::_INVISIBLE_COLOR);
     }
 
     this->opacityAnimation->setStartValue(this->getColor());
-    this->opacityAnimation->setEndValue(visible ? "#66000000":"#00000000");
     this->opacityAnimation->start();
 }
 
