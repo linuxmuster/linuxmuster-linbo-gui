@@ -118,7 +118,7 @@ QList<LinboLogger::LinboLog> LinboLogger::getLogsOfCurrentChapter() {
 QList<LinboLogger::LinboLog> LinboLogger::getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterTypes) {
     QList<LinboLog> tmpLogs;
 
-    for(LinboLog log : logs) {
+    for(const LinboLog &log : logs) {
         if(filterTypes.testFlag(log.type))
             tmpLogs.append(log);
     }

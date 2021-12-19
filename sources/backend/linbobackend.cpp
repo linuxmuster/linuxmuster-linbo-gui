@@ -39,12 +39,9 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     // Processes
     this->_asynchronosProcess = new QProcess(this);
     // ascynchorons commands are logged to logger
-    connect( _asynchronosProcess, SIGNAL(readyReadStandardOutput()),
-             this, SLOT(_readFromStdout()) );
-    connect( _asynchronosProcess, SIGNAL(readyReadStandardError()),
-             this, SLOT(_readFromStderr()) );
-    connect(this->_asynchronosProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(_handleProcessFinished(int, QProcess::ExitStatus)));
+    connect(this->_asynchronosProcess, &QProcess::readyReadStandardOutput, this, &LinboBackend::_readFromStdout);
+    connect(this->_asynchronosProcess, &QProcess::readyReadStandardError, this, &LinboBackend::_readFromStderr);
+    connect(this->_asynchronosProcess, &QProcess::finished, this, &LinboBackend::_handleProcessFinished);
 
     // synchronos commands are not logged
     this->_synchronosProcess = new QProcess(this);
@@ -68,7 +65,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
     this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
     this->_timeoutRemainingTimeRefreshTimer->setInterval(10);
-    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout,
+    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout, this,
     [=] {
         if(this->_state == Autostarting)
             emit this->autostartTimeoutProgressChanged();
@@ -84,7 +81,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 
     // default select first OS if no other OS has been selected yet
     if(_config->operatingSystems().length() > 0 && this->_currentOs == nullptr)
-        this->_currentOs = this->_config->operatingSystems()[0];
+        this->_currentOs = this->_config->operatingSystems().at(0);
 
     this->_executeAutomaticTasks();
 }
@@ -266,7 +263,7 @@ bool LinboBackend::partitionDrive(bool format, LinboPostProcessActions postProce
 
     QStringList commandArgs = QStringList(format ? "partition":"partition_noformat");
     for( int i=0; i < this->_config->diskPartitions().length(); i++) {
-        LinboDiskPartition* p = this->_config->diskPartitions()[i];
+        LinboDiskPartition* p = this->_config->diskPartitions().at(i);
         commandArgs.append(
             this->_buildCommand(
                 p->path(),
@@ -299,7 +296,7 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
         commandArgs.append(LinboConfig::downloadMethodToString(downloadMethod));
 
     for(int i = 0; i < this->_config->operatingSystems().length(); i++) {
-        LinboOs* os = this->_config->operatingSystems()[i];
+        LinboOs* os = this->_config->operatingSystems().at(i);
         commandArgs.append(this->_buildCommand(os->baseImage()->getName()));
         commandArgs.append(this->_buildCommand(""));
     }
@@ -598,7 +595,7 @@ QString LinboBackend::_executeCommand(bool waitForFinished, QString command, QSt
     if(this->_state >= Root) {
         // args are not logged for security
         QString args = commandArgs.join(" ").replace(this->_rootPassword, "***");
-        this->_logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command, LinboLogger::LinboGuiInfo);
+        this->_logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + args, LinboLogger::LinboGuiInfo);
     }
     else
         this->_logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
@@ -631,7 +628,7 @@ QString LinboBackend::_executeCommand(bool waitForFinished, QString command, QSt
 void LinboBackend::_readFromStdout() {
     QString stdOut = this->_asynchronosProcess->readAllStandardOutput();
     QStringList lines = stdOut.split("\n");
-    for(QString line : lines) {
+    for(const QString &line : lines) {
         this->_logger->log(line.simplified(), LinboLogger::StdOut);
     }
 }
@@ -639,7 +636,7 @@ void LinboBackend::_readFromStdout() {
 void LinboBackend::_readFromStderr() {
     QString stdOut = this->_asynchronosProcess->readAllStandardError();
     QStringList lines = stdOut.split("\n");
-    for(QString line : lines) {
+    for(const QString &line : lines) {
         this->_logger->log(line.simplified(), LinboLogger::StdErr);
     }
 }

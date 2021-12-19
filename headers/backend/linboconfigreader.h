@@ -34,7 +34,8 @@ private:
     bool _stringToBool(const QString& value);
 
 private:
-    LinboBackend* backend;
+    LinboBackend* _backend;
+    const QVector<QString> _trueWords = {"yes", "true", "enable"};
 #ifdef TEST_ENV
     const QString _configFilePath = TEST_ENV"/start.conf";
     const QString _iconBasePath = TEST_ENV"/icons";

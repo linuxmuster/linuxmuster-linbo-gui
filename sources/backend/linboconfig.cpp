@@ -41,7 +41,7 @@ QList<LinboImage*> LinboConfig::getImagesOfOs(LinboOs* os, bool includeImagesWit
     QList<LinboImage*> filteredImages;
     QList<LinboImage*> imagesWithoutOs;
 
-    for(LinboImage* image : this->_images)
+    for(LinboImage* image : qAsConst(this->_images))
         if(!image->existsOnDisk() && !includeNonExistantImages)
             continue;
         else if(image->getOs() == os)
