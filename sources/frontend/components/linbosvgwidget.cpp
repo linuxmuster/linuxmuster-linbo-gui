@@ -26,7 +26,7 @@ LinboSvgWidget::LinboSvgWidget(int height, QString path, QWidget* parent) : QLab
     int linboLogoWidth = height * (renderer->defaultSize().width() / renderer->defaultSize().height());
 
     QImage* image = new QImage(linboLogoWidth, height, QImage::Format_ARGB32);
-    image->fill("#00000000");
+    image->fill(QColor(0,0,0,0));
 
     QPainter painter(image);
     renderer->render(&painter);

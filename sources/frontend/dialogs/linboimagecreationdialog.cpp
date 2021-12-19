@@ -34,7 +34,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->actionButtonGroup = new QButtonGroup(this);
     this->actionButtonGroup->setExclusive(true);
 
-    connect(this->actionButtonGroup, SIGNAL(buttonToggled(QAbstractButton*, bool)), this, SLOT(refreshPathAndDescription()));
+    connect(this->actionButtonGroup, &QButtonGroup::buttonToggled, this, &LinboImageCreationDialog::refreshPathAndDescription);
 
     //% "replace current image"
     LinboRadioButton* replaceImage = new LinboRadioButton(qtTrId("dialog_createImage_action_current"));
@@ -96,7 +96,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     LinboToolButton* pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_create"));
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, &LinboToolButton::clicked, [=]() {
+    connect(pushButtonCache, &LinboToolButton::clicked, this, [=]() {
         this->createImage(LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId()));
     });
 
@@ -104,7 +104,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_createAndUpload"));
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, &LinboPushButton::clicked, [=]() {
+    connect(pushButtonCache, &LinboPushButton::clicked, this, [=]() {
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
         postProcessActions.setFlag(LinboBackend::NoAction, false);
         this->createImage( LinboBackend::UploadImage | postProcessActions);
@@ -161,15 +161,15 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 
 void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
     if(this->backend->getCurrentOs()->baseImage() == nullptr) {
-        this->actionButtonGroup->buttons()[1]->setChecked(true);
-        this->actionButtonGroup->buttons()[0]->setChecked(false);
-        this->actionButtonGroup->buttons()[0]->setEnabled(false);
+        this->actionButtonGroup->buttons().at(1)->setChecked(true);
+        this->actionButtonGroup->buttons().at(0)->setChecked(false);
+        this->actionButtonGroup->buttons().at(0)->setEnabled(false);
     }
     else {
-        this->actionButtonGroup->buttons()[0]->setEnabled(true);
+        this->actionButtonGroup->buttons().at(0)->setEnabled(true);
         if(isOpening) {
-            this->actionButtonGroup->buttons()[0]->setChecked(true);
-            this->actionButtonGroup->buttons()[1]->setChecked(false);
+            this->actionButtonGroup->buttons().at(0)->setChecked(true);
+            this->actionButtonGroup->buttons().at(1)->setChecked(false);
         }
     }
 

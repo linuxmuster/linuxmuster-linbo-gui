@@ -21,11 +21,11 @@
 LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->backend = backend;
-    connect(this->backend, SIGNAL(currentOsChanged(LinboOs*)), this, SLOT(handleCurrentOsChanged(LinboOs*)));
-    connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
-    connect(this->backend, SIGNAL(autostartTimeoutProgressChanged()), this, SLOT(handleTimeoutProgressChanged()));
-    connect(this->backend, SIGNAL(rootTimeoutProgressChanged()), this, SLOT(handleTimeoutProgressChanged()));
-    connect(this->backend->getLogger(), SIGNAL(latestLogChanged(const LinboLogger::LinboLog&)), this, SLOT(handleLatestLogChanged(const LinboLogger::LinboLog&)));
+    connect(this->backend, &LinboBackend::currentOsChanged, this, &LinboMainActions::handleCurrentOsChanged);
+    connect(this->backend, &LinboBackend::stateChanged, this, &LinboMainActions::handleLinboStateChanged);
+    connect(this->backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
+    connect(this->backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
+    connect(this->backend->getLogger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::handleLatestLogChanged);
 
     this->stackView = new LinboStackedWidget(this);
 
@@ -65,7 +65,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->passedTimeLabel->setAlignment(Qt::AlignCenter);
 
     this->passedTimeTimer = new QTimer(this->progressBarWidget);
-    connect(this->passedTimeTimer, &QTimer::timeout, [=]() {
+    connect(this->passedTimeTimer, &QTimer::timeout, this, [=]() {
         int passedSecs = QDateTime::currentSecsSinceEpoch() - this->processStartedAt;
         QString passedTime =
             QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))

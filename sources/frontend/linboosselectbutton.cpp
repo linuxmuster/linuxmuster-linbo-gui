@@ -78,8 +78,9 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
             {LinboOs::ReinstallOs, gTheme->getIconPath(LinboTheme::ReinstallLegacyIcon)}
         };
 
-        for(LinboOs::LinboOsStartAction startAction : startActionButtonIcons.keys()) {
-            QString startActionIconPath = startActionButtonIcons[startAction];
+        for(auto i = startActionButtonIcons.begin(); i != startActionButtonIcons.end(); i++) {
+            LinboOs::LinboOsStartAction startAction = i.key();
+            QString startActionIconPath = i.value();
             bool disabled = !this->os->actionEnabled(startAction) || this->os->defaultAction() == startAction;
 
             if(disabled)
@@ -113,7 +114,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         actionButton->setVisible(false);
         //% "Upload image of %1"
         actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->os->name()));
-        connect(actionButton, &LinboPushButton::clicked, [=] {
+        connect(actionButton, &LinboPushButton::clicked, this, [=] {
             this->os->backend()->setCurrentOs(this->os);
             emit this->imageUploadRequested();
         });
@@ -135,7 +136,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         this->osNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     }
     else {
-        connect(this->button, &LinboPushButton::hovered, [=] {this->button->setChecked(true);});
+        connect(this->button, &LinboPushButton::hovered, this, [=] {this->button->setChecked(true);});
         connect(this->button, &LinboPushButton::doubleClicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
     }
 

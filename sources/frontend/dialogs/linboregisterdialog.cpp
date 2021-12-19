@@ -30,7 +30,7 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     //% "Room"
     this->mainLayout->addWidget(new QLabel(qtTrId("room")));
     roomEdit = new LinboLineEdit();
-    connect(roomEdit, SIGNAL(textChanged(const QString&)), this, SLOT(handleRoomChanged(const QString&)));
+    connect(roomEdit, &LinboLineEdit::textChanged, this, &LinboRegisterDialog::handleRoomChanged);
     this->mainLayout->addWidget(roomEdit);
 
     //% "Hostname"

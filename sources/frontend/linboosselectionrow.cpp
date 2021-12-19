@@ -264,8 +264,8 @@ void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
         this->resizeAndPositionAllButtons();
         this->sizeAnimation->setStartValue(this->size());
         this->sizeAnimation->setEndValue(size);
-        connect(this->sizeAnimation, &QPropertyAnimation::finished, [=] {this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
-        QTimer::singleShot(300, [=] {this->sizeAnimation->start();});
+        connect(this->sizeAnimation, &QPropertyAnimation::finished, this, [=] {this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
+        QTimer::singleShot(300, this, [=] {this->sizeAnimation->start();});
     }
     else {
         if(this->sizeOverride != nullptr) {

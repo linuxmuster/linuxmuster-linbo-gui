@@ -40,12 +40,9 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->process = new QProcess(this);
     this->process->setProcessChannelMode(QProcess::MergedChannels);
 
-    connect(this->process, SIGNAL(readyReadStandardOutput()),
-            this, SLOT(readOutput()) );
-    connect(this->process, SIGNAL(readyReadStandardError()),
-            this, SLOT(readOutput()) );
-    connect(this->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(handleProcessFinished(int, QProcess::ExitStatus)));
+    connect(this->process, &QProcess::readyReadStandardOutput, this, &LinboTerminal::readOutput);
+    connect(this->process, &QProcess::readyReadStandardError, this, &LinboTerminal::readOutput);
+    connect(this->process, &QProcess::finished, this, &LinboTerminal::handleProcessFinished);
 
     this->process->setEnvironment({"PS1=$(whoami)@$(hostname):$(pwd)$ "});
     this->process->start("sh", QStringList("-i"));

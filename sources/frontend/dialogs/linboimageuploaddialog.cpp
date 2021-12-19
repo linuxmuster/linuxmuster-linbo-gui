@@ -73,7 +73,7 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     //% "upload"
     this->uploadButton = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
     this->addToolButton(this->uploadButton);
-    connect(this->uploadButton, &LinboPushButton::clicked, [=]() {
+    connect(this->uploadButton, &LinboPushButton::clicked, this, [=]() {
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
         this->backend->uploadImage(this->backend->getConfig()->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
         this->autoClose();

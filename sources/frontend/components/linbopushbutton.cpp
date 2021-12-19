@@ -191,7 +191,7 @@ void LinboPushButton::setVisibleAnimated(bool visible) {
 
         // if the button is still supposed to be hidden after 400ms (the default animation duration)
         // -> hide the button to prevent it from overlaying other stuff
-        QTimer::singleShot(400, [=] {
+        QTimer::singleShot(400, this, [=] {
             if(!this->shouldBeVisible)
                 this->setVisible(false);
         });

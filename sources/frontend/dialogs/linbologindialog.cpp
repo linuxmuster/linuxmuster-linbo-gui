@@ -31,7 +31,7 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
     connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
 
     //% "Please enter password:"
-    connect(passwordInput, &QLineEdit::textChanged, [=] {this->setTitle(qtTrId("dialog_login_title"));});
+    connect(passwordInput, &QLineEdit::textChanged, this, [=] {this->setTitle(qtTrId("dialog_login_title"));});
 
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));

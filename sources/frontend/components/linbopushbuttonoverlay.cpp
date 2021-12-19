@@ -37,7 +37,7 @@ LinboPushButtonOverlay::LinboPushButtonOverlay(OverlayType type, QWidget* overla
 
     this->setEffectEnabled(false);
 
-    connect(this->animation, SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this, SLOT(handleAnimationStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+    connect(this->animation, &QPropertyAnimation::stateChanged, this, &LinboPushButtonOverlay::handleAnimationStateChanged);
 }
 
 
