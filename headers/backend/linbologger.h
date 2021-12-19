@@ -60,9 +60,10 @@ public:
     static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterType);
     static QStringList logsToStacktrace(QList<LinboLog> logs, int limit = -1);
 
-protected slots:
     void info(QString logText);
     void error(QString logText);
+
+protected slots:
     void chapterBeginning(QString logText);
     void chapterEnd(QString logText);
     void stdErr(QString logText);

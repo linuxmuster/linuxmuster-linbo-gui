@@ -171,13 +171,13 @@ public slots:
     bool login(QString password);
     void logout();
 
-    bool replaceImageOfCurrentOs(QString description = "", LinboPostProcessActions postProcessActions = NoAction);
-    bool createImageOfCurrentOS(QString name, QString description = "", LinboPostProcessActions postProcessActions = NoAction);
+    bool replaceImageOfCurrentOs(QString description = "", LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
+    bool createImageOfCurrentOS(QString name, QString description = "", LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
 
-    bool uploadImage(const LinboImage* image, LinboPostProcessActions postProcessActions = NoAction);
+    bool uploadImage(const LinboImage* image, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
 
-    bool partitionDrive(bool format = true, LinboPostProcessActions postProcessActions = NoAction);
-    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions postProcessActions = NoAction);
+    bool partitionDrive(bool format = true, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
+    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
 
@@ -185,7 +185,7 @@ public slots:
     bool resetMessage();
 
 private slots:
-    bool _uploadImage(const LinboImage* image, LinboPostProcessActions postProcessAction = NoAction, bool allowCreatingImageState = false);
+    bool _uploadImage(const LinboImage* image, LinboBackend::LinboPostProcessActions postProcessAction = LinboBackend::NoAction, bool allowCreatingImageState = false);
 
     void _executeAutomaticTasks();
     void _executeAutoPartition();

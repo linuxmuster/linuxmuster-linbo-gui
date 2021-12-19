@@ -88,8 +88,9 @@ LinboGui::LinboGui()
         QTranslator* translator = new QTranslator(this);
 
         // fallback to en-GB!
-        if(!translator->load(":/" + localeName + ".qm"))
-            translator->load(":/en-GB.qm");
+        if(!translator->load(":/" + localeName + ".qm") && !translator->load(":/en-GB.qm")) {
+            this->backend->getLogger()->error("Could not load any translation!");
+        }
 
         QApplication::installTranslator(translator);
     }
