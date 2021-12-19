@@ -123,7 +123,7 @@ void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
     config->_cacheSize = this->backend->_executeCommand(true, "size", config->cachePath()).replace("\n", "");
 
     // Harddisk Size
-    QRegExp *removePartition = new QRegExp("[0-9]{1,2}");
+    QRegularExpression *removePartition = new QRegularExpression("[0-9]{1,2}");
     QString hd = config->cachePath();
     // e.g. turn /dev/sda1 into /dev/sda
     hd.remove( *removePartition );
@@ -195,15 +195,15 @@ void LinboConfigReader::_parseLinboConfig(QMap<QString, QString> rawLinboConfig,
         else if(key == "cache")   linboConfig->_cachePath = value;
         else if(key == "roottimeout")   linboConfig->_rootTimeout = (unsigned int)value.toInt();
         else if(key == "group")   linboConfig->_hostGroup = value;
-        else if(key == "autopartition")  linboConfig->_autoPartition = stringToBool(value);
-        else if(key == "autoinitcache")  linboConfig->_autoInitCache = stringToBool(value);
-        else if(key == "autoformat")  linboConfig->_autoFormat = stringToBool(value);
-        else if(key == "backgroundcolor" && QRegExp("^([a-fA-F0-9]{6})$").exactMatch(value)) linboConfig->_backgroundColor = "#" + value;
+        else if(key == "autopartition")  linboConfig->_autoPartition = _stringToBool(value);
+        else if(key == "autoinitcache")  linboConfig->_autoInitCache = _stringToBool(value);
+        else if(key == "autoformat")  linboConfig->_autoFormat = _stringToBool(value);
+        else if(key == "backgroundcolor" && this->_validateColorCode(value)) linboConfig->_backgroundColor = "#" + value;
         else if(key == "downloadtype")  linboConfig->_downloadMethod = LinboConfig::stringToDownloadMethod(value);
-        else if(key == "useminimallayout") linboConfig->_useMinimalLayout = this->stringToBool(value);
+        else if(key == "useminimallayout") linboConfig->_useMinimalLayout = this->_stringToBool(value);
         else if(key == "locale") linboConfig->_locale = value;
-        else if(key == "guidisabled") linboConfig->_guiDisabled = this->stringToBool(value);
-        else if(key == "clientdetailsvisiblebydefault") linboConfig->_clientDetailsVisibleByDefault = this->stringToBool(value);
+        else if(key == "guidisabled") linboConfig->_guiDisabled = this->_stringToBool(value);
+        else if(key == "clientdetailsvisiblebydefault") linboConfig->_clientDetailsVisibleByDefault = this->_stringToBool(value);
         else if(key == "themeconffile") linboConfig->_themeConfFile = value;
     }
 }
@@ -217,7 +217,7 @@ void LinboConfigReader::_parsePartitionConfig(QMap<QString, QString> rawParition
         else if(key == "size")  partition->_size = value.toInt();
         else if(key == "id")  partition->_id = value;
         else if(key == "fstype")  partition->_fstype = value;
-        else if(key.startsWith("bootable"))  partition->_bootable = stringToBool(value);
+        else if(key.startsWith("bootable"))  partition->_bootable = _stringToBool(value);
     }
 
     if(partition->path() != "")
@@ -235,19 +235,18 @@ void LinboConfigReader::_parseOsConfig(QMap<QString, QString> rawOsConfig, Linbo
         else if(key == "description")   os->_description = value;
         else if(key == "version")       os->_version = value;
         else if(key == "iconname")      os->_iconName = value;
-        //else if(key == "image")         os->_DifferentialImage(new LinboImage(value, LinboImage::DifferentialImage, os));
         else if(key == "boot")          os->_bootPartition = value;
         else if(key == "root")          os->_rootPartition = value;
         else if(key == "kernel")        os->_kernel = value;
         else if(key == "initrd")        os->_initrd = value;
         else if(key == "append")        os->_kernelOptions = value;
-        else if(key == "syncenabled")   os->_syncButtonEnabled = stringToBool(value);
-        else if(key == "startenabled")  os->_startButtonEnabled = stringToBool(value);
-        else if((key == "remotesyncenabled") || (key == "newenabled"))   os->_reinstallButtonEnabled = stringToBool(value);
+        else if(key == "syncenabled")   os->_syncButtonEnabled = _stringToBool(value);
+        else if(key == "startenabled")  os->_startButtonEnabled = _stringToBool(value);
+        else if((key == "remotesyncenabled") || (key == "newenabled"))   os->_reinstallButtonEnabled = _stringToBool(value);
         else if(key == "defaultaction") os->_defaultAction = os->startActionFromString(value);
-        else if(key == "autostart")     os->_autostartEnabled = stringToBool(value);
+        else if(key == "autostart")     os->_autostartEnabled = _stringToBool(value);
         else if(key == "autostarttimeout")   os->_autostartTimeout = value.toInt();
-        else if(key == "hidden")        os->_hidden = stringToBool(value);
+        else if(key == "hidden")        os->_hidden = _stringToBool(value);
         else if(key == "baseimage") {
             if(!config->_images.contains(value))
                 config->_images.insert(value, new LinboImage(value, this->backend));
@@ -262,7 +261,12 @@ void LinboConfigReader::_parseOsConfig(QMap<QString, QString> rawOsConfig, Linbo
 
 }
 
-bool LinboConfigReader::stringToBool(const QString& value) {
+bool LinboConfigReader::_validateColorCode(QString code) {
+    QRegularExpression regex("^([a-fA-F0-9]{6})$");
+    return regex.match(code).hasMatch();
+}
+
+bool LinboConfigReader::_stringToBool(const QString& value) {
     QStringList trueWords("yes");
     trueWords.append("true");
     trueWords.append("enable");

@@ -2,6 +2,7 @@
 #define LINBOCONFIGREADER_H
 
 #include <QObject>
+#include <QRegularExpression>
 #include "linboconfig.h"
 #include "linboimage.h"
 #include "linbodiskpartition.h"
@@ -29,7 +30,8 @@ private:
     void _parsePartitionConfig(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
     void _parseOsConfig(QMap<QString, QString> rawOsConfig, LinboConfig* config);
 
-    bool stringToBool(const QString& value);
+    bool _validateColorCode(QString code);
+    bool _stringToBool(const QString& value);
 
 private:
     LinboBackend* backend;

@@ -22,7 +22,6 @@
 #include <QDialog>
 #include <QObject>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QBoxLayout>
 #include <QFont>
 #include <QFontDatabase>

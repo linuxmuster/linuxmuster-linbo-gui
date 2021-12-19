@@ -4,7 +4,7 @@ VERSION = 7.0.4
 DEFINES += GUI_VERSION=\"\\\"$${VERSION}\\\"\"
 
 CONFIG += static
-QT += gui widgets svg xml
+QT += gui widgets svg svgwidgets xml
 
 # Include Linux framebuffer plugin
 QTPLUGIN.platforms = qlinuxfb

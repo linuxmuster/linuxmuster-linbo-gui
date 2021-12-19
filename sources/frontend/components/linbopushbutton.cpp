@@ -269,7 +269,7 @@ void LinboPushButton::focusOutEvent(QFocusEvent *e)  {
     emit this->defocused(e->reason());
 }
 
-void LinboPushButton::enterEvent(QEvent *e) {
+void LinboPushButton::enterEvent(QEnterEvent *e) {
     this->isHovered = true;
     QAbstractButton::enterEvent(e);
     emit this->hovered();

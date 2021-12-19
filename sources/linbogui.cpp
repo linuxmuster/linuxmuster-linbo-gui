@@ -76,7 +76,7 @@ LinboGui::LinboGui()
 
     // attach translator
     QString localeName = this->backend->getConfig()->locale();
-    if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
+    if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == '-')) {
 
         if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)

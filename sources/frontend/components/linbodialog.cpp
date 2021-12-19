@@ -42,7 +42,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     connect(this->opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, gTheme->getColor(LinboTheme::BackgroundColor));
+    pal.setColor(QPalette::Base, gTheme->getColor(LinboTheme::BackgroundColor));
     this->setAutoFillBackground(true);
     this->setPalette(pal);
     this->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
@@ -336,7 +336,7 @@ QColor ModalOverlay::getColor() {
 void ModalOverlay::setColor(QColor color) {
     this->color = color;
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, color);
+    pal.setColor(QPalette::Base, color);
     this->setPalette(pal);
 }
 
