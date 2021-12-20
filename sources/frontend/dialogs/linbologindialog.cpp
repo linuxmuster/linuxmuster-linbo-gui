@@ -28,7 +28,7 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
     this->passwordInput = new LinboLineEdit();
     this->passwordInput->setEchoMode(QLineEdit::NoEcho);
     this->passwordInput->setAlignment(Qt::AlignCenter);
-    connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
+    connect(passwordInput, &LinboLineEdit::returnPressed, this, &LinboLoginDialog::inputFinished);
 
     //% "Please enter password:"
     connect(passwordInput, &QLineEdit::textChanged, this, [=] {this->setTitle(qtTrId("dialog_login_title"));});
@@ -36,12 +36,12 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(close()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboLoginDialog::close);
 
     //% "login"
     toolButtonCache = new LinboToolButton(qtTrId("dialog_login_button_login"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(inputFinished()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboLoginDialog::inputFinished);
 
     this->mainLayout = new QVBoxLayout(this);
     this->mainLayout->setContentsMargins(0,0,0,0);

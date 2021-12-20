@@ -24,7 +24,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->sizeOverride = nullptr;
 
     this->backend = backend;
-    connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
+    connect(this->backend, &LinboBackend::stateChanged, this, &LinboOsSelectionRow::handleLinboStateChanged);
 
     this->showOnlySelectedButton = false;
 
@@ -44,7 +44,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
 #else
         LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->iconName(), os, this->osButtonGroup, this);
 #endif
-        connect(osButton->button, SIGNAL(toggled(bool)), this, SLOT(handleButtonToggled(bool)));
+        connect(osButton->button, &LinboPushButton::toggled, this, &LinboOsSelectionRow::handleButtonToggled);
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 

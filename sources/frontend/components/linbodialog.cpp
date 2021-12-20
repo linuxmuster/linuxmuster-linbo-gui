@@ -26,8 +26,8 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->setWindowFlags(Qt::Widget);
     this->_modalOverlayWidget = new ModalOverlay(parent);
     this->_modalOverlayWidget->setVisible(false);
-    connect(this->_modalOverlayWidget, SIGNAL(clicked()), this, SLOT(autoClose()));
-    connect(this->_modalOverlayWidget, SIGNAL(clicked()), this, SIGNAL(closedByUser()));
+    connect(this->_modalOverlayWidget, &ModalOverlay::clicked, this, &LinboDialog::autoClose);
+    connect(this->_modalOverlayWidget, &ModalOverlay::clicked, this, &LinboDialog::closedByUser);
 
     this->_opacityEffect = new QGraphicsOpacityEffect(this);
     this->_opacityEffect->setOpacity(0);
@@ -37,8 +37,8 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->_opacityEffectAnimation = new QPropertyAnimation(this->_opacityEffect, "opacity");
     this->_opacityEffectAnimation->setDuration(200);
     this->_opacityEffectAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
-    connect(this->_opacityEffectAnimation, SIGNAL(finished()), this, SLOT(_animationFinished()));
-    connect(this->_opacityEffectAnimation, SIGNAL(finished()), this, SIGNAL(closedByUser()));
+    connect(this->_opacityEffectAnimation, &QPropertyAnimation::finished, this, &LinboDialog::_animationFinished);
+    connect(this->_opacityEffectAnimation, &QPropertyAnimation::finished, this, &LinboDialog::closedByUser);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Window, gTheme->getColor(LinboTheme::BackgroundColor));
@@ -56,7 +56,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->_titleLabel = new QLabel(this->objectName());
     this->_titleLabel->setAlignment(Qt::AlignCenter);
     this->_closeButton = new LinboToolButton(LinboTheme::CancelIcon);
-    connect(this->_closeButton, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(this->_closeButton, &LinboToolButton::clicked, this, &LinboDialog::autoClose);
 
     this->_toolBarWidget = new QWidget(parent);
     this->_toolBarWidget->setAutoFillBackground(true);
@@ -325,13 +325,13 @@ void ModalOverlay::setVisibleAnimated(bool visible) {
         return;
 
     if(visible) {
-        disconnect(this->opacityAnimation, SIGNAL(finished()), this, SLOT(hide()));
+        disconnect(this->opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
         this->opacityAnimation->setEndValue(ModalOverlay::_VISIBLE_COLOR);
         this->setColor(ModalOverlay::_INVISIBLE_COLOR);
         this->setVisible(true);
     }
     else {
-        connect(this->opacityAnimation, SIGNAL(finished()), this, SLOT(hide()));
+        connect(this->opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
         this->opacityAnimation->setEndValue(ModalOverlay::_INVISIBLE_COLOR);
     }
 

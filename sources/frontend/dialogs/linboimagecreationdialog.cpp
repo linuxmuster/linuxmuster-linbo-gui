@@ -114,7 +114,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
-    connect(pushButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(pushButtonCache, &LinboToolButton::clicked, this, &LinboImageCreationDialog::autoClose);
 
     connect(this, &LinboDialog::opened, [=] { this->refreshPathAndDescription(true); });
 }

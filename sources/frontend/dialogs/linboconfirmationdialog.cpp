@@ -27,16 +27,16 @@ LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question
     //% "yes"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("yes"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(accepted()));
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::accepted);
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::autoClose);
 
     //% "no"
     toolButtonCache = new LinboToolButton(qtTrId("no"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
-    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(rejected()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::autoClose);
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::rejected);
 
-    connect(this, SIGNAL(closedByUser()), this, SIGNAL(rejected()));
+    connect(this, &LinboConfirmationDialog::closedByUser, this, &LinboConfirmationDialog::rejected);
 }
 
 

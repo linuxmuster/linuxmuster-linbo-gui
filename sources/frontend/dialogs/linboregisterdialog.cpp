@@ -84,12 +84,12 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     //% "register"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_register_button_resgister"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(registerClient()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboRegisterDialog::registerClient);
 
     //% "cancel"
     toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboRegisterDialog::autoClose);
 }
 
 void LinboRegisterDialog::registerClient() {

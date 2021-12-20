@@ -82,7 +82,7 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboImageUploadDialog::autoClose);
 
     connect(this, &LinboImageUploadDialog::opened, this, &LinboImageUploadDialog::refreshImageList);
 }

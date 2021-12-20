@@ -111,7 +111,7 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
         overlay->setAnimationDuration(100);
     }
 
-    connect(this, SIGNAL(toggled(bool)), this, SLOT(handleToggled(bool)));
+    connect(this, &LinboPushButton::toggled, this, &LinboPushButton::handleToggled);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 

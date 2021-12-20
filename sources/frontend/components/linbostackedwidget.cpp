@@ -26,7 +26,7 @@ LinboStackedWidget::LinboStackedWidget(QWidget* parent) : QStackedWidget(parent)
     opacityAnimation->setEasingCurve(QEasingCurve::InOutQuad);
     opacityAnimation->setDuration(400);
     opacityAnimation->setLoopCount(1);
-    connect(opacityAnimation, SIGNAL(finished()), this, SLOT(handleAnimationFinished()));
+    connect(opacityAnimation, &QPropertyAnimation::finished, this, &LinboStackedWidget::handleAnimationFinished);
 }
 
 void LinboStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {

@@ -23,7 +23,7 @@ LinboProgressBar::LinboProgressBar(QWidget* parent) : QProgressBar(parent)
     this->refreshTimer = new QTimer();
     this->refreshTimer->setSingleShot(false);
     this->refreshTimer->setInterval(400);
-    connect(this->refreshTimer, SIGNAL(timeout()), this, SLOT(updateIndeterminate()));
+    connect(this->refreshTimer, &QTimer::timeout, this, &LinboProgressBar::updateIndeterminate);
 
 
     this->indeterminateAnimtion = new QPropertyAnimation(this, "value");

@@ -30,7 +30,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     //this->backend->login("Muster!");
 #endif
 
-    connect(this->backend, SIGNAL(stateChanged(LinboBackend::LinboState)), this, SLOT(handleLinboStateChanged(LinboBackend::LinboState)));
+    connect(this->backend, &LinboBackend::stateChanged, this, &LinboMainPage::handleLinboStateChanged);
 
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));
 
@@ -116,7 +116,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     rootActionButton->setToolTip(qtTrId("settings"));
 
     logoutActionButton = new LinboToolButton(LinboTheme::LogoutIcon);
-    connect(logoutActionButton, SIGNAL(clicked()), this->backend, SLOT(logout()));
+    connect(logoutActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::logout);
     this->powerActionButtons.append(logoutActionButton);
     logoutActionButton->setFixedHeight(buttonWidth);
     logoutActionButton->setFixedWidth(buttonWidth);
@@ -125,7 +125,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     logoutActionButton->setToolTip(qtTrId("logout"));
 
     LinboPushButton* rebootActionButton = new LinboToolButton(LinboTheme::RebootIcon);
-    connect(rebootActionButton, SIGNAL(clicked()), this->backend, SLOT(reboot()));
+    connect(rebootActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::reboot);
     this->powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
     rebootActionButton->setFixedWidth(buttonWidth);
@@ -133,7 +133,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     rebootActionButton->setToolTip(qtTrId("reboot"));
 
     LinboPushButton* shutdownActionButton = new LinboToolButton(LinboTheme::ShutdownIcon);
-    connect(shutdownActionButton, SIGNAL(clicked()), this->backend, SLOT(shutdown()));
+    connect(shutdownActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::shutdown);
     this->powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
     shutdownActionButton->setFixedWidth(buttonWidth);
@@ -154,7 +154,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int dialogWidth = gTheme->getSize(LinboTheme::DialogWidth);
     this->loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
     this->loginDialog->centerInParent();
-    connect(this->powerActionButtons[0], SIGNAL(clicked()), this->loginDialog, SLOT(open()));
+    connect(this->powerActionButtons[0], &LinboToolButton::clicked, this->loginDialog, &LinboLoginDialog::open);
 
     this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
     this->allDialogs.append(this->imageCreationDialog);
@@ -191,7 +191,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
     this->confirmationDialog->centerInParent();
-    connect(this->confirmationDialog, SIGNAL(accepted()), this->backend, SLOT(partitionDrive()));
+    connect(this->confirmationDialog, &LinboConfirmationDialog::accepted, this->backend, &LinboBackend::partitionDrive);
     connect(this->mainActions, &LinboMainActions::drivePartitioningRequested,
             this->confirmationDialog, &LinboDialog::open);
 

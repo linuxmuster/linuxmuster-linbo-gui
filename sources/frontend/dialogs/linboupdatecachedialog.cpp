@@ -61,12 +61,12 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     //% "update"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_updateCache_button_update"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(updateCache()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboUpdateCacheDialog::updateCache);
 
     //% "cancel"
     toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboUpdateCacheDialog::autoClose);
 }
 
 void LinboUpdateCacheDialog::updateCache() {

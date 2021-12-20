@@ -37,13 +37,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->buttonWidget = new QWidget();
 
     this->startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->buttonWidget);
-    connect(this->startOsButton, SIGNAL(clicked()), this->backend, SLOT(startCurrentOs()));
+    connect(this->startOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::startCurrentOs);
 
     this->syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->buttonWidget);
-    connect(this->syncOsButton, SIGNAL(clicked()), this->backend, SLOT(syncCurrentOs()));
+    connect(this->syncOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::syncCurrentOs);
 
     this->reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->buttonWidget);
-    connect(this->reinstallOsButton, SIGNAL(clicked()), this->backend, SLOT(reinstallCurrentOs()));
+    connect(this->reinstallOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::reinstallCurrentOs);
 
     //% "No baseimage defined"
     this->noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->buttonWidget);
@@ -77,7 +77,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->processStartedAt = QDateTime::currentSecsSinceEpoch();
 
     this->cancelButton = new LinboToolButton(LinboTheme::CancelIcon, this->progressBarWidget);
-    connect(this->cancelButton, SIGNAL(clicked()), this->backend, SLOT(cancelCurrentAction()));
+    connect(this->cancelButton, &LinboToolButton::clicked, this->backend, &LinboBackend::cancelCurrentAction);
 
     this->stackView->addWidget(this->progressBarWidget);
 
@@ -92,7 +92,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->messageDetailsTextBrowser->setLineWrapMode(QTextEdit::NoWrap);
 
     this->resetMessageButton = new LinboToolButton(LinboTheme::BackIcon, this->messageWidget);
-    connect(this->resetMessageButton, SIGNAL(clicked()), this->backend, SLOT(resetMessage()));
+    connect(this->resetMessageButton, &LinboToolButton::clicked, this->backend, &LinboBackend::resetMessage);
 
     this->stackView->addWidget(this->messageWidget);
 
@@ -165,7 +165,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->stackView->addWidget(this->emptyWidget);
 
 
-    connect(this->stackView, SIGNAL(currentChanged(int)), this, SLOT(resizeAndPositionAllItems()));
+    connect(this->stackView, &LinboStackedWidget::currentChanged, this, &LinboMainActions::resizeAndPositionAllItems);
     this->handleLinboStateChanged(this->backend->getState());
 }
 

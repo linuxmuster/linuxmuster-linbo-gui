@@ -52,14 +52,12 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     // autostart timers
     this->_autostartTimer = new QTimer(this);
     this->_autostartTimer->setSingleShot(true);
-    connect(this->_autostartTimer, SIGNAL(timeout()),
-            this, SLOT(_handleAutostartTimerTimeout()));
+    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
 
     // root timeout timer
     this->_rootTimeoutTimer = new QTimer(this);
     this->_rootTimeoutTimer->setSingleShot(true);
-    connect(this->_rootTimeoutTimer, SIGNAL(timeout()),
-            this, SLOT(_handleRootTimerTimeout()));
+    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
 
     // timeout progress refresh timer
     this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
@@ -253,7 +251,11 @@ bool LinboBackend::uploadImage(const LinboImage* image, LinboPostProcessActions 
     return this->_uploadImage(image, postProcessActions, false);
 }
 
-bool LinboBackend::partitionDrive(bool format, LinboPostProcessActions postProcessActions) {
+void LinboBackend::partitionDrive() {
+    this->_partitionDrive(true, NoAction);
+}
+
+bool LinboBackend::_partitionDrive(bool format, LinboPostProcessActions postProcessActions) {
     if(this->_state != Root && this->_state != Initializing)
         return false;
 
@@ -438,7 +440,7 @@ void LinboBackend::_executeAutoPartition() {
     if(!this->_config->autoPartition())
         return this->_executeAutoInitCache();
 
-    this->partitionDrive(true, LinboPostProcessAction::ExecuteAutoInitCache | LinboPostProcessAction::CancelToIdle);
+    this->_partitionDrive(true, LinboPostProcessAction::ExecuteAutoInitCache | LinboPostProcessAction::CancelToIdle);
 }
 
 void LinboBackend::_executeAutoInitCache() {
