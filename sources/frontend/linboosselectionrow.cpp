@@ -35,7 +35,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->osButtonGroup = new QButtonGroup();
     this->osButtonGroup->setExclusive(true);
 
-    for(LinboOs* os : backend->getConfig()->operatingSystems()) {
+    for(LinboOs* os : backend->config()->operatingSystems()) {
         if(this->osButtons.length() >= 4)
             break;
 
@@ -48,10 +48,10 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
-        osButton->setShowActionButtons(!this->backend->getConfig()->useMinimalLayout());
+        osButton->setShowActionButtons(!this->backend->config()->useMinimalLayout());
 
         // auto select current OS
-        if(this->backend->getCurrentOs() == os)
+        if(this->backend->currentOs() == os)
             osButton->button->setChecked(true);
 
         this->osButtons.append(osButton);
@@ -68,11 +68,11 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
 
         QString environmentValuesText;
         //% "Hostname"
-        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->getConfig()->hostname() + "\n";
+        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->config()->hostname() + "\n";
         //% "IP-Address"
-        environmentValuesText += qtTrId("ip") + ":  " + this->backend->getConfig()->ipAddress() + "\n";
+        environmentValuesText += qtTrId("ip") + ":  " + this->backend->config()->ipAddress() + "\n";
         //% "Mac"
-        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->getConfig()->macAddress() + "\n";
+        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->config()->macAddress() + "\n";
 
         this->environmentValuesLabel = new QLabel(environmentValuesText, this);
         this->environmentValuesLabel->hide();
@@ -81,7 +81,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
     }
 
-    this->handleLinboStateChanged(this->backend->getState());
+    this->handleLinboStateChanged(this->backend->state());
 }
 
 void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int widthOverride) {
@@ -97,7 +97,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
 
     if(this->osButtons.length() > 0) {
 
-        bool useMinimalLayout = this->backend->getConfig()->useMinimalLayout();
+        bool useMinimalLayout = this->backend->config()->useMinimalLayout();
         int buttonCount = this->osButtons.length();
 
         int spacing;
@@ -136,7 +136,7 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
             bool visible = true;
             QRect geometry = this->osButtons[i]->geometry();
 
-            if(this->osButtons[i]->getOs() != this->backend->getCurrentOs() || !this->showOnlySelectedButton) {
+            if(this->osButtons[i]->getOs() != this->backend->currentOs() || !this->showOnlySelectedButton) {
                 // "normal" buttons
                 visible = !this->showOnlySelectedButton;
                 if(!useMinimalLayout && buttonCount > 2)

@@ -66,7 +66,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->button = new LinboPushButton(icon, "", {checkedOverlay, this->defaultStartActionOverlay, this->defaultRootActionOverlay}, this);
     this->setToolTip(this->os->description());
 
-    if(!os->backend()->getConfig()->useMinimalLayout()) {
+    if(!os->backend()->config()->useMinimalLayout()) {
         connect(this->button, &LinboPushButton::clicked, this, &LinboOsSelectButton::handlePrimaryButtonClicked);
 
         QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
@@ -142,13 +142,13 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->button->setCheckable(true);
     this->buttonGroup->addButton(this->button);
-    this->handleBackendStateChange(this->os->backend()->getState());
+    this->handleBackendStateChange(this->os->backend()->state());
 
     QWidget::setVisible(true);
 }
 
 void LinboOsSelectButton::handlePrimaryButtonClicked() {
-    if(this->os->backend()->getState() == LinboBackend::Idle)
+    if(this->os->backend()->state() == LinboBackend::Idle)
         switch (this->os->defaultAction()) {
         case LinboOs::StartOs:
             this->os->start();
@@ -162,7 +162,7 @@ void LinboOsSelectButton::handlePrimaryButtonClicked() {
         default:
             break;
         }
-    else if (this->os->backend()->getState() == LinboBackend::Root) {
+    else if (this->os->backend()->state() == LinboBackend::Root) {
         this->os->backend()->setCurrentOs(this->os);
         emit this->imageCreationRequested();
     }
@@ -193,7 +193,7 @@ void LinboOsSelectButton::setVisible(bool visible) {
 void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
 
-    if(!this->showActionButtons || this->os->backend()->getConfig()->useMinimalLayout()) {
+    if(!this->showActionButtons || this->os->backend()->config()->useMinimalLayout()) {
         this->button->setGeometry((this->width() - this->height()) / 2, 0, this->height(), this->height());
     }
     else {
@@ -251,7 +251,7 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
     case LinboBackend::Idle:
         this->button->setToolTip(this->getTooltipContentForAction(this->os->defaultAction()));
 
-        if(!this->os->backend()->getConfig()->useMinimalLayout())
+        if(!this->os->backend()->config()->useMinimalLayout())
             this->showDefaultAction = true;
 
         checkedOverlayMuted = false;
@@ -260,7 +260,7 @@ void LinboOsSelectButton::handleBackendStateChange(LinboBackend::LinboState stat
         //% "Create image of %1"
         this->button->setToolTip(qtTrId("createImageOfOS").arg(this->os->name()));
 
-        if(!this->os->backend()->getConfig()->useMinimalLayout())
+        if(!this->os->backend()->config()->useMinimalLayout())
             this->showDefaultAction = true;
 
         checkedOverlayMuted = false;
@@ -291,8 +291,8 @@ QString LinboOsSelectButton::getTooltipContentForAction(LinboOs::LinboOsStartAct
 
 void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
 
-    bool startActionVisible = this->shouldBeVisible && this->os->backend()->getState() < LinboBackend::Root;
-    bool rootActionVisible = this->shouldBeVisible && this->os->backend()->getState() >= LinboBackend::Root;
+    bool startActionVisible = this->shouldBeVisible && this->os->backend()->state() < LinboBackend::Root;
+    bool rootActionVisible = this->shouldBeVisible && this->os->backend()->state() >= LinboBackend::Root;
 
     if(this->inited && !doNotAnimate) {
         this->defaultStartActionOverlay->setVisibleAnimated(startActionVisible && this->showDefaultAction);
@@ -303,7 +303,7 @@ void LinboOsSelectButton::updateActionButtonVisibility(bool doNotAnimate) {
         this->defaultRootActionOverlay->setVisible(rootActionVisible && this->showDefaultAction);
     }
 
-    if(this->os->backend()->getConfig()->useMinimalLayout())
+    if(this->os->backend()->config()->useMinimalLayout())
         return;
 
     if(!this->showActionButtons) {

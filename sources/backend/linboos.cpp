@@ -45,7 +45,7 @@ bool LinboOs::reinstall() {
     return this->_parent->reinstallCurrentOs();
 }
 
-void LinboOs::setBaseImage (LinboImage* baseImage) {
+void LinboOs::_setBaseImage (LinboImage* baseImage) {
     baseImage->_os = this;
     this->_baseImage = baseImage;
 }

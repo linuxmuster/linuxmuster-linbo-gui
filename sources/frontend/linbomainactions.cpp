@@ -25,7 +25,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     connect(this->backend, &LinboBackend::stateChanged, this, &LinboMainActions::handleLinboStateChanged);
     connect(this->backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
     connect(this->backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
-    connect(this->backend->getLogger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::handleLatestLogChanged);
+    connect(this->backend->logger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::handleLatestLogChanged);
 
     this->stackView = new LinboStackedWidget(this);
 
@@ -104,7 +104,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     LinboPushButton* buttonCache;
 
-    if(this->backend->getConfig()->useMinimalLayout()) {
+    if(this->backend->config()->useMinimalLayout()) {
         //% "Create image"
         buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboTheme::ImageIcon, LinboTheme::TextColor);
         this->rootActionButtons.append(buttonCache);
@@ -123,13 +123,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     //% "Update cache"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboTheme::SyncIcon, LinboTheme::TextColor);
-    buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
+    buttonCache->setVisible(this->backend->config()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //% "Partition drive"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboTheme::PartitionIcon, LinboTheme::TextColor);
-    buttonCache->setVisible(this->backend->getConfig()->operatingSystems().length() > 0);
+    buttonCache->setVisible(this->backend->config()->operatingSystems().length() > 0);
     this->rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
@@ -148,7 +148,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
         horizontalRootLayoutCache->addWidget(this->rootActionButtons[i]);
     }
 
-    if(this->backend->getConfig()->useMinimalLayout()) {
+    if(this->backend->config()->useMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
         separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
@@ -166,7 +166,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
 
     connect(this->stackView, &LinboStackedWidget::currentChanged, this, &LinboMainActions::resizeAndPositionAllItems);
-    this->handleLinboStateChanged(this->backend->getState());
+    this->handleLinboStateChanged(this->backend->state());
 }
 
 void LinboMainActions::resizeAndPositionAllItems() {
@@ -178,14 +178,14 @@ void LinboMainActions::resizeAndPositionAllItems() {
 
     // Action buttons
     // set tooltips:
-    if(this->backend->getCurrentOs() != nullptr) {
-        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->getCurrentOs()->name()));
-        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->getCurrentOs()->name()));
-        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->getCurrentOs()->name()));
+    if(this->backend->currentOs() != nullptr) {
+        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->currentOs()->name()));
+        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->currentOs()->name()));
+        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->currentOs()->name()));
     }
 
     // bring buttons in correct order:
-    LinboOs* selectedOs = this->backend->getCurrentOs();
+    LinboOs* selectedOs = this->backend->currentOs();
     LinboOs::LinboOsStartAction defaultAction = LinboOs::UnknownAction;
     if(selectedOs != nullptr)
         defaultAction = selectedOs->defaultAction();
@@ -391,7 +391,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         currentWidget = this->progressBarWidget;
         break;
     case LinboBackend::Idle:
-        if(this->backend->getConfig()->useMinimalLayout())
+        if(this->backend->config()->useMinimalLayout())
             currentWidget = this->buttonWidget;
         else
             currentWidget = this->emptyWidget;
@@ -420,7 +420,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError: {
-        QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
+        QList<LinboLogger::LinboLog> chaperLogs = this->backend->logger()->logsOfCurrentChapter();
         //% "The process %1 crashed:"
         this->messageLabel->setText(qtTrId("main_message_processCrashed").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
         QString errorDetails;
@@ -444,7 +444,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     }
 
     case LinboBackend::RootActionSuccess: {
-        QList<LinboLogger::LinboLog> chaperLogs = this->backend->getLogger()->getLogsOfCurrentChapter();
+        QList<LinboLogger::LinboLog> chaperLogs = this->backend->logger()->logsOfCurrentChapter();
         //% "The process %1 finished successfully."
         this->messageLabel->setText(qtTrId("main_message_processFinishedSuccessfully").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
         this->messageDetailsTextBrowser->setText("");
@@ -469,7 +469,7 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
 }
 
 void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
-    if(this->backend->getState() == LinboBackend::Idle)
+    if(this->backend->state() == LinboBackend::Idle)
         return;
 
     QString logColor = gTheme->getColor(LinboTheme::TextColor).name();
@@ -482,23 +482,23 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
 }
 
 void LinboMainActions::handleTimeoutProgressChanged() {
-    if(this->backend->getState() != LinboBackend::Autostarting && this->backend->getState() != LinboBackend::RootTimeout)
+    if(this->backend->state() != LinboBackend::Autostarting && this->backend->state() != LinboBackend::RootTimeout)
         return;
 
     double progress = 0;
     int remaningSeconds = 0;
     QString label = "";
 
-    if(this->backend->getState() == LinboBackend::Autostarting) {
-        progress = this->backend->getAutostartTimeoutProgress();
-        remaningSeconds = this->backend->getAutostartTimeoutRemainingSeconds();
+    if(this->backend->state() == LinboBackend::Autostarting) {
+        progress = this->backend->autostartTimeoutProgress();
+        remaningSeconds = this->backend->autostartTimeoutRemainingSeconds();
 
         //% "Starting"
-        label = qtTrId("main_autostart_label") + " " + this->backend->getCurrentOs()->name();
+        label = qtTrId("main_autostart_label") + " " + this->backend->currentOs()->name();
     }
     else {
-        progress = this->backend->getRootTimeoutProgress();
-        remaningSeconds = this->backend->getRootTimeoutRemainingSeconds();
+        progress = this->backend->rootTimeoutProgress();
+        remaningSeconds = this->backend->rootTimeoutRemainingSeconds();
 
         //% "Logging out automatically"
         label = qtTrId("main_rootTimeout_label");

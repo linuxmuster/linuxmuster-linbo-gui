@@ -32,9 +32,9 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
         return "";
 
     if(
-        !this->_backend->getConfig()->theme()->getIconPath(icon).isEmpty()
+        !this->_backend->config()->theme()->iconPath(icon).isEmpty()
     ) {
-        return this->_backend->getConfig()->theme()->getIconPath(icon);
+        return this->_backend->config()->theme()->iconPath(icon);
     }
 
     QString iconPath = ":/icons/";
@@ -44,7 +44,7 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
         iconPath += this->_isBackgroundColorDark() ? "light/":"dark/";
 
     // remove "Icon"
-    QString iconName = this->_backend->getConfig()->theme()->getIconName(icon);
+    QString iconName = this->_backend->config()->theme()->iconName(icon);
     // de-capitalize first letter
     iconName.replace(0, 1, iconName.at(0).toLower());
 
@@ -55,14 +55,14 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
 QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
 
     if(
-        this->_backend->getConfig()->theme()->getColor(colorRole).isValid()
+        this->_backend->config()->theme()->color(colorRole).isValid()
     ) {
-        return this->_backend->getConfig()->theme()->getColor(colorRole);
+        return this->_backend->config()->theme()->color(colorRole);
     }
 
     switch (colorRole) {
     case LinboTheme::PrimaryColor:
-        return this->_backend->getConfig()->theme()->getColor(LinboTheme::PrimaryColor);
+        return this->_backend->config()->theme()->color(LinboTheme::PrimaryColor);
     case LinboTheme::BackgroundColor:
         return this->getColor(LinboTheme::PrimaryColor);
     case LinboTheme::ElevatedBackgroundColor:

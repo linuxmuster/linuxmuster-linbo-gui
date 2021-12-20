@@ -42,10 +42,10 @@
 class LinboBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(LinboBackend::LinboState state READ getState NOTIFY stateChanged)
-    Q_PROPERTY(LinboOs* _currentOs READ getCurrentOs WRITE setCurrentOs NOTIFY currentOsChanged)
-    Q_PROPERTY(double autostartTimeoutProgress READ getAutostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
-    Q_PROPERTY(int autostartTimeoutRemainingSeconds READ getAutostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
+    Q_PROPERTY(LinboBackend::LinboState state READ state NOTIFY stateChanged)
+    Q_PROPERTY(LinboOs* _currentOs READ currentOs WRITE setCurrentOs NOTIFY currentOsChanged)
+    Q_PROPERTY(double autostartTimeoutProgress READ autostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
+    Q_PROPERTY(int autostartTimeoutRemainingSeconds READ autostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
 
 public:
     explicit LinboBackend(QObject *parent = nullptr);
@@ -90,18 +90,18 @@ public:
     Q_DECLARE_FLAGS(LinboPostProcessActions, LinboPostProcessAction)
     Q_FLAG(LinboPostProcessActions)
 
-    LinboState getState();
-    LinboLogger* getLogger();
-    LinboConfig* getConfig();
-    LinboOs* getCurrentOs();
+    LinboState state();
+    LinboLogger* logger();
+    LinboConfig* config();
+    LinboOs* currentOs();
     void setCurrentOs(LinboOs* os);
     void restartRootTimeout();
 
-    double getAutostartTimeoutProgress();
-    int getAutostartTimeoutRemainingSeconds();
+    double autostartTimeoutProgress();
+    int autostartTimeoutRemainingSeconds();
 
-    double getRootTimeoutProgress();
-    int getRootTimeoutRemainingSeconds();
+    double rootTimeoutProgress();
+    int rootTimeoutRemainingSeconds();
 
 protected:
     QString _readImageDescription(LinboImage* image);

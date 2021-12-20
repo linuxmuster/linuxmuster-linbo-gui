@@ -105,7 +105,7 @@ public:
 private:
     explicit LinboOs(LinboBackend *parent = nullptr);
 
-    void setBaseImage (LinboImage* baseImage);
+    void _setBaseImage(LinboImage* baseImage);
 
     LinboBackend* _parent;
 

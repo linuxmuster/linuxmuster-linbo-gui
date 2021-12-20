@@ -43,8 +43,8 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     ipAddressEdit = new LinboLineEdit();
     QString prefilledIp = "";
 
-    QStringList subnetMask = backend->getConfig()->subnetMask().split(".");
-    QStringList ipAddress = backend->getConfig()->ipAddress().split(".");
+    QStringList subnetMask = backend->config()->subnetMask().split(".");
+    QStringList ipAddress = backend->config()->ipAddress().split(".");
 
     if(subnetMask.length() == 4 && ipAddress.length() == 4)
         for(int i = 0; i < 4; i++) {

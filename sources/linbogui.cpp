@@ -75,12 +75,12 @@ LinboGui::LinboGui()
                          "}");
 
     // attach translator
-    QString localeName = this->backend->getConfig()->locale();
+    QString localeName = this->backend->config()->locale();
     if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == '-')) {
 
         if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)
-            QStringList tmpLocaleName = this->backend->getConfig()->locale().split("-");
+            QStringList tmpLocaleName = this->backend->config()->locale().split("-");
             localeName = tmpLocaleName[0] + "-";
             localeName += tmpLocaleName[1].toUpper();
         }
@@ -89,7 +89,7 @@ LinboGui::LinboGui()
 
         // fallback to en-GB!
         if(!translator->load(":/" + localeName + ".qm") && !translator->load(":/en-GB.qm")) {
-            this->backend->getLogger()->error("Could not load any translation!");
+            this->backend->logger()->error("Could not load any translation!");
         }
 
         QApplication::installTranslator(translator);

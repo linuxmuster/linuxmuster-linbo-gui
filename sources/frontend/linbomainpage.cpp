@@ -21,7 +21,7 @@
 LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->inited = false;
-    this->showClientInfo = backend->getConfig()->clientDetailsVisibleByDefault();
+    this->showClientInfo = backend->config()->clientDetailsVisibleByDefault();
     this->f1Pressed = false;
 
     this->backend = backend;
@@ -70,7 +70,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->getConfig()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->getConfig()->ipAddress() + " - F1");
+    QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->config()->ipAddress() + " - F1");
     QFont versionAndNetworkLabelFont;
     versionAndNetworkLabelFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
     versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);
@@ -87,7 +87,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
     // client info
-    clientInfo = new LinboClientInfo(this->backend->getConfig(), this);
+    clientInfo = new LinboClientInfo(this->backend->config(), this);
     clientInfo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     clientInfo->setFixedWidth(this->width() * 0.9);
     mainLayout->addWidget(clientInfo);
@@ -211,7 +211,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // attach eventFilter
     qApp->installEventFilter(this);
-    this->handleLinboStateChanged(this->backend->getState());
+    this->handleLinboStateChanged(this->backend->state());
 }
 
 void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
@@ -219,7 +219,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
     int clientInfoHeight = 0;
-    bool useMinimalLayout = this->backend->getConfig()->useMinimalLayout();
+    bool useMinimalLayout = this->backend->config()->useMinimalLayout();
 
     switch (newState) {
     case LinboBackend::StartActionError:
@@ -331,7 +331,7 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
             this->f1Pressed = true;
         }
         else if(keyEvent->key() == Qt::Key_Escape) {
-            switch (this->backend->getState()) {
+            switch (this->backend->state()) {
             case LinboBackend::Autostarting:
             case LinboBackend::RootTimeout:
                 this->backend->cancelCurrentAction();

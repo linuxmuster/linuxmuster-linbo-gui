@@ -91,13 +91,13 @@ public:
     };
     Q_ENUM(LinboThemeSizeRole)
 
-    QString getIconPath(LinboThemeIcon icon);
-    QColor getColor(LinboThemeColorRole colorRole);
+    QString iconPath(LinboThemeIcon icon);
+    QColor color(LinboThemeColorRole colorRole);
 
-    QMap<LinboThemeColorRole, QString> getColorRolesAndNames();
-    QMap<LinboThemeIcon, QString> getIconsAndNames();
+    QMap<LinboThemeColorRole, QString> colorRolesAndNames();
+    QMap<LinboThemeIcon, QString> iconsAndNames();
 
-    QString getIconName(LinboThemeIcon icon);
+    QString iconName(LinboThemeIcon icon);
 
 private:
     QMap<LinboThemeColorRole, QColor> _colors;

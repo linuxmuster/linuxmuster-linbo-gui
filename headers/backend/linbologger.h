@@ -55,29 +55,29 @@ public:
     const LinboLog& getLatestLog();
 
     static QString logTypeToString(LinboLogType logType);
-    QList<LinboLog> getLogs();
-    QList<LinboLog> getLogsOfCurrentChapter();
-    static QList<LinboLog> getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterType);
+    QList<LinboLog> logs();
+    QList<LinboLog> logsOfCurrentChapter();
+    static QList<LinboLog> filteredLogs(QList<LinboLog> logs, LinboLogTypes filterType);
     static QStringList logsToStacktrace(QList<LinboLog> logs, int limit = -1);
 
     void info(QString logText);
     void error(QString logText);
 
 protected slots:
-    void chapterBeginning(QString logText);
-    void chapterEnd(QString logText);
-    void stdErr(QString logText);
-    void stdOut(QString logText);
+    void _chapterBeginning(QString logText);
+    void _chapterEnd(QString logText);
+    void _stdErr(QString logText);
+    void _stdOut(QString logText);
 
 private:
     explicit LinboLogger(QString logFilePath, QObject *parent = nullptr);
 
-    void log(QString logText, LinboLogType logType);
+    void _log(QString logText, LinboLogType logType);
 
-    bool writeToLogFile(QString text);
+    bool _writeToLogFile(QString text);
 
-    QString logFilePath;
-    QList<LinboLog> logHistory;
+    QString _logFilePath;
+    QList<LinboLog> _logHistory;
 
 signals:
     void latestLogChanged(const LinboLogger::LinboLog& latestLog);

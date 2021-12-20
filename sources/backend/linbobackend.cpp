@@ -73,7 +73,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 
     if(this->_config->guiDisabled()) {
         this->_setState(Disabled);
-        this->_logger->log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
     }
 
 
@@ -102,7 +102,7 @@ bool LinboBackend::startCurrentOs() {
     if(os == nullptr || (this->_state != Idle && this->_state != Autostarting) || !os->actionEnabled(LinboOs::StartOs))
         return false;
 
-    this->_logger->log("Starting " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Starting " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
 
     this->_setState(Starting);
 
@@ -126,7 +126,7 @@ bool LinboBackend::syncCurrentOs() {
     if(os == nullptr || (this->_state != Idle && this->_state != Autostarting) || !os->actionEnabled(LinboOs::SyncOs))
         return false;
 
-    this->_logger->log("Syncing " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Syncing " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
 
     this->_setState(Syncing);
 
@@ -135,7 +135,7 @@ bool LinboBackend::syncCurrentOs() {
         "syncstart",
         this->_config->serverIpAddress(),
         this->_config->cachePath(),
-        os->baseImage()->getName(),
+        os->baseImage()->name(),
         "",
         os->bootPartition(),
         os->rootPartition(),
@@ -153,7 +153,7 @@ bool LinboBackend::reinstallCurrentOs() {
     if(os == nullptr || (this->_state != Idle && this->_state != Autostarting) || !os->actionEnabled(LinboOs::ReinstallOs))
         return false;
 
-    this->_logger->log("Reinstalling " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Reinstalling " + this->_currentOs->name(), LinboLogger::LinboLogChapterBeginning);
 
     this->_setState(Reinstalling);
 
@@ -162,7 +162,7 @@ bool LinboBackend::reinstallCurrentOs() {
         "syncr",
         this->_config->serverIpAddress(),
         this->_config->cachePath(),
-        os->baseImage()->getName(),
+        os->baseImage()->name(),
         "",
         os->bootPartition(),
         os->rootPartition(),
@@ -179,7 +179,7 @@ bool LinboBackend::login(QString password) {
     if(this->_state != Idle)
         return false;
 
-    this->_logger->log("Authenticating with password.", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Authenticating with password.", LinboLogger::LinboLogChapterBeginning);
 
     this->_executeCommand(true, "authenticate", this->_config->serverIpAddress(), "linbo", password, "linbo");
     bool successfull = this->_synchronosProcess->exitCode() == 0;
@@ -190,7 +190,7 @@ bool LinboBackend::login(QString password) {
         this->restartRootTimeout();
     }
 
-    this->_logger->log("Authentication " + QString(successfull ? "OK":"FAILED"), LinboLogger::LinboLogChapterEnd);
+    this->_logger->_log("Authentication " + QString(successfull ? "OK":"FAILED"), LinboLogger::LinboLogChapterEnd);
 
     return successfull;
 }
@@ -207,7 +207,7 @@ void LinboBackend::restartRootTimeout() {
 }
 
 bool LinboBackend::replaceImageOfCurrentOs(QString description, LinboPostProcessActions postProcessAction) {
-    return this->createImageOfCurrentOS(this->_currentOs->baseImage()->getName(), description, postProcessAction);
+    return this->createImageOfCurrentOS(this->_currentOs->baseImage()->name(), description, postProcessAction);
 }
 
 bool LinboBackend::createImageOfCurrentOS(QString name, QString description, LinboPostProcessActions postProcessActions) {
@@ -216,14 +216,14 @@ bool LinboBackend::createImageOfCurrentOS(QString name, QString description, Lin
 
     this->_postProcessActions = postProcessActions;
 
-    this->_logger->log("Creating image", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Creating image", LinboLogger::LinboLogChapterBeginning);
     this->_setState(CreatingImage);
 
-    this->_logger->log("Writing image description", LinboLogger::LinboGuiInfo);
+    this->_logger->_log("Writing image description", LinboLogger::LinboGuiInfo);
     if(!this->_writeImageDescription(name, description))
-        this->_logger->log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
+        this->_logger->_log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
 
-    if(this->_postProcessActions.testFlag(UploadImage) && this->_currentOs->baseImage() != nullptr && name == this->_currentOs->baseImage()->getName()) {
+    if(this->_postProcessActions.testFlag(UploadImage) && this->_currentOs->baseImage() != nullptr && name == this->_currentOs->baseImage()->name()) {
         this->_imageToUploadAutomatically = this->_currentOs->baseImage();
     }
     else if(this->_postProcessActions.testFlag(UploadImage)) {
@@ -231,7 +231,7 @@ bool LinboBackend::createImageOfCurrentOS(QString name, QString description, Lin
     }
 
 
-    this->_logger->log("Beginning image creation...", LinboLogger::LinboGuiInfo);
+    this->_logger->_log("Beginning image creation...", LinboLogger::LinboGuiInfo);
     this->_executeCommand(
         false,
         "create",
@@ -260,7 +260,7 @@ bool LinboBackend::_partitionDrive(bool format, LinboPostProcessActions postProc
         return false;
 
     this->_postProcessActions = postProcessActions;
-    this->_logger->log("Partitioning drive", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Partitioning drive", LinboLogger::LinboLogChapterBeginning);
     this->_setState(Partitioning);
 
     QStringList commandArgs = QStringList(format ? "partition":"partition_noformat");
@@ -287,7 +287,7 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
         return false;
 
     this->_postProcessActions = postProcessActions;
-    this->_logger->log("Updating cache", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Updating cache", LinboLogger::LinboLogChapterBeginning);
     this->_setState(UpdatingCache);
 
     QStringList commandArgs = this->_buildCommand(format ? "initcache_format":"initcache", _config->serverIpAddress(), _config->cachePath());
@@ -299,7 +299,7 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
 
     for(int i = 0; i < this->_config->operatingSystems().length(); i++) {
         LinboOs* os = this->_config->operatingSystems().at(i);
-        commandArgs.append(this->_buildCommand(os->baseImage()->getName()));
+        commandArgs.append(this->_buildCommand(os->baseImage()->name()));
         commandArgs.append(this->_buildCommand(""));
     }
 
@@ -321,7 +321,7 @@ bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddr
     if(this->_state != Root)
         return false;
 
-    this->_logger->log("Registering client", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Registering client", LinboLogger::LinboLogChapterBeginning);
 
     this->_setState(Registering);
 
@@ -333,7 +333,7 @@ bool LinboBackend::registerClient(QString room, QString hostname, QString ipAddr
 bool LinboBackend::cancelCurrentAction() {
     switch (this->_state) {
     case Autostarting:
-        this->_logger->log("Cancelling autostart", LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Cancelling autostart", LinboLogger::LinboGuiInfo);
         this->_autostartTimer->stop();
         this->_timeoutRemainingTimeRefreshTimer->stop();
         this->_setState(Idle);
@@ -342,13 +342,13 @@ bool LinboBackend::cancelCurrentAction() {
     case Starting:
     case Syncing:
     case Reinstalling:
-        this->_logger->log("Cancelling current start action: " + QString::number(this->_state), LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Cancelling current start action: " + QString::number(this->_state), LinboLogger::LinboGuiInfo);
         this->_asynchronosProcess->kill();
         this->_setState(Idle);
         return true;
 
     case RootTimeout:
-        this->_logger->log("Cancelling root timeout", LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Cancelling root timeout", LinboLogger::LinboGuiInfo);
         this->_setState(Root);
         this->restartRootTimeout();
         return true;
@@ -357,7 +357,7 @@ bool LinboBackend::cancelCurrentAction() {
     case UpdatingCache:
     case CreatingImage:
     case UploadingImage:
-        this->_logger->log("Cancelling current action: " + QString::number(this->_state), LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Cancelling current action: " + QString::number(this->_state), LinboLogger::LinboGuiInfo);
         this->_asynchronosProcess->kill();
         if(!this->_postProcessActions.testFlag(LinboPostProcessAction::CancelToIdle))
             this->_setState(Root);
@@ -367,7 +367,7 @@ bool LinboBackend::cancelCurrentAction() {
         return true;
 
     default:
-        this->_logger->log("Cannot cancel current action: " + QString::number(this->_state), LinboLogger::LinboGuiError);
+        this->_logger->_log("Cannot cancel current action: " + QString::number(this->_state), LinboLogger::LinboGuiError);
         return false;
     }
 }
@@ -391,15 +391,15 @@ bool LinboBackend::resetMessage() {
     return true;
 }
 
-LinboLogger* LinboBackend::getLogger() {
+LinboLogger* LinboBackend::logger() {
     return this->_logger;
 }
 
-LinboConfig* LinboBackend::getConfig() {
+LinboConfig* LinboBackend::config() {
     return this->_config;
 }
 
-LinboOs* LinboBackend::getCurrentOs() {
+LinboOs* LinboBackend::currentOs() {
     return this->_currentOs;
 }
 
@@ -411,19 +411,19 @@ void LinboBackend::setCurrentOs(LinboOs* os) {
     emit this->currentOsChanged(os);
 }
 
-double LinboBackend::getAutostartTimeoutProgress() {
+double LinboBackend::autostartTimeoutProgress() {
     return this->_autostartTimer->isActive() ? 1 - double(this->_autostartTimer->remainingTime()) / double(this->_autostartTimer->interval()) : 1;
 }
 
-int LinboBackend::getAutostartTimeoutRemainingSeconds() {
+int LinboBackend::autostartTimeoutRemainingSeconds() {
     return this->_autostartTimer->isActive() ? this->_autostartTimer->remainingTime() / 1000 : 0;
 }
 
-double LinboBackend::getRootTimeoutProgress() {
+double LinboBackend::rootTimeoutProgress() {
     return this->_rootTimeoutTimer->isActive() ? 1 - double(this->_rootTimeoutTimer->remainingTime()) / double(this->_rootTimeoutTimer->interval()) : 1;
 }
 
-int LinboBackend::getRootTimeoutRemainingSeconds() {
+int LinboBackend::rootTimeoutRemainingSeconds() {
     return this->_rootTimeoutTimer->isActive() ? this->_rootTimeoutTimer->remainingTime() / 1000 : 0;
 }
 
@@ -463,7 +463,7 @@ void LinboBackend::_executeAutostart() {
     }
 
     this->_setState(Autostarting);
-    this->_logger->log("Beginning autostart timeout for " + this->_currentOs->name(), LinboLogger::LinboGuiInfo);
+    this->_logger->_log("Beginning autostart timeout for " + this->_currentOs->name(), LinboLogger::LinboGuiInfo);
     this->_autostartTimer->setInterval(this->_currentOs->autostartTimeout() * 1000);
     this->_autostartTimer->start();
     this->_timeoutRemainingTimeRefreshTimer->start();
@@ -477,7 +477,7 @@ bool LinboBackend::_uploadImage(const LinboImage* image, LinboPostProcessActions
         return false;
 
     this->_postProcessActions = postProcessActions;
-    this->_logger->log("Uploading image", LinboLogger::LinboLogChapterBeginning);
+    this->_logger->_log("Uploading image", LinboLogger::LinboLogChapterBeginning);
     this->_setState(UploadingImage);
 
     this->_executeCommand(
@@ -487,7 +487,7 @@ bool LinboBackend::_uploadImage(const LinboImage* image, LinboPostProcessActions
         "linbo",
         this->_rootPassword,
         this->_config->cachePath(),
-        image->getName()
+        image->name()
     );
 
     return true;
@@ -499,7 +499,7 @@ QString LinboBackend::_readImageDescription(LinboImage* image) {
     QString description = this->_executeCommand(
                               true,
                               this->_linboCmdCommand,
-                              this->_buildCommand("readfile", this->_config->cachePath(), image->getName() + ".desc"),
+                              this->_buildCommand("readfile", this->_config->cachePath(), image->name() + ".desc"),
                               &exitCode);
 
     if(exitCode == 0)
@@ -509,7 +509,7 @@ QString LinboBackend::_readImageDescription(LinboImage* image) {
 }
 
 bool LinboBackend::_writeImageDescription(LinboImage* image, QString newDescription) {
-    return this->_writeImageDescription(image->getName(), newDescription);
+    return this->_writeImageDescription(image->name(), newDescription);
 }
 
 bool LinboBackend::_writeImageDescription(QString imageName, QString newDescription) {
@@ -520,21 +520,21 @@ bool LinboBackend::_writeImageDescription(QString imageName, QString newDescript
         this->_buildCommand("writefile", this->_config->cachePath(), imageName + ".desc"));
 
     if(!process.waitForStarted()) {
-        this->_logger->log("Description writer didn't start: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
+        this->_logger->_log("Description writer didn't start: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
     process.write(newDescription.toUtf8());
 
     if(!process.waitForBytesWritten()) {
-        this->_logger->log("Description writer didn't write: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
+        this->_logger->_log("Description writer didn't write: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
     process.closeWriteChannel();
 
     if(!process.waitForFinished()) {
-        this->_logger->log("Description writer didn't finish: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
+        this->_logger->_log("Description writer didn't finish: " + QString::number(process.exitCode()), LinboLogger::LinboGuiError);
         return false;
     }
 
@@ -551,7 +551,7 @@ void LinboBackend::_logout(bool force) {
 
 void LinboBackend::_handleAutostartTimerTimeout() {
     this->_timeoutRemainingTimeRefreshTimer->stop();
-    this->_logger->log("Executing autostart for " + this->_currentOs->name(), LinboLogger::LinboGuiInfo);
+    this->_logger->_log("Executing autostart for " + this->_currentOs->name(), LinboLogger::LinboGuiInfo);
 
     LinboOs::LinboOsStartAction defaultAction = this->_currentOs->defaultAction();
     bool wasSuccessfull = false;
@@ -570,9 +570,9 @@ void LinboBackend::_handleAutostartTimerTimeout() {
     }
 
     if(wasSuccessfull)
-        this->_logger->log("Executed autostart successfully!", LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Executed autostart successfully!", LinboLogger::LinboGuiInfo);
     else
-        this->_logger->log("An error occured when executing autostart for " + this->_currentOs->name(), LinboLogger::LinboGuiError);
+        this->_logger->_log("An error occured when executing autostart for " + this->_currentOs->name(), LinboLogger::LinboGuiError);
 }
 
 void LinboBackend::_handleRootTimerTimeout() {
@@ -597,10 +597,10 @@ QString LinboBackend::_executeCommand(bool waitForFinished, QString command, QSt
     if(this->_state >= Root) {
         // args are not logged for security
         QString args = commandArgs.join(" ").replace(this->_rootPassword, "***");
-        this->_logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + args, LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + args, LinboLogger::LinboGuiInfo);
     }
     else
-        this->_logger->log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Executing " + QString(waitForFinished ? "synchronos":"asynchronos") + ": " + command + " " + commandArgs.join(" "), LinboLogger::LinboGuiInfo);
 
     if(waitForFinished) {
         // clear old output
@@ -631,7 +631,7 @@ void LinboBackend::_readFromStdout() {
     QString stdOut = this->_asynchronosProcess->readAllStandardOutput();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_logger->log(line.simplified(), LinboLogger::StdOut);
+        this->_logger->_log(line.simplified(), LinboLogger::StdOut);
     }
 }
 
@@ -639,17 +639,17 @@ void LinboBackend::_readFromStderr() {
     QString stdOut = this->_asynchronosProcess->readAllStandardError();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_logger->log(line.simplified(), LinboLogger::StdErr);
+        this->_logger->_log(line.simplified(), LinboLogger::StdErr);
     }
 }
 
 void LinboBackend::_handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     Q_UNUSED(exitStatus)
     if(exitCode == 0) {
-        this->_logger->log("Process exited normally.", LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Process exited normally.", LinboLogger::LinboGuiInfo);
 
         if(this->_postProcessActions.testFlag(UploadImage)) {
-            this->_logger->log("Process exited.", LinboLogger::LinboLogChapterEnd);
+            this->_logger->_log("Process exited.", LinboLogger::LinboLogChapterEnd);
             this->_postProcessActions = this->_postProcessActions.setFlag(UploadImage, false);
             this->_uploadImage(this->_imageToUploadAutomatically, this->_postProcessActions, true);
             this->_imageToUploadAutomatically = nullptr;
@@ -667,7 +667,7 @@ void LinboBackend::_handleProcessFinished(int exitCode, QProcess::ExitStatus exi
         else if(this->_postProcessActions.testFlag(ExecuteAutoInitCache)) {
             this->_setState(Initializing);
             this->_postProcessActions = NoAction;
-            this->_logger->log("Process exited.", LinboLogger::LinboLogChapterEnd);
+            this->_logger->_log("Process exited.", LinboLogger::LinboLogChapterEnd);
             this->_executeAutoInitCache();
             return;
         }
@@ -681,7 +681,7 @@ void LinboBackend::_handleProcessFinished(int exitCode, QProcess::ExitStatus exi
         this->_postProcessActions = NoAction;
     }
     else {
-        this->_logger->log("Process exited with an error.", LinboLogger::LinboGuiError);
+        this->_logger->_log("Process exited with an error.", LinboLogger::LinboGuiError);
 
         if(this->_state > Root && !this->_postProcessActions.testFlag(LinboPostProcessAction::CancelToIdle))
             this->_setState(RootActionError);
@@ -691,10 +691,10 @@ void LinboBackend::_handleProcessFinished(int exitCode, QProcess::ExitStatus exi
         this->_postProcessActions = NoAction;
     }
 
-    this->_logger->log("Process exited.", LinboLogger::LinboLogChapterEnd);
+    this->_logger->_log("Process exited.", LinboLogger::LinboLogChapterEnd);
 }
 
-LinboBackend::LinboState LinboBackend::getState() {
+LinboBackend::LinboState LinboBackend::state() {
     return this->_state;
 }
 
@@ -706,5 +706,5 @@ void LinboBackend::_setState(LinboState state) {
     emit this->stateChanged(this->_state);
 
     if(this->_logger != nullptr)
-        this->_logger->log("Linbo state changed to: " + QString::number(state), LinboLogger::LinboGuiInfo);
+        this->_logger->_log("Linbo state changed to: " + QString::number(state), LinboLogger::LinboGuiInfo);
 }

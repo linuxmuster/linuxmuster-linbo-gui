@@ -37,10 +37,10 @@ public:
     friend class LinboOs;
 
     QString getDescription();
-    const QString& getName() const {
+    const QString& name() const {
         return this->_name;
     }
-    LinboOs* getOs() {
+    LinboOs* os() {
         return this->_os;
     }
     bool hasOs() {

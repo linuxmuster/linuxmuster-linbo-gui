@@ -14,7 +14,7 @@ LinboConfig* LinboConfigReader::readConfig() {
 LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePath) {
     LinboConfig* config = new LinboConfig(this->_backend);
     // read start.conf
-    this->_backend->getLogger()->info("Starting to parse start.conf");
+    this->_backend->logger()->info("Starting to parse start.conf");
 
     QFile inputFile(startConfFilePath);
     if (inputFile.open(QIODevice::ReadOnly))
@@ -82,9 +82,9 @@ LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePat
         }
     }
     else
-        this->_backend->getLogger()->error("Error opening the start configuration file: " + startConfFilePath);
+        this->_backend->logger()->error("Error opening the start configuration file: " + startConfFilePath);
 
-    this->_backend->getLogger()->info("Finished parsing start.conf");
+    this->_backend->logger()->info("Finished parsing start.conf");
 
     this->_loadEnvironmentValues(config);
 
@@ -94,7 +94,7 @@ LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePat
 }
 
 void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
-    this->_backend->getLogger()->log("Loading environment values", LinboLogger::LinboGuiInfo);
+    this->_backend->logger()->_log("Loading environment values", LinboLogger::LinboGuiInfo);
     //  client ip
     config->_ipAddress = this->_backend->_executeCommand(true, "ip").replace("\n", "");
 
@@ -149,7 +149,7 @@ void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
             existingImage->_existsOnDisk = true;
     }
 
-    this->_backend->getLogger()->log("Finished loading environment values", LinboLogger::LinboGuiInfo);
+    this->_backend->logger()->_log("Finished loading environment values", LinboLogger::LinboGuiInfo);
 }
 
 LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath, LinboConfig* config) {
@@ -157,11 +157,11 @@ LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath
 
     QSettings settingsReader(themeConfFilePath, QSettings::IniFormat);
     if(settingsReader.status() != QSettings::NoError) {
-        this->_backend->getLogger()->error("Could not read theme config: " + themeConfFilePath);
+        this->_backend->logger()->error("Could not read theme config: " + themeConfFilePath);
         return themeConfig;
     }
 
-    QMapIterator<LinboTheme::LinboThemeColorRole, QString> ic(themeConfig->getColorRolesAndNames());
+    QMapIterator<LinboTheme::LinboThemeColorRole, QString> ic(themeConfig->colorRolesAndNames());
     while (ic.hasNext()) {
         ic.next();
         //qDebug() << qPrintable("    - `" + ic.value().toLower().replace("color", "") + "`");
@@ -171,7 +171,7 @@ LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath
         }
     }
 
-    QMapIterator<LinboTheme::LinboThemeIcon, QString> ii(themeConfig->getIconsAndNames());
+    QMapIterator<LinboTheme::LinboThemeIcon, QString> ii(themeConfig->iconsAndNames());
     while (ii.hasNext()) {
         ii.next();
         QString iconConfKey = "icons/" + ii.value().toLower().replace("icon", "");
@@ -253,7 +253,7 @@ void LinboConfigReader::_parseOsConfig(QMap<QString, QString> rawOsConfig, Linbo
         else if(key == "baseimage") {
             if(!config->_images.contains(value))
                 config->_images.insert(value, new LinboImage(value, this->_backend));
-            os->setBaseImage(config->_images[value]);
+            os->_setBaseImage(config->_images[value]);
         }
     }
 

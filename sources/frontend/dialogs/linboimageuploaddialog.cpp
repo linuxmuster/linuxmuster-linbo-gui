@@ -75,7 +75,7 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     this->addToolButton(this->uploadButton);
     connect(this->uploadButton, &LinboPushButton::clicked, this, [=]() {
         LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
-        this->backend->uploadImage(this->backend->getConfig()->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
+        this->backend->uploadImage(this->backend->config()->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
         this->autoClose();
     });
 
@@ -119,8 +119,8 @@ void LinboImageUploadDialog::refreshImageList() {
     this->imageSelectBox->clear();
 
     bool imagesWereFound = false;
-    for(LinboImage* image : this->backend->getConfig()->getImagesOfOs(this->backend->getCurrentOs(), true, false)) {
-        this->imageSelectBox->addItem(image->getName());
+    for(LinboImage* image : this->backend->config()->getImagesOfOs(this->backend->currentOs(), true, false)) {
+        this->imageSelectBox->addItem(image->name());
         imagesWereFound = true;
     }
 
