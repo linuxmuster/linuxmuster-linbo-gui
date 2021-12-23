@@ -104,9 +104,9 @@ public:
     int rootTimeoutRemainingSeconds();
 
 protected:
-    QString _readImageDescription(LinboImage* image);
-    bool _writeImageDescription(LinboImage* image, QString newDescription);
-    bool _writeImageDescription(QString imageName, QString newDescription);
+    QString readImageDescription(LinboImage* image);
+    bool writeImageDescription(LinboImage* image, QString newDescription);
+    bool writeImageDescription(QString imageName, QString newDescription);
 
 private:
     LinboState _state;

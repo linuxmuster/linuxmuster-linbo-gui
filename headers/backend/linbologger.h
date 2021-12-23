@@ -64,10 +64,10 @@ public:
     void error(QString logText);
 
 protected slots:
-    void _chapterBeginning(QString logText);
-    void _chapterEnd(QString logText);
-    void _stdErr(QString logText);
-    void _stdOut(QString logText);
+    void chapterBeginning(QString logText);
+    void chapterEnd(QString logText);
+    void stdErr(QString logText);
+    void stdOut(QString logText);
 
 private:
     explicit LinboLogger(QString logFilePath, QObject *parent = nullptr);

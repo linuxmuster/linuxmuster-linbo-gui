@@ -64,19 +64,19 @@ void LinboLogger::error(QString logText) {
     this->_log(logText, LinboLogger::LinboGuiError);
 }
 
-void LinboLogger::_chapterBeginning(QString logText) {
+void LinboLogger::chapterBeginning(QString logText) {
     this->_log(logText, LinboLogger::LinboLogChapterBeginning);
 }
 
-void LinboLogger::_chapterEnd(QString logText) {
+void LinboLogger::chapterEnd(QString logText) {
     this->_log(logText, LinboLogger::LinboLogChapterEnd);
 }
 
-void LinboLogger::_stdErr(QString logText) {
+void LinboLogger::stdErr(QString logText) {
     this->_log(logText, LinboLogger::StdErr);
 }
 
-void LinboLogger::_stdOut(QString logText) {
+void LinboLogger::stdOut(QString logText) {
     this->_log(logText, LinboLogger::StdOut);
 }
 
