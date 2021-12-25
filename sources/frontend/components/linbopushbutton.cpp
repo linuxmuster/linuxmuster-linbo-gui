@@ -28,47 +28,47 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QWidget* parent) :
 }
 
 LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushButtonOverlay*> extraOverlays, QWidget* parent) : QAbstractButton(parent) {
-    this->svgIcon = nullptr;
-    this->label = nullptr;
-    this->shouldBeVisible = true;
-    this->isPressed = false;
-    this->isHovered = false;
-    this->isFocused = false;
+    this->_svgIcon = nullptr;
+    this->_label = nullptr;
+    this->_shouldBeVisible = true;
+    this->_isPressed = false;
+    this->_isHovered = false;
+    this->_isFocused = false;
 
     this->setMouseTracking(true);
     this->setFocusPolicy(Qt::TabFocus);
 
-    this->geometryAnimation = new QPropertyAnimation(this, "geometry", this);
-    this->geometryAnimation->setDuration(400);
-    this->geometryAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+    this->_geometryAnimation = new QPropertyAnimation(this, "geometry", this);
+    this->_geometryAnimation->setDuration(400);
+    this->_geometryAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
     this->setObjectName(icon);
 
     // Background
     if(!icon.isEmpty()) {
-        this->svgIcon = new QSvgWidget(icon);
-        this->overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->svgIcon, true));
+        this->_svgIcon = new QSvgWidget(icon);
+        this->_overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->_svgIcon, true));
     }
 
-    this->label = new QLabel(label, this);
-    this->label->setAlignment(Qt::AlignCenter);
-    this->overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->label, true));
-    this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::Background, extraOverlays));
+    this->_label = new QLabel(label, this);
+    this->_label->setAlignment(Qt::AlignCenter);
+    this->_overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->_label, true));
+    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::Background, extraOverlays));
 
     // Hover
-    this->hoveredOverlay = new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayHoveredIcon));
-    this->overlays.append(
+    this->_hoveredOverlay = new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayHoveredIcon));
+    this->_overlays.append(
         new LinboPushButtonOverlay(
             LinboPushButtonOverlay::OnHover,
-            this->hoveredOverlay,
+            this->_hoveredOverlay,
             true
         )
     );
 
-    this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::OnHover, extraOverlays));
+    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnHover, extraOverlays));
 
     // Pressed
-    this->overlays.append(
+    this->_overlays.append(
         new LinboPushButtonOverlay(
             LinboPushButtonOverlay::OnPressed,
             new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayPressedIcon)),
@@ -76,14 +76,14 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
         )
     );
 
-    this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::OnPressed, extraOverlays));
+    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed, extraOverlays));
 
     // Checked
-    this->overlays.append(this->getOverlaysOfType(LinboPushButtonOverlay::OnChecked, extraOverlays));
+    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnChecked, extraOverlays));
 
     // KeyboardFocus
     QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayKeyboardFocusIcon));
-    this->overlays.append(
+    this->_overlays.append(
     new LinboPushButtonOverlay {
         LinboPushButtonOverlay::OnKeyboardFocus,
         keyboardFocusOverlay,
@@ -92,30 +92,30 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     );
 
     // set defaults
-    for(LinboPushButtonOverlay* overlay : this->overlays) {
+    for(LinboPushButtonOverlay* overlay : this->_overlays) {
         overlay->setParent(this);
-        overlay->widget->setParent(this);
+        overlay->_widget->setParent(this);
     }
 
-    for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::Background)) {
-        if(overlay->managedAutomatically)
+    for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::Background)) {
+        if(overlay->_managedAutomatically)
             overlay->setVisibleAnimated(true);
-        overlay->setAnimationDuration(200);
+        overlay->_setAnimationDuration(200);
     }
 
-    for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnHover)) {
-        overlay->setAnimationDuration(200);
+    for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnHover)) {
+        overlay->_setAnimationDuration(200);
     }
 
-    for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnPressed)) {
-        overlay->setAnimationDuration(100);
+    for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed)) {
+        overlay->_setAnimationDuration(100);
     }
 
-    connect(this, &LinboPushButton::toggled, this, &LinboPushButton::handleToggled);
+    connect(this, &LinboPushButton::toggled, this, &LinboPushButton::_handleToggled);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-void LinboPushButton::handleToggled(bool checked) {
+void LinboPushButton::_handleToggled(bool checked) {
     if(checked)
         emit this->checked();
 }
@@ -125,116 +125,116 @@ void LinboPushButton::resizeEvent(QResizeEvent *event) {
 
     QList<QWidget*> doNotResizeWidgets;
 
-    if(this->label != nullptr && !this->label->text().isEmpty()) {
+    if(this->_label != nullptr && !this->_label->text().isEmpty()) {
 
-        this->label->setFixedHeight(this->height());
+        this->_label->setFixedHeight(this->height());
 
-        QFont font = this->label->font();
+        QFont font = this->_label->font();
         font.setPixelSize(gTheme->toFontSize(this->height() * 0.5));
-        this->label->setFont(font);
+        this->_label->setFont(font);
 
-        if(this->svgIcon != nullptr) {
-            this->svgIcon->setGeometry(QRect(0, 0, this->height(), this->height()));
+        if(this->_svgIcon != nullptr) {
+            this->_svgIcon->setGeometry(QRect(0, 0, this->height(), this->height()));
 
-            this->label->move(this->height() * 1.1, 0);
-            this->label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            this->_label->move(this->height() * 1.1, 0);
+            this->_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-            doNotResizeWidgets.append(this->svgIcon);
-            doNotResizeWidgets.append(this->label);
+            doNotResizeWidgets.append(this->_svgIcon);
+            doNotResizeWidgets.append(this->_label);
         }
         else {
-            this->label->setAlignment(Qt::AlignCenter);
+            this->_label->setAlignment(Qt::AlignCenter);
         }
 
-        this->label->adjustSize();
-        this->setMinimumWidth((this->label->x() + this->label->sizeHint().width()) * 1.1);
+        this->_label->adjustSize();
+        this->setMinimumWidth((this->_label->x() + this->_label->sizeHint().width()) * 1.1);
     }
 
-    for(LinboPushButtonOverlay* overlay : this->overlays) {
-        if(doNotResizeWidgets.contains(overlay->widget))
+    for(LinboPushButtonOverlay* overlay : this->_overlays) {
+        if(doNotResizeWidgets.contains(overlay->_widget))
             continue;
 
-        overlay->widget->setGeometry(QRect(0, 0, this->width(), this->height()));
+        overlay->_widget->setGeometry(QRect(0, 0, this->width(), this->height()));
     }
 }
 
 void LinboPushButton::setGeometryAnimated(const QRect& geometry) {
-    this->geometryAnimation->setStartValue(this->geometry());
-    this->geometryAnimation->setEndValue(geometry);
-    this->geometryAnimation->start();
+    this->_geometryAnimation->setStartValue(this->geometry());
+    this->_geometryAnimation->setEndValue(geometry);
+    this->_geometryAnimation->start();
 }
 
 void LinboPushButton::setVisible(bool visible) {
-    this->shouldBeVisible = visible;
+    this->_shouldBeVisible = visible;
     QAbstractButton::setVisible(visible);
 }
 
 void LinboPushButton::setVisibleAnimated(bool visible) {
-    if(visible == this->shouldBeVisible)
+    if(visible == this->_shouldBeVisible)
         return;
 
     if(!this->isVisible()) {
         // if the parent was hidden
         // -> Show it to be able to fade the overlays in
-        for(LinboPushButtonOverlay* overlay : this->overlays)
+        for(LinboPushButtonOverlay* overlay : this->_overlays)
             overlay->setVisible(false);
 
         this->setVisible(true);
     }
 
-    this->shouldBeVisible = visible;
+    this->_shouldBeVisible = visible;
 
     if(!visible) {
-        for(LinboPushButtonOverlay* overlay : this->overlays)
-            if(overlay->managedAutomatically)
+        for(LinboPushButtonOverlay* overlay : this->_overlays)
+            if(overlay->_managedAutomatically)
                 overlay->setVisibleAnimated(false);
 
         // if the button is still supposed to be hidden after 400ms (the default animation duration)
         // -> hide the button to prevent it from overlaying other stuff
         QTimer::singleShot(400, this, [=] {
-            if(!this->shouldBeVisible)
+            if(!this->_shouldBeVisible)
                 this->setVisible(false);
         });
     }
     else
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::Background))
-            if(overlay->managedAutomatically)
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::Background))
+            if(overlay->_managedAutomatically)
                 overlay->setVisibleAnimated(true);
 }
 
 void LinboPushButton::setOverlayTypeMuted(LinboPushButtonOverlay::OverlayType overlayType, bool muted) {
-    if(this->mutedOverlayTypes.contains(overlayType) && !muted)
-        this->mutedOverlayTypes.removeAt(this->mutedOverlayTypes.indexOf(overlayType));
-    else if(!this->mutedOverlayTypes.contains(overlayType) && muted)
-        this->mutedOverlayTypes.append(overlayType);
+    if(this->_mutedOverlayTypes.contains(overlayType) && !muted)
+        this->_mutedOverlayTypes.removeAt(this->_mutedOverlayTypes.indexOf(overlayType));
+    else if(!this->_mutedOverlayTypes.contains(overlayType) && muted)
+        this->_mutedOverlayTypes.append(overlayType);
 
     this->repaint();
 }
 
 void LinboPushButton::paintEvent(QPaintEvent *e) {
 
-    for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnChecked))
-        overlay->setVisibleAnimated(this->isChecked() && !this->overlayTypeIsMuted(LinboPushButtonOverlay::OnChecked));
+    for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnChecked))
+        overlay->setVisibleAnimated(this->isChecked() && !this->_overlayTypeIsMuted(LinboPushButtonOverlay::OnChecked));
 
-    if(this->isEnabled() && this->isHovered)
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnHover))
-            overlay->setVisibleAnimated(!this->overlayTypeIsMuted(LinboPushButtonOverlay::OnHover));
+    if(this->isEnabled() && this->_isHovered)
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnHover))
+            overlay->setVisibleAnimated(!this->_overlayTypeIsMuted(LinboPushButtonOverlay::OnHover));
     else
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnHover))
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnHover))
             overlay->setVisibleAnimated(false);
 
-    if(this->isEnabled() && this->isFocused)
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnKeyboardFocus))
-            overlay->setVisibleAnimated(!this->overlayTypeIsMuted(LinboPushButtonOverlay::OnKeyboardFocus));
+    if(this->isEnabled() && this->_isFocused)
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnKeyboardFocus))
+            overlay->setVisibleAnimated(!this->_overlayTypeIsMuted(LinboPushButtonOverlay::OnKeyboardFocus));
     else
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnKeyboardFocus))
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnKeyboardFocus))
             overlay->setVisibleAnimated(false);
 
-    if(this->isEnabled() && this->isPressed)
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnPressed))
-            overlay->setVisibleAnimated(!this->overlayTypeIsMuted(LinboPushButtonOverlay::OnPressed));
+    if(this->isEnabled() && this->_isPressed)
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed))
+            overlay->setVisibleAnimated(!this->_overlayTypeIsMuted(LinboPushButtonOverlay::OnPressed));
     else
-        for(LinboPushButtonOverlay* overlay : this->getOverlaysOfType(LinboPushButtonOverlay::OnPressed))
+        for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed))
             overlay->setVisibleAnimated(false);
 
     QWidget::paintEvent(e);
@@ -242,13 +242,13 @@ void LinboPushButton::paintEvent(QPaintEvent *e) {
 
 void LinboPushButton::keyPressEvent(QKeyEvent *e) {
     if(e->key() == Qt::Key_Return)
-        this->isPressed = true;
+        this->_isPressed = true;
     return QAbstractButton::keyPressEvent(e);
 }
 
 void LinboPushButton::keyReleaseEvent(QKeyEvent *e) {
-    if(e->key() == Qt::Key_Return && this->isPressed) {
-        this->isPressed = false;
+    if(e->key() == Qt::Key_Return && this->_isPressed) {
+        this->_isPressed = false;
         emit this->clicked();
     }
     return QAbstractButton::keyReleaseEvent(e);
@@ -259,34 +259,34 @@ void LinboPushButton::focusInEvent(QFocusEvent *e)  {
         return QAbstractButton::focusInEvent(e);
 
     emit this->hovered();
-    this->isFocused = true;
+    this->_isFocused = true;
     return QAbstractButton::focusInEvent(e);
 }
 
 void LinboPushButton::focusOutEvent(QFocusEvent *e)  {
-    this->isFocused = false;
+    this->_isFocused = false;
     QAbstractButton::focusOutEvent(e);
     emit this->defocused(e->reason());
 }
 
 void LinboPushButton::enterEvent(QEnterEvent *e) {
-    this->isHovered = true;
+    this->_isHovered = true;
     QAbstractButton::enterEvent(e);
     emit this->hovered();
 }
 
 void LinboPushButton::leaveEvent(QEvent *e) {
-    this->isHovered = false;
+    this->_isHovered = false;
     QAbstractButton::leaveEvent(e);
 }
 
 void LinboPushButton::mousePressEvent(QMouseEvent *e) {
-    this->isPressed = true;
+    this->_isPressed = true;
     QAbstractButton::mousePressEvent(e);
 }
 
 void LinboPushButton::mouseReleaseEvent(QMouseEvent *e) {
-    this->isPressed = false;
+    this->_isPressed = false;
     QAbstractButton::mouseReleaseEvent(e);
 }
 
@@ -295,21 +295,21 @@ void LinboPushButton::mouseDoubleClickEvent(QMouseEvent *e) {
     emit this->doubleClicked();
 }
 
-QList<LinboPushButtonOverlay*> LinboPushButton::getOverlaysOfType(LinboPushButtonOverlay::OverlayType type) {
-    return this->getOverlaysOfType(type, this->overlays);
+QList<LinboPushButtonOverlay*> LinboPushButton::_getOverlaysOfType(LinboPushButtonOverlay::OverlayType type) {
+    return this->_getOverlaysOfType(type, this->_overlays);
 }
 
-QList<LinboPushButtonOverlay*> LinboPushButton::getOverlaysOfType(LinboPushButtonOverlay::OverlayType type, QList<LinboPushButtonOverlay*> overlays) {
+QList<LinboPushButtonOverlay*> LinboPushButton::_getOverlaysOfType(LinboPushButtonOverlay::OverlayType type, QList<LinboPushButtonOverlay*> overlays) {
     QList<LinboPushButtonOverlay*> filteredOverlays;
 
     for(LinboPushButtonOverlay* overlay : overlays) {
-        if(overlay->getType() == type)
+        if(overlay->_getType() == type)
             filteredOverlays.append(overlay);
     }
 
     return filteredOverlays;
 }
 
-bool LinboPushButton::overlayTypeIsMuted(LinboPushButtonOverlay::OverlayType overlayType) {
-    return this->mutedOverlayTypes.contains(overlayType);
+bool LinboPushButton::_overlayTypeIsMuted(LinboPushButtonOverlay::OverlayType overlayType) {
+    return this->_mutedOverlayTypes.contains(overlayType);
 }

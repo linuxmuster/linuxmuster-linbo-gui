@@ -20,62 +20,62 @@
 
 LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
-    this->backend = backend;
+    this->_backend = backend;
 
     //% "Upload image"
     this->setTitle(qtTrId("dialog_uploadImage_title"));
 
-    this->mainLayout = new QVBoxLayout(this);
-    this->mainLayout->addStretch();
+    this->_mainLayout = new QVBoxLayout(this);
+    this->_mainLayout->addStretch();
 
     //% "The image to upload:"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_uploadImage_selection_title") + "</b>"));
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_uploadImage_selection_title") + "</b>"));
 
-    this->imageSelectBox = new LinboComboBox();
+    this->_imageSelectBox = new LinboComboBox();
 
-    this->mainLayout->addWidget(this->imageSelectBox);
+    this->_mainLayout->addWidget(this->_imageSelectBox);
 
     // Post process actions
     //% "What to do after the process has finished?"
-    mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_postActionQuestion") + "</b>"));
+    _mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_postActionQuestion") + "</b>"));
 
-    this->postProcessActionButtonGroup = new QButtonGroup(this);
-    this->postProcessActionButtonGroup->setExclusive(true);
+    this->_postProcessActionButtonGroup = new QButtonGroup(this);
+    this->_postProcessActionButtonGroup->setExclusive(true);
 
-    this->postProcessActionLayout = new QHBoxLayout();
-    this->mainLayout->addLayout(this->postProcessActionLayout);
+    this->_postProcessActionLayout = new QHBoxLayout();
+    this->_mainLayout->addLayout(this->_postProcessActionLayout);
 
     //% "nothing"
     LinboRadioButton* buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_nothing"));
     buttonCache->setChecked(true);
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
 
     //% "shutdown"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_shutdown"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
 
     //% "reboot"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_reboot"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
 
     //% "logout"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_logout"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
 
-    this->mainLayout->addStretch();
+    this->_mainLayout->addStretch();
 
     // Toolbuttons
 
     //% "upload"
-    this->uploadButton = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
-    this->addToolButton(this->uploadButton);
-    connect(this->uploadButton, &LinboPushButton::clicked, this, [=]() {
-        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
-        this->backend->uploadImage(this->backend->config()->getImageByName(this->imageSelectBox->currentText()), postProcessActions);
+    this->_uploadButton = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
+    this->addToolButton(this->_uploadButton);
+    connect(this->_uploadButton, &LinboPushButton::clicked, this, [=]() {
+        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId());
+        this->_backend->uploadImage(this->_backend->config()->getImageByName(this->_imageSelectBox->currentText()), postProcessActions);
         this->autoClose();
     });
 
@@ -92,16 +92,16 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
 
     int margins = gTheme->getSize(LinboTheme::Margins);
 
-    this->mainLayout->setContentsMargins(margins, margins, margins, margins);
-    this->mainLayout->setSpacing(margins * 0.5);
+    this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
+    this->_mainLayout->setSpacing(margins * 0.5);
 
     for(int i = 1; i < 8; i++) {
         QWidget* item;
 
         if(i < 4)
-            item = this->mainLayout->itemAt(i)->widget();
+            item = this->_mainLayout->itemAt(i)->widget();
         else
-            item = this->postProcessActionLayout->itemAt(i-4)->widget();
+            item = this->_postProcessActionLayout->itemAt(i-4)->widget();
 
         // make lables smaller
         if(i != 2)
@@ -116,21 +116,21 @@ void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
 }
 
 void LinboImageUploadDialog::refreshImageList() {
-    this->imageSelectBox->clear();
+    this->_imageSelectBox->clear();
 
     bool imagesWereFound = false;
-    for(LinboImage* image : this->backend->config()->getImagesOfOs(this->backend->currentOs(), true, false)) {
-        this->imageSelectBox->addItem(image->name());
+    for(LinboImage* image : this->_backend->config()->getImagesOfOs(this->_backend->currentOs(), true, false)) {
+        this->_imageSelectBox->addItem(image->name());
         imagesWereFound = true;
     }
 
     if(!imagesWereFound) {
         //% "No image found"
-        this->imageSelectBox->addItem(qtTrId("dialog_uploadImage_noImages"));
-        this->imageSelectBox->setEnabled(false);
-        this->uploadButton->setEnabled(false);
+        this->_imageSelectBox->addItem(qtTrId("dialog_uploadImage_noImages"));
+        this->_imageSelectBox->setEnabled(false);
+        this->_uploadButton->setEnabled(false);
     }
     else {
-        this->uploadButton->setEnabled(true);
+        this->_uploadButton->setEnabled(true);
     }
 }

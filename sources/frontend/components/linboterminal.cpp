@@ -2,10 +2,10 @@
 
 LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
 {
-    this->currentHistoryIndex = -1;
-    this->fixedPosition = 0;
-    this->commandBeforeHistorySwitch.clear();
-    this->doNotExitOnProcessExit = false;
+    this->_currentHistoryIndex = -1;
+    this->_fixedPosition = 0;
+    this->_commandBeforeHistorySwitch.clear();
+    this->_doNotExitOnProcessExit = false;
 
     this->setStyleSheet(
         "QTextEdit {"
@@ -35,17 +35,17 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->setCursorWidth(8);
     this->setFont(QFont("Ubuntu Mono"));
 
-    connect(this, &QTextEdit::cursorPositionChanged, this, &LinboTerminal::handleCursorPositionChanged);
+    connect(this, &QTextEdit::cursorPositionChanged, this, &LinboTerminal::_handleCursorPositionChanged);
 
-    this->process = new QProcess(this);
-    this->process->setProcessChannelMode(QProcess::MergedChannels);
+    this->_process = new QProcess(this);
+    this->_process->setProcessChannelMode(QProcess::MergedChannels);
 
-    connect(this->process, &QProcess::readyReadStandardOutput, this, &LinboTerminal::readOutput);
-    connect(this->process, &QProcess::readyReadStandardError, this, &LinboTerminal::readOutput);
-    connect(this->process, &QProcess::finished, this, &LinboTerminal::handleProcessFinished);
+    connect(this->_process, &QProcess::readyReadStandardOutput, this, &LinboTerminal::_readOutput);
+    connect(this->_process, &QProcess::readyReadStandardError, this, &LinboTerminal::_readOutput);
+    connect(this->_process, &QProcess::finished, this, &LinboTerminal::_handleProcessFinished);
 
-    this->process->setEnvironment({"PS1=$(whoami)@$(hostname):$(pwd)$ "});
-    this->process->start("sh", QStringList("-i"));
+    this->_process->setEnvironment({"PS1=$(whoami)@$(hostname):$(pwd)$ "});
+    this->_process->start("sh", QStringList("-i"));
     this->moveCursor(QTextCursor::End);
 }
 
@@ -55,48 +55,48 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
 
     int key = event->key();
     if (key == Qt::Key_Backspace || event->key() == Qt::Key_Left) {
-        accept = textCursor().position() > fixedPosition;
+        accept = textCursor().position() > _fixedPosition;
     }
     else if (key == Qt::Key_Return) {
         accept = false;
-        this->execute(this->getCurrentCommand());
+        this->_execute(this->_getCurrentCommand());
     }
     else if (key == Qt::Key_Up || key == Qt::Key_Down) {
         accept = false;
 
-        int oldHistoryIndex = this->currentHistoryIndex;
+        int oldHistoryIndex = this->_currentHistoryIndex;
 
         if(key == Qt::Key_Up) {
-            this->currentHistoryIndex += 1;
+            this->_currentHistoryIndex += 1;
         }
         else if(key == Qt::Key_Down) {
-            this->currentHistoryIndex -= 1;
+            this->_currentHistoryIndex -= 1;
         }
 
-        if(this->currentHistoryIndex >= 0 && this->commandHistory.length() > this->currentHistoryIndex) {
+        if(this->_currentHistoryIndex >= 0 && this->_commandHistory.length() > this->_currentHistoryIndex) {
             if(oldHistoryIndex == -1)
                 // store current command before bringing up the history
-                this->commandBeforeHistorySwitch = this->getCurrentCommand();
+                this->_commandBeforeHistorySwitch = this->_getCurrentCommand();
 
             // show requested history command
-            this->setCurrentCommand(this->commandHistory[this->currentHistoryIndex]);
+            this->_setCurrentCommand(this->_commandHistory[this->_currentHistoryIndex]);
         }
-        else if(this->currentHistoryIndex == -1) {
+        else if(this->_currentHistoryIndex == -1) {
             // show last typed command (is not in history yet, as it was not yet executed)
-            this->setCurrentCommand(this->commandBeforeHistorySwitch);
-            this->commandBeforeHistorySwitch.clear();
+            this->_setCurrentCommand(this->_commandBeforeHistorySwitch);
+            this->_commandBeforeHistorySwitch.clear();
         }
-        else if(this->commandHistory.length() <= this->currentHistoryIndex) {
+        else if(this->_commandHistory.length() <= this->_currentHistoryIndex) {
             // don't go above history length
-            this->currentHistoryIndex = this->commandHistory.length() -1;
+            this->_currentHistoryIndex = this->_commandHistory.length() -1;
         }
         else {
             // don't do below -1
-            this->currentHistoryIndex = -1;
+            this->_currentHistoryIndex = -1;
         }
     }
     else if( key == Qt::Key_Tab) {
-        this->process->write(QByteArray());
+        this->_process->write(QByteArray());
         accept = false;
     }
     else if( key == Qt::Key_C) {
@@ -106,8 +106,8 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
             this->copy();
         else if(event->modifiers().testFlag(Qt::ControlModifier)) {
             // restart process on ctrl+c
-            this->setCurrentCommand("^C");
-            this->restartProcess();
+            this->_setCurrentCommand("^C");
+            this->_restartProcess();
         }
         else
             accept = true;
@@ -124,7 +124,7 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
         accept = true;
     }
     else {
-        if(textCursor().position() < fixedPosition)
+        if(textCursor().position() < _fixedPosition)
             this->moveCursor(QTextCursor::End);
         accept = true;
     }
@@ -134,13 +134,13 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
     }
 }
 
-QString LinboTerminal::getCurrentCommand() {
-    int count = toPlainText().count() - fixedPosition;
+QString LinboTerminal::_getCurrentCommand() {
+    int count = toPlainText().count() - _fixedPosition;
     return toPlainText().right(count);
 }
 
-void LinboTerminal::setCurrentCommand(QString command) {
-    while(this->textCursor().position() > this->fixedPosition)
+void LinboTerminal::_setCurrentCommand(QString command) {
+    while(this->textCursor().position() > this->_fixedPosition)
         this->moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
 
     this->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -149,53 +149,53 @@ void LinboTerminal::setCurrentCommand(QString command) {
     this->insertPlainText(command);
 }
 
-void LinboTerminal::readOutput() {
-    QString output = this->process->readAll();
+void LinboTerminal::_readOutput() {
+    QString output = this->_process->readAll();
     this->append(output);
     this->moveCursor(QTextCursor::End);
-    fixedPosition = textCursor().position();
+    _fixedPosition = textCursor().position();
 }
 
-void LinboTerminal::handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+void LinboTerminal::_handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     Q_UNUSED(exitCode)
     Q_UNUSED(exitStatus)
 
-    this->process->start("sh", QStringList("-i"));
+    this->_process->start("sh", QStringList("-i"));
 
-    if(!this->doNotExitOnProcessExit) {
+    if(!this->_doNotExitOnProcessExit) {
         this->clear();
         emit this->processExited();
     }
 
-    this->doNotExitOnProcessExit = false;
+    this->_doNotExitOnProcessExit = false;
 }
 
-void LinboTerminal::execute(QString command) {
+void LinboTerminal::_execute(QString command) {
 
     // handle history
     if (command != "")
-        this->commandHistory.insert(0, command);
-    this->currentHistoryIndex = -1;
+        this->_commandHistory.insert(0, command);
+    this->_currentHistoryIndex = -1;
 
     // execute command
     if(command == "clear") {
         this->clear();
-        this->fixedPosition = 0;
+        this->_fixedPosition = 0;
         command = "";
     }
 
-    this->process->write((command + "\n").toUtf8());
+    this->_process->write((command + "\n").toUtf8());
 }
 
-void LinboTerminal::restartProcess() {
-    this->doNotExitOnProcessExit = true;
-    this->process->kill();
+void LinboTerminal::_restartProcess() {
+    this->_doNotExitOnProcessExit = true;
+    this->_process->kill();
 }
 
-void LinboTerminal::handleCursorPositionChanged()
+void LinboTerminal::_handleCursorPositionChanged()
 {
     //qDebug() << "Cursor position changed position: " << textCursor().position() << " fixed position " << fixedPosition;
-    if (textCursor().position() < fixedPosition) {
+    if (textCursor().position() < _fixedPosition) {
         this->setCursorWidth(0);
     }
     else {
@@ -205,7 +205,7 @@ void LinboTerminal::handleCursorPositionChanged()
 
 void LinboTerminal::clearAndRestart() {
     this->clear();
-    this->fixedPosition = 0;
-    this->commandHistory.clear();
-    this->restartProcess();
+    this->_fixedPosition = 0;
+    this->_commandHistory.clear();
+    this->_restartProcess();
 }

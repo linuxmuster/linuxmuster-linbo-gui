@@ -20,85 +20,85 @@
 
 LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
-    this->inited = false;
-    this->sizeOverride = nullptr;
+    this->_inited = false;
+    this->_sizeOverride = nullptr;
 
-    this->backend = backend;
-    connect(this->backend, &LinboBackend::stateChanged, this, &LinboOsSelectionRow::handleLinboStateChanged);
+    this->_backend = backend;
+    connect(this->_backend, &LinboBackend::stateChanged, this, &LinboOsSelectionRow::_handleLinboStateChanged);
 
-    this->showOnlySelectedButton = false;
+    this->_showOnlySelectedButton = false;
 
-    this->sizeAnimation = new QPropertyAnimation(this, "minimumSize", this);
-    this->sizeAnimation->setDuration(100);
-    this->sizeAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    this->_sizeAnimation = new QPropertyAnimation(this, "minimumSize", this);
+    this->_sizeAnimation->setDuration(100);
+    this->_sizeAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-    this->osButtonGroup = new QButtonGroup();
-    this->osButtonGroup->setExclusive(true);
+    this->_osButtonGroup = new QButtonGroup();
+    this->_osButtonGroup->setExclusive(true);
 
     for(LinboOs* os : backend->config()->operatingSystems()) {
-        if(this->osButtons.length() >= 4)
+        if(this->_osButtons.length() >= 4)
             break;
 
 #ifdef TEST_ENV
-        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->iconName(), os, this->osButtonGroup, this);
+        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->iconName(), os, this->_osButtonGroup, this);
 #else
         LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->iconName(), os, this->osButtonGroup, this);
 #endif
-        connect(osButton->button, &LinboPushButton::toggled, this, &LinboOsSelectionRow::handleButtonToggled);
+        connect(osButton->_button, &LinboPushButton::toggled, this, &LinboOsSelectionRow::_handleButtonToggled);
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
-        osButton->setShowActionButtons(!this->backend->config()->useMinimalLayout());
+        osButton->_setShowActionButtons(!this->_backend->config()->useMinimalLayout());
 
         // auto select current OS
-        if(this->backend->currentOs() == os)
-            osButton->button->setChecked(true);
+        if(this->_backend->currentOs() == os)
+            osButton->_button->setChecked(true);
 
-        this->osButtons.append(osButton);
+        this->_osButtons.append(osButton);
     }
 
-    if(this->osButtons.length() == 0) {
+    if(this->_osButtons.length() == 0) {
         //% "No Operating system configured in start.conf"
-        this->noOsLabel = new QLabel(qtTrId("osSelection_noOperatingSystems"), this);
-        this->noOsLabel->hide();
-        this->noOsLabel->setAlignment(Qt::AlignCenter);
-        this->noOsLabelFont.setBold(true);
-        this->noOsLabel->setFont(this->noOsLabelFont);
-        this->noOsLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
+        this->_noOsLabel = new QLabel(qtTrId("osSelection_noOperatingSystems"), this);
+        this->_noOsLabel->hide();
+        this->_noOsLabel->setAlignment(Qt::AlignCenter);
+        this->_noOsLabelFont.setBold(true);
+        this->_noOsLabel->setFont(this->_noOsLabelFont);
+        this->_noOsLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
 
         QString environmentValuesText;
         //% "Hostname"
-        environmentValuesText += qtTrId("hostname") + ":  " + this->backend->config()->hostname() + "\n";
+        environmentValuesText += qtTrId("hostname") + ":  " + this->_backend->config()->hostname() + "\n";
         //% "IP-Address"
-        environmentValuesText += qtTrId("ip") + ":  " + this->backend->config()->ipAddress() + "\n";
+        environmentValuesText += qtTrId("ip") + ":  " + this->_backend->config()->ipAddress() + "\n";
         //% "Mac"
-        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->backend->config()->macAddress() + "\n";
+        environmentValuesText += qtTrId("client_info_mac") + ":  " + this->_backend->config()->macAddress() + "\n";
 
-        this->environmentValuesLabel = new QLabel(environmentValuesText, this);
-        this->environmentValuesLabel->hide();
-        this->environmentValuesLabel->setAlignment(Qt::AlignCenter);
-        this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
-        this->environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
+        this->_environmentValuesLabel = new QLabel(environmentValuesText, this);
+        this->_environmentValuesLabel->hide();
+        this->_environmentValuesLabel->setAlignment(Qt::AlignCenter);
+        this->_environmentValuesLabel->setFont(this->_environmentValuesLabelFont);
+        this->_environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
     }
 
-    this->handleLinboStateChanged(this->backend->state());
+    this->_handleLinboStateChanged(this->_backend->state());
 }
 
-void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int widthOverride) {
+void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int widthOverride) {
 
     heightOverride = this->height();
     widthOverride = this->width();
 
-    if(this->sizeOverride != nullptr)
-        heightOverride = this->sizeOverride->height();
+    if(this->_sizeOverride != nullptr)
+        heightOverride = this->_sizeOverride->height();
 
-    if(this->sizeOverride != nullptr)
-        widthOverride = this->sizeOverride->width();
+    if(this->_sizeOverride != nullptr)
+        widthOverride = this->_sizeOverride->width();
 
-    if(this->osButtons.length() > 0) {
+    if(this->_osButtons.length() > 0) {
 
-        bool useMinimalLayout = this->backend->config()->useMinimalLayout();
-        int buttonCount = this->osButtons.length();
+        bool useMinimalLayout = this->_backend->config()->useMinimalLayout();
+        int buttonCount = this->_osButtons.length();
 
         int spacing;
         int buttonWidth;
@@ -131,14 +131,14 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
 
         int x = (widthOverride - totalWidth) / 2;
 
-        for(int i = 0; i < this->osButtons.length(); i++) {
+        for(int i = 0; i < this->_osButtons.length(); i++) {
 
             bool visible = true;
-            QRect geometry = this->osButtons[i]->geometry();
+            QRect geometry = this->_osButtons[i]->geometry();
 
-            if(this->osButtons[i]->getOs() != this->backend->currentOs() || !this->showOnlySelectedButton) {
+            if(this->_osButtons[i]->getOs() != this->_backend->currentOs() || !this->_showOnlySelectedButton) {
                 // "normal" buttons
-                visible = !this->showOnlySelectedButton;
+                visible = !this->_showOnlySelectedButton;
                 if(!useMinimalLayout && buttonCount > 2)
                     if(i < 2)
                         geometry = QRect(x + (buttonWidth  * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
@@ -153,15 +153,15 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
                 geometry = QRect((widthOverride - heightOverride) / 2, 0, heightOverride, heightOverride);
             }
 
-            if(this->inited) {
-                this->osButtons[i]->setVisibleAnimated(visible);
+            if(this->_inited) {
+                this->_osButtons[i]->setVisibleAnimated(visible);
 
                 QPropertyAnimation* moveAnimation = new QPropertyAnimation(this);
                 moveAnimation->setPropertyName("geometry");
                 moveAnimation->setEasingCurve(QEasingCurve::InOutQuad);
                 moveAnimation->setDuration(300);
-                moveAnimation->setTargetObject(this->osButtons[i]);
-                moveAnimation->setStartValue(this->osButtons[i]->geometry());
+                moveAnimation->setTargetObject(this->_osButtons[i]);
+                moveAnimation->setStartValue(this->_osButtons[i]->geometry());
                 moveAnimation->setEndValue(geometry);
                 moveAnimation->start();
                 connect(moveAnimation, &QPropertyAnimation::finished, moveAnimation, &QPropertyAnimation::deleteLater);
@@ -170,8 +170,8 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
             }
             else {
                 // Do not animate the first time
-                this->osButtons[i]->setVisible(visible);
-                this->osButtons[i]->setGeometry(geometry);
+                this->_osButtons[i]->setVisible(visible);
+                this->_osButtons[i]->setGeometry(geometry);
             }
         }
     }
@@ -179,29 +179,29 @@ void LinboOsSelectionRow::resizeAndPositionAllButtons(int heightOverride, int wi
         int infoLabelHeight = heightOverride;
         int infoLabelWidth = widthOverride * 0.8;
         int noOsLabelHeight = heightOverride * 0.15;
-        this->noOsLabelFont.setPixelSize(gTheme->toFontSize(noOsLabelHeight * 0.8));
-        this->noOsLabel->setFont(this->noOsLabelFont);
-        this->noOsLabel->setGeometry((widthOverride - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
-        this->noOsLabel->show();
+        this->_noOsLabelFont.setPixelSize(gTheme->toFontSize(noOsLabelHeight * 0.8));
+        this->_noOsLabel->setFont(this->_noOsLabelFont);
+        this->_noOsLabel->setGeometry((widthOverride - infoLabelWidth) / 2, 0, infoLabelWidth, noOsLabelHeight);
+        this->_noOsLabel->show();
 
-        this->environmentValuesLabelFont.setPixelSize(gTheme->toFontSize(infoLabelHeight * 0.1));
-        this->environmentValuesLabel->setFont(this->environmentValuesLabelFont);
-        this->environmentValuesLabel->setGeometry((widthOverride - infoLabelWidth) / 2, noOsLabelHeight, infoLabelWidth, infoLabelHeight);
-        this->environmentValuesLabel->show();
+        this->_environmentValuesLabelFont.setPixelSize(gTheme->toFontSize(infoLabelHeight * 0.1));
+        this->_environmentValuesLabel->setFont(this->_environmentValuesLabelFont);
+        this->_environmentValuesLabel->setGeometry((widthOverride - infoLabelWidth) / 2, noOsLabelHeight, infoLabelWidth, infoLabelHeight);
+        this->_environmentValuesLabel->show();
     }
 
-    this->inited = true;
+    this->_inited = true;
 }
 
-void LinboOsSelectionRow::handleButtonToggled(bool checked) {
+void LinboOsSelectionRow::_handleButtonToggled(bool checked) {
     if(checked)
-        this->backend->setCurrentOs(this->getSelectedOs());
+        this->_backend->setCurrentOs(this->getSelectedOs());
 }
 
 LinboOs* LinboOsSelectionRow::getSelectedOs() {
-    for(LinboOsSelectButton* button : this->osButtons) {
-        if(button->button->isChecked())
-            return button->getOs();
+    for(LinboOsSelectButton* button : this->_osButtons) {
+        if(button->_button->isChecked())
+            return button->_getOs();
     }
     return nullptr;
 }
@@ -210,27 +210,27 @@ void LinboOsSelectionRow::setShowOnlySelectedButton(bool value) {
     // find selected button
     // set its x so it is in the middle (animated)
     // set Opacity of all other buttons to 0 (animated)
-    if(value == this->showOnlySelectedButton)
+    if(value == this->_showOnlySelectedButton)
         return;
 
-    this->showOnlySelectedButton = value;
+    this->_showOnlySelectedButton = value;
 
-    if(this->inited)
-        this->resizeAndPositionAllButtons();
+    if(this->_inited)
+        this->_resizeAndPositionAllButtons();
 }
 
 void LinboOsSelectionRow::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
     //qDebug() << "RESIZE EVENT: width: " << width() << " height: " << height();
-    this->resizeAndPositionAllButtons();
+    this->_resizeAndPositionAllButtons();
 }
 
-void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newState) {
+void LinboOsSelectionRow::_handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     switch (newState) {
     case LinboBackend::Idle:
     case LinboBackend::Root:
-        for(LinboOsSelectButton* osButton : this->osButtons)
+        for(LinboOsSelectButton* osButton : this->_osButtons)
             osButton->setEnabled(true);
         this->setShowOnlySelectedButton(false);
         break;
@@ -241,7 +241,7 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
     case LinboBackend::Reinstalling:
     case LinboBackend::CreatingImage:
     case LinboBackend::UploadingImage:
-        for(LinboOsSelectButton* osButton : this->osButtons)
+        for(LinboOsSelectButton* osButton : this->_osButtons)
             osButton->setEnabled(false);
         this->setShowOnlySelectedButton(true);
         break;
@@ -249,7 +249,7 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
     case LinboBackend::RootActionSuccess:
-        for(LinboOsSelectButton* osButton : this->osButtons)
+        for(LinboOsSelectButton* osButton : this->_osButtons)
             osButton->setEnabled(false);
         break;
 
@@ -260,20 +260,20 @@ void LinboOsSelectionRow::handleLinboStateChanged(LinboBackend::LinboState newSt
 
 void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
     if(size.height() < this->height()) {
-        this->sizeOverride = new QSize(size);
-        this->resizeAndPositionAllButtons();
-        this->sizeAnimation->setStartValue(this->size());
-        this->sizeAnimation->setEndValue(size);
-        connect(this->sizeAnimation, &QPropertyAnimation::finished, this, [=] {this->setMinimumSize(size); delete this->sizeOverride; this->sizeOverride = nullptr;});
-        QTimer::singleShot(300, this, [=] {this->sizeAnimation->start();});
+        this->_sizeOverride = new QSize(size);
+        this->_resizeAndPositionAllButtons();
+        this->_sizeAnimation->setStartValue(this->size());
+        this->_sizeAnimation->setEndValue(size);
+        connect(this->_sizeAnimation, &QPropertyAnimation::finished, this, [=] {this->setMinimumSize(size); delete this->_sizeOverride; this->_sizeOverride = nullptr;});
+        QTimer::singleShot(300, this, [=] {this->_sizeAnimation->start();});
     }
     else {
-        if(this->sizeOverride != nullptr) {
-            delete this->sizeOverride;
-            this->sizeOverride = nullptr;
+        if(this->_sizeOverride != nullptr) {
+            delete this->_sizeOverride;
+            this->_sizeOverride = nullptr;
         }
 
-        delete this->sizeOverride;
+        delete this->_sizeOverride;
         this->setFixedSize(size);
     }
 }

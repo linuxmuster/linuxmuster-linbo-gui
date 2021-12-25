@@ -32,13 +32,13 @@ LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, 
 
 LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, LinboTheme::LinboThemeColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->getIconPath(icon), text, parent)
 {
-    this->colorRole = colorRole;
+    this->_colorRole = colorRole;
 }
 
 void LinboToolButton::paintEvent(QPaintEvent *e) {
     LinboPushButton::paintEvent(e);
-    if(this->colorRole == LinboTheme::ToolButtonColor)
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboTheme::DisabledToolButtonColor).name() + ";}");
+    if(this->_colorRole == LinboTheme::ToolButtonColor)
+        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->_colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboTheme::DisabledToolButtonColor).name() + ";}");
     else
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + ";}");
+        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->_colorRole).name() + ";}");
 }

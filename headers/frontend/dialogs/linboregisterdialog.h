@@ -43,17 +43,17 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboBackend* backend;
-    QVBoxLayout* mainLayout;
-    LinboLineEdit* roomEdit;
-    LinboLineEdit* hostnameEdit;
-    LinboLineEdit* ipAddressEdit;
-    LinboLineEdit* hostGroupEdit;
-    QComboBox* roleSelectBox;
+    LinboBackend* _backend;
+    QVBoxLayout* _mainLayout;
+    LinboLineEdit* _roomEdit;
+    LinboLineEdit* _hostnameEdit;
+    LinboLineEdit* _ipAddressEdit;
+    LinboLineEdit* _hostGroupEdit;
+    QComboBox* _roleSelectBox;
 
 private slots:
-    void handleRoomChanged(const QString& newText);
-    void registerClient();
+    void _handleRoomChanged(const QString& newText);
+    void _registerClient();
 };
 
 #endif // LINBOREGISTERDIALOG_H

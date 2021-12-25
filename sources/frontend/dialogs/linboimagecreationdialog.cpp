@@ -20,75 +20,75 @@
 
 LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
-    this->backend = backend;
+    this->_backend = backend;
 
     //% "Create image"
     this->setTitle(qtTrId("dialog_createImage_title"));
 
-    this->mainLayout = new QVBoxLayout(this);
-    this->mainLayout->setSpacing(0);
+    this->_mainLayout = new QVBoxLayout(this);
+    this->_mainLayout->setSpacing(0);
 
     //% "The action to perfom:"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_action_title") + "</b>"));
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_action_title") + "</b>"));
 
-    this->actionButtonGroup = new QButtonGroup(this);
-    this->actionButtonGroup->setExclusive(true);
+    this->_actionButtonGroup = new QButtonGroup(this);
+    this->_actionButtonGroup->setExclusive(true);
 
-    connect(this->actionButtonGroup, &QButtonGroup::buttonToggled, this, &LinboImageCreationDialog::refreshPathAndDescription);
+    connect(this->_actionButtonGroup, &QButtonGroup::buttonToggled, this, &LinboImageCreationDialog::_refreshPathAndDescription);
 
     //% "replace current image"
     LinboRadioButton* replaceImage = new LinboRadioButton(qtTrId("dialog_createImage_action_current"));
-    this->mainLayout->addWidget(replaceImage);
-    this->actionButtonGroup->addButton(replaceImage, 0);
+    this->_mainLayout->addWidget(replaceImage);
+    this->_actionButtonGroup->addButton(replaceImage, 0);
 
     //% "create a new image"
     LinboRadioButton* createNewImage = new LinboRadioButton(qtTrId("dialog_createImage_action_new"));
-    this->mainLayout->addWidget(createNewImage);
-    this->actionButtonGroup->addButton(createNewImage, 1);
+    this->_mainLayout->addWidget(createNewImage);
+    this->_actionButtonGroup->addButton(createNewImage, 1);
 
     //% "Image name:"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageName") + "</b>"));
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageName") + "</b>"));
 
-    this->imageNameLineEdit = new LinboLineEdit();
-    this->mainLayout->addWidget(this->imageNameLineEdit);
+    this->_imageNameLineEdit = new LinboLineEdit();
+    this->_mainLayout->addWidget(this->_imageNameLineEdit);
 
     //% "Image description:"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageDescription") + "</b>"));
-    this->imageDescriptionTextBrowser = new LinboTextBrowser();
-    this->imageDescriptionTextBrowser->setTabChangesFocus(true);
-    this->mainLayout->addWidget(this->imageDescriptionTextBrowser);
-    this->imageDescriptionTextBrowser->setReadOnly(false);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageDescription") + "</b>"));
+    this->_imageDescriptionTextBrowser = new LinboTextBrowser();
+    this->_imageDescriptionTextBrowser->setTabChangesFocus(true);
+    this->_mainLayout->addWidget(this->_imageDescriptionTextBrowser);
+    this->_imageDescriptionTextBrowser->setReadOnly(false);
 
     // Post process actions
     //% "What to do after the process has finished?"
-    mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_postActionQuestion") + "</b>"));
+    _mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_postActionQuestion") + "</b>"));
 
-    this->postProcessActionButtonGroup = new QButtonGroup(this);
-    this->postProcessActionButtonGroup->setExclusive(true);
+    this->_postProcessActionButtonGroup = new QButtonGroup(this);
+    this->_postProcessActionButtonGroup->setExclusive(true);
 
-    this->postProcessActionLayout = new QHBoxLayout();
-    this->mainLayout->addLayout(this->postProcessActionLayout);
+    this->_postProcessActionLayout = new QHBoxLayout();
+    this->_mainLayout->addLayout(this->_postProcessActionLayout);
 
     //% "nothing"
     LinboRadioButton* buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_nothing"));
     buttonCache->setChecked(true);
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
 
     //% "shutdown"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_shutdown"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
 
     //% "reboot"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_reboot"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
 
     //% "logout"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_logout"));
-    this->postProcessActionLayout->addWidget(buttonCache);
-    this->postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
+    this->_postProcessActionLayout->addWidget(buttonCache);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
 
     // Bottom buttons
 
@@ -97,7 +97,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboToolButton::clicked, this, [=]() {
-        this->createImage(LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId()));
+        this->_createImage(LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId()));
     });
 
     //% "create + upload"
@@ -105,9 +105,9 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboPushButton::clicked, this, [=]() {
-        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->postProcessActionButtonGroup->checkedId());
+        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId());
         postProcessActions.setFlag(LinboBackend::NoAction, false);
-        this->createImage( LinboBackend::UploadImage | postProcessActions);
+        this->_createImage( LinboBackend::UploadImage | postProcessActions);
     });
 
     //% cancel
@@ -116,17 +116,17 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboToolButton::clicked, this, &LinboImageCreationDialog::autoClose);
 
-    connect(this, &LinboDialog::opened, [=] { this->refreshPathAndDescription(true); });
+    connect(this, &LinboDialog::opened, [=] { this->_refreshPathAndDescription(true); });
 }
 
-void LinboImageCreationDialog::createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
+void LinboImageCreationDialog::_createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
 
-    if(this->actionButtonGroup->checkedId() == 0)
+    if(this->_actionButtonGroup->checkedId() == 0)
         // replace image
-        this->backend->replaceImageOfCurrentOs(this->imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->replaceImageOfCurrentOs(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
     else
         // create new image
-        this->backend->createImageOfCurrentOS(this->imageNameLineEdit->text(), this->imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->createImageOfCurrentOS(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
 
     this->autoClose();
 }
@@ -136,15 +136,15 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 
     int margins = gTheme->getSize(LinboTheme::Margins);
 
-    this->mainLayout->setContentsMargins(margins, margins, margins, margins);
+    this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
 
     for(int i = 0; i < 12; i++) {
         QWidget* item;
 
         if(i < 8)
-            item = this->mainLayout->itemAt(i)->widget();
+            item = this->_mainLayout->itemAt(i)->widget();
         else
-            item = this->postProcessActionLayout->itemAt(i-8)->widget();
+            item = this->_postProcessActionLayout->itemAt(i-8)->widget();
 
         if(i != 6) {
             if(i % 2 == 0)
@@ -159,28 +159,28 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
     }
 }
 
-void LinboImageCreationDialog::refreshPathAndDescription(bool isOpening) {
-    if(this->backend->currentOs()->baseImage() == nullptr) {
-        this->actionButtonGroup->buttons().at(1)->setChecked(true);
-        this->actionButtonGroup->buttons().at(0)->setChecked(false);
-        this->actionButtonGroup->buttons().at(0)->setEnabled(false);
+void LinboImageCreationDialog::_refreshPathAndDescription(bool isOpening) {
+    if(this->_backend->currentOs()->baseImage() == nullptr) {
+        this->_actionButtonGroup->buttons().at(1)->setChecked(true);
+        this->_actionButtonGroup->buttons().at(0)->setChecked(false);
+        this->_actionButtonGroup->buttons().at(0)->setEnabled(false);
     }
     else {
-        this->actionButtonGroup->buttons().at(0)->setEnabled(true);
+        this->_actionButtonGroup->buttons().at(0)->setEnabled(true);
         if(isOpening) {
-            this->actionButtonGroup->buttons().at(0)->setChecked(true);
-            this->actionButtonGroup->buttons().at(1)->setChecked(false);
+            this->_actionButtonGroup->buttons().at(0)->setChecked(true);
+            this->_actionButtonGroup->buttons().at(1)->setChecked(false);
         }
     }
 
-    if(this->actionButtonGroup->checkedId() == 0) {
-        this->imageNameLineEdit->setEnabled(false);
-        this->imageNameLineEdit->setText(this->backend->currentOs()->baseImage()->name());
-        this->imageDescriptionTextBrowser->setText(this->backend->currentOs()->baseImage()->getDescription());
+    if(this->_actionButtonGroup->checkedId() == 0) {
+        this->_imageNameLineEdit->setEnabled(false);
+        this->_imageNameLineEdit->setText(this->_backend->currentOs()->baseImage()->name());
+        this->_imageDescriptionTextBrowser->setText(this->_backend->currentOs()->baseImage()->getDescription());
     }
     else {
-        this->imageNameLineEdit->setEnabled(true);
-        this->imageNameLineEdit->setText("");
-        this->imageDescriptionTextBrowser->setText("");
+        this->_imageNameLineEdit->setEnabled(true);
+        this->_imageNameLineEdit->setText("");
+        this->_imageDescriptionTextBrowser->setText("");
     }
 }

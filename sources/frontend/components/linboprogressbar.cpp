@@ -20,56 +20,56 @@
 
 LinboProgressBar::LinboProgressBar(QWidget* parent) : QProgressBar(parent)
 {
-    this->refreshTimer = new QTimer();
-    this->refreshTimer->setSingleShot(false);
-    this->refreshTimer->setInterval(400);
-    connect(this->refreshTimer, &QTimer::timeout, this, &LinboProgressBar::updateIndeterminate);
+    this->_refreshTimer = new QTimer();
+    this->_refreshTimer->setSingleShot(false);
+    this->_refreshTimer->setInterval(400);
+    connect(this->_refreshTimer, &QTimer::timeout, this, &LinboProgressBar::updateIndeterminate);
 
 
-    this->indeterminateAnimtion = new QPropertyAnimation(this, "value");
-    this->indeterminateAnimtion->setDuration(2000);
-    this->indeterminateAnimtion->setStartValue(0);
-    this->indeterminateAnimtion->setEndValue(1000);
-    this->indeterminateAnimtion->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
-    this->indeterminateAnimtion->setLoopCount(-1);
+    this->_indeterminateAnimtion = new QPropertyAnimation(this, "value");
+    this->_indeterminateAnimtion->setDuration(2000);
+    this->_indeterminateAnimtion->setStartValue(0);
+    this->_indeterminateAnimtion->setEndValue(1000);
+    this->_indeterminateAnimtion->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_indeterminateAnimtion->setLoopCount(-1);
 
     this->setValue(0);
 }
 
 void LinboProgressBar::setIndeterminate(bool indeterminate) {
-    if(this->indeterminate == indeterminate)
+    if(this->_indeterminate == indeterminate)
         return;
 
-    this->indeterminate = indeterminate;
+    this->_indeterminate = indeterminate;
 
-    if(this->indeterminate) {
-        this->preIndeterminateValue = this->value();
-        this->preIndeterminateMinimum = this->minimum();
-        this->preIndeterminateMaximum = this->maximum();
+    if(this->_indeterminate) {
+        this->_preIndeterminateValue = this->value();
+        this->_preIndeterminateMinimum = this->minimum();
+        this->_preIndeterminateMaximum = this->maximum();
         // finer steps, so the Animation is fluid
         this->setMinimum(0);
         this->setMaximum(1000);
-        this->indeterminateAnimtion->start();
+        this->_indeterminateAnimtion->start();
     }
     else {
         // reset minimum and maximum
-        this->setMinimum(this->preIndeterminateMinimum);
-        this->setMaximum(this->preIndeterminateMaximum);
-        this->setValue(this->preIndeterminateValue);
-        this->indeterminateAnimtion->stop();
+        this->setMinimum(this->_preIndeterminateMinimum);
+        this->setMaximum(this->_preIndeterminateMaximum);
+        this->setValue(this->_preIndeterminateValue);
+        this->_indeterminateAnimtion->stop();
     }
 }
 
 void LinboProgressBar::setReversed(bool reversed) {
-    if(this->reversed == reversed)
+    if(this->_reversed == reversed)
         return;
 
-    this->reversed = reversed;
+    this->_reversed = reversed;
     this->update();
 }
 
 bool LinboProgressBar::getIndeterminate() {
-    return this->indeterminate;
+    return this->_indeterminate;
 }
 
 void LinboProgressBar::updateIndeterminate() {
@@ -86,7 +86,7 @@ void LinboProgressBar::paintEvent(QPaintEvent *e) {
     double to = 0;
 
     // progress
-    if(this->indeterminate) {
+    if(this->_indeterminate) {
         int maximum = this->maximum() / 2;
         if(this->value() <= maximum)
             // for the first half -> fill from left
@@ -101,7 +101,7 @@ void LinboProgressBar::paintEvent(QPaintEvent *e) {
         to = double(double(this->value()) / double(this->maximum()));
     }
 
-    if(this->reversed) {
+    if(this->_reversed) {
         // if reversed -> reverse and swap from and to
         double tmp = 1 - from;
         from = 1 - to;

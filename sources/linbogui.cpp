@@ -58,10 +58,10 @@ LinboGui::LinboGui()
     qDebug() << "Display width: " << this->width() << " height: " << this->height();
 
     // create the backend
-    this->backend = new LinboBackend(this);
+    this->_backend = new LinboBackend(this);
 
     // create the theme
-    this->theme = new LinboGuiTheme(this->backend, this, this);
+    this->_theme = new LinboGuiTheme(this->_backend, this, this);
 
     // set background
     this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboTheme::BackgroundColor).name() + "; }"
@@ -75,12 +75,12 @@ LinboGui::LinboGui()
                          "}");
 
     // attach translator
-    QString localeName = this->backend->config()->locale();
+    QString localeName = this->_backend->config()->locale();
     if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == '-')) {
 
         if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)
-            QStringList tmpLocaleName = this->backend->config()->locale().split("-");
+            QStringList tmpLocaleName = this->_backend->config()->locale().split("-");
             localeName = tmpLocaleName[0] + "-";
             localeName += tmpLocaleName[1].toUpper();
         }
@@ -89,13 +89,13 @@ LinboGui::LinboGui()
 
         // fallback to en-GB!
         if(!translator->load(":/" + localeName + ".qm") && !translator->load(":/en-GB.qm")) {
-            this->backend->logger()->error("Could not load any translation!");
+            this->_backend->logger()->error("Could not load any translation!");
         }
 
         QApplication::installTranslator(translator);
     }
 
     // create start page
-    this->startPage = new LinboMainPage(this->backend, this);
+    this->_startPage = new LinboMainPage(this->_backend, this);
 
 }

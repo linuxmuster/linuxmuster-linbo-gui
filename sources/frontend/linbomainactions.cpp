@@ -20,172 +20,172 @@
 
 LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
-    this->backend = backend;
-    connect(this->backend, &LinboBackend::currentOsChanged, this, &LinboMainActions::handleCurrentOsChanged);
-    connect(this->backend, &LinboBackend::stateChanged, this, &LinboMainActions::handleLinboStateChanged);
-    connect(this->backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
-    connect(this->backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::handleTimeoutProgressChanged);
-    connect(this->backend->logger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::handleLatestLogChanged);
+    this->_backend = backend;
+    connect(this->_backend, &LinboBackend::currentOsChanged, this, &LinboMainActions::_handleCurrentOsChanged);
+    connect(this->_backend, &LinboBackend::stateChanged, this, &LinboMainActions::_handleLinboStateChanged);
+    connect(this->_backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
+    connect(this->_backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
+    connect(this->_backend->logger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::_handleLatestLogChanged);
 
-    this->stackView = new LinboStackedWidget(this);
+    this->_stackView = new LinboStackedWidget(this);
 
-    this->inited = false;
+    this->_inited = false;
 
     this->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
 
     // Action Buttons
-    this->buttonWidget = new QWidget();
+    this->_buttonWidget = new QWidget();
 
-    this->startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->buttonWidget);
-    connect(this->startOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::startCurrentOs);
+    this->_startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->_buttonWidget);
+    connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startCurrentOs);
 
-    this->syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->buttonWidget);
-    connect(this->syncOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::syncCurrentOs);
+    this->_syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->_buttonWidget);
+    connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncCurrentOs);
 
-    this->reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->buttonWidget);
-    connect(this->reinstallOsButton, &LinboToolButton::clicked, this->backend, &LinboBackend::reinstallCurrentOs);
+    this->_reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->_buttonWidget);
+    connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallCurrentOs);
 
     //% "No baseimage defined"
-    this->noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->buttonWidget);
-    this->noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
-    this->noBaseImageLabel->hide();
-    this->noBaseImageLabel->setAlignment(Qt::AlignCenter);
+    this->_noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->_buttonWidget);
+    this->_noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
+    this->_noBaseImageLabel->hide();
+    this->_noBaseImageLabel->setAlignment(Qt::AlignCenter);
 
-    this->stackView->addWidget(this->buttonWidget);
+    this->_stackView->addWidget(this->_buttonWidget);
 
     // Progress bar
-    this->progressBarWidget = new QWidget();
-    this->progressBar = new LinboProgressBar(this->progressBarWidget);
-    this->progressBar->setRange(0,1000);
-    this->progressBar->setIndeterminate(true);
+    this->_progressBarWidget = new QWidget();
+    this->_progressBar = new LinboProgressBar(this->_progressBarWidget);
+    this->_progressBar->setRange(0,1000);
+    this->_progressBar->setIndeterminate(true);
 
-    this->logLabel = new QLabel("", this->progressBarWidget);
-    this->logLabel->setAlignment(Qt::AlignCenter);
-    this->passedTimeLabel = new QLabel("00:00", this->progressBarWidget);
-    this->passedTimeLabel->setAlignment(Qt::AlignCenter);
+    this->_logLabel = new QLabel("", this->_progressBarWidget);
+    this->_logLabel->setAlignment(Qt::AlignCenter);
+    this->_passedTimeLabel = new QLabel("00:00", this->_progressBarWidget);
+    this->_passedTimeLabel->setAlignment(Qt::AlignCenter);
 
-    this->passedTimeTimer = new QTimer(this->progressBarWidget);
-    connect(this->passedTimeTimer, &QTimer::timeout, this, [=]() {
-        int passedSecs = QDateTime::currentSecsSinceEpoch() - this->processStartedAt;
+    this->_passedTimeTimer = new QTimer(this->_progressBarWidget);
+    connect(this->_passedTimeTimer, &QTimer::timeout, this, [=]() {
+        int passedSecs = QDateTime::currentSecsSinceEpoch() - this->_processStartedAt;
         QString passedTime =
             QStringLiteral("%1").arg(passedSecs / 60, 2, 10, QLatin1Char('0'))
             + ":"
             + QStringLiteral("%1").arg(passedSecs % 60, 2, 10, QLatin1Char('0'));
-        this->passedTimeLabel->setText(passedTime);
+        this->_passedTimeLabel->setText(passedTime);
     });
-    this->passedTimeTimer->setInterval(1000);
-    this->processStartedAt = QDateTime::currentSecsSinceEpoch();
+    this->_passedTimeTimer->setInterval(1000);
+    this->_processStartedAt = QDateTime::currentSecsSinceEpoch();
 
-    this->cancelButton = new LinboToolButton(LinboTheme::CancelIcon, this->progressBarWidget);
-    connect(this->cancelButton, &LinboToolButton::clicked, this->backend, &LinboBackend::cancelCurrentAction);
+    this->_cancelButton = new LinboToolButton(LinboTheme::CancelIcon, this->_progressBarWidget);
+    connect(this->_cancelButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::cancelCurrentAction);
 
-    this->stackView->addWidget(this->progressBarWidget);
+    this->_stackView->addWidget(this->_progressBarWidget);
 
     // Message widget
-    this->messageWidget = new QWidget();
-    this->messageLabel = new QLabel("", this->messageWidget);
-    this->messageLabel->setAlignment(Qt::AlignCenter);
+    this->_messageWidget = new QWidget();
+    this->_messageLabel = new QLabel("", this->_messageWidget);
+    this->_messageLabel->setAlignment(Qt::AlignCenter);
 
-    this->messageDetailsTextBrowser = new LinboTextBrowser(this->messageWidget);
-    this->messageDetailsTextBrowser->setReadOnly(true);
-    this->messageDetailsTextBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    this->messageDetailsTextBrowser->setLineWrapMode(QTextEdit::NoWrap);
+    this->_messageDetailsTextBrowser = new LinboTextBrowser(this->_messageWidget);
+    this->_messageDetailsTextBrowser->setReadOnly(true);
+    this->_messageDetailsTextBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->_messageDetailsTextBrowser->setLineWrapMode(QTextEdit::NoWrap);
 
-    this->resetMessageButton = new LinboToolButton(LinboTheme::BackIcon, this->messageWidget);
-    connect(this->resetMessageButton, &LinboToolButton::clicked, this->backend, &LinboBackend::resetMessage);
+    this->_resetMessageButton = new LinboToolButton(LinboTheme::BackIcon, this->_messageWidget);
+    connect(this->_resetMessageButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::resetMessage);
 
-    this->stackView->addWidget(this->messageWidget);
+    this->_stackView->addWidget(this->_messageWidget);
 
     // Root widget
-    this->rootWidget = new QWidget();
-    this->rootLayout = new QVBoxLayout(this->rootWidget);
-    this->rootLayout->setAlignment(Qt::AlignCenter);
-    this->rootLayout->setContentsMargins(0,0,0,0);
+    this->_rootWidget = new QWidget();
+    this->_rootLayout = new QVBoxLayout(this->_rootWidget);
+    this->_rootLayout->setAlignment(Qt::AlignCenter);
+    this->_rootLayout->setContentsMargins(0,0,0,0);
 
     LinboPushButton* buttonCache;
 
-    if(this->backend->config()->useMinimalLayout()) {
+    if(this->_backend->config()->useMinimalLayout()) {
         //% "Create image"
         buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboTheme::ImageIcon, LinboTheme::TextColor);
-        this->rootActionButtons.append(buttonCache);
+        this->_rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
 
         //% "Upload image"
         buttonCache = new LinboToolButton(qtTrId("main_root_button_uploadImage"), LinboTheme::UploadIcon, LinboTheme::TextColor);
-        this->rootActionButtons.append(buttonCache);
+        this->_rootActionButtons.append(buttonCache);
         connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
     }
 
     //% "Open terminal"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_openTerminal"), LinboTheme::TerminalIcon, LinboTheme::TextColor);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::terminalRequested);
-    this->rootActionButtons.append(buttonCache);
+    this->_rootActionButtons.append(buttonCache);
 
     //% "Update cache"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_updateCache"), LinboTheme::SyncIcon, LinboTheme::TextColor);
-    buttonCache->setVisible(this->backend->config()->operatingSystems().length() > 0);
-    this->rootActionButtons.append(buttonCache);
+    buttonCache->setVisible(this->_backend->config()->operatingSystems().length() > 0);
+    this->_rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::cacheUpdateRequested);
 
     //% "Partition drive"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_partitionDrive"), LinboTheme::PartitionIcon, LinboTheme::TextColor);
-    buttonCache->setVisible(this->backend->config()->operatingSystems().length() > 0);
-    this->rootActionButtons.append(buttonCache);
+    buttonCache->setVisible(this->_backend->config()->operatingSystems().length() > 0);
+    this->_rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::drivePartitioningRequested);
 
     //% "Register"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_register"), LinboTheme::RegisterIcon, LinboTheme::TextColor);
-    this->rootActionButtons.append(buttonCache);
+    this->_rootActionButtons.append(buttonCache);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::registrationRequested);
 
     QHBoxLayout* horizontalRootLayoutCache = nullptr;
 
-    for(int i = 0; i < this->rootActionButtons.length(); i++) {
+    for(int i = 0; i < this->_rootActionButtons.length(); i++) {
         if(i % 2 == 0)
             horizontalRootLayoutCache = new QHBoxLayout();
 
-        this->rootLayout->addLayout(horizontalRootLayoutCache);
-        horizontalRootLayoutCache->addWidget(this->rootActionButtons[i]);
+        this->_rootLayout->addLayout(horizontalRootLayoutCache);
+        horizontalRootLayoutCache->addWidget(this->_rootActionButtons[i]);
     }
 
-    if(this->backend->config()->useMinimalLayout()) {
+    if(this->_backend->config()->useMinimalLayout()) {
         // insert a line to separate image specific and global actions
         QFrame* separatorLine = new QFrame();
         separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
         separatorLine->setFrameShape(QFrame::HLine);
-        this->rootLayout->insertWidget(1, separatorLine);
+        this->_rootLayout->insertWidget(1, separatorLine);
     }
 
-    this->rootLayout->addStretch();
+    this->_rootLayout->addStretch();
 
-    this->stackView->addWidget(this->rootWidget);
+    this->_stackView->addWidget(this->_rootWidget);
 
     // empty widget
-    this->emptyWidget = new QWidget();
-    this->stackView->addWidget(this->emptyWidget);
+    this->_emptyWidget = new QWidget();
+    this->_stackView->addWidget(this->_emptyWidget);
 
 
-    connect(this->stackView, &LinboStackedWidget::currentChanged, this, &LinboMainActions::resizeAndPositionAllItems);
-    this->handleLinboStateChanged(this->backend->state());
+    connect(this->_stackView, &LinboStackedWidget::currentChanged, this, &LinboMainActions::_resizeAndPositionAllItems);
+    this->_handleLinboStateChanged(this->_backend->state());
 }
 
-void LinboMainActions::resizeAndPositionAllItems() {
+void LinboMainActions::_resizeAndPositionAllItems() {
 
     // stack view
-    this->stackView->setFixedSize(this->size());
+    this->_stackView->setFixedSize(this->size());
 
     int defaultSpacing = this->height() * 0.03;
 
     // Action buttons
     // set tooltips:
-    if(this->backend->currentOs() != nullptr) {
-        this->startOsButton->setToolTip(qtTrId("startOS").arg(this->backend->currentOs()->name()));
-        this->syncOsButton->setToolTip(qtTrId("syncOS").arg(this->backend->currentOs()->name()));
-        this->reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->backend->currentOs()->name()));
+    if(this->_backend->currentOs() != nullptr) {
+        this->_startOsButton->setToolTip(qtTrId("startOS").arg(this->_backend->currentOs()->name()));
+        this->_syncOsButton->setToolTip(qtTrId("syncOS").arg(this->_backend->currentOs()->name()));
+        this->_reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->_backend->currentOs()->name()));
     }
 
     // bring buttons in correct order:
-    LinboOs* selectedOs = this->backend->currentOs();
+    LinboOs* selectedOs = this->_backend->currentOs();
     LinboOs::LinboOsStartAction defaultAction = LinboOs::UnknownAction;
     if(selectedOs != nullptr)
         defaultAction = selectedOs->defaultAction();
@@ -211,12 +211,12 @@ void LinboMainActions::resizeAndPositionAllItems() {
         break;
     }
 
-    while (this->actionButtons.length() < 3)
-        this->actionButtons.append(nullptr);
+    while (this->_actionButtons.length() < 3)
+        this->_actionButtons.append(nullptr);
 
-    this->actionButtons[startOsPosition] = this->startOsButton;
-    this->actionButtons[syncOsPosition] = this->syncOsButton;
-    this->actionButtons[reinstallOsPosition] = this->reinstallOsButton;
+    this->_actionButtons[startOsPosition] = this->_startOsButton;
+    this->_actionButtons[syncOsPosition] = this->_syncOsButton;
+    this->_actionButtons[reinstallOsPosition] = this->_reinstallOsButton;
 
     // check for disabled actions
     QList<bool> positionsEnabled;
@@ -234,25 +234,25 @@ void LinboMainActions::resizeAndPositionAllItems() {
         geometries.append(QRect());
 
     // move buttons into place
-    this->buttonWidget->setGeometry(0,0,this->width(), this->height());
+    this->_buttonWidget->setGeometry(0,0,this->width(), this->height());
 
-    int buttonSpacing = this->buttonWidget->height() * 0.1;
-    int defaultButtonHeight = this->buttonWidget->height() * 0.6;
-    geometries[0] = QRect((this->buttonWidget->width() - defaultButtonHeight) / 2, 0,defaultButtonHeight, defaultButtonHeight);
+    int buttonSpacing = this->_buttonWidget->height() * 0.1;
+    int defaultButtonHeight = this->_buttonWidget->height() * 0.6;
+    geometries[0] = QRect((this->_buttonWidget->width() - defaultButtonHeight) / 2, 0,defaultButtonHeight, defaultButtonHeight);
 
 
-    int secondaryButtonHeight = this->buttonWidget->height() * 0.3;
+    int secondaryButtonHeight = this->_buttonWidget->height() * 0.3;
     if(positionsEnabled[1] && positionsEnabled[2]) {
         // place buttons besides each other
         geometries[1] = QRect(
-                            this->buttonWidget->width() / 2 - secondaryButtonHeight - buttonSpacing / 2,
+                            this->_buttonWidget->width() / 2 - secondaryButtonHeight - buttonSpacing / 2,
                             defaultButtonHeight + buttonSpacing,
                             secondaryButtonHeight,
                             secondaryButtonHeight
                         );
 
         geometries[2] = QRect(
-                            this->buttonWidget->width() / 2 + buttonSpacing / 2,
+                            this->_buttonWidget->width() / 2 + buttonSpacing / 2,
                             defaultButtonHeight + buttonSpacing,
                             secondaryButtonHeight,
                             secondaryButtonHeight
@@ -261,7 +261,7 @@ void LinboMainActions::resizeAndPositionAllItems() {
     else {
         // place buttons on top of each other
         geometries[1] = QRect(
-                            this->buttonWidget->width() / 2 - secondaryButtonHeight / 2,
+                            this->_buttonWidget->width() / 2 - secondaryButtonHeight / 2,
                             defaultButtonHeight + buttonSpacing,
                             secondaryButtonHeight,
                             secondaryButtonHeight
@@ -270,138 +270,138 @@ void LinboMainActions::resizeAndPositionAllItems() {
         geometries[2] = geometries[1];
     }
 
-    for(int i = 0; i < this->actionButtons.length(); i++) {
-        if(this->inited) {
-            this->actionButtons[i]->setVisibleAnimated(positionsEnabled[i]);
-            this->actionButtons[i]->setGeometryAnimated(geometries[i]);
+    for(int i = 0; i < this->_actionButtons.length(); i++) {
+        if(this->_inited) {
+            this->_actionButtons[i]->setVisibleAnimated(positionsEnabled[i]);
+            this->_actionButtons[i]->setGeometryAnimated(geometries[i]);
         }
         else {
             // don't animate the first time
-            this->actionButtons[i]->setVisible(positionsEnabled[i]);
-            this->actionButtons[i]->setGeometry(geometries[i]);
+            this->_actionButtons[i]->setVisible(positionsEnabled[i]);
+            this->_actionButtons[i]->setGeometry(geometries[i]);
         }
 
         if(i < 2)
-            QWidget::setTabOrder(this->actionButtons[i], this->actionButtons[i+1]);
+            QWidget::setTabOrder(this->_actionButtons[i], this->_actionButtons[i+1]);
     }
 
     QFont fontCache;
 
     if(selectedOs != nullptr && selectedOs->baseImage() == nullptr) {
-        int noBaseImageLabelHeight = this->buttonWidget->height() * 0.2;
-        fontCache = this->noBaseImageLabel->font();
+        int noBaseImageLabelHeight = this->_buttonWidget->height() * 0.2;
+        fontCache = this->_noBaseImageLabel->font();
         fontCache.setPixelSize(gTheme->toFontSize(noBaseImageLabelHeight * 0.8));
-        this->noBaseImageLabel->setFont(fontCache);
-        this->noBaseImageLabel->setGeometry(0, defaultButtonHeight * 1.1, this->buttonWidget->width(), noBaseImageLabelHeight);
-        this->noBaseImageLabel->show();
+        this->_noBaseImageLabel->setFont(fontCache);
+        this->_noBaseImageLabel->setGeometry(0, defaultButtonHeight * 1.1, this->_buttonWidget->width(), noBaseImageLabelHeight);
+        this->_noBaseImageLabel->show();
     }
     else {
-        this->noBaseImageLabel->hide();
+        this->_noBaseImageLabel->hide();
     }
 
     // Progress bar
-    this->progressBarWidget->setGeometry(0,0,this->width(), this->height());
-    int progressBarHeight = this->progressBarWidget->height() * 0.1;
-    int progressBarWidth = this->progressBarWidget->width() * 0.5;
+    this->_progressBarWidget->setGeometry(0,0,this->width(), this->height());
+    int progressBarHeight = this->_progressBarWidget->height() * 0.1;
+    int progressBarWidth = this->_progressBarWidget->width() * 0.5;
     int logLabelHeight = progressBarHeight * 2;
-    int logLabelWidth = this->progressBarWidget->width() * 0.8;
-    int cancelButtonWidth = this->progressBarWidget->height() * 0.4;
+    int logLabelWidth = this->_progressBarWidget->width() * 0.8;
+    int cancelButtonWidth = this->_progressBarWidget->height() * 0.4;
 
-    fontCache = this->logLabel->font();
+    fontCache = this->_logLabel->font();
     fontCache.setPixelSize(gTheme->toFontSize(logLabelHeight * 0.8));
-    this->logLabel->setFont(fontCache);
-    this->logLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, 0, logLabelWidth, logLabelHeight);
+    this->_logLabel->setFont(fontCache);
+    this->_logLabel->setGeometry((this->_progressBarWidget->width() - logLabelWidth) / 2, 0, logLabelWidth, logLabelHeight);
 
-    progressBar->setGeometry((this->progressBarWidget->width() - progressBarWidth) / 2, this->logLabel->y() + logLabelHeight + defaultSpacing, progressBarWidth, progressBarHeight);
+    _progressBar->setGeometry((this->_progressBarWidget->width() - progressBarWidth) / 2, this->_logLabel->y() + logLabelHeight + defaultSpacing, progressBarWidth, progressBarHeight);
 
-    fontCache = this->passedTimeLabel->font();
+    fontCache = this->_passedTimeLabel->font();
     fontCache.setPixelSize(gTheme->toFontSize(logLabelHeight * 0.8));
-    this->passedTimeLabel->setFont(fontCache);
-    this->passedTimeLabel->setGeometry((this->progressBarWidget->width() - logLabelWidth) / 2, this->progressBar->y() + progressBarHeight + defaultSpacing, logLabelWidth, logLabelHeight);
+    this->_passedTimeLabel->setFont(fontCache);
+    this->_passedTimeLabel->setGeometry((this->_progressBarWidget->width() - logLabelWidth) / 2, this->_progressBar->y() + progressBarHeight + defaultSpacing, logLabelWidth, logLabelHeight);
 
-    this->cancelButton->setGeometry((this->progressBarWidget->width() - cancelButtonWidth) / 2, this->passedTimeLabel->y() + logLabelHeight + defaultSpacing, cancelButtonWidth, cancelButtonWidth);
+    this->_cancelButton->setGeometry((this->_progressBarWidget->width() - cancelButtonWidth) / 2, this->_passedTimeLabel->y() + logLabelHeight + defaultSpacing, cancelButtonWidth, cancelButtonWidth);
 
     // Message widget
-    this->messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));
+    this->_messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
-    if(this->messageDetailsTextBrowser->isVisible()) {
-        this->messageLabel->setGeometry(0,0, this->width(), this->height() * 0.2);
+    if(this->_messageDetailsTextBrowser->isVisible()) {
+        this->_messageLabel->setGeometry(0,0, this->width(), this->height() * 0.2);
 
         int messageDetailsFontHeight = this->height() * 0.6;
-        QFont messageDetailsFont = this->messageDetailsTextBrowser->font();
+        QFont messageDetailsFont = this->_messageDetailsTextBrowser->font();
         messageDetailsFont.setPixelSize(gTheme->toFontSize(messageDetailsFontHeight / 12.5));
-        this->messageDetailsTextBrowser->setFont(messageDetailsFont);
+        this->_messageDetailsTextBrowser->setFont(messageDetailsFont);
 
-        QFont messageFont = this->messageLabel->font();
+        QFont messageFont = this->_messageLabel->font();
         messageFont.setBold(true);
         messageFont.setPixelSize(gTheme->toFontSize(messageDetailsFont.pixelSize() * 1.5));
-        this->messageLabel->setFont(messageFont);
+        this->_messageLabel->setFont(messageFont);
 
-        this->messageDetailsTextBrowser->setFixedWidth(this->width() * 0.8);
-        this->messageDetailsTextBrowser->move((this->width() - this->messageDetailsTextBrowser->width()) / 2, this->messageLabel->height());
-        this->messageDetailsTextBrowser->setFixedHeight(messageDetailsFontHeight);
+        this->_messageDetailsTextBrowser->setFixedWidth(this->width() * 0.8);
+        this->_messageDetailsTextBrowser->move((this->width() - this->_messageDetailsTextBrowser->width()) / 2, this->_messageLabel->height());
+        this->_messageDetailsTextBrowser->setFixedHeight(messageDetailsFontHeight);
     }
     else {
-        QFont messageFont = this->messageLabel->font();
+        QFont messageFont = this->_messageLabel->font();
         messageFont.setBold(true);
         messageFont.setPixelSize(gTheme->toFontSize(this->height() * 0.1));
-        this->messageLabel->setFont(messageFont);
-        this->messageLabel->setGeometry(0, 0, this->width(), this->height());
+        this->_messageLabel->setFont(messageFont);
+        this->_messageLabel->setGeometry(0, 0, this->width(), this->height());
     }
 
     int resetMessageButtonSize = this->height() * 0.15;
 
-    this->resetMessageButton->setGeometry((this->width() - resetMessageButtonSize) / 2, this->height() - resetMessageButtonSize * 1.1, resetMessageButtonSize, resetMessageButtonSize);
+    this->_resetMessageButton->setGeometry((this->width() - resetMessageButtonSize) / 2, this->height() - resetMessageButtonSize * 1.1, resetMessageButtonSize, resetMessageButtonSize);
 
     // Root widget
-    this->rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
+    this->_rootWidget->setGeometry(QRect(0,0, this->width(), this->height()));
 
-    int rootActionButtonHeight = this->height() / (this->rootActionButtons.length() / 2) - this->height() * 0.03;
-    this->rootLayout->setSpacing(defaultSpacing);
+    int rootActionButtonHeight = this->height() / (this->_rootActionButtons.length() / 2) - this->height() * 0.03;
+    this->_rootLayout->setSpacing(defaultSpacing);
 
-    for(LinboPushButton* button : this->rootActionButtons) {
+    for(LinboPushButton* button : this->_rootActionButtons) {
         button->setFixedHeight(rootActionButtonHeight);
         button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     }
 
-    this->inited = true;
+    this->_inited = true;
 }
 
 void LinboMainActions::resizeEvent(QResizeEvent *event) {
-    this->resizeAndPositionAllItems();
+    this->_resizeAndPositionAllItems();
     QWidget::resizeEvent(event);
 }
 
-void LinboMainActions::handleCurrentOsChanged(LinboOs* newOs) {
+void LinboMainActions::_handleCurrentOsChanged(LinboOs* newOs) {
     Q_UNUSED(newOs)
-    this->resizeAndPositionAllItems();
+    this->_resizeAndPositionAllItems();
 }
 
-void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState) {
+void LinboMainActions::_handleLinboStateChanged(LinboBackend::LinboState newState) {
 
     QWidget* currentWidget = nullptr;
-    this->passedTimeTimer->stop();
+    this->_passedTimeTimer->stop();
 
     switch (newState) {
     case LinboBackend::Autostarting:
     case LinboBackend::RootTimeout:
-        this->progressBar->setIndeterminate(false);
-        this->progressBar->setReversed(true);
-        this->progressBar->setValue(0);
-        currentWidget = this->progressBarWidget;
+        this->_progressBar->setIndeterminate(false);
+        this->_progressBar->setReversed(true);
+        this->_progressBar->setValue(0);
+        currentWidget = this->_progressBarWidget;
         break;
     case LinboBackend::Idle:
-        if(this->backend->config()->useMinimalLayout())
-            currentWidget = this->buttonWidget;
+        if(this->_backend->config()->useMinimalLayout())
+            currentWidget = this->_buttonWidget;
         else
-            currentWidget = this->emptyWidget;
+            currentWidget = this->_emptyWidget;
         break;
 
 
     case LinboBackend::Disabled:
-        this->cancelButton->hide();
+        this->_cancelButton->hide();
         //% "This client is controlled remotely. Please don't power it off."
-        this->logLabel->setText(qtTrId("main_message_disabled"));
+        this->_logLabel->setText(qtTrId("main_message_disabled"));
     // fall through
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
@@ -410,19 +410,19 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
     case LinboBackend::Reinstalling:
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
-        this->passedTimeLabel->setText("00:00");
-        this->processStartedAt = QDateTime::currentSecsSinceEpoch();
-        this->passedTimeTimer->start();
-        this->progressBar->setIndeterminate(true);
-        this->progressBar->setReversed(false);
-        currentWidget = this->progressBarWidget;
+        this->_passedTimeLabel->setText("00:00");
+        this->_processStartedAt = QDateTime::currentSecsSinceEpoch();
+        this->_passedTimeTimer->start();
+        this->_progressBar->setIndeterminate(true);
+        this->_progressBar->setReversed(false);
+        currentWidget = this->_progressBarWidget;
         break;
 
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError: {
-        QList<LinboLogger::LinboLog> chaperLogs = this->backend->logger()->logsOfCurrentChapter();
+        QList<LinboLogger::LinboLog> chaperLogs = this->_backend->logger()->logsOfCurrentChapter();
         //% "The process %1 crashed:"
-        this->messageLabel->setText(qtTrId("main_message_processCrashed").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
+        this->_messageLabel->setText(qtTrId("main_message_processCrashed").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\""));
         QString errorDetails;
         if(chaperLogs.length() == 0)
             //% "No logs before this crash"
@@ -436,40 +436,40 @@ void LinboMainActions::handleLinboStateChanged(LinboBackend::LinboState newState
         //% "Please ask your system administrator for help."
         errorDetails += "<br><br><b>" + qtTrId("main_message_askForHelp") + "</b>";
 
-        this->messageDetailsTextBrowser->setText("<html>" + errorDetails + "</html>");
-        this->messageLabel->setStyleSheet("QLabel { color : red; }");
-        this->messageDetailsTextBrowser->setVisible(true);
-        currentWidget = this->messageWidget;
+        this->_messageDetailsTextBrowser->setText("<html>" + errorDetails + "</html>");
+        this->_messageLabel->setStyleSheet("QLabel { color : red; }");
+        this->_messageDetailsTextBrowser->setVisible(true);
+        currentWidget = this->_messageWidget;
         break;
     }
 
     case LinboBackend::RootActionSuccess: {
-        QList<LinboLogger::LinboLog> chaperLogs = this->backend->logger()->logsOfCurrentChapter();
+        QList<LinboLogger::LinboLog> chaperLogs = this->_backend->logger()->logsOfCurrentChapter();
         //% "The process %1 finished successfully."
-        this->messageLabel->setText(qtTrId("main_message_processFinishedSuccessfully").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
-        this->messageDetailsTextBrowser->setText("");
-        this->messageLabel->setStyleSheet("QLabel { color : green; }");
-        currentWidget = this->messageWidget;
-        this->messageDetailsTextBrowser->setVisible(false);
+        this->_messageLabel->setText(qtTrId("main_message_processFinishedSuccessfully").arg("\"" + chaperLogs[chaperLogs.length()-1].message + "\"" ));
+        this->_messageDetailsTextBrowser->setText("");
+        this->_messageLabel->setStyleSheet("QLabel { color : green; }");
+        currentWidget = this->_messageWidget;
+        this->_messageDetailsTextBrowser->setVisible(false);
         break;
     }
 
     case LinboBackend::Root:
-        currentWidget = this->rootWidget;
+        currentWidget = this->_rootWidget;
         break;
 
     default:
         break;
     }
 
-    if(this->inited)
-        this->stackView->setCurrentWidgetAnimated(currentWidget);
+    if(this->_inited)
+        this->_stackView->setCurrentWidgetAnimated(currentWidget);
     else
-        this->stackView->setCurrentWidget(currentWidget);
+        this->_stackView->setCurrentWidget(currentWidget);
 }
 
-void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
-    if(this->backend->state() == LinboBackend::Idle)
+void LinboMainActions::_handleLatestLogChanged(const LinboLogger::LinboLog& latestLog) {
+    if(this->_backend->state() == LinboBackend::Idle)
         return;
 
     QString logColor = gTheme->getColor(LinboTheme::TextColor).name();
@@ -477,40 +477,40 @@ void LinboMainActions::handleLatestLogChanged(const LinboLogger::LinboLog& lates
     if (latestLog.type == LinboLogger::StdErr)
         logColor = "red";
 
-    this->logLabel->setStyleSheet("QLabel { color : " + logColor + "; }");
-    this->logLabel->setText(latestLog.message);
+    this->_logLabel->setStyleSheet("QLabel { color : " + logColor + "; }");
+    this->_logLabel->setText(latestLog.message);
 }
 
-void LinboMainActions::handleTimeoutProgressChanged() {
-    if(this->backend->state() != LinboBackend::Autostarting && this->backend->state() != LinboBackend::RootTimeout)
+void LinboMainActions::_handleTimeoutProgressChanged() {
+    if(this->_backend->state() != LinboBackend::Autostarting && this->_backend->state() != LinboBackend::RootTimeout)
         return;
 
     double progress = 0;
     int remaningSeconds = 0;
     QString label = "";
 
-    if(this->backend->state() == LinboBackend::Autostarting) {
-        progress = this->backend->autostartTimeoutProgress();
-        remaningSeconds = this->backend->autostartTimeoutRemainingSeconds();
+    if(this->_backend->state() == LinboBackend::Autostarting) {
+        progress = this->_backend->autostartTimeoutProgress();
+        remaningSeconds = this->_backend->autostartTimeoutRemainingSeconds();
 
         //% "Starting"
-        label = qtTrId("main_autostart_label") + " " + this->backend->currentOs()->name();
+        label = qtTrId("main_autostart_label") + " " + this->_backend->currentOs()->name();
     }
     else {
-        progress = this->backend->rootTimeoutProgress();
-        remaningSeconds = this->backend->rootTimeoutRemainingSeconds();
+        progress = this->_backend->rootTimeoutProgress();
+        remaningSeconds = this->_backend->rootTimeoutRemainingSeconds();
 
         //% "Logging out automatically"
         label = qtTrId("main_rootTimeout_label");
     }
 
-    this->progressBar->setValue(1000 - progress * 1000);
+    this->_progressBar->setValue(1000 - progress * 1000);
 
-    this->logLabel->setText(label);
+    this->_logLabel->setText(label);
 
     QString remaningTime =
         QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
         + ":"
         + QStringLiteral("%1").arg(remaningSeconds % 60, 2, 10, QLatin1Char('0'));
-    this->passedTimeLabel->setText(remaningTime);
+    this->_passedTimeLabel->setText(remaningTime);
 }

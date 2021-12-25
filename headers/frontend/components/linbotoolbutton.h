@@ -38,7 +38,7 @@ protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    LinboTheme::LinboThemeColorRole colorRole;
+    LinboTheme::LinboThemeColorRole _colorRole;
 
 };
 

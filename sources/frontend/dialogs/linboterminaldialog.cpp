@@ -22,14 +22,14 @@ LinboTerminalDialog::LinboTerminalDialog(QWidget* parent) : LinboDialog(parent)
 {
     //% "Terminal"
     this->setTitle(qtTrId("dialog_terminal_title"));
-    this->terminal = new LinboTerminal(this);
-    connect(this->terminal, &LinboTerminal::processExited, this, &LinboDialog::autoClose);
-    connect(this, &LinboDialog::closedByUser, this->terminal, &LinboTerminal::clearAndRestart);
+    this->_terminal = new LinboTerminal(this);
+    connect(this->_terminal, &LinboTerminal::processExited, this, &LinboDialog::autoClose);
+    connect(this, &LinboDialog::closedByUser, this->_terminal, &LinboTerminal::clearAndRestart);
 }
 
 void LinboTerminalDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
     int margins = gTheme->getSize(LinboTheme::Margins);
-    this->terminal->setGeometry(margins, margins, this->width() - 2 * margins, this->height() - 2 * margins);
+    this->_terminal->setGeometry(margins, margins, this->width() - 2 * margins, this->height() - 2 * margins);
 }

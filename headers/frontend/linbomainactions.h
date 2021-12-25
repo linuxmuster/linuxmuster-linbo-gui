@@ -50,45 +50,45 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboBackend* backend;
+    LinboBackend* _backend;
 
-    LinboStackedWidget* stackView;
+    LinboStackedWidget* _stackView;
 
-    QWidget* buttonWidget;
-    LinboPushButton* startOsButton;
-    LinboPushButton* syncOsButton;
-    LinboPushButton* reinstallOsButton;
-    QList<LinboPushButton*> actionButtons;
-    QLabel* noBaseImageLabel;
+    QWidget* _buttonWidget;
+    LinboPushButton* _startOsButton;
+    LinboPushButton* _syncOsButton;
+    LinboPushButton* _reinstallOsButton;
+    QList<LinboPushButton*> _actionButtons;
+    QLabel* _noBaseImageLabel;
 
-    QWidget* progressBarWidget;
-    LinboProgressBar* progressBar;
-    QLabel* logLabel;
-    QLabel* passedTimeLabel;
-    QTimer* passedTimeTimer;
-    double processStartedAt;
-    LinboPushButton* cancelButton;
+    QWidget* _progressBarWidget;
+    LinboProgressBar* _progressBar;
+    QLabel* _logLabel;
+    QLabel* _passedTimeLabel;
+    QTimer* _passedTimeTimer;
+    double _processStartedAt;
+    LinboPushButton* _cancelButton;
 
-    QWidget* messageWidget;
-    QVBoxLayout* messageLayout;
-    QLabel* messageLabel;
-    LinboTextBrowser* messageDetailsTextBrowser;
-    LinboPushButton* resetMessageButton;
+    QWidget* _messageWidget;
+    QVBoxLayout* _messageLayout;
+    QLabel* _messageLabel;
+    LinboTextBrowser* _messageDetailsTextBrowser;
+    LinboPushButton* _resetMessageButton;
 
-    QWidget* rootWidget;
-    QVBoxLayout* rootLayout;
-    QList<LinboPushButton*> rootActionButtons;
+    QWidget* _rootWidget;
+    QVBoxLayout* _rootLayout;
+    QList<LinboPushButton*> _rootActionButtons;
 
-    QWidget* emptyWidget;
+    QWidget* _emptyWidget;
 
-    bool inited;
+    bool _inited;
 
 private slots:
-    void resizeAndPositionAllItems();
-    void handleCurrentOsChanged(LinboOs* newOs);
-    void handleLinboStateChanged(LinboBackend::LinboState newState);
-    void handleLatestLogChanged(const LinboLogger::LinboLog& latestLog);
-    void handleTimeoutProgressChanged();
+    void _resizeAndPositionAllItems();
+    void _handleCurrentOsChanged(LinboOs* newOs);
+    void _handleLinboStateChanged(LinboBackend::LinboState newState);
+    void _handleLatestLogChanged(const LinboLogger::LinboLog& latestLog);
+    void _handleTimeoutProgressChanged();
 
 signals:
     void imageCreationRequested();

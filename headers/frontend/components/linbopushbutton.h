@@ -64,23 +64,23 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *e) override;
 
 private:
-    bool shouldBeVisible;
-    bool isHovered;
-    bool isFocused;
-    bool isPressed;
-    QPropertyAnimation* geometryAnimation;
-    QList<LinboPushButtonOverlay*> overlays;
-    QList<LinboPushButtonOverlay::OverlayType> mutedOverlayTypes;
-    QSvgWidget* svgIcon;
-    QSvgWidget* hoveredOverlay;
-    QLabel *label;
+    bool _shouldBeVisible;
+    bool _isHovered;
+    bool _isFocused;
+    bool _isPressed;
+    QPropertyAnimation* _geometryAnimation;
+    QList<LinboPushButtonOverlay*> _overlays;
+    QList<LinboPushButtonOverlay::OverlayType> _mutedOverlayTypes;
+    QSvgWidget* _svgIcon;
+    QSvgWidget* _hoveredOverlay;
+    QLabel *_label;
 
-    bool overlayTypeIsMuted(LinboPushButtonOverlay::OverlayType overlayType);
-    QList<LinboPushButtonOverlay*> getOverlaysOfType(LinboPushButtonOverlay::OverlayType type);
-    QList<LinboPushButtonOverlay*> getOverlaysOfType(LinboPushButtonOverlay::OverlayType type, QList<LinboPushButtonOverlay*> overlays);
+    bool _overlayTypeIsMuted(LinboPushButtonOverlay::OverlayType overlayType);
+    QList<LinboPushButtonOverlay*> _getOverlaysOfType(LinboPushButtonOverlay::OverlayType type);
+    QList<LinboPushButtonOverlay*> _getOverlaysOfType(LinboPushButtonOverlay::OverlayType type, QList<LinboPushButtonOverlay*> overlays);
 
 private slots:
-    void handleToggled(bool checked);
+    void _handleToggled(bool checked);
 
 signals:
     void checked();

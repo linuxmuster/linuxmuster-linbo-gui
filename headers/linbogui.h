@@ -42,9 +42,9 @@ public:
     //void done(int r) override;
 
 private:
-    LinboBackend* backend;
-    LinboGuiTheme* theme;
-    LinboMainPage* startPage;
+    LinboBackend* _backend;
+    LinboGuiTheme* _theme;
+    LinboMainPage* _startPage;
 
 };
 

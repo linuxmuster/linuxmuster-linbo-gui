@@ -40,16 +40,16 @@ protected:
     void refreshImageList();
 
 private:
-    LinboBackend* backend;
+    LinboBackend* _backend;
 
-    QVBoxLayout* mainLayout;
+    QVBoxLayout* _mainLayout;
 
-    QComboBox* imageSelectBox;
+    QComboBox* _imageSelectBox;
 
-    QButtonGroup* postProcessActionButtonGroup;
-    QHBoxLayout* postProcessActionLayout;
+    QButtonGroup* _postProcessActionButtonGroup;
+    QHBoxLayout* _postProcessActionLayout;
 
-    LinboToolButton* uploadButton;
+    LinboToolButton* _uploadButton;
 };
 
 #endif // LINBOIMAGEUPLOADDIALOG_H

@@ -45,18 +45,18 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboBackend* backend;
-    QVBoxLayout* mainLayout;
-    QButtonGroup* actionButtonGroup;
-    LinboLineEdit* imageNameLineEdit;
-    LinboTextBrowser* imageDescriptionTextBrowser;
+    LinboBackend* _backend;
+    QVBoxLayout* _mainLayout;
+    QButtonGroup* _actionButtonGroup;
+    LinboLineEdit* _imageNameLineEdit;
+    LinboTextBrowser* _imageDescriptionTextBrowser;
 
-    QButtonGroup* postProcessActionButtonGroup;
-    QHBoxLayout* postProcessActionLayout;
+    QButtonGroup* _postProcessActionButtonGroup;
+    QHBoxLayout* _postProcessActionLayout;
 
 private slots:
-    void refreshPathAndDescription(bool isOpening = false);
-    void createImage(LinboBackend::LinboPostProcessActions postProcessActions);
+    void _refreshPathAndDescription(bool isOpening = false);
+    void _createImage(LinboBackend::LinboPostProcessActions postProcessActions);
 };
 
 #endif // LINBOIMAGECREATIONDIALOG_H

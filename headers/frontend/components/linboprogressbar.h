@@ -40,17 +40,16 @@ public:
     void setReversed(bool reversed);
 
 protected:
-    QTimer* refreshTimer;
-    QPropertyAnimation* indeterminateAnimtion;
-
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    bool indeterminate;
-    bool reversed;
-    int preIndeterminateValue;
-    int preIndeterminateMinimum;
-    int preIndeterminateMaximum;
+    bool _indeterminate;
+    bool _reversed;
+    int _preIndeterminateValue;
+    int _preIndeterminateMinimum;
+    int _preIndeterminateMaximum;
+    QTimer* _refreshTimer;
+    QPropertyAnimation* _indeterminateAnimtion;
 
 protected slots:
     void updateIndeterminate();

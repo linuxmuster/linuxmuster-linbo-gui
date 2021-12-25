@@ -20,21 +20,21 @@
 
 LinboStackedWidget::LinboStackedWidget(QWidget* parent) : QStackedWidget(parent)
 {
-    this->animationState = Idle;
-    opacityAnimation = new QPropertyAnimation();
-    opacityAnimation->setPropertyName("opacity");
-    opacityAnimation->setEasingCurve(QEasingCurve::InOutQuad);
-    opacityAnimation->setDuration(400);
-    opacityAnimation->setLoopCount(1);
-    connect(opacityAnimation, &QPropertyAnimation::finished, this, &LinboStackedWidget::handleAnimationFinished);
+    this->_animationState = Idle;
+    _opacityAnimation = new QPropertyAnimation();
+    _opacityAnimation->setPropertyName("opacity");
+    _opacityAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+    _opacityAnimation->setDuration(400);
+    _opacityAnimation->setLoopCount(1);
+    connect(_opacityAnimation, &QPropertyAnimation::finished, this, &LinboStackedWidget::handleAnimationFinished);
 }
 
 void LinboStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
-    if(widget == nullptr || (widget == this->currentWidget() && this->animationState == Idle))
+    if(widget == nullptr || (widget == this->currentWidget() && this->_animationState == Idle))
         return;
-    else if(widget == this->currentWidget() && this->animationState != Idle) {
-        this->newWidget = widget;
-        if(this->animationState == FadingOut) {
+    else if(widget == this->currentWidget() && this->_animationState != Idle) {
+        this->_newWidget = widget;
+        if(this->_animationState == FadingOut) {
             return;
         }
         else {
@@ -43,44 +43,44 @@ void LinboStackedWidget::setCurrentWidgetAnimated(QWidget* widget) {
         }
     }
 
-    this->newWidget = widget;
+    this->_newWidget = widget;
 
     // fade old widget out
     QGraphicsOpacityEffect* opacityEffect = new QGraphicsOpacityEffect(this);
     this->currentWidget()->setGraphicsEffect(opacityEffect);
     opacityEffect->setOpacity(1);
 
-    opacityAnimation->setStartValue(1);
-    opacityAnimation->setEndValue(0);
-    opacityAnimation->setTargetObject(opacityEffect);
-    opacityAnimation->start();
+    _opacityAnimation->setStartValue(1);
+    _opacityAnimation->setEndValue(0);
+    _opacityAnimation->setTargetObject(opacityEffect);
+    _opacityAnimation->start();
 
-    this->animationState = FadingOut;
+    this->_animationState = FadingOut;
 }
 
 void LinboStackedWidget::handleAnimationFinished() {
     // disable graphical effect to prevent errors
     this->currentWidget()->graphicsEffect()->setEnabled(false);
 
-    if(this->newWidget == nullptr) {
-        this->animationState = Idle;
+    if(this->_newWidget == nullptr) {
+        this->_animationState = Idle;
         return;
     }
 
     // hide new widget
     QGraphicsOpacityEffect* opacityEffect = new QGraphicsOpacityEffect(this);
-    this->newWidget->setGraphicsEffect(opacityEffect);
+    this->_newWidget->setGraphicsEffect(opacityEffect);
     opacityEffect->setOpacity(0);
 
     // set new widget
-    this->setCurrentWidget(this->newWidget);
-    this->newWidget = nullptr;
+    this->setCurrentWidget(this->_newWidget);
+    this->_newWidget = nullptr;
 
     // fade new widget in
-    opacityAnimation->setTargetObject(opacityEffect);
-    opacityAnimation->setStartValue(0);
-    opacityAnimation->setEndValue(1);
-    opacityAnimation->start();
+    _opacityAnimation->setTargetObject(opacityEffect);
+    _opacityAnimation->setStartValue(0);
+    _opacityAnimation->setEndValue(1);
+    _opacityAnimation->start();
 
-    this->animationState = FadingIn;
+    this->_animationState = FadingIn;
 }

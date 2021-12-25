@@ -41,7 +41,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboTerminal* terminal;
+    LinboTerminal* _terminal;
 
 };
 

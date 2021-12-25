@@ -20,17 +20,17 @@
 
 LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
-    this->inited = false;
-    this->showClientInfo = backend->config()->clientDetailsVisibleByDefault();
-    this->f1Pressed = false;
+    this->_inited = false;
+    this->_showClientInfo = backend->config()->clientDetailsVisibleByDefault();
+    this->_f1Pressed = false;
 
-    this->backend = backend;
+    this->_backend = backend;
 
 #ifdef TEST_ENV
     //this->backend->login("Muster!");
 #endif
 
-    connect(this->backend, &LinboBackend::stateChanged, this, &LinboMainPage::handleLinboStateChanged);
+    connect(this->_backend, &LinboBackend::stateChanged, this, &LinboMainPage::_handleLinboStateChanged);
 
     this->setGeometry(QRect(0,0,parent->width(), parent->height()));
 
@@ -53,24 +53,24 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // OS Buttons
-    osSelectionRow = new LinboOsSelectionRow(this->backend);
-    mainLayout->addWidget(osSelectionRow);
+    _osSelectionRow = new LinboOsSelectionRow(this->_backend);
+    mainLayout->addWidget(_osSelectionRow);
 
     mainLayout->addStretch();
 
     // action buttons
-    this->mainActions = new LinboMainActions(this->backend, this);
-    this->mainActions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addWidget(this->mainActions);
+    this->_mainActions = new LinboMainActions(this->_backend, this);
+    this->_mainActions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    mainLayout->addWidget(this->_mainActions);
 
-    this->startActionWidgetAnimation = new QPropertyAnimation(this->mainActions, "minimumSize");
-    this->startActionWidgetAnimation->setDuration(400);
-    this->startActionWidgetAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+    this->_startActionWidgetAnimation = new QPropertyAnimation(this->_mainActions, "minimumSize");
+    this->_startActionWidgetAnimation->setDuration(400);
+    this->_startActionWidgetAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->backend->config()->ipAddress() + " - F1");
+    QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->_backend->config()->ipAddress() + " - F1");
     QFont versionAndNetworkLabelFont;
     versionAndNetworkLabelFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
     versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);
@@ -87,15 +87,15 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
     // client info
-    clientInfo = new LinboClientInfo(this->backend->config(), this);
-    clientInfo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    clientInfo->setFixedWidth(this->width() * 0.9);
-    mainLayout->addWidget(clientInfo);
-    mainLayout->setAlignment(this->clientInfo, Qt::AlignCenter);
+    _clientInfo = new LinboClientInfo(this->_backend->config(), this);
+    _clientInfo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    _clientInfo->setFixedWidth(this->width() * 0.9);
+    mainLayout->addWidget(_clientInfo);
+    mainLayout->setAlignment(this->_clientInfo, Qt::AlignCenter);
 
-    this->clientInfoAnimation = new QPropertyAnimation(clientInfo, "minimumSize");
-    this->clientInfoAnimation->setDuration(400);
-    this->clientInfoAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+    this->_clientInfoAnimation = new QPropertyAnimation(_clientInfo, "minimumSize");
+    this->_clientInfoAnimation->setDuration(400);
+    this->_clientInfoAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
     // power and settings Buttons
 
@@ -108,33 +108,33 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     int y = this->height() - (height + margins);
     powerActionsLayoutWidget->setGeometry(QRect(x, y, width, height));
 
-    rootActionButton = new LinboToolButton(LinboTheme::SettingsIcon);
-    this->powerActionButtons.append(rootActionButton);
-    rootActionButton->setFixedHeight(buttonWidth);
-    rootActionButton->setFixedWidth(buttonWidth);
+    _rootActionButton = new LinboToolButton(LinboTheme::SettingsIcon);
+    this->_powerActionButtons.append(_rootActionButton);
+    _rootActionButton->setFixedHeight(buttonWidth);
+    _rootActionButton->setFixedWidth(buttonWidth);
     //% "Settings"
-    rootActionButton->setToolTip(qtTrId("settings"));
+    _rootActionButton->setToolTip(qtTrId("settings"));
 
-    logoutActionButton = new LinboToolButton(LinboTheme::LogoutIcon);
-    connect(logoutActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::logout);
-    this->powerActionButtons.append(logoutActionButton);
-    logoutActionButton->setFixedHeight(buttonWidth);
-    logoutActionButton->setFixedWidth(buttonWidth);
-    logoutActionButton->setVisible(false);
+    _logoutActionButton = new LinboToolButton(LinboTheme::LogoutIcon);
+    connect(_logoutActionButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::logout);
+    this->_powerActionButtons.append(_logoutActionButton);
+    _logoutActionButton->setFixedHeight(buttonWidth);
+    _logoutActionButton->setFixedWidth(buttonWidth);
+    _logoutActionButton->setVisible(false);
     //% "Log out"
-    logoutActionButton->setToolTip(qtTrId("logout"));
+    _logoutActionButton->setToolTip(qtTrId("logout"));
 
     LinboPushButton* rebootActionButton = new LinboToolButton(LinboTheme::RebootIcon);
-    connect(rebootActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::reboot);
-    this->powerActionButtons.append(rebootActionButton);
+    connect(rebootActionButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reboot);
+    this->_powerActionButtons.append(rebootActionButton);
     rebootActionButton->setFixedHeight(buttonWidth);
     rebootActionButton->setFixedWidth(buttonWidth);
     //% "Reboot"
     rebootActionButton->setToolTip(qtTrId("reboot"));
 
     LinboPushButton* shutdownActionButton = new LinboToolButton(LinboTheme::ShutdownIcon);
-    connect(shutdownActionButton, &LinboToolButton::clicked, this->backend, &LinboBackend::shutdown);
-    this->powerActionButtons.append(shutdownActionButton);
+    connect(shutdownActionButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::shutdown);
+    this->_powerActionButtons.append(shutdownActionButton);
     shutdownActionButton->setFixedHeight(buttonWidth);
     shutdownActionButton->setFixedWidth(buttonWidth);
     //% "Shutdown"
@@ -143,83 +143,83 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     QVBoxLayout* powerActionsLayout = new QVBoxLayout(powerActionsLayoutWidget);
     powerActionsLayout->setSpacing(0);
     powerActionsLayout->setContentsMargins(0,0,0,0);
-    powerActionsLayout->addWidget(rootActionButton);
-    powerActionsLayout->addWidget(logoutActionButton);
+    powerActionsLayout->addWidget(_rootActionButton);
+    powerActionsLayout->addWidget(_logoutActionButton);
     powerActionsLayout->addWidget(rebootActionButton);
     powerActionsLayout->addWidget(shutdownActionButton);
 
     // Dialogs (for imaging stuff)
-    this->loginDialog = new LinboLoginDialog(this->backend, this);
+    this->_loginDialog = new LinboLoginDialog(this->_backend, this);
     int dialogHeight = gTheme->getSize(LinboTheme::DialogHeight);
     int dialogWidth = gTheme->getSize(LinboTheme::DialogWidth);
-    this->loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
-    this->loginDialog->centerInParent();
-    connect(this->powerActionButtons[0], &LinboToolButton::clicked, this->loginDialog, &LinboLoginDialog::open);
+    this->_loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
+    this->_loginDialog->centerInParent();
+    connect(this->_powerActionButtons[0], &LinboToolButton::clicked, this->_loginDialog, &LinboLoginDialog::open);
 
-    this->imageCreationDialog = new LinboImageCreationDialog(backend, parent);
-    this->allDialogs.append(this->imageCreationDialog);
-    this->imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
-    this->imageCreationDialog->centerInParent();
-    connect(this->osSelectionRow, &LinboOsSelectionRow::imageCreationRequested,
-            this->imageCreationDialog, &LinboImageCreationDialog::open);
-    connect(this->mainActions, &LinboMainActions::imageCreationRequested,
-            this->imageCreationDialog, &LinboImageCreationDialog::open);
+    this->_imageCreationDialog = new LinboImageCreationDialog(backend, parent);
+    this->_allDialogs.append(this->_imageCreationDialog);
+    this->_imageCreationDialog->setGeometry(0, 0, dialogWidth, dialogHeight);
+    this->_imageCreationDialog->centerInParent();
+    connect(this->_osSelectionRow, &LinboOsSelectionRow::imageCreationRequested,
+            this->_imageCreationDialog, &LinboImageCreationDialog::open);
+    connect(this->_mainActions, &LinboMainActions::imageCreationRequested,
+            this->_imageCreationDialog, &LinboImageCreationDialog::open);
 
-    this->imageUploadDialog = new LinboImageUploadDialog(backend, parent);
-    this->allDialogs.append(this->imageUploadDialog);
-    this->imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
-    this->imageUploadDialog->centerInParent();
-    connect(this->osSelectionRow, &LinboOsSelectionRow::imageUploadRequested,
-            this->imageUploadDialog, &LinboImageUploadDialog::open);
-    connect(this->mainActions, &LinboMainActions::imageUploadRequested,
-            this->imageUploadDialog, &LinboImageUploadDialog::open);
+    this->_imageUploadDialog = new LinboImageUploadDialog(backend, parent);
+    this->_allDialogs.append(this->_imageUploadDialog);
+    this->_imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
+    this->_imageUploadDialog->centerInParent();
+    connect(this->_osSelectionRow, &LinboOsSelectionRow::imageUploadRequested,
+            this->_imageUploadDialog, &LinboImageUploadDialog::open);
+    connect(this->_mainActions, &LinboMainActions::imageUploadRequested,
+            this->_imageUploadDialog, &LinboImageUploadDialog::open);
 
-    this->terminalDialog = new LinboTerminalDialog(parent);
-    this->allDialogs.append(this->terminalDialog);
-    this->terminalDialog->setGeometry(0, 0, std::min(dialogWidth * 2, int(this->width() * 0.9)), dialogHeight);
-    this->terminalDialog->centerInParent();
-    connect(this->mainActions, &LinboMainActions::terminalRequested,
-            this->terminalDialog, &LinboImageCreationDialog::open);
+    this->_terminalDialog = new LinboTerminalDialog(parent);
+    this->_allDialogs.append(this->_terminalDialog);
+    this->_terminalDialog->setGeometry(0, 0, std::min(dialogWidth * 2, int(this->width() * 0.9)), dialogHeight);
+    this->_terminalDialog->centerInParent();
+    connect(this->_mainActions, &LinboMainActions::terminalRequested,
+            this->_terminalDialog, &LinboImageCreationDialog::open);
 
-    this->confirmationDialog = new LinboConfirmationDialog(
+    this->_confirmationDialog = new LinboConfirmationDialog(
         //% "Partition drive"
         qtTrId("dialog_partition_title"),
         //% "Are you sure? This will delete all data on your drive!"
         qtTrId("dialog_partition_question"),
         parent);
-    this->allDialogs.append(this->confirmationDialog);
+    this->_allDialogs.append(this->_confirmationDialog);
 
-    this->confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
-    this->confirmationDialog->centerInParent();
-    connect(this->confirmationDialog, &LinboConfirmationDialog::accepted, this->backend, &LinboBackend::partitionDrive);
-    connect(this->mainActions, &LinboMainActions::drivePartitioningRequested,
-            this->confirmationDialog, &LinboDialog::open);
+    this->_confirmationDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.2);
+    this->_confirmationDialog->centerInParent();
+    connect(this->_confirmationDialog, &LinboConfirmationDialog::accepted, this->_backend, &LinboBackend::partitionDrive);
+    connect(this->_mainActions, &LinboMainActions::drivePartitioningRequested,
+            this->_confirmationDialog, &LinboDialog::open);
 
-    this->registerDialog = new LinboRegisterDialog(backend, parent);
-    this->allDialogs.append(this->registerDialog);
-    this->registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.7);
-    this->registerDialog->centerInParent();
-    connect(this->mainActions, &LinboMainActions::registrationRequested,
-            this->registerDialog, &LinboImageCreationDialog::open);
+    this->_registerDialog = new LinboRegisterDialog(backend, parent);
+    this->_allDialogs.append(this->_registerDialog);
+    this->_registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.7);
+    this->_registerDialog->centerInParent();
+    connect(this->_mainActions, &LinboMainActions::registrationRequested,
+            this->_registerDialog, &LinboImageCreationDialog::open);
 
-    this->updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
-    this->allDialogs.append(this->updateCacheDialog);
-    this->updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.5, dialogHeight * 0.3);
-    this->updateCacheDialog->centerInParent();
-    connect(this->mainActions, &LinboMainActions::cacheUpdateRequested,
-            this->updateCacheDialog, &LinboImageCreationDialog::open);
+    this->_updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
+    this->_allDialogs.append(this->_updateCacheDialog);
+    this->_updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.5, dialogHeight * 0.3);
+    this->_updateCacheDialog->centerInParent();
+    connect(this->_mainActions, &LinboMainActions::cacheUpdateRequested,
+            this->_updateCacheDialog, &LinboImageCreationDialog::open);
 
     // attach eventFilter
     qApp->installEventFilter(this);
-    this->handleLinboStateChanged(this->backend->state());
+    this->_handleLinboStateChanged(this->_backend->state());
 }
 
-void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
+void LinboMainPage::_handleLinboStateChanged(LinboBackend::LinboState newState) {
     bool powerActionButtonsVisible = false;
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
     int clientInfoHeight = 0;
-    bool useMinimalLayout = this->backend->config()->useMinimalLayout();
+    bool useMinimalLayout = this->_backend->config()->useMinimalLayout();
 
     switch (newState) {
     case LinboBackend::StartActionError:
@@ -261,7 +261,7 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
 
     case LinboBackend::RootTimeout:
-        for(LinboDialog* dialog : this->allDialogs)
+        for(LinboDialog* dialog : this->_allDialogs)
             dialog->autoClose();
     // fall through
     case LinboBackend::Partitioning:
@@ -283,69 +283,69 @@ void LinboMainPage::handleLinboStateChanged(LinboBackend::LinboState newState) {
         break;
     }
 
-    for(LinboPushButton* powerActionButton : this->powerActionButtons)
-        if(powerActionButton == logoutActionButton && newState < LinboBackend::Root)
+    for(LinboPushButton* powerActionButton : this->_powerActionButtons)
+        if(powerActionButton == _logoutActionButton && newState < LinboBackend::Root)
             powerActionButton->setVisible(false);
-        else if(powerActionButton == logoutActionButton && newState >= LinboBackend::Root)
+        else if(powerActionButton == _logoutActionButton && newState >= LinboBackend::Root)
             powerActionButton->setVisible(powerActionButtonsVisible);
-        else if(powerActionButton == rootActionButton && newState >= LinboBackend::Root)
+        else if(powerActionButton == _rootActionButton && newState >= LinboBackend::Root)
             powerActionButton->setVisible(false);
         else
             powerActionButton->setVisible(powerActionButtonsVisible);
 
-    if(this->showClientInfo)
+    if(this->_showClientInfo)
         clientInfoHeight = this->height() * 0.1;
 
-    if(this->inited) {
-        this->startActionWidgetAnimation->setStartValue(QSize(this->width(), this->mainActions->height()));
-        this->startActionWidgetAnimation->setEndValue(QSize(this->width(), startActionsWidgetHeight));
-        this->startActionWidgetAnimation->start();
+    if(this->_inited) {
+        this->_startActionWidgetAnimation->setStartValue(QSize(this->width(), this->_mainActions->height()));
+        this->_startActionWidgetAnimation->setEndValue(QSize(this->width(), startActionsWidgetHeight));
+        this->_startActionWidgetAnimation->start();
 
-        this->osSelectionRow->setMinimumSizeAnimated(QSize(this->width(), osSelectionRowHeight));
+        this->_osSelectionRow->setMinimumSizeAnimated(QSize(this->width(), osSelectionRowHeight));
 
-        this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-        this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, clientInfoHeight));
-        this->clientInfoAnimation->start();
+        this->_clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->_clientInfo->height()));
+        this->_clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, clientInfoHeight));
+        this->_clientInfoAnimation->start();
     }
     else {
-        this->mainActions->setMinimumSize(this->width(), startActionsWidgetHeight);
-        this->osSelectionRow->setMinimumSize(this->width(), osSelectionRowHeight);
-        this->clientInfo->setMinimumSize(this->width() * 0.9, clientInfoHeight);
+        this->_mainActions->setMinimumSize(this->width(), startActionsWidgetHeight);
+        this->_osSelectionRow->setMinimumSize(this->width(), osSelectionRowHeight);
+        this->_clientInfo->setMinimumSize(this->width() * 0.9, clientInfoHeight);
     }
 
-    this->inited = true;
+    this->_inited = true;
 }
 
-bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
+bool LinboMainPage::_eventFilter(QObject *obj, QEvent *event) {
     Q_UNUSED(obj)
 
     if (event->type() == QEvent::MouseMove)
     {
-        this->backend->restartRootTimeout();
+        this->_backend->restartRootTimeout();
     }
     else if(event->type() == QEvent::KeyPress) {
-        this->backend->restartRootTimeout();
+        this->_backend->restartRootTimeout();
 
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if(keyEvent->key() == Qt::Key_F1) {
-            this->f1Pressed = true;
+            this->_f1Pressed = true;
         }
         else if(keyEvent->key() == Qt::Key_Escape) {
-            switch (this->backend->state()) {
+            switch (this->_backend->state()) {
             case LinboBackend::Autostarting:
             case LinboBackend::RootTimeout:
-                this->backend->cancelCurrentAction();
+                this->_backend->cancelCurrentAction();
                 break;
 
             case LinboBackend::StartActionError:
             case LinboBackend::RootActionError:
             case LinboBackend::RootActionSuccess:
-                this->backend->resetMessage();
+                this->_backend->resetMessage();
                 break;
 
             case LinboBackend::Root: {
                 bool someDialogOpen = false;
-                for(LinboDialog* dialog : this->allDialogs) {
+                for(LinboDialog* dialog : this->_allDialogs) {
                     if(dialog->isVisible()) {
                         someDialogOpen = true;
                         break;
@@ -353,7 +353,7 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
                 }
 
                 if(!someDialogOpen)
-                    this->backend->logout();
+                    this->_backend->logout();
                 break;
             }
 
@@ -363,24 +363,24 @@ bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
         }
     }
     else if(event->type() == QEvent::KeyRelease) {
-        this->backend->restartRootTimeout();
+        this->_backend->restartRootTimeout();
 
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key() == Qt::Key_F1 && this->clientInfoAnimation->state() == QPropertyAnimation::Stopped) {
-            this->showClientInfo = !this->showClientInfo;
+        if(keyEvent->key() == Qt::Key_F1 && this->_clientInfoAnimation->state() == QPropertyAnimation::Stopped) {
+            this->_showClientInfo = !this->_showClientInfo;
 
-            if(this->showClientInfo) {
-                this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-                this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
-                this->clientInfoAnimation->start();
+            if(this->_showClientInfo) {
+                this->_clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->_clientInfo->height()));
+                this->_clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, this->height() * 0.1));
+                this->_clientInfoAnimation->start();
             }
             else {
-                this->clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->clientInfo->height()));
-                this->clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
-                this->clientInfoAnimation->start();
+                this->_clientInfoAnimation->setStartValue(QSize(this->width() * 0.9, this->_clientInfo->height()));
+                this->_clientInfoAnimation->setEndValue(QSize(this->width() * 0.9, 0));
+                this->_clientInfoAnimation->start();
             }
 
-            this->f1Pressed = false;
+            this->_f1Pressed = false;
         }
     }
     return false;

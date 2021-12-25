@@ -17,26 +17,28 @@ class LinboTerminal : public QTextEdit
 public:
     LinboTerminal(QWidget* parent = nullptr);
 
+protected:
+    void keyPressEvent(QKeyEvent * event) override;
+
+private:
+    int _fixedPosition;
+    int _currentHistoryIndex;
+    bool _doNotExitOnProcessExit;
+    QString _commandBeforeHistorySwitch;
+    QStringList _commandHistory;
+    QProcess* _process;
+
 public slots:
     void clearAndRestart();
 
-private:
-    int fixedPosition;
-    QProcess* process;
-    QString commandBeforeHistorySwitch;
-    QStringList commandHistory;
-    int currentHistoryIndex;
-    void keyPressEvent (QKeyEvent * event) override;
-    bool doNotExitOnProcessExit;
-
 private slots:
-    QString getCurrentCommand();
-    void setCurrentCommand(QString command);
-    void handleCursorPositionChanged();
-    void readOutput();
-    void handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void execute(QString command);
-    void restartProcess();
+    QString _getCurrentCommand();
+    void _setCurrentCommand(QString command);
+    void _handleCursorPositionChanged();
+    void _readOutput();
+    void _handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void _execute(QString command);
+    void _restartProcess();
 
 signals:
     void processExited();

@@ -42,23 +42,23 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboBackend* backend;
-    QList<LinboOsSelectButton*> osButtons;
-    QButtonGroup* osButtonGroup;
-    QLabel* noOsLabel;
-    QFont noOsLabelFont;
-    QLabel* environmentValuesLabel;
-    QFont environmentValuesLabelFont;
-    QPropertyAnimation* sizeAnimation;
-    bool showOnlySelectedButton;
-    bool inited;
+    LinboBackend* _backend;
+    QList<LinboOsSelectButton*> _osButtons;
+    QButtonGroup* _osButtonGroup;
+    QLabel* _noOsLabel;
+    QFont _noOsLabelFont;
+    QLabel* _environmentValuesLabel;
+    QFont _environmentValuesLabelFont;
+    QPropertyAnimation* _sizeAnimation;
+    bool _showOnlySelectedButton;
+    bool _inited;
 
-    QSize* sizeOverride;
+    QSize* _sizeOverride;
 
 private slots:
-    void resizeAndPositionAllButtons(int heightOverride = -1, int widthOverride = -1);
-    void handleButtonToggled(bool checked);
-    void handleLinboStateChanged(LinboBackend::LinboState newState);
+    void _resizeAndPositionAllButtons(int heightOverride = -1, int widthOverride = -1);
+    void _handleButtonToggled(bool checked);
+    void _handleLinboStateChanged(LinboBackend::LinboState newState);
 
 signals:
     void imageCreationRequested();

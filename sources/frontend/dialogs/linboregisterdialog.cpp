@@ -20,27 +20,27 @@
 
 LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
-    this->backend = backend;
+    this->_backend = backend;
 
     //% "Register client"
     this->setTitle(qtTrId("dialog_register_title"));
 
-    this->mainLayout = new QVBoxLayout(this);
+    this->_mainLayout = new QVBoxLayout(this);
 
     //% "Room"
-    this->mainLayout->addWidget(new QLabel(qtTrId("room")));
-    roomEdit = new LinboLineEdit();
-    connect(roomEdit, &LinboLineEdit::textChanged, this, &LinboRegisterDialog::handleRoomChanged);
-    this->mainLayout->addWidget(roomEdit);
+    this->_mainLayout->addWidget(new QLabel(qtTrId("room")));
+    _roomEdit = new LinboLineEdit();
+    connect(_roomEdit, &LinboLineEdit::textChanged, this, &LinboRegisterDialog::_handleRoomChanged);
+    this->_mainLayout->addWidget(_roomEdit);
 
     //% "Hostname"
-    this->mainLayout->addWidget(new QLabel(qtTrId("hostname")));
-    hostnameEdit = new LinboLineEdit();
-    this->mainLayout->addWidget(hostnameEdit);
+    this->_mainLayout->addWidget(new QLabel(qtTrId("hostname")));
+    _hostnameEdit = new LinboLineEdit();
+    this->_mainLayout->addWidget(_hostnameEdit);
 
     //% "IP-Address"
-    this->mainLayout->addWidget(new QLabel(qtTrId("ip")));
-    ipAddressEdit = new LinboLineEdit();
+    this->_mainLayout->addWidget(new QLabel(qtTrId("ip")));
+    _ipAddressEdit = new LinboLineEdit();
     QString prefilledIp = "";
 
     QStringList subnetMask = backend->config()->subnetMask().split(".");
@@ -53,38 +53,38 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
                 prefilledIp.append(ipAddress[i] + ".");
             }
         }
-    ipAddressEdit->setText(prefilledIp);
-    this->mainLayout->addWidget(ipAddressEdit);
+    _ipAddressEdit->setText(prefilledIp);
+    this->_mainLayout->addWidget(_ipAddressEdit);
 
     //% "Host group"
-    this->mainLayout->addWidget(new QLabel(qtTrId("group")));
-    hostGroupEdit = new LinboLineEdit();
-    this->mainLayout->addWidget(hostGroupEdit);
+    this->_mainLayout->addWidget(new QLabel(qtTrId("group")));
+    _hostGroupEdit = new LinboLineEdit();
+    this->_mainLayout->addWidget(_hostGroupEdit);
 
     //% "Client role"
-    this->mainLayout->addWidget(new QLabel(qtTrId("dialog_register_clientRole")));
-    this->roleSelectBox = new LinboComboBox();
+    this->_mainLayout->addWidget(new QLabel(qtTrId("dialog_register_clientRole")));
+    this->_roleSelectBox = new LinboComboBox();
 
     //% "Classroom student computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomStudent"), LinboConfig::ClassroomStudentComputerRole);
+    this->_roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomStudent"), LinboConfig::ClassroomStudentComputerRole);
 
     //% "Classroom teacher computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomTeacher"), LinboConfig::ClassroomTeacherComputerRole);
+    this->_roleSelectBox->addItem(qtTrId("dialog_register_clientRole_classroomTeacher"), LinboConfig::ClassroomTeacherComputerRole);
 
     //% "Faculty teacher computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_facultyTeacher"), LinboConfig::FacultyTeacherComputerRole);
+    this->_roleSelectBox->addItem(qtTrId("dialog_register_clientRole_facultyTeacher"), LinboConfig::FacultyTeacherComputerRole);
 
     //% "Staff computer"
-    this->roleSelectBox->addItem(qtTrId("dialog_register_clientRole_staffComputer"), LinboConfig::StaffComputerRole);
+    this->_roleSelectBox->addItem(qtTrId("dialog_register_clientRole_staffComputer"), LinboConfig::StaffComputerRole);
 
-    this->mainLayout->addWidget(this->roleSelectBox);
+    this->_mainLayout->addWidget(this->_roleSelectBox);
 
-    this->mainLayout->addStretch();
+    this->_mainLayout->addStretch();
 
     //% "register"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_register_button_resgister"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboRegisterDialog::registerClient);
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboRegisterDialog::_registerClient);
 
     //% "cancel"
     toolButtonCache = new LinboToolButton(qtTrId("cancel"));
@@ -92,19 +92,19 @@ LinboRegisterDialog::LinboRegisterDialog(LinboBackend* backend, QWidget* parent)
     connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboRegisterDialog::autoClose);
 }
 
-void LinboRegisterDialog::registerClient() {
-    this->backend->registerClient(this->roomEdit->text(), this->hostnameEdit->text(), this->ipAddressEdit->text(), this->hostGroupEdit->text(), LinboConfig::LinboDeviceRole(this->roleSelectBox->currentData().toInt()));
+void LinboRegisterDialog::_registerClient() {
+    this->_backend->registerClient(this->_roomEdit->text(), this->_hostnameEdit->text(), this->_ipAddressEdit->text(), this->_hostGroupEdit->text(), LinboConfig::LinboDeviceRole(this->_roleSelectBox->currentData().toInt()));
     this->setVisibleAnimated(false);
 }
 
-void LinboRegisterDialog::handleRoomChanged(const QString& newText) {
-    QString currentHostnameText = this->hostnameEdit->text();
+void LinboRegisterDialog::_handleRoomChanged(const QString& newText) {
+    QString currentHostnameText = this->_hostnameEdit->text();
     currentHostnameText.replace("-", "");
-    if(this->hostnameEdit->text().isEmpty() || newText.startsWith(currentHostnameText) || (currentHostnameText.startsWith(newText) && this->hostnameEdit->text().endsWith("-")))
-        this->hostnameEdit->setText(newText + "-");
+    if(this->_hostnameEdit->text().isEmpty() || newText.startsWith(currentHostnameText) || (currentHostnameText.startsWith(newText) && this->_hostnameEdit->text().endsWith("-")))
+        this->_hostnameEdit->setText(newText + "-");
 
-    if(newText.isEmpty() && this->hostnameEdit->text() == "-")
-        this->hostnameEdit->setText("");
+    if(newText.isEmpty() && this->_hostnameEdit->text() == "-")
+        this->_hostnameEdit->setText("");
 }
 
 void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
@@ -112,10 +112,10 @@ void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
 
     int margins = gTheme->getSize(LinboTheme::Margins);
 
-    this->mainLayout->setContentsMargins(margins, margins, margins, margins);
+    this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
 
     for(int i = 0; i < 10; i++) {
-        QWidget* item = this->mainLayout->itemAt(i)->widget();
+        QWidget* item = this->_mainLayout->itemAt(i)->widget();
 
         // make lables smaller
         if(i % 2 == 0)
