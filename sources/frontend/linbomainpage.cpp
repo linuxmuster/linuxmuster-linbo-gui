@@ -316,7 +316,7 @@ void LinboMainPage::_handleLinboStateChanged(LinboBackend::LinboState newState) 
     this->_inited = true;
 }
 
-bool LinboMainPage::_eventFilter(QObject *obj, QEvent *event) {
+bool LinboMainPage::eventFilter(QObject *obj, QEvent *event) {
     Q_UNUSED(obj)
 
     if (event->type() == QEvent::MouseMove)

@@ -136,7 +136,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             bool visible = true;
             QRect geometry = this->_osButtons[i]->geometry();
 
-            if(this->_osButtons[i]->getOs() != this->_backend->currentOs() || !this->_showOnlySelectedButton) {
+            if(this->_osButtons[i]->_getOs() != this->_backend->currentOs() || !this->_showOnlySelectedButton) {
                 // "normal" buttons
                 visible = !this->_showOnlySelectedButton;
                 if(!useMinimalLayout && buttonCount > 2)
@@ -154,7 +154,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             }
 
             if(this->_inited) {
-                this->_osButtons[i]->setVisibleAnimated(visible);
+                this->_osButtons[i]->_setVisibleAnimated(visible);
 
                 QPropertyAnimation* moveAnimation = new QPropertyAnimation(this);
                 moveAnimation->setPropertyName("geometry");

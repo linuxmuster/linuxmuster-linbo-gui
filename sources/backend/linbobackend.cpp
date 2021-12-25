@@ -220,7 +220,7 @@ bool LinboBackend::createImageOfCurrentOS(QString name, QString description, Lin
     this->_setState(CreatingImage);
 
     this->_logger->_log("Writing image description", LinboLogger::LinboGuiInfo);
-    if(!this->_writeImageDescription(name, description))
+    if(!this->writeImageDescription(name, description))
         this->_logger->_log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
 
     if(this->_postProcessActions.testFlag(UploadImage) && this->_currentOs->baseImage() != nullptr && name == this->_currentOs->baseImage()->name()) {
@@ -493,7 +493,7 @@ bool LinboBackend::_uploadImage(const LinboImage* image, LinboPostProcessActions
     return true;
 }
 
-QString LinboBackend::_readImageDescription(LinboImage* image) {
+QString LinboBackend::readImageDescription(LinboImage* image) {
     QProcess readProcess;
     int exitCode = -1;
     QString description = this->_executeCommand(
@@ -508,11 +508,11 @@ QString LinboBackend::_readImageDescription(LinboImage* image) {
         return "";
 }
 
-bool LinboBackend::_writeImageDescription(LinboImage* image, QString newDescription) {
-    return this->_writeImageDescription(image->name(), newDescription);
+bool LinboBackend::writeImageDescription(LinboImage* image, QString newDescription) {
+    return this->writeImageDescription(image->name(), newDescription);
 }
 
-bool LinboBackend::_writeImageDescription(QString imageName, QString newDescription) {
+bool LinboBackend::writeImageDescription(QString imageName, QString newDescription) {
 
     QProcess process;
     process.start(
