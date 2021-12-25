@@ -8,11 +8,13 @@
 #include "linboimage.h"
 #include "linboconfig.h"
 
+class LinboBackend;
+
 class LinboCmd : public QObject
 {
     Q_OBJECT
 public:
-    explicit LinboCmd(LinboLogger* logger, QObject *parent = nullptr);
+    explicit LinboCmd(LinboBackend *parent);
 
     template<typename ... Strings>
     bool executeAsync(QString argument, const Strings&... arguments) {
@@ -50,8 +52,7 @@ private:
     QString _outputOfLastSyncExecution;
     int _exitCodeOfLastSyncExecution;
 
-    LinboLogger* _logger;
-    LinboConfig* _config;
+    LinboBackend* _backend;
 
     QProcess* _asynchronosProcess;
     QProcess* _synchronosProcess;

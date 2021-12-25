@@ -36,7 +36,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 
     this->_logger = new LinboLogger("/tmp/linbo.log", this);
 
-    this->_linboCmd = new LinboCmd(this->_logger, this);
+    this->_linboCmd = new LinboCmd(this);
     connect(this->_linboCmd, &LinboCmd::commandFinished, this, &LinboBackend::_handleCommandFinished);
 
     this->_configReader = new LinboConfigReader(this);

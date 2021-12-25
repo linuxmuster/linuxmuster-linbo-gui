@@ -1,10 +1,11 @@
 #include "../../headers/backend/linbocmd.h"
+#include "linbobackend.h"
 
-LinboCmd::LinboCmd(LinboLogger* logger, QObject *parent)
-    : QObject{parent}
+LinboCmd::LinboCmd(LinboBackend *parent)
+    : QObject(parent)
 {
     this->_stringToMaskInOutput = "";
-    this->_logger = logger;
+    this->_backend = parent;
     // Processes
     this->_asynchronosProcess = new QProcess(this);
     // ascynchorons commands are logged to logger
@@ -18,7 +19,7 @@ LinboCmd::LinboCmd(LinboLogger* logger, QObject *parent)
 
 QString LinboCmd::readImageDescription(LinboImage* image) {
     QProcess readProcess;
-    QString description = this->getOutput(this->_buildCommand("readfile", this->_config->cachePath(), image->name() + ".desc"));
+    QString description = this->getOutput("readfile", this->_backend->config()->cachePath(), image->name() + ".desc");
 
     if(this->getExitCodeOfLastSyncCommand() == 0)
         return description;
@@ -35,24 +36,24 @@ bool LinboCmd::writeImageDescription(QString imageName, QString newDescription) 
     QProcess process;
     process.start(
         this->_linboCmdCommand,
-        this->_buildCommand("writefile", this->_config->cachePath(), imageName + ".desc"));
+        this->_buildCommand("writefile", this->_backend->config()->cachePath(), imageName + ".desc"));
 
     if(!process.waitForStarted()) {
-        this->_logger->error("Description writer didn't start: " + QString::number(process.exitCode()));
+        this->_backend->logger()->error("Description writer didn't start: " + QString::number(process.exitCode()));
         return false;
     }
 
     process.write(newDescription.toUtf8());
 
     if(!process.waitForBytesWritten()) {
-        this->_logger->error("Description writer didn't write: " + QString::number(process.exitCode()));
+        this->_backend->logger()->error("Description writer didn't write: " + QString::number(process.exitCode()));
         return false;
     }
 
     process.closeWriteChannel();
 
     if(!process.waitForFinished()) {
-        this->_logger->error("Description writer didn't finish: " + QString::number(process.exitCode()));
+        this->_backend->logger()->error("Description writer didn't finish: " + QString::number(process.exitCode()));
         return false;
     }
 
@@ -106,7 +107,7 @@ void LinboCmd::_readFromStdout() {
     QString stdOut = this->_asynchronosProcess->readAllStandardOutput();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_logger->stdOut(line.simplified());
+        this->_backend->logger()->stdOut(line.simplified());
     }
 }
 
@@ -114,7 +115,7 @@ void LinboCmd::_readFromStderr() {
     QString stdOut = this->_asynchronosProcess->readAllStandardError();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_logger->stdErr(line.simplified());
+        this->_backend->logger()->stdErr(line.simplified());
     }
 }
 
@@ -127,5 +128,5 @@ QString LinboCmd::_maskString(QString stringToMask) {
 
 void LinboCmd::_logExecution(QStringList arguments) {
     QString argumentsString = this->_maskString(arguments.join(" "));
-    this->_logger->info("Executing: " + this->_linboCmdCommand + " " + argumentsString);
+    this->_backend->logger()->info("Executing: " + this->_linboCmdCommand + " " + argumentsString);
 }
