@@ -28,9 +28,9 @@ LinboImage::LinboImage(QString name, LinboBackend *parent) : QObject(parent)
 }
 
 QString LinboImage::getDescription() {
-    return this->_backend->readImageDescription(this);
+    return this->_backend->_linboCmd->readImageDescription(this);
 }
 
 bool LinboImage::setDescription (const QString& description) {
-    return this->_backend->writeImageDescription(this, description);
+    return this->_backend->_linboCmd->writeImageDescription(this, description);
 }

@@ -32,6 +32,7 @@ class LinboLogger : public QObject
 public:
 
     friend class LinboBackend;
+    friend class LinboCmd;
     friend class LinboConfigReader;
 
     enum LinboLogType {

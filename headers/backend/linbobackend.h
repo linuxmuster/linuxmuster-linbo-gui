@@ -33,6 +33,7 @@
 #include "linboimage.h"
 #include "linbodiskpartition.h"
 #include "linboconfigreader.h"
+#include "linbocmd.h"
 
 /**
  * @brief The LinboBackend class is used to execute Linbo commands (control linbo_cmd) very comfortable.
@@ -104,59 +105,23 @@ public:
     int rootTimeoutRemainingSeconds();
 
 protected:
-    QString readImageDescription(LinboImage* image);
-    bool writeImageDescription(LinboImage* image, QString newDescription);
-    bool writeImageDescription(QString imageName, QString newDescription);
 
 private:
     LinboState _state;
     LinboLogger* _logger;
     LinboConfigReader* _configReader;
     LinboConfig* _config;
-    QStringList _linboCommandCache;
+    LinboCmd* _linboCmd;
 
     QTimer* _autostartTimer;
     QTimer* _rootTimeoutTimer;
     QTimer* _timeoutRemainingTimeRefreshTimer;
 
     LinboOs* _currentOs;
-#ifdef TEST_ENV
-    QString const _linboCmdCommand = TEST_ENV"/linbo_cmd";
-#else
-    QString const _linboCmdCommand = "linbo_cmd";
-#endif
-
-    QProcess* _asynchronosProcess;
-    QProcess* _synchronosProcess;
 
     QString _rootPassword;
     const LinboImage* _imageToUploadAutomatically;
     LinboPostProcessActions _postProcessActions;
-
-    template<typename ... Strings>
-    QString _executeCommand(bool waitForFinished, QString argument, const Strings&... arguments) {
-        return this->_executeCommand(waitForFinished, this->_linboCmdCommand, this->_buildCommand(argument, arguments ...));
-    }
-
-    QStringList _buildCommand() {
-        QStringList tmpArguments = this->_linboCommandCache;
-        this->_linboCommandCache.clear();
-        return tmpArguments;
-    }
-
-    template<typename ... Strings>
-    QStringList _buildCommand(QString argument, const Strings&... arguments) {
-        // this appends a quoted space in case item is empty and resolves
-        // problems with linbo_cmd's weird "shift"-usage
-        if (argument.isEmpty())
-            this->_linboCommandCache.append("");
-        else
-            this->_linboCommandCache.append(argument);
-
-        return _buildCommand(arguments...);
-    }
-
-    QString _executeCommand(bool wait, QString command, QStringList commandArgs, int* returnCode = nullptr);
 
     void _setState(LinboState state);
 
@@ -194,9 +159,7 @@ private slots:
     void _executeAutostart();
     void _handleAutostartTimerTimeout();
     void _handleRootTimerTimeout();
-    void _readFromStdout();
-    void _readFromStderr();
-    void _handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void _logout(bool force);
 
 signals:

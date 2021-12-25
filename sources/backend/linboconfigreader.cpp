@@ -96,41 +96,41 @@ LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePat
 void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
     this->_backend->logger()->_log("Loading environment values", LinboLogger::LinboGuiInfo);
     //  client ip
-    config->_ipAddress = this->_backend->_executeCommand(true, "ip").replace("\n", "");
+    config->_ipAddress = this->_backend->_linboCmd->getOutput("ip").replace("\n", "");
 
     // subnet mask
-    config->_subnetMask = this->_backend->_executeCommand(true, "netmask").replace("\n", "");
+    config->_subnetMask = this->_backend->_linboCmd->getOutput("netmask").replace("\n", "");
 
     // subnet bitmask
-    config->_subnetBitmask = this->_backend->_executeCommand(true, "bitmask").replace("\n", "");
+    config->_subnetBitmask = this->_backend->_linboCmd->getOutput("bitmask").replace("\n", "");
 
     // mac address
-    config->_macAddress = this->_backend->_executeCommand(true, "mac").replace("\n", "");
+    config->_macAddress = this->_backend->_linboCmd->getOutput("mac").replace("\n", "");
 
     // Version
-    config->_linboVersion = this->_backend->_executeCommand(true, "version").simplified().replace("\n", "").split("[").first();
+    config->_linboVersion = this->_backend->_linboCmd->getOutput("version").simplified().replace("\n", "").split("[").first();
 
     // hostname
-    config->_hostname = this->_backend->_executeCommand(true, "hostname").replace("\n", "");
+    config->_hostname = this->_backend->_linboCmd->getOutput("hostname").replace("\n", "");
 
     // CPU
-    config->_cpuModel = this->_backend->_executeCommand(true, "cpu").replace("\n", "");
+    config->_cpuModel = this->_backend->_linboCmd->getOutput("cpu").replace("\n", "");
 
     // Memory
-    config->_ramSize = this->_backend->_executeCommand(true, "memory").replace("\n", "");
+    config->_ramSize = this->_backend->_linboCmd->getOutput("memory").replace("\n", "");
 
     // Cache Size
-    config->_cacheSize = this->_backend->_executeCommand(true, "size", config->cachePath()).replace("\n", "");
+    config->_cacheSize = this->_backend->_linboCmd->getOutput("size", config->cachePath()).replace("\n", "");
 
     // Harddisk Size
     QRegularExpression *removePartition = new QRegularExpression("[0-9]{1,2}");
     QString hd = config->cachePath();
     // e.g. turn /dev/sda1 into /dev/sda
     hd.remove( *removePartition );
-    config->_hddSize = this->_backend->_executeCommand(true, "size", hd).replace("\n", "");
+    config->_hddSize = this->_backend->_linboCmd->getOutput("size", hd).replace("\n", "");
 
     // Load all existing images
-    QStringList existingImageNames = this->_backend->_executeCommand(true, "listimages", config->cachePath()).split("\n");
+    QStringList existingImageNames = this->_backend->_linboCmd->getOutput("listimages", config->cachePath()).split("\n");
     for(QString existingImageName : existingImageNames) {
         existingImageName = existingImageName.split("/").last();
         if(!existingImageName.endsWith(".cloop"))

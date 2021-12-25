@@ -28,6 +28,7 @@ INCLUDEPATH += \
     headers/frontend/components
 
 HEADERS += \
+    headers/backend/linbocmd.h \
     headers/backend/linboconfig.h \
     headers/backend/linboconfigreader.h \
     headers/backend/linbodiskpartition.h \
@@ -65,6 +66,7 @@ HEADERS += \
     headers/frontend/linboosselectionrow.h
 
 SOURCES += \
+    sources/backend/linbocmd.cpp \
     sources/backend/linboconfig.cpp \
     sources/backend/linboconfigreader.cpp \
     sources/backend/linbodiskpartition.cpp \
