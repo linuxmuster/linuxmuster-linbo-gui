@@ -204,6 +204,7 @@ void LinboDialog::paintEvent(QPaintEvent *e) {
     if(this->_toolButtons.length() > 0)
         QWidget::setTabOrder(this->_toolButtons.last(), this->_closeButton);
 
+    // This is a hack to create a cricle for tabbing inside a dialog
     connect(this->_closeButton, &LinboPushButton::defocused, this, [=](Qt::FocusReason reason) {
         if(reason == Qt::TabFocusReason)
             firstWidget->setFocus();
