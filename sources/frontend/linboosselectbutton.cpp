@@ -40,12 +40,6 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         {LinboOs::UnknownAction, ""}
     };
 
-    LinboPushButtonOverlay* checkedOverlay= new LinboPushButtonOverlay (
-        LinboPushButtonOverlay::OnChecked,
-        new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayCheckedIcon)),
-        false
-    );
-
     QString defaultActionOverlayPath = defaultStartActionOverlayPaths[this->_os->defaultAction()];
     if(!this->_os->actionEnabled(this->_os->defaultAction()))
         defaultActionOverlayPath = "";
@@ -62,10 +56,8 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         false
     );
 
-    this->_button = new LinboPushButton(icon, "", {checkedOverlay, this->_defaultStartActionOverlay, this->_defaultRootActionOverlay}, this);
+    this->_button = new LinboPushButton(icon, "", {this->_defaultStartActionOverlay, this->_defaultRootActionOverlay}, this);
     this->setToolTip(this->_os->description());
-
-    this->_button->setCheckable(false);
 
     connect(this->_button, &LinboPushButton::clicked, this, &LinboOsSelectButton::_handlePrimaryButtonClicked);
 
