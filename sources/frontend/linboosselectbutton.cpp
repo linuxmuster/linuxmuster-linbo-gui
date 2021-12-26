@@ -95,13 +95,13 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
             switch (startAction) {
             case LinboOs::StartOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::start);
+                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeStart);
                 break;
             case LinboOs::SyncOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::sync);
+                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeSync);
                 break;
             case LinboOs::ReinstallOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::reinstall);
+                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeReinstall);
                 break;
             default:
                 break;
@@ -115,8 +115,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         //% "Upload image of %1"
         actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->_os->name()));
         connect(actionButton, &LinboPushButton::clicked, this, [=] {
-            this->_os->backend()->setCurrentOs(this->_os);
-            emit this->imageUploadRequested();
+            emit this->imageUploadRequested(this->_os);
         });
         this->_rootActionButtons.append(actionButton);
 
@@ -151,20 +150,19 @@ void LinboOsSelectButton::_handlePrimaryButtonClicked() {
     if(this->_os->backend()->state() == LinboBackend::Idle)
         switch (this->_os->defaultAction()) {
         case LinboOs::StartOs:
-            this->_os->start();
+            this->_os->executeStart();
             break;
         case LinboOs::SyncOs:
-            this->_os->sync();
+            this->_os->executeSync();
             break;
         case LinboOs::ReinstallOs:
-            this->_os->reinstall();
+            this->_os->executeReinstall();
             break;
         default:
             break;
         }
     else if (this->_os->backend()->state() == LinboBackend::Root) {
-        this->_os->backend()->setCurrentOs(this->_os);
-        emit this->imageCreationRequested();
+        emit this->imageCreationRequested(this->_os);
     }
 }
 

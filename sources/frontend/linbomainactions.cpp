@@ -21,7 +21,6 @@
 LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWidget(parent)
 {
     this->_backend = backend;
-    connect(this->_backend, &LinboBackend::currentOsChanged, this, &LinboMainActions::_handleCurrentOsChanged);
     connect(this->_backend, &LinboBackend::stateChanged, this, &LinboMainActions::_handleLinboStateChanged);
     connect(this->_backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
     connect(this->_backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
@@ -37,13 +36,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->_buttonWidget = new QWidget();
 
     this->_startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->_buttonWidget);
-    connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startCurrentOs);
+    connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startOs);
 
     this->_syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->_buttonWidget);
-    connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncCurrentOs);
+    connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncOs);
 
     this->_reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->_buttonWidget);
-    connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallCurrentOs);
+    connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallOs);
 
     //% "No baseimage defined"
     this->_noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->_buttonWidget);

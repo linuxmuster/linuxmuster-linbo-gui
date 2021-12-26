@@ -56,7 +56,7 @@ private:
 
 private slots:
     void _refreshPathAndDescription(bool isOpening = false);
-    void _createImage(LinboBackend::LinboPostProcessActions postProcessActions);
+    void _createImage(LinboPostProcessActions::Flags postProcessActions);
 };
 
 #endif // LINBOIMAGECREATIONDIALOG_H

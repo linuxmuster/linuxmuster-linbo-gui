@@ -36,6 +36,7 @@ HEADERS += \
     headers/backend/linbologger.h \
     headers/backend/linboos.h \
     headers/backend/linbobackend.h \
+    headers/backend/linbopostprocessactions.h \
     headers/backend/linbotheme.h \
     headers/frontend/components/linbocheckbox.h \
     headers/frontend/components/linbocombobox.h \

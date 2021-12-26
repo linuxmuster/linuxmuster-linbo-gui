@@ -73,22 +73,22 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     LinboRadioButton* buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_nothing"));
     buttonCache->setChecked(true);
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::NoAction);
 
     //% "shutdown"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_shutdown"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Shutdown);
 
     //% "reboot"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_reboot"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Reboot);
 
     //% "logout"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_logout"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Logout);
 
     // Bottom buttons
 
@@ -97,7 +97,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboToolButton::clicked, this, [=]() {
-        this->_createImage(LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId()));
+        this->_createImage(LinboPostProcessActions::Flags(this->_postProcessActionButtonGroup->checkedId()));
     });
 
     //% "create + upload"
@@ -105,9 +105,9 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->addToolButton(pushButtonCache);
     pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboPushButton::clicked, this, [=]() {
-        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId());
-        postProcessActions.setFlag(LinboBackend::NoAction, false);
-        this->_createImage( LinboBackend::UploadImage | postProcessActions);
+        LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::Flags(this->_postProcessActionButtonGroup->checkedId());
+        postProcessActions.setFlag(LinboPostProcessActions::NoAction, false);
+        this->_createImage( LinboPostProcessActions::UploadImage | postProcessActions);
     });
 
     //% cancel
@@ -119,14 +119,14 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     connect(this, &LinboDialog::opened, [=] { this->_refreshPathAndDescription(true); });
 }
 
-void LinboImageCreationDialog::_createImage(LinboBackend::LinboPostProcessActions postProcessActions) {
+void LinboImageCreationDialog::_createImage(LinboPostProcessActions::Flags postProcessActions) {
 
     if(this->_actionButtonGroup->checkedId() == 0)
         // replace image
-        this->_backend->replaceImageOfCurrentOs(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->replaceImageOfOs(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
     else
         // create new image
-        this->_backend->createImageOfCurrentOS(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->createImageOfOs(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
 
     this->autoClose();
 }

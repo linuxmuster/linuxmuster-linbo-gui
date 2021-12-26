@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QSettings>
 
+#include "linbopostprocessactions.h"
 #include "linbologger.h"
 #include "linboconfig.h"
 #include "linboos.h"
@@ -53,6 +54,7 @@ public:
 
     friend class LinboImage;
     friend class LinboConfigReader;
+    friend class LinboOs;
 
     /**
      * @brief The LinboState enum contains all possible states of Linbo
@@ -78,24 +80,9 @@ public:
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
     };
 
-    enum LinboPostProcessAction {
-        NoAction = 1,
-        Shutdown = 2,
-        Reboot = 4,
-        Logout = 8,
-        UploadImage = 16,
-        ExecuteAutoInitCache = 32,
-        ExecuteAutostart = 64,
-        CancelToIdle = 128
-    };
-    Q_DECLARE_FLAGS(LinboPostProcessActions, LinboPostProcessAction)
-    Q_FLAG(LinboPostProcessActions)
-
     LinboState state();
     LinboLogger* logger();
     LinboConfig* config();
-    LinboOs* currentOs();
-    void setCurrentOs(LinboOs* os);
     void restartRootTimeout();
 
     double autostartTimeoutProgress();
@@ -117,11 +104,9 @@ private:
     QTimer* _rootTimeoutTimer;
     QTimer* _timeoutRemainingTimeRefreshTimer;
 
-    LinboOs* _currentOs;
-
     QString _rootPassword;
     const LinboImage* _imageToUploadAutomatically;
-    LinboPostProcessActions _postProcessActions;
+    LinboPostProcessActions::Flags _postProcessActions;
 
     void _setState(LinboState state);
 
@@ -129,36 +114,38 @@ public slots:
     void shutdown();
     void reboot();
 
-    bool startCurrentOs();
-    bool syncCurrentOs();
-    bool reinstallCurrentOs();
-
     bool login(QString password);
     void logout();
 
-    bool replaceImageOfCurrentOs(QString description = "", LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
-    bool createImageOfCurrentOS(QString name, QString description = "", LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
-
-    bool uploadImage(const LinboImage* image, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
-
     void partitionDrive();
-    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
+    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
 
     bool cancelCurrentAction();
     bool resetMessage();
 
+protected slots:
+    bool startOs(LinboOs* os);
+    bool syncOs(LinboOs* os);
+    bool reinstallOs(LinboOs* os);
+
+    bool replaceImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+
+    bool uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+
 private slots:
-    bool _partitionDrive(bool format, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
-    bool _uploadImage(const LinboImage* image, LinboBackend::LinboPostProcessActions postProcessAction = LinboBackend::NoAction, bool allowCreatingImageState = false);
+    bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool _uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessAction = LinboPostProcessActions::NoAction, bool allowCreatingImageState = false);
 
     void _initTimers();
     void _setDefaultOs();
     void _executeAutomaticTasks();
-    void _executeAutoPartition();
-    void _executeAutoInitCache();
-    void _executeAutostart();
+    bool _executeAutoPartition();
+    bool _executeAutoInitCache();
+    LinboOs* _getOsForAutostart();
+    bool _executeAutostart();
     void _handleAutostartTimerTimeout();
     void _handleRootTimerTimeout();
     void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -166,13 +153,11 @@ private slots:
 
 signals:
     void stateChanged(LinboBackend::LinboState state);
-    void currentOsChanged(LinboOs* os);
     void autostartTimeoutProgressChanged();
     void rootTimeoutProgressChanged();
 
 };
 
 extern LinboBackend* gBackend;
-Q_DECLARE_OPERATORS_FOR_FLAGS(LinboBackend::LinboPostProcessActions)
 
 #endif // LINBOBACKEND_H

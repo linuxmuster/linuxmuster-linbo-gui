@@ -94,9 +94,10 @@ public:
     bool actionEnabled(LinboOsStartAction action);
     static LinboOsStartAction startActionFromString(const QString& name);
 
-    bool start();
-    bool sync();
-    bool reinstall();
+    bool executeStart();
+    bool executeSync();
+    bool executeReinstall();
+    bool executeDefaultAction();
 
     LinboBackend* backend() {
         return this->_parent;

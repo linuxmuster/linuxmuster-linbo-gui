@@ -49,22 +49,22 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     LinboRadioButton* buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_nothing"));
     buttonCache->setChecked(true);
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::NoAction);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::NoAction);
 
     //% "shutdown"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_shutdown"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Shutdown);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Shutdown);
 
     //% "reboot"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_reboot"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Reboot);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Reboot);
 
     //% "logout"
     buttonCache = new LinboRadioButton(qtTrId("dialog_createImage_postaction_logout"));
     this->_postProcessActionLayout->addWidget(buttonCache);
-    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboBackend::Logout);
+    this->_postProcessActionButtonGroup->addButton(buttonCache, LinboPostProcessActions::Logout);
 
     this->_mainLayout->addStretch();
 
@@ -74,9 +74,12 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     this->_uploadButton = new LinboToolButton(qtTrId("dialog_uploadImage_button_upload"));
     this->addToolButton(this->_uploadButton);
     connect(this->_uploadButton, &LinboPushButton::clicked, this, [=]() {
-        LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::LinboPostProcessAction(this->_postProcessActionButtonGroup->checkedId());
-        this->_backend->uploadImage(this->_backend->config()->getImageByName(this->_imageSelectBox->currentText()), postProcessActions);
-        this->autoClose();
+        LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::Flags(this->_postProcessActionButtonGroup->checkedId());
+        LinboImage* image = this->_backend->config()->getImageByName(this->_imageSelectBox->currentText());
+        if(image != nullptr) {
+            image->upload(postProcessActions);
+            this->autoClose();
+        }
     });
 
     //% "cancel"

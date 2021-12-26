@@ -49,11 +49,6 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
         osButton->_setShowActionButtons(!this->_backend->config()->useMinimalLayout());
-
-        // auto select current OS
-        if(this->_backend->currentOs() == os)
-            osButton->_button->setChecked(true);
-
         this->_osButtons.append(osButton);
     }
 
@@ -79,6 +74,9 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->_environmentValuesLabel->setAlignment(Qt::AlignCenter);
         this->_environmentValuesLabel->setFont(this->_environmentValuesLabelFont);
         this->_environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
+    }
+    else {
+        this->_osButtons[0]->_button->setChecked(true);
     }
 
     this->_handleLinboStateChanged(this->_backend->state());
@@ -136,7 +134,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             bool visible = true;
             QRect geometry = this->_osButtons[i]->geometry();
 
-            if(this->_osButtons[i]->_getOs() != this->_backend->currentOs() || !this->_showOnlySelectedButton) {
+            if(this->_osButtons[i] != this->_selectedButton || !this->_showOnlySelectedButton) {
                 // "normal" buttons
                 visible = !this->_showOnlySelectedButton;
                 if(!useMinimalLayout && buttonCount > 2)
@@ -195,13 +193,20 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
 
 void LinboOsSelectionRow::_handleButtonToggled(bool checked) {
     if(checked)
-        this->_backend->setCurrentOs(this->getSelectedOs());
+        this->_selectedButton = this->_getSelectedButton();
 }
 
 LinboOs* LinboOsSelectionRow::getSelectedOs() {
+    LinboOsSelectButton* selectedButton = this->_getSelectedButton();
+    if(selectedButton != nullptr)
+        return selectedButton->_getOs();
+    return nullptr;
+}
+
+LinboOsSelectButton* LinboOsSelectionRow::_getSelectedButton() {
     for(LinboOsSelectButton* button : this->_osButtons) {
         if(button->_button->isChecked())
-            return button->_getOs();
+            return button;
     }
     return nullptr;
 }

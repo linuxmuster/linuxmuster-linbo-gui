@@ -30,19 +30,29 @@ LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
     this->_baseImage = nullptr;
 }
 
-bool LinboOs::start() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->startCurrentOs();
+bool LinboOs::executeStart() {
+    return this->_parent->startOs(this);
 }
 
-bool LinboOs::sync() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->syncCurrentOs();
+bool LinboOs::executeSync() {
+    return this->_parent->syncOs(this);
 }
 
-bool LinboOs::reinstall() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->reinstallCurrentOs();
+bool LinboOs::executeReinstall() {
+    return this->_parent->reinstallOs(this);
+}
+
+bool LinboOs::executeDefaultAction() {
+    switch (this->defaultAction()) {
+    case LinboOs::StartOs:
+        return this->executeStart();
+    case LinboOs::SyncOs:
+        return this->executeSync();
+    case LinboOs::ReinstallOs:
+        return this->executeReinstall();
+    default:
+        return false;
+    }
 }
 
 void LinboOs::_setBaseImage (LinboImage* baseImage) {

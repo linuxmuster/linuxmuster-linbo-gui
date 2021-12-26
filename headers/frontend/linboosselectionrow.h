@@ -50,10 +50,13 @@ private:
     QLabel* _environmentValuesLabel;
     QFont _environmentValuesLabelFont;
     QPropertyAnimation* _sizeAnimation;
+    LinboOsSelectButton* _selectedButton;
     bool _showOnlySelectedButton;
     bool _inited;
 
     QSize* _sizeOverride;
+
+    LinboOsSelectButton* _getSelectedButton();
 
 private slots:
     void _resizeAndPositionAllButtons(int heightOverride = -1, int widthOverride = -1);
