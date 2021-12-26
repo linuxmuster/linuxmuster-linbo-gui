@@ -64,8 +64,8 @@ private slots:
     void _handleLinboStateChanged(LinboBackend::LinboState newState);
 
 signals:
-    void imageCreationRequested();
-    void imageUploadRequested();
+    void imageCreationRequested(LinboOs* os);
+    void imageUploadRequested(LinboOs* os);
 
 };
 

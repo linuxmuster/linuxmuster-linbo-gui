@@ -45,7 +45,6 @@ class LinboBackend : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(LinboBackend::LinboState state READ state NOTIFY stateChanged)
-    Q_PROPERTY(LinboOs* _currentOs READ currentOs WRITE setCurrentOs NOTIFY currentOsChanged)
     Q_PROPERTY(double autostartTimeoutProgress READ autostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
     Q_PROPERTY(int autostartTimeoutRemainingSeconds READ autostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
 
@@ -143,7 +142,6 @@ private slots:
     bool _uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessAction = LinboPostProcessActions::NoAction, bool allowCreatingImageState = false);
 
     void _initTimers();
-    void _setDefaultOs();
     void _executeAutomaticTasks();
     bool _executeAutoPartition();
     bool _executeAutoInitCache();

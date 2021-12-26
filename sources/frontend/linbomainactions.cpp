@@ -83,18 +83,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     LinboPushButton* buttonCache;
 
-    if(this->_backend->config()->useMinimalLayout()) {
-        //% "Create image"
-        buttonCache = new LinboToolButton(qtTrId("main_root_button_createImage"), LinboTheme::ImageIcon, LinboTheme::TextColor);
-        this->_rootActionButtons.append(buttonCache);
-        connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageCreationRequested);
-
-        //% "Upload image"
-        buttonCache = new LinboToolButton(qtTrId("main_root_button_uploadImage"), LinboTheme::UploadIcon, LinboTheme::TextColor);
-        this->_rootActionButtons.append(buttonCache);
-        connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::imageUploadRequested);
-    }
-
     //% "Open terminal"
     buttonCache = new LinboToolButton(qtTrId("main_root_button_openTerminal"), LinboTheme::TerminalIcon, LinboTheme::TextColor);
     connect(buttonCache, &LinboPushButton::clicked, this, &LinboMainActions::terminalRequested);

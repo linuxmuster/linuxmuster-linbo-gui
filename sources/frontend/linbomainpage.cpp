@@ -162,16 +162,12 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->_imageCreationDialog->centerInParent();
     connect(this->_osSelectionRow, &LinboOsSelectionRow::imageCreationRequested,
             this->_imageCreationDialog, &LinboImageCreationDialog::open);
-    connect(this->_mainActions, &LinboMainActions::imageCreationRequested,
-            this->_imageCreationDialog, &LinboImageCreationDialog::open);
 
     this->_imageUploadDialog = new LinboImageUploadDialog(backend, parent);
     this->_allDialogs.append(this->_imageUploadDialog);
     this->_imageUploadDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.3);
     this->_imageUploadDialog->centerInParent();
     connect(this->_osSelectionRow, &LinboOsSelectionRow::imageUploadRequested,
-            this->_imageUploadDialog, &LinboImageUploadDialog::open);
-    connect(this->_mainActions, &LinboMainActions::imageUploadRequested,
             this->_imageUploadDialog, &LinboImageUploadDialog::open);
 
     this->_terminalDialog = new LinboTerminalDialog(parent);

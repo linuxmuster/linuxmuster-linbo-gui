@@ -34,3 +34,8 @@ QString LinboImage::getDescription() {
 bool LinboImage::setDescription (const QString& description) {
     return this->_backend->_linboCmd->writeImageDescription(this, description);
 }
+
+
+bool LinboImage::upload(LinboPostProcessActions::Flags postProcessActions) {
+    return this->_backend->uploadImage(this, postProcessActions);
+}

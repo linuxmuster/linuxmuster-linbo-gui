@@ -49,7 +49,6 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
         this->_logger->_log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
     }
 
-    this->_setDefaultOs();
     this->_executeAutomaticTasks();
 
     if(this->state() == Initializing)

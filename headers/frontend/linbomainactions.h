@@ -84,8 +84,6 @@ private slots:
     void _handleTimeoutProgressChanged();
 
 signals:
-    void imageCreationRequested();
-    void imageUploadRequested();
     void terminalRequested();
     void cacheUpdateRequested();
     void drivePartitioningRequested();

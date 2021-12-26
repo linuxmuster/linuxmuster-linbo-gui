@@ -128,10 +128,10 @@ void LinboImageCreationDialog::_createImage(LinboPostProcessActions::Flags postP
 
     if(this->_actionButtonGroup->checkedId() == 0)
         // replace image
-        this->_backend->replaceImageOfOs(this->_targetOs, this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_targetOs->replaceImage(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
     else
         // create new image
-        this->_backend->createImageOfOs(this->_targetOs, this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_targetOs->createImage(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
 
     this->autoClose();
 }
