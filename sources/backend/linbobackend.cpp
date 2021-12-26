@@ -42,38 +42,14 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     this->_configReader = new LinboConfigReader(this);
     this->_config = this->_configReader->readConfig();
 
-    // autostart timers
-    this->_autostartTimer = new QTimer(this);
-    this->_autostartTimer->setSingleShot(true);
-    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
-
-    // root timeout timer
-    this->_rootTimeoutTimer = new QTimer(this);
-    this->_rootTimeoutTimer->setSingleShot(true);
-    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
-
-    // timeout progress refresh timer
-    this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
-    this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
-    this->_timeoutRemainingTimeRefreshTimer->setInterval(10);
-    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout, this,
-    [=] {
-        if(this->_state == Autostarting)
-            emit this->autostartTimeoutProgressChanged();
-        else if(this->_state == RootTimeout)
-            emit this->rootTimeoutProgressChanged();
-    });
+    this->_initTimers();
 
     if(this->_config->guiDisabled()) {
         this->_setState(Disabled);
         this->_logger->_log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
     }
 
-
-    // default select first OS if no other OS has been selected yet
-    if(_config->operatingSystems().length() > 0 && this->_currentOs == nullptr)
-        this->_currentOs = this->_config->operatingSystems().at(0);
-
+    this->_setDefaultOs();
     this->_executeAutomaticTasks();
 }
 
@@ -418,6 +394,36 @@ int LinboBackend::rootTimeoutRemainingSeconds() {
 // -----------
 // - Helpers -
 // -----------
+
+void LinboBackend::_initTimers() {
+    // autostart timers
+    this->_autostartTimer = new QTimer(this);
+    this->_autostartTimer->setSingleShot(true);
+    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
+
+    // root timeout timer
+    this->_rootTimeoutTimer = new QTimer(this);
+    this->_rootTimeoutTimer->setSingleShot(true);
+    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
+
+    // timeout progress refresh timer
+    this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
+    this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
+    this->_timeoutRemainingTimeRefreshTimer->setInterval(10);
+    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout, this,
+    [=] {
+        if(this->_state == Autostarting)
+            emit this->autostartTimeoutProgressChanged();
+        else if(this->_state == RootTimeout)
+            emit this->rootTimeoutProgressChanged();
+    });
+}
+
+void LinboBackend::_setDefaultOs() {
+    // default select first OS if no other OS has been selected yet
+    if(_config->operatingSystems().length() > 0 && this->_currentOs == nullptr)
+        this->_currentOs = this->_config->operatingSystems().at(0);
+}
 
 void LinboBackend::_executeAutomaticTasks() {
     this->_executeAutoPartition();

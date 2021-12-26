@@ -153,6 +153,8 @@ private slots:
     bool _partitionDrive(bool format, LinboBackend::LinboPostProcessActions postProcessActions = LinboBackend::NoAction);
     bool _uploadImage(const LinboImage* image, LinboBackend::LinboPostProcessActions postProcessAction = LinboBackend::NoAction, bool allowCreatingImageState = false);
 
+    void _initTimers();
+    void _setDefaultOs();
     void _executeAutomaticTasks();
     void _executeAutoPartition();
     void _executeAutoInitCache();
