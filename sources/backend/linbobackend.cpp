@@ -520,7 +520,6 @@ void LinboBackend::_handleAutostartTimerTimeout() {
 
 void LinboBackend::_handleRootTimerTimeout() {
     this->_timeoutRemainingTimeRefreshTimer->stop();
-    qDebug() << "timeout stop";
     if(this->_state == Root) {
         // timeout for the first time -> switch to timeout state
         this->restartRootTimeout();
