@@ -165,6 +165,4 @@ signals:
 
 };
 
-extern LinboBackend* gBackend;
-
 #endif // LINBOBACKEND_H

@@ -22,11 +22,8 @@
 
 #include "linbobackend.h"
 
-LinboBackend* gBackend = nullptr;
-
 LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 {
-    gBackend = this;
     this->_logger = nullptr;
     this->_rootPassword = "";
     this->_imageToUploadAutomatically = nullptr;
