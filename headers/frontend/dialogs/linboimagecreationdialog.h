@@ -41,6 +41,9 @@ class LinboImageCreationDialog : public LinboDialog
 public:
     LinboImageCreationDialog(LinboBackend* backend, QWidget* parent);
 
+public slots:
+    void open(LinboOs* os);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -53,6 +56,8 @@ private:
 
     QButtonGroup* _postProcessActionButtonGroup;
     QHBoxLayout* _postProcessActionLayout;
+
+    LinboOs* _targetOs;
 
 private slots:
     void _refreshPathAndDescription(bool isOpening = false);

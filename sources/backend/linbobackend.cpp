@@ -32,6 +32,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     this->_imageToUploadAutomatically = nullptr;
     this->_state = Initializing;
     this->_postProcessActions = LinboPostProcessActions::NoAction;
+    this->_osOfCurrentAction = nullptr;
 
     this->_logger = new LinboLogger("/tmp/linbo.log", this);
 
@@ -59,6 +60,13 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 // - Public functions -
 // --------------------
 
+LinboOs* LinboBackend::osOfCurrentAction() {
+    QList<LinboState> osBaseStates = {Autostarting, Starting, Syncing, Reinstalling, CreatingImage, UploadingImage};
+    if(!osBaseStates.contains(this->state()))
+        return nullptr;
+    return this->_osOfCurrentAction;
+}
+
 void LinboBackend::shutdown() {
     QProcess::execute("busybox", {"poweroff"});
 }
@@ -73,6 +81,7 @@ bool LinboBackend::startOs(LinboOs* os) {
 
     this->_logger->_log("Starting " + os->name(), LinboLogger::LinboLogChapterBeginning);
 
+    this->_osOfCurrentAction = os;
     this->_setState(Starting);
 
     return this->_linboCmd->executeAsync(
@@ -92,6 +101,7 @@ bool LinboBackend::syncOs(LinboOs* os) {
 
     this->_logger->_log("Syncing " + os->name(), LinboLogger::LinboLogChapterBeginning);
 
+    this->_osOfCurrentAction = os;
     this->_setState(Syncing);
 
     return this->_linboCmd->executeAsync(
@@ -114,6 +124,7 @@ bool LinboBackend::reinstallOs(LinboOs* os) {
 
     this->_logger->_log("Reinstalling " + os->name(), LinboLogger::LinboLogChapterBeginning);
 
+    this->_osOfCurrentAction = os;
     this->_setState(Reinstalling);
 
     return this->_linboCmd->executeAsync(
@@ -175,6 +186,7 @@ bool LinboBackend::createImageOfOs(LinboOs* os, QString name, QString descriptio
     this->_postProcessActions = postProcessActions;
 
     this->_logger->_log("Creating image", LinboLogger::LinboLogChapterBeginning);
+    this->_osOfCurrentAction = os;
     this->_setState(CreatingImage);
 
     this->_logger->_log("Writing image description", LinboLogger::LinboGuiInfo);
@@ -449,6 +461,7 @@ bool LinboBackend::_executeAutostart() {
         return false;
     }
 
+    this->_osOfCurrentAction = osForAutostart;
     this->_setState(Autostarting);
     this->_logger->_log("Beginning autostart timeout for " + osForAutostart->name(), LinboLogger::LinboGuiInfo);
     this->_autostartTimer->setInterval(osForAutostart->autostartTimeout() * 1000);
@@ -466,6 +479,7 @@ bool LinboBackend::_uploadImage(const LinboImage* image, LinboPostProcessActions
 
     this->_postProcessActions = postProcessActions;
     this->_logger->_log("Uploading image", LinboLogger::LinboLogChapterBeginning);
+    this->_osOfCurrentAction = image->_os;
     this->_setState(UploadingImage);
 
     return this->_linboCmd->executeAsync(

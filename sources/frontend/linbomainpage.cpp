@@ -179,7 +179,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->_terminalDialog->setGeometry(0, 0, std::min(dialogWidth * 2, int(this->width() * 0.9)), dialogHeight);
     this->_terminalDialog->centerInParent();
     connect(this->_mainActions, &LinboMainActions::terminalRequested,
-            this->_terminalDialog, &LinboImageCreationDialog::open);
+            this->_terminalDialog, &LinboTerminalDialog::open);
 
     this->_confirmationDialog = new LinboConfirmationDialog(
         //% "Partition drive"

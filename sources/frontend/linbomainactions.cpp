@@ -36,13 +36,13 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
     this->_buttonWidget = new QWidget();
 
     this->_startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->_buttonWidget);
-    connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startOs);
+    // TODO connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startOs);
 
     this->_syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->_buttonWidget);
-    connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncOs);
+    // TODO connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncOs);
 
     this->_reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->_buttonWidget);
-    connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallOs);
+    // TODO connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallOs);
 
     //% "No baseimage defined"
     this->_noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->_buttonWidget);
@@ -493,7 +493,7 @@ void LinboMainActions::_handleTimeoutProgressChanged() {
         remaningSeconds = this->_backend->autostartTimeoutRemainingSeconds();
 
         //% "Starting"
-        label = qtTrId("main_autostart_label") + " " + this->_backend->currentOs()->name();
+        label = qtTrId("main_autostart_label") + " " + this->_backend->osOfCurrentAction()->name();
     }
     else {
         progress = this->_backend->rootTimeoutProgress();

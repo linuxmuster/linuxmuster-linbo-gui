@@ -91,6 +91,8 @@ public:
     double rootTimeoutProgress();
     int rootTimeoutRemainingSeconds();
 
+    LinboOs* osOfCurrentAction();
+
 protected:
 
 private:
@@ -99,6 +101,7 @@ private:
     LinboConfigReader* _configReader;
     LinboConfig* _config;
     LinboCmd* _linboCmd;
+    LinboOs* _osOfCurrentAction;
 
     QTimer* _autostartTimer;
     QTimer* _rootTimeoutTimer;

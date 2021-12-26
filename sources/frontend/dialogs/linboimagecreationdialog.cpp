@@ -119,14 +119,19 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     connect(this, &LinboDialog::opened, [=] { this->_refreshPathAndDescription(true); });
 }
 
+void LinboImageCreationDialog::open(LinboOs* os) {
+    this->_targetOs = os;
+    LinboDialog::open();
+}
+
 void LinboImageCreationDialog::_createImage(LinboPostProcessActions::Flags postProcessActions) {
 
     if(this->_actionButtonGroup->checkedId() == 0)
         // replace image
-        this->_backend->replaceImageOfOs(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->replaceImageOfOs(this->_targetOs, this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
     else
         // create new image
-        this->_backend->createImageOfOs(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        this->_backend->createImageOfOs(this->_targetOs, this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
 
     this->autoClose();
 }
@@ -160,7 +165,7 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 }
 
 void LinboImageCreationDialog::_refreshPathAndDescription(bool isOpening) {
-    if(this->_backend->currentOs()->baseImage() == nullptr) {
+    if(this->_targetOs->baseImage() == nullptr) {
         this->_actionButtonGroup->buttons().at(1)->setChecked(true);
         this->_actionButtonGroup->buttons().at(0)->setChecked(false);
         this->_actionButtonGroup->buttons().at(0)->setEnabled(false);
@@ -175,8 +180,8 @@ void LinboImageCreationDialog::_refreshPathAndDescription(bool isOpening) {
 
     if(this->_actionButtonGroup->checkedId() == 0) {
         this->_imageNameLineEdit->setEnabled(false);
-        this->_imageNameLineEdit->setText(this->_backend->currentOs()->baseImage()->name());
-        this->_imageDescriptionTextBrowser->setText(this->_backend->currentOs()->baseImage()->getDescription());
+        this->_imageNameLineEdit->setText(this->_targetOs->baseImage()->name());
+        this->_imageDescriptionTextBrowser->setText(this->_targetOs->baseImage()->getDescription());
     }
     else {
         this->_imageNameLineEdit->setEnabled(true);

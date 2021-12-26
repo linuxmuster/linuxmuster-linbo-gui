@@ -90,6 +90,11 @@ LinboImageUploadDialog::LinboImageUploadDialog(LinboBackend* backend, QWidget* p
     connect(this, &LinboImageUploadDialog::opened, this, &LinboImageUploadDialog::refreshImageList);
 }
 
+void LinboImageUploadDialog::open(LinboOs* os) {
+    this->_targetOs = os;
+    LinboDialog::open();
+}
+
 void LinboImageUploadDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
@@ -122,7 +127,7 @@ void LinboImageUploadDialog::refreshImageList() {
     this->_imageSelectBox->clear();
 
     bool imagesWereFound = false;
-    for(LinboImage* image : this->_backend->config()->getImagesOfOs(this->_backend->currentOs(), true, false)) {
+    for(LinboImage* image : this->_backend->config()->getImagesOfOs(this->_targetOs, true, false)) {
         this->_imageSelectBox->addItem(image->name());
         imagesWereFound = true;
     }

@@ -35,6 +35,9 @@ class LinboImageUploadDialog : public LinboDialog
 public:
     LinboImageUploadDialog(LinboBackend* backend, QWidget* parent);
 
+public slots:
+    void open(LinboOs* os);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void refreshImageList();
@@ -50,6 +53,8 @@ private:
     QHBoxLayout* _postProcessActionLayout;
 
     LinboToolButton* _uploadButton;
+
+    LinboOs* _targetOs;
 };
 
 #endif // LINBOIMAGEUPLOADDIALOG_H
