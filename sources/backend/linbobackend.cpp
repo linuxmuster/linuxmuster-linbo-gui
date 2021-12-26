@@ -551,13 +551,7 @@ bool LinboBackend::_noMorePostProcessActionsToExecute() {
 }
 
 bool LinboBackend::_validatePostProcessActions(LinboPostProcessActions::Flags flags) {
-    // Possible workflows:
-    // create -> upload -> shutdown/reboot/logout
-    // upload ---------´
-    //
-    // autoPartition -> autoInitCache -> autostart -> logout
-    // autoPartition ----------------´------------´
-    // autoInitCache ---------------´------------´
+    // See comment in linbopostprocessactions.h
     if(flags.testFlag(LinboPostProcessActions::UploadImage)) {
         return !flags.testAnyFlags(LinboPostProcessActions::ExecuteAutoInitCache | LinboPostProcessActions::ExecuteAutostart);
     }
@@ -573,14 +567,7 @@ bool LinboBackend::_validatePostProcessActions(LinboPostProcessActions::Flags fl
 }
 
 LinboPostProcessActions::Flag LinboBackend::_nextAction(LinboPostProcessActions::Flags postProcessActions) {
-    // Flag testing order:
-    // 1. UploadImage
-    // 2. ExecuteAutoInitCache
-    // 3. ExecuteAutostart
-    // 4. Shutown
-    // 5. Reboot
-    // 6. Logout
-
+    // The order is important! See comment in linbopostprocessactions.h
     QList<LinboPostProcessActions::Flag> flagsToTest = {
         LinboPostProcessActions::UploadImage,
         LinboPostProcessActions::ExecuteAutoInitCache,

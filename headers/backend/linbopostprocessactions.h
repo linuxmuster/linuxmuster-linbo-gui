@@ -4,6 +4,13 @@
 
 class LinboPostProcessActions {
 public:
+    // Possible workflows:
+    // create -> upload -> shutdown/reboot/logout
+    // upload ---------´
+    //
+    // autoPartition -> autoInitCache -> autostart -> logout
+    // autoPartition ----------------´------------´
+    // autoInitCache ---------------´------------´
     enum Flag {
         NoAction = 1,
         Shutdown = 2,
