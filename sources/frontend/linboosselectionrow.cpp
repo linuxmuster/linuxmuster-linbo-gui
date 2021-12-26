@@ -48,7 +48,6 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
-        osButton->_setShowActionButtons(!this->_backend->config()->useMinimalLayout());
         this->_osButtons.append(osButton);
     }
 
@@ -95,7 +94,6 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
 
     if(this->_osButtons.length() > 0) {
 
-        bool useMinimalLayout = this->_backend->config()->useMinimalLayout();
         int buttonCount = this->_osButtons.length();
 
         int spacing;
@@ -103,19 +101,13 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
         int buttonHeight;
         int totalWidth;
 
-        if(useMinimalLayout) {
-            spacing = heightOverride * 0.2;
-            buttonWidth = std::min(int(((widthOverride - spacing) / buttonCount) * 0.9), heightOverride * 3);
-            buttonHeight = heightOverride;
-            totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
-        }
-        else if (!useMinimalLayout && buttonCount <= 2) {
+        if (buttonCount <= 2) {
             spacing = heightOverride * 0.1;
             buttonWidth = std::min((widthOverride - spacing) / buttonCount, int(heightOverride * 1.5) - spacing);
             buttonHeight = heightOverride / 2 - spacing / 2;
             totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
         }
-        else if(!useMinimalLayout && buttonCount > 2) {
+        if(buttonCount > 2) {
             // if we have more than two buttons -> we have multiple rows with two buttons each
             spacing = heightOverride * 0.1;
             buttonWidth = std::min((widthOverride - spacing) / 2, int(heightOverride * 1.5) - spacing);
@@ -137,7 +129,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             if(this->_osButtons[i] != this->_selectedButton || !this->_showOnlySelectedButton) {
                 // "normal" buttons
                 visible = !this->_showOnlySelectedButton;
-                if(!useMinimalLayout && buttonCount > 2)
+                if(buttonCount > 2)
                     if(i < 2)
                         geometry = QRect(x + (buttonWidth  * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
                     else

@@ -20,7 +20,6 @@
 
 LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup* buttonGroup, QWidget* parent) : QWidget(parent)
 {
-    this->_showActionButtons = false;
     this->_inited = false;
     this->_buttonGroup = buttonGroup;
     this->_os = os;
@@ -66,78 +65,75 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
     this->_button = new LinboPushButton(icon, "", {checkedOverlay, this->_defaultStartActionOverlay, this->_defaultRootActionOverlay}, this);
     this->setToolTip(this->_os->description());
 
-    if(!os->backend()->config()->useMinimalLayout()) {
-        connect(this->_button, &LinboPushButton::clicked, this, &LinboOsSelectButton::_handlePrimaryButtonClicked);
+    this->_button->setCheckable(false);
 
-        QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
-            //% "Start %1"
-            {LinboOs::StartOs, gTheme->getIconPath(LinboTheme::StartLegacyIcon)},
-            //% "Sync and start %1"
-            {LinboOs::SyncOs, gTheme->getIconPath(LinboTheme::SyncLegacyIcon)},
-            //% "Reinstall %1"
-            {LinboOs::ReinstallOs, gTheme->getIconPath(LinboTheme::ReinstallLegacyIcon)}
-        };
+    connect(this->_button, &LinboPushButton::clicked, this, &LinboOsSelectButton::_handlePrimaryButtonClicked);
 
-        for(auto i = startActionButtonIcons.begin(); i != startActionButtonIcons.end(); i++) {
-            LinboOs::LinboOsStartAction startAction = i.key();
-            QString startActionIconPath = i.value();
-            bool disabled = !this->_os->actionEnabled(startAction) || this->_os->defaultAction() == startAction;
+    QMap<LinboOs::LinboOsStartAction, QString> startActionButtonIcons = {
+        //% "Start %1"
+        {LinboOs::StartOs, gTheme->getIconPath(LinboTheme::StartLegacyIcon)},
+        //% "Sync and start %1"
+        {LinboOs::SyncOs, gTheme->getIconPath(LinboTheme::SyncLegacyIcon)},
+        //% "Reinstall %1"
+        {LinboOs::ReinstallOs, gTheme->getIconPath(LinboTheme::ReinstallLegacyIcon)}
+    };
 
-            if(disabled)
-                continue;
+    for(auto i = startActionButtonIcons.begin(); i != startActionButtonIcons.end(); i++) {
+        LinboOs::LinboOsStartAction startAction = i.key();
+        QString startActionIconPath = i.value();
+        bool disabled = !this->_os->actionEnabled(startAction) || this->_os->defaultAction() == startAction;
 
-            LinboPushButton* actionButton = new LinboPushButton(startActionIconPath, this);
-            actionButton->setToolTip(this->_getTooltipContentForAction(startAction));
+        if(disabled)
+            continue;
 
-            actionButton->setEnabled(!disabled);
-            actionButton->setVisible(false);
-            this->_startActionButtons.append(actionButton);
+        LinboPushButton* actionButton = new LinboPushButton(startActionIconPath, this);
+        actionButton->setToolTip(this->_getTooltipContentForAction(startAction));
 
-            switch (startAction) {
-            case LinboOs::StartOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeStart);
-                break;
-            case LinboOs::SyncOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeSync);
-                break;
-            case LinboOs::ReinstallOs:
-                connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeReinstall);
-                break;
-            default:
-                break;
-            }
-        }
-
-        // root action button
-        LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboTheme::UploadLegacyIcon), this);
-        actionButton->setGeometry(0,0,0,0);
+        actionButton->setEnabled(!disabled);
         actionButton->setVisible(false);
-        //% "Upload image of %1"
-        actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->_os->name()));
-        connect(actionButton, &LinboPushButton::clicked, this, [=] {
-            emit this->imageUploadRequested(this->_os);
-        });
-        this->_rootActionButtons.append(actionButton);
+        this->_startActionButtons.append(actionButton);
 
-        // OS name label
-        this->_osNameLabel = new QLabel(this);
-        if(this->_os->baseImage() != nullptr) {
-            this->_osNameLabel->setText(this->_os->name());
-            this->_osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboTheme::TextColor).name() + "}");
+        switch (startAction) {
+        case LinboOs::StartOs:
+            connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeStart);
+            break;
+        case LinboOs::SyncOs:
+            connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeSync);
+            break;
+        case LinboOs::ReinstallOs:
+            connect(actionButton, &LinboPushButton::clicked, this->_os, &LinboOs::executeReinstall);
+            break;
+        default:
+            break;
         }
-        else {
-            //% "No baseimage defined"
-            this->_osNameLabel->setText(qtTrId("main_noBaseImage"));
-            this->_osNameLabel->setStyleSheet("QLabel {color: red}");
-        }
+    }
 
-        this->_osNameLabel->setWordWrap(true);
-        this->_osNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    // root action button
+    LinboPushButton* actionButton = new LinboPushButton(gTheme->getIconPath(LinboTheme::UploadLegacyIcon), this);
+    actionButton->setGeometry(0,0,0,0);
+    actionButton->setVisible(false);
+    //% "Upload image of %1"
+    actionButton->setToolTip(qtTrId("uploadImageOfOS").arg(this->_os->name()));
+    connect(actionButton, &LinboPushButton::clicked, this, [=] {
+        emit this->imageUploadRequested(this->_os);
+    });
+    this->_rootActionButtons.append(actionButton);
+
+    // OS name label
+    this->_osNameLabel = new QLabel(this);
+    if(this->_os->baseImage() != nullptr) {
+        this->_osNameLabel->setText(this->_os->name());
+        this->_osNameLabel->setStyleSheet("QLabel {color: " + gTheme->getColor(LinboTheme::TextColor).name() + "}");
     }
     else {
-        connect(this->_button, &LinboPushButton::hovered, this, [=] {this->_button->setChecked(true);});
-        connect(this->_button, &LinboPushButton::doubleClicked, this, &LinboOsSelectButton::_handlePrimaryButtonClicked);
+        //% "No baseimage defined"
+        this->_osNameLabel->setText(qtTrId("main_noBaseImage"));
+        this->_osNameLabel->setStyleSheet("QLabel {color: red}");
     }
+
+    this->_osNameLabel->setWordWrap(true);
+    this->_osNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+
 
     this->_button->setCheckable(true);
     this->_buttonGroup->addButton(this->_button);
@@ -191,51 +187,35 @@ void LinboOsSelectButton::setVisible(bool visible) {
 void LinboOsSelectButton::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
 
-    if(!this->_showActionButtons || this->_os->backend()->config()->useMinimalLayout()) {
-        this->_button->setGeometry((this->width() - this->height()) / 2, 0, this->height(), this->height());
-    }
-    else {
-        this->_button->setGeometry(0, 0, event->size().height(), event->size().height());
+    this->_button->setGeometry(0, 0, event->size().height(), event->size().height());
 
-        int x = this->height();
-        int spacing = this->width() * 0.04;
-        int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
+    int x = this->height();
+    int spacing = this->width() * 0.04;
+    int actionButtonSize = (this->width() - this->height()) / 4 - spacing;
 
-        if(this->height() <= 0 || this->width() / this->height() < 1.1) {
-            // only the big button is visible
-            actionButtonSize = 0;
-            x = 0;
-            spacing = 0;
-        }
-
-        for(LinboPushButton* actionButton : this->_startActionButtons) {
-            actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
-            x += actionButtonSize + spacing;
-        }
-
-        x = this->height();
-
-        for(LinboPushButton* actionButton : this->_rootActionButtons) {
-            actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
-            x += actionButtonSize + spacing;
-        }
-
-        this->_osNameLabel->setGeometry(this->height() + spacing, 0, this->width() - this->height() - spacing * 2, actionButtonSize);
-        QFont fontCache = this->_osNameLabel->font();
-        fontCache.setPixelSize(gTheme->toFontSize(actionButtonSize * 0.5));
-        this->_osNameLabel->setFont(fontCache);
+    if(this->height() <= 0 || this->width() / this->height() < 1.1) {
+        // only the big button is visible
+        actionButtonSize = 0;
+        x = 0;
+        spacing = 0;
     }
 
-    this->_updateActionButtonVisibility();
-}
+    for(LinboPushButton* actionButton : this->_startActionButtons) {
+        actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
+        x += actionButtonSize + spacing;
+    }
 
+    x = this->height();
 
-void LinboOsSelectButton::_setShowActionButtons(bool showActionButtons) {
-    if(this->_showActionButtons == showActionButtons && this->_inited)
-        return;
+    for(LinboPushButton* actionButton : this->_rootActionButtons) {
+        actionButton->setGeometry(x + spacing, this->height() - actionButtonSize, actionButtonSize, actionButtonSize);
+        x += actionButtonSize + spacing;
+    }
 
-    this->_showActionButtons = showActionButtons;
-    this->_button->setCheckable(!showActionButtons);
+    this->_osNameLabel->setGeometry(this->height() + spacing, 0, this->width() - this->height() - spacing * 2, actionButtonSize);
+    QFont fontCache = this->_osNameLabel->font();
+    fontCache.setPixelSize(gTheme->toFontSize(actionButtonSize * 0.5));
+    this->_osNameLabel->setFont(fontCache);
 
     this->_updateActionButtonVisibility();
 }
@@ -249,8 +229,7 @@ void LinboOsSelectButton::_handleBackendStateChange(LinboBackend::LinboState sta
     case LinboBackend::Idle:
         this->_button->setToolTip(this->_getTooltipContentForAction(this->_os->defaultAction()));
 
-        if(!this->_os->backend()->config()->useMinimalLayout())
-            this->_showDefaultAction = true;
+        this->_showDefaultAction = true;
 
         checkedOverlayMuted = false;
         break;
@@ -258,8 +237,7 @@ void LinboOsSelectButton::_handleBackendStateChange(LinboBackend::LinboState sta
         //% "Create image of %1"
         this->_button->setToolTip(qtTrId("createImageOfOS").arg(this->_os->name()));
 
-        if(!this->_os->backend()->config()->useMinimalLayout())
-            this->_showDefaultAction = true;
+        this->_showDefaultAction = true;
 
         checkedOverlayMuted = false;
         break;
@@ -299,22 +277,6 @@ void LinboOsSelectButton::_updateActionButtonVisibility(bool doNotAnimate) {
     else {
         this->_defaultStartActionOverlay->setVisible(startActionVisible && this->_showDefaultAction);
         this->_defaultRootActionOverlay->setVisible(rootActionVisible && this->_showDefaultAction);
-    }
-
-    if(this->_os->backend()->config()->useMinimalLayout())
-        return;
-
-    if(!this->_showActionButtons) {
-        for(LinboPushButton* actionButton : this->_startActionButtons)
-            actionButton->setVisible(false);
-
-        for(LinboPushButton* actionButton : this->_rootActionButtons)
-            actionButton->setVisible(false);
-
-        this->_defaultStartActionOverlay->setVisible(false);
-        this->_defaultRootActionOverlay->setVisible(false);
-
-        return;
     }
 
     for(LinboPushButton* actionButton : this->_startActionButtons)

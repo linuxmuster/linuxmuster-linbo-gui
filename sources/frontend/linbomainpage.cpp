@@ -215,43 +215,24 @@ void LinboMainPage::_handleLinboStateChanged(LinboBackend::LinboState newState) 
     int startActionsWidgetHeight;
     int osSelectionRowHeight;
     int clientInfoHeight = 0;
-    bool useMinimalLayout = this->_backend->config()->useMinimalLayout();
 
     switch (newState) {
     case LinboBackend::StartActionError:
     case LinboBackend::RootActionError:
-        if(useMinimalLayout) {
-            osSelectionRowHeight = this->height() * 0.2;
-            startActionsWidgetHeight = this->height() * 0.4;
-        }
-        else {
-            osSelectionRowHeight = this->height() * 0.15;
-            startActionsWidgetHeight = this->height() * 0.45;
-        }
+        osSelectionRowHeight = this->height() * 0.15;
+        startActionsWidgetHeight = this->height() * 0.45;
         break;
 
     case LinboBackend::Idle:
-        if(useMinimalLayout) {
-            osSelectionRowHeight = this->height() * 0.2;
-            startActionsWidgetHeight = this->height() * 0.2;
-        }
-        else {
-            osSelectionRowHeight = this->height() * 0.4;
-            startActionsWidgetHeight = this->height() * 0;
-        }
+        osSelectionRowHeight = this->height() * 0.4;
+        startActionsWidgetHeight = this->height() * 0;
 
         powerActionButtonsVisible = true;
         break;
 
     case LinboBackend::Root:
-        if(useMinimalLayout) {
-            osSelectionRowHeight = this->height() * 0.2;
-            startActionsWidgetHeight = this->height() * 0.25;
-        }
-        else {
-            osSelectionRowHeight = this->height() * 0.3;
-            startActionsWidgetHeight = this->height() * 0.15;
-        }
+        osSelectionRowHeight = this->height() * 0.3;
+        startActionsWidgetHeight = this->height() * 0.15;
 
         powerActionButtonsVisible = true;
         break;

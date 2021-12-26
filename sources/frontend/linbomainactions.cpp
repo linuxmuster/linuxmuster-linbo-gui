@@ -115,14 +115,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
         horizontalRootLayoutCache->addWidget(this->_rootActionButtons[i]);
     }
 
-    if(this->_backend->config()->useMinimalLayout()) {
-        // insert a line to separate image specific and global actions
-        QFrame* separatorLine = new QFrame();
-        separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
-        separatorLine->setFrameShape(QFrame::HLine);
-        this->_rootLayout->insertWidget(1, separatorLine);
-    }
-
     this->_rootLayout->addStretch();
 
     this->_stackView->addWidget(this->_rootWidget);

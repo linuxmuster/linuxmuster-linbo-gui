@@ -46,11 +46,7 @@ private:
     void _setVisibleAnimated(bool visible);
     void setVisible(bool visible) override;
 
-    // if set to true, the "old" Layout will be used (one big and four small buttons)
-    void _setShowActionButtons(bool showActionButtons);
-
     bool _inited;
-    bool _showActionButtons;
     bool _shouldBeVisible;
     bool _showDefaultAction;
 

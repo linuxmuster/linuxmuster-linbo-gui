@@ -107,9 +107,6 @@ public:
     const bool& autoFormat() {
         return this->_autoFormat;
     }
-    const bool& useMinimalLayout() {
-        return this->_useMinimalLayout;
-    }
     const bool& clientDetailsVisibleByDefault() {
         return this->_clientDetailsVisibleByDefault;
     }
@@ -172,7 +169,6 @@ private:
     bool _autoPartition;
     bool _autoInitCache;
     bool _autoFormat;
-    bool _useMinimalLayout;
     bool _guiDisabled;
     bool _clientDetailsVisibleByDefault;
 

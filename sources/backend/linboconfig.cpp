@@ -27,7 +27,6 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_locale = "";
     this->_downloadMethod = LinboConfig::Rsync;
     this->_autoFormat = 0;
-    this->_useMinimalLayout = false;
     this->_guiDisabled = false;
     this->_rootTimeout = 0;
     this->_autoPartition = false;

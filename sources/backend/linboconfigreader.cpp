@@ -201,7 +201,6 @@ void LinboConfigReader::_parseLinboConfig(QMap<QString, QString> rawLinboConfig,
         else if(key == "autoformat")  linboConfig->_autoFormat = _stringToBool(value);
         else if(key == "backgroundcolor" && this->_validateColorCode(value)) linboConfig->_backgroundColor = "#" + value;
         else if(key == "downloadtype")  linboConfig->_downloadMethod = LinboConfig::stringToDownloadMethod(value);
-        else if(key == "useminimallayout") linboConfig->_useMinimalLayout = this->_stringToBool(value);
         else if(key == "locale") linboConfig->_locale = value;
         else if(key == "guidisabled") linboConfig->_guiDisabled = this->_stringToBool(value);
         else if(key == "clientdetailsvisiblebydefault") linboConfig->_clientDetailsVisibleByDefault = this->_stringToBool(value);
