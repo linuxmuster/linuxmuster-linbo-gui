@@ -306,7 +306,6 @@ bool LinboBackend::cancelCurrentAction() {
     case Autostarting:
         this->_logger->_log("Cancelling autostart", LinboLogger::LinboGuiInfo);
         this->_timeoutTimer->stop();
-        this->_timeoutRemainingTimeRefreshTimer->stop();
         this->_setState(Idle);
         return true;
 
