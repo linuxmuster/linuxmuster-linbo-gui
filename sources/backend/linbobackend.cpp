@@ -391,18 +391,6 @@ int LinboBackend::rootTimeoutRemainingSeconds() {
 // -----------
 
 void LinboBackend::_initTimers() {
-    // autostart timers
-    this->_autostartTimer = new QTimer(this);
-    this->_autostartTimer->setSingleShot(true);
-    connect(this->_autostartTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
-    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
-
-    // root timeout timer
-    this->_rootTimeoutTimer = new QTimer(this);
-    this->_rootTimeoutTimer->setSingleShot(true);
-    connect(this->_rootTimeoutTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
-    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
-
     // timeout progress refresh timer
     this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
     this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
@@ -414,6 +402,18 @@ void LinboBackend::_initTimers() {
         else if(this->_state == RootTimeout)
             emit this->rootTimeoutProgressChanged();
     });
+
+    // autostart timers
+    this->_autostartTimer = new QTimer(this);
+    this->_autostartTimer->setSingleShot(true);
+    connect(this->_autostartTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
+    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
+
+    // root timeout timer
+    this->_rootTimeoutTimer = new QTimer(this);
+    this->_rootTimeoutTimer->setSingleShot(true);
+    connect(this->_rootTimeoutTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
+    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
 }
 
 void LinboBackend::_executeAutomaticTasks() {
