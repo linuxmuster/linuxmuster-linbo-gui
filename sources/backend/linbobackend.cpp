@@ -33,7 +33,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 
     this->_logger = new LinboLogger("/tmp/linbo.log", this);
 
-    this->_linboCmd = new LinboCmd(this);
+    this->_linboCmd = new LinboCmd(this->_logger, this);
     connect(this->_linboCmd, &LinboCmd::commandFinished, this, &LinboBackend::_handleCommandFinished);
 
     this->_configReader = new LinboConfigReader(this);
@@ -167,6 +167,18 @@ bool LinboBackend::createImageOfOs(LinboOs* os, QString name, QString descriptio
 
     this->_logger->_log("Beginning image creation...", LinboLogger::LinboGuiInfo);
     return this->_linboCmd->createImageOfOs(os, name, this->_config->cachePath());
+}
+
+QString LinboBackend::readImageDescription(LinboImage* image) {
+    return this->_linboCmd->readImageDescription(image, this->_config->cachePath());
+}
+
+bool LinboBackend::writeImageDescription(LinboImage* image, QString newDescription) {
+    return this->_linboCmd->writeImageDescription(image, newDescription, this->_config->cachePath());
+}
+
+bool LinboBackend::writeImageDescription(QString imageName, QString newDescription) {
+    return this->_linboCmd->writeImageDescription(imageName, newDescription, this->_config->cachePath());
 }
 
 bool LinboBackend::uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions) {
@@ -520,7 +532,7 @@ void LinboBackend::_executeNextPostProcessAction() {
 void LinboBackend::_executePostProcessAction(LinboPostProcessActions::Flag action) {
     switch(action) {
     case LinboPostProcessActions::UploadImage:
-        this->_uploadImage(this->_imageToUploadAutomatically, this->_postProcessActions, true);
+        this->_uploadImage(this->_imageToUploadAutomatically, this->_postProcessActions);
         this->_imageToUploadAutomatically = nullptr;
         break;
     case LinboPostProcessActions::ExecuteAutoInitCache:

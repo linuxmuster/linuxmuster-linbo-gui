@@ -16,7 +16,7 @@ class LinboCmd : public QObject
 {
     Q_OBJECT
 public:
-    explicit LinboCmd(QObject *parent);
+    explicit LinboCmd(LinboLogger* logger, QObject *parent);
 
     bool startOs(LinboOs* os, QString cachePath);
     bool syncOs(LinboOs* os, QString serverIP, QString cachePath);
@@ -64,13 +64,14 @@ protected:
 
 
 private:
+    LinboLogger* _logger;
+    QProcess* _asynchronosProcess;
+    QProcess* _synchronosProcess;
+
     QString _stringToMaskInOutput;
 
     QString _outputOfLastSyncExecution;
     int _exitCodeOfLastSyncExecution;
-
-    QProcess* _asynchronosProcess;
-    QProcess* _synchronosProcess;
 
     QStringList _linboCommandCache;
 #ifdef TEST_ENV

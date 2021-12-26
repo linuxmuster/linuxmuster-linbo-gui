@@ -1,9 +1,10 @@
 #include "../../headers/backend/linbocmd.h"
 #include "linbobackend.h"
 
-LinboCmd::LinboCmd(QObject *parent)
+LinboCmd::LinboCmd(LinboLogger* logger, QObject *parent)
     : QObject(parent)
 {
+    this->_logger = logger;
     this->_stringToMaskInOutput = "";
     // Processes
     this->_asynchronosProcess = new QProcess(this);
@@ -224,18 +225,22 @@ void LinboCmd::setStringToMaskInOutput(QString string) {
 }
 
 void LinboCmd::_readFromStdout() {
+    if(this->_logger == nullptr)
+        return;
     QString stdOut = this->_asynchronosProcess->readAllStandardOutput();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_backend->logger()->stdOut(line.simplified());
+        this->_logger->stdOut(line.simplified());
     }
 }
 
 void LinboCmd::_readFromStderr() {
+    if(this->_logger == nullptr)
+        return;
     QString stdOut = this->_asynchronosProcess->readAllStandardError();
     QStringList lines = stdOut.split("\n");
     for(const QString &line : lines) {
-        this->_backend->logger()->stdErr(line.simplified());
+        this->_logger->stdErr(line.simplified());
     }
 }
 
@@ -247,6 +252,8 @@ QString LinboCmd::_maskString(QString stringToMask) {
 }
 
 void LinboCmd::_logExecution(QStringList arguments) {
+    if(this->_logger == nullptr)
+        return;
     QString argumentsString = this->_maskString(arguments.join(" "));
-    this->_backend->logger()->info("Executing: " + this->_linboCmdCommand + " " + argumentsString);
+    this->_logger->info("Executing: " + this->_linboCmdCommand + " " + argumentsString);
 }

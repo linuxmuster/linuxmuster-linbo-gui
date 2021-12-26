@@ -111,6 +111,10 @@ protected slots:
     bool replaceImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
+    QString readImageDescription(LinboImage* image);
+    bool writeImageDescription(LinboImage* image, QString newDescription);
+    bool writeImageDescription(QString imageName, QString newDescription);
+
     bool uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
 private:
@@ -125,7 +129,7 @@ private:
     QTimer* _timeoutRemainingTimeRefreshTimer;
 
     QString _rootPassword;
-    const LinboImage* _imageToUploadAutomatically;
+    LinboImage* _imageToUploadAutomatically;
     LinboPostProcessActions::Flags _postProcessActions;
 
     void _setState(LinboState state);
