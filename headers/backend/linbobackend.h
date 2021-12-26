@@ -133,6 +133,7 @@ private:
 private slots:
     bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool _uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessAction = LinboPostProcessActions::NoAction, bool allowCreatingImageState = false);
+    void _logout(bool force);
 
     void _executeAutomaticTasks();
     bool _executeAutoPartition();
@@ -141,7 +142,13 @@ private slots:
     bool _executeAutostart();
 
     void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void _logout(bool force);
+    void _handleCommandFinishedSuccessfull();
+    void _handleCommandFinishedError();
+    void _executeNextPostProcessAction();
+    void _executePostProcessAction(LinboPostProcessActions::Flag action);
+    bool _noMorePostProcessActionsToExecute();
+    bool _validatePostProcessActions(LinboPostProcessActions::Flags postProcessActions);
+    LinboPostProcessActions::Flag _nextAction(LinboPostProcessActions::Flags postProcessActions);
 
     void _initTimers();
     void _handleTimeoutTimerTimeout();

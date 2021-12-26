@@ -11,8 +11,7 @@ public:
         Logout = 8,
         UploadImage = 16,
         ExecuteAutoInitCache = 32,
-        ExecuteAutostart = 64,
-        CancelToIdle = 128
+        ExecuteAutostart = 64
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 };
