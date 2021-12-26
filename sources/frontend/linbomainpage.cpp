@@ -200,14 +200,14 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     this->_registerDialog->setGeometry(0, 0, dialogWidth, dialogHeight * 0.7);
     this->_registerDialog->centerInParent();
     connect(this->_mainActions, &LinboMainActions::registrationRequested,
-            this->_registerDialog, &LinboImageCreationDialog::open);
+            this->_registerDialog, &LinboRegisterDialog::open);
 
     this->_updateCacheDialog = new LinboUpdateCacheDialog(backend, parent);
     this->_allDialogs.append(this->_updateCacheDialog);
     this->_updateCacheDialog->setGeometry(0, 0, dialogWidth * 0.5, dialogHeight * 0.3);
     this->_updateCacheDialog->centerInParent();
     connect(this->_mainActions, &LinboMainActions::cacheUpdateRequested,
-            this->_updateCacheDialog, &LinboImageCreationDialog::open);
+            this->_updateCacheDialog, &LinboUpdateCacheDialog::open);
 
     // attach eventFilter
     qApp->installEventFilter(this);

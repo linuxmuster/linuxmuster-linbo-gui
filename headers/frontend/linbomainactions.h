@@ -54,13 +54,6 @@ private:
 
     LinboStackedWidget* _stackView;
 
-    QWidget* _buttonWidget;
-    LinboPushButton* _startOsButton;
-    LinboPushButton* _syncOsButton;
-    LinboPushButton* _reinstallOsButton;
-    QList<LinboPushButton*> _actionButtons;
-    QLabel* _noBaseImageLabel;
-
     QWidget* _progressBarWidget;
     LinboProgressBar* _progressBar;
     QLabel* _logLabel;

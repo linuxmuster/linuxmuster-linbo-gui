@@ -32,26 +32,6 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
 
-    // Action Buttons
-    this->_buttonWidget = new QWidget();
-
-    this->_startOsButton = new LinboToolButton(LinboTheme::StartIcon, this->_buttonWidget);
-    // TODO connect(this->_startOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::startOs);
-
-    this->_syncOsButton = new LinboToolButton(LinboTheme::SyncIcon, this->_buttonWidget);
-    // TODO connect(this->_syncOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::syncOs);
-
-    this->_reinstallOsButton = new LinboToolButton(LinboTheme::ReinstallIcon, this->_buttonWidget);
-    // TODO connect(this->_reinstallOsButton, &LinboToolButton::clicked, this->_backend, &LinboBackend::reinstallOs);
-
-    //% "No baseimage defined"
-    this->_noBaseImageLabel = new QLabel(qtTrId("main_noBaseImage"), this->_buttonWidget);
-    this->_noBaseImageLabel->setStyleSheet("QLabel { color : red; }");
-    this->_noBaseImageLabel->hide();
-    this->_noBaseImageLabel->setAlignment(Qt::AlignCenter);
-
-    this->_stackView->addWidget(this->_buttonWidget);
-
     // Progress bar
     this->_progressBarWidget = new QWidget();
     this->_progressBar = new LinboProgressBar(this->_progressBarWidget);
@@ -170,133 +150,11 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
 void LinboMainActions::_resizeAndPositionAllItems() {
 
-    // stack view
-    this->_stackView->setFixedSize(this->size());
-
     int defaultSpacing = this->height() * 0.03;
-
-    // Action buttons
-    // set tooltips:
-    if(this->_backend->currentOs() != nullptr) {
-        this->_startOsButton->setToolTip(qtTrId("startOS").arg(this->_backend->currentOs()->name()));
-        this->_syncOsButton->setToolTip(qtTrId("syncOS").arg(this->_backend->currentOs()->name()));
-        this->_reinstallOsButton->setToolTip(qtTrId("reinstallOS").arg(this->_backend->currentOs()->name()));
-    }
-
-    // bring buttons in correct order:
-    LinboOs* selectedOs = this->_backend->currentOs();
-    LinboOs::LinboOsStartAction defaultAction = LinboOs::UnknownAction;
-    if(selectedOs != nullptr)
-        defaultAction = selectedOs->defaultAction();
-
-    int syncOsPosition = 2;
-    int startOsPosition = 0;
-    int reinstallOsPosition = 1;
-
-    switch (defaultAction) {
-    case LinboOs::StartOs:
-        break;
-    case LinboOs::SyncOs:
-        syncOsPosition = 0;
-        startOsPosition = 1;
-        reinstallOsPosition = 2;
-        break;
-    case LinboOs::ReinstallOs:
-        syncOsPosition = 1;
-        startOsPosition = 2;
-        reinstallOsPosition = 0;
-        break;
-    default:
-        break;
-    }
-
-    while (this->_actionButtons.length() < 3)
-        this->_actionButtons.append(nullptr);
-
-    this->_actionButtons[startOsPosition] = this->_startOsButton;
-    this->_actionButtons[syncOsPosition] = this->_syncOsButton;
-    this->_actionButtons[reinstallOsPosition] = this->_reinstallOsButton;
-
-    // check for disabled actions
-    QList<bool> positionsEnabled;
-    while(positionsEnabled.length() < 3)
-        positionsEnabled.append(false);
-
-    if(selectedOs != nullptr) {
-        positionsEnabled[startOsPosition] = selectedOs->startActionEnabled();
-        positionsEnabled[syncOsPosition] = selectedOs->syncActionEnabled();
-        positionsEnabled[reinstallOsPosition] = selectedOs->reinstallActionEnabled();
-    }
-
-    QList<QRect> geometries;
-    while (geometries.length() < 3)
-        geometries.append(QRect());
-
-    // move buttons into place
-    this->_buttonWidget->setGeometry(0,0,this->width(), this->height());
-
-    int buttonSpacing = this->_buttonWidget->height() * 0.1;
-    int defaultButtonHeight = this->_buttonWidget->height() * 0.6;
-    geometries[0] = QRect((this->_buttonWidget->width() - defaultButtonHeight) / 2, 0,defaultButtonHeight, defaultButtonHeight);
-
-
-    int secondaryButtonHeight = this->_buttonWidget->height() * 0.3;
-    if(positionsEnabled[1] && positionsEnabled[2]) {
-        // place buttons besides each other
-        geometries[1] = QRect(
-                            this->_buttonWidget->width() / 2 - secondaryButtonHeight - buttonSpacing / 2,
-                            defaultButtonHeight + buttonSpacing,
-                            secondaryButtonHeight,
-                            secondaryButtonHeight
-                        );
-
-        geometries[2] = QRect(
-                            this->_buttonWidget->width() / 2 + buttonSpacing / 2,
-                            defaultButtonHeight + buttonSpacing,
-                            secondaryButtonHeight,
-                            secondaryButtonHeight
-                        );
-    }
-    else {
-        // place buttons on top of each other
-        geometries[1] = QRect(
-                            this->_buttonWidget->width() / 2 - secondaryButtonHeight / 2,
-                            defaultButtonHeight + buttonSpacing,
-                            secondaryButtonHeight,
-                            secondaryButtonHeight
-                        );
-
-        geometries[2] = geometries[1];
-    }
-
-    for(int i = 0; i < this->_actionButtons.length(); i++) {
-        if(this->_inited) {
-            this->_actionButtons[i]->setVisibleAnimated(positionsEnabled[i]);
-            this->_actionButtons[i]->setGeometryAnimated(geometries[i]);
-        }
-        else {
-            // don't animate the first time
-            this->_actionButtons[i]->setVisible(positionsEnabled[i]);
-            this->_actionButtons[i]->setGeometry(geometries[i]);
-        }
-
-        if(i < 2)
-            QWidget::setTabOrder(this->_actionButtons[i], this->_actionButtons[i+1]);
-    }
-
     QFont fontCache;
 
-    if(selectedOs != nullptr && selectedOs->baseImage() == nullptr) {
-        int noBaseImageLabelHeight = this->_buttonWidget->height() * 0.2;
-        fontCache = this->_noBaseImageLabel->font();
-        fontCache.setPixelSize(gTheme->toFontSize(noBaseImageLabelHeight * 0.8));
-        this->_noBaseImageLabel->setFont(fontCache);
-        this->_noBaseImageLabel->setGeometry(0, defaultButtonHeight * 1.1, this->_buttonWidget->width(), noBaseImageLabelHeight);
-        this->_noBaseImageLabel->show();
-    }
-    else {
-        this->_noBaseImageLabel->hide();
-    }
+    // stack view
+    this->_stackView->setFixedSize(this->size());
 
     // Progress bar
     this->_progressBarWidget->setGeometry(0,0,this->width(), this->height());
@@ -390,10 +248,7 @@ void LinboMainActions::_handleLinboStateChanged(LinboBackend::LinboState newStat
         currentWidget = this->_progressBarWidget;
         break;
     case LinboBackend::Idle:
-        if(this->_backend->config()->useMinimalLayout())
-            currentWidget = this->_buttonWidget;
-        else
-            currentWidget = this->_emptyWidget;
+        currentWidget = this->_emptyWidget;
         break;
 
 
