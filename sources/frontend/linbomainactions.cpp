@@ -22,8 +22,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 {
     this->_backend = backend;
     connect(this->_backend, &LinboBackend::stateChanged, this, &LinboMainActions::_handleLinboStateChanged);
-    connect(this->_backend, &LinboBackend::autostartTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
-    connect(this->_backend, &LinboBackend::rootTimeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
+    connect(this->_backend, &LinboBackend::timeoutProgressChanged, this, &LinboMainActions::_handleTimeoutProgressChanged);
     connect(this->_backend->logger(), &LinboLogger::latestLogChanged, this, &LinboMainActions::_handleLatestLogChanged);
 
     this->_stackView = new LinboStackedWidget(this);
@@ -315,25 +314,17 @@ void LinboMainActions::_handleLatestLogChanged(const LinboLogger::LinboLog& late
     this->_logLabel->setText(latestLog.message);
 }
 
-void LinboMainActions::_handleTimeoutProgressChanged() {
+void LinboMainActions::_handleTimeoutProgressChanged(double progress, int remaningMilliseconds) {
     if(this->_backend->state() != LinboBackend::Autostarting && this->_backend->state() != LinboBackend::RootTimeout)
         return;
 
-    double progress = 0;
-    int remaningSeconds = 0;
     QString label = "";
 
     if(this->_backend->state() == LinboBackend::Autostarting) {
-        progress = this->_backend->autostartTimeoutProgress();
-        remaningSeconds = this->_backend->autostartTimeoutRemainingSeconds();
-
         //% "Starting"
         label = qtTrId("main_autostart_label") + " " + this->_backend->osOfCurrentAction()->name();
     }
     else {
-        progress = this->_backend->rootTimeoutProgress();
-        remaningSeconds = this->_backend->rootTimeoutRemainingSeconds();
-
         //% "Logging out automatically"
         label = qtTrId("main_rootTimeout_label");
     }
@@ -342,9 +333,11 @@ void LinboMainActions::_handleTimeoutProgressChanged() {
 
     this->_logLabel->setText(label);
 
+    int remaningSeconds = remaningMilliseconds / 1000;
     QString remaningTime =
         QStringLiteral("%1").arg(remaningSeconds / 60, 2, 10, QLatin1Char('0'))
         + ":"
         + QStringLiteral("%1").arg(remaningSeconds % 60, 2, 10, QLatin1Char('0'));
+
     this->_passedTimeLabel->setText(remaningTime);
 }

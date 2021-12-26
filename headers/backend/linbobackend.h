@@ -45,8 +45,8 @@ class LinboBackend : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(LinboBackend::LinboState state READ state NOTIFY stateChanged)
-    Q_PROPERTY(double autostartTimeoutProgress READ autostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
-    Q_PROPERTY(int autostartTimeoutRemainingSeconds READ autostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
+    Q_PROPERTY(double _timeoutProgress READ _timeoutProgress NOTIFY timeoutProgressChanged)
+    Q_PROPERTY(int _timeoutRemainingMilliseconds READ _timeoutRemainingMilliseconds NOTIFY timeoutProgressChanged)
 
 public:
     explicit LinboBackend(QObject *parent = nullptr);
@@ -82,35 +82,9 @@ public:
     LinboState state();
     LinboLogger* logger();
     LinboConfig* config();
-    void restartRootTimeout();
-
-    double autostartTimeoutProgress();
-    int autostartTimeoutRemainingSeconds();
-
-    double rootTimeoutProgress();
-    int rootTimeoutRemainingSeconds();
-
     LinboOs* osOfCurrentAction();
 
-protected:
-
-private:
-    LinboState _state;
-    LinboLogger* _logger;
-    LinboConfigReader* _configReader;
-    LinboConfig* _config;
-    LinboCmd* _linboCmd;
-    LinboOs* _osOfCurrentAction;
-
-    QTimer* _autostartTimer;
-    QTimer* _rootTimeoutTimer;
-    QTimer* _timeoutRemainingTimeRefreshTimer;
-
-    QString _rootPassword;
-    const LinboImage* _imageToUploadAutomatically;
-    LinboPostProcessActions::Flags _postProcessActions;
-
-    void _setState(LinboState state);
+    void restartRootTimeout();
 
 public slots:
     void shutdown();
@@ -127,6 +101,8 @@ public slots:
     bool cancelCurrentAction();
     bool resetMessage();
 
+protected:
+
 protected slots:
     bool startOs(LinboOs* os);
     bool syncOs(LinboOs* os);
@@ -137,25 +113,47 @@ protected slots:
 
     bool uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
+private:
+    LinboState _state;
+    LinboLogger* _logger;
+    LinboConfigReader* _configReader;
+    LinboConfig* _config;
+    LinboCmd* _linboCmd;
+    LinboOs* _osOfCurrentAction;
+
+    QTimer* _timeoutTimer;
+    QTimer* _timeoutRemainingTimeRefreshTimer;
+
+    QString _rootPassword;
+    const LinboImage* _imageToUploadAutomatically;
+    LinboPostProcessActions::Flags _postProcessActions;
+
+    void _setState(LinboState state);
+
 private slots:
     bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool _uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessAction = LinboPostProcessActions::NoAction, bool allowCreatingImageState = false);
 
-    void _initTimers();
     void _executeAutomaticTasks();
     bool _executeAutoPartition();
     bool _executeAutoInitCache();
     LinboOs* _getOsForAutostart();
     bool _executeAutostart();
-    void _handleAutostartTimerTimeout();
-    void _handleRootTimerTimeout();
+
     void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void _logout(bool force);
 
+    void _initTimers();
+    void _handleTimeoutTimerTimeout();
+    void _handleAutostartTimerTimeout();
+    void _handleRootTimerTimeout();
+    void _handleTimeoutRemaningTimeRefreshTimerTimeout();
+    double _timeoutProgress();
+    int _timeoutRemainingMilliseconds();
+
 signals:
     void stateChanged(LinboBackend::LinboState state);
-    void autostartTimeoutProgressChanged();
-    void rootTimeoutProgressChanged();
+    void timeoutProgressChanged(double progress, int remaningMilliseconds);
 
 };
 

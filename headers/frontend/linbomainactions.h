@@ -81,7 +81,7 @@ private slots:
     void _handleCurrentOsChanged(LinboOs* newOs);
     void _handleLinboStateChanged(LinboBackend::LinboState newState);
     void _handleLatestLogChanged(const LinboLogger::LinboLog& latestLog);
-    void _handleTimeoutProgressChanged();
+    void _handleTimeoutProgressChanged(double progress, int remaningMilliseconds);
 
 signals:
     void terminalRequested();

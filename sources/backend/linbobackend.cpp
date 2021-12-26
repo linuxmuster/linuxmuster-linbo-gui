@@ -169,7 +169,7 @@ void LinboBackend::logout() {
 
 void LinboBackend::restartRootTimeout() {
     if(this->_state == Root && this->_config->rootTimeout() > 0) {
-        this->_rootTimeoutTimer->start((this->_config->rootTimeout() * 1000) / 2);
+        this->_timeoutTimer->start((this->_config->rootTimeout() * 1000) / 2);
         this->_timeoutRemainingTimeRefreshTimer->start();
     }
 }
@@ -304,7 +304,7 @@ bool LinboBackend::cancelCurrentAction() {
     switch (this->_state) {
     case Autostarting:
         this->_logger->_log("Cancelling autostart", LinboLogger::LinboGuiInfo);
-        this->_autostartTimer->stop();
+        this->_timeoutTimer->stop();
         this->_timeoutRemainingTimeRefreshTimer->stop();
         this->_setState(Idle);
         return true;
@@ -369,52 +369,9 @@ LinboConfig* LinboBackend::config() {
     return this->_config;
 }
 
-double LinboBackend::autostartTimeoutProgress() {
-    return this->_autostartTimer->isActive() ? 1 - double(this->_autostartTimer->remainingTime()) / double(this->_autostartTimer->interval()) : 1;
-}
-
-int LinboBackend::autostartTimeoutRemainingSeconds() {
-    return this->_autostartTimer->isActive() ? this->_autostartTimer->remainingTime() / 1000 : 0;
-}
-
-double LinboBackend::rootTimeoutProgress() {
-    return this->_rootTimeoutTimer->isActive() ? 1 - double(this->_rootTimeoutTimer->remainingTime()) / double(this->_rootTimeoutTimer->interval()) : 1;
-}
-
-int LinboBackend::rootTimeoutRemainingSeconds() {
-    return this->_rootTimeoutTimer->isActive() ? this->_rootTimeoutTimer->remainingTime() / 1000 : 0;
-}
-
-
 // -----------
 // - Helpers -
 // -----------
-
-void LinboBackend::_initTimers() {
-    // timeout progress refresh timer
-    this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
-    this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
-    this->_timeoutRemainingTimeRefreshTimer->setInterval(10);
-    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout, this,
-    [=] {
-        if(this->_state == Autostarting)
-            emit this->autostartTimeoutProgressChanged();
-        else if(this->_state == RootTimeout)
-            emit this->rootTimeoutProgressChanged();
-    });
-
-    // autostart timers
-    this->_autostartTimer = new QTimer(this);
-    this->_autostartTimer->setSingleShot(true);
-    connect(this->_autostartTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
-    connect(this->_autostartTimer, &QTimer::timeout, this, &LinboBackend::_handleAutostartTimerTimeout);
-
-    // root timeout timer
-    this->_rootTimeoutTimer = new QTimer(this);
-    this->_rootTimeoutTimer->setSingleShot(true);
-    connect(this->_rootTimeoutTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
-    connect(this->_rootTimeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleRootTimerTimeout);
-}
 
 void LinboBackend::_executeAutomaticTasks() {
     if(this->_executeAutoPartition())
@@ -463,8 +420,8 @@ bool LinboBackend::_executeAutostart() {
     this->_osOfCurrentAction = osForAutostart;
     this->_setState(Autostarting);
     this->_logger->_log("Beginning autostart timeout for " + osForAutostart->name(), LinboLogger::LinboGuiInfo);
-    this->_autostartTimer->setInterval(osForAutostart->autostartTimeout() * 1000);
-    this->_autostartTimer->start();
+    this->_timeoutTimer->setInterval(osForAutostart->autostartTimeout() * 1000);
+    this->_timeoutTimer->start();
     this->_timeoutRemainingTimeRefreshTimer->start();
     return true;
 }
@@ -500,6 +457,54 @@ void LinboBackend::_logout(bool force) {
     this->_setState(Idle);
 }
 
+void LinboBackend::_initTimers() {
+    this->_timeoutRemainingTimeRefreshTimer = new QTimer(this);
+    this->_timeoutRemainingTimeRefreshTimer->setSingleShot(false);
+    this->_timeoutRemainingTimeRefreshTimer->setInterval(10);
+    connect(this->_timeoutRemainingTimeRefreshTimer, &QTimer::timeout, this, &LinboBackend::_handleTimeoutRemaningTimeRefreshTimerTimeout);
+
+    this->_timeoutTimer = new QTimer(this);
+    this->_timeoutTimer->setSingleShot(true);
+    connect(this->_timeoutTimer, &QTimer::timeout, this->_timeoutRemainingTimeRefreshTimer, &QTimer::stop);
+    connect(this->_timeoutTimer, &QTimer::timeout, this, &LinboBackend::_handleTimeoutTimerTimeout);
+}
+
+void LinboBackend::_handleTimeoutRemaningTimeRefreshTimerTimeout() {
+    emit this->timeoutProgressChanged(
+        this->_timeoutProgress(),
+        this->_timeoutRemainingMilliseconds()
+    );
+}
+
+double LinboBackend::_timeoutProgress() {
+    if(!this->_timeoutTimer->isActive())
+        return 1.0;
+
+    double remaningTime = this->_timeoutTimer->remainingTime();
+    double totalTime = this->_timeoutTimer->interval();
+    return 1 - remaningTime / totalTime;
+}
+
+int LinboBackend::_timeoutRemainingMilliseconds() {
+    if(!this->_timeoutTimer->isActive())
+        return 0;
+
+    return this->_timeoutTimer->remainingTime();
+}
+
+
+void LinboBackend::_handleTimeoutTimerTimeout() {
+    if(this->state() == Autostarting) {
+        this->_handleAutostartTimerTimeout();
+    }
+    else if(this->state() >= Root) {
+        this->_handleRootTimerTimeout();
+    }
+    else {
+        this->_logger->error("Got timer timeout in wrong state: " + QString::number(this->state()));
+    }
+}
+
 void LinboBackend::_handleAutostartTimerTimeout() {
     LinboOs* os = this->_getOsForAutostart();
     if(os == nullptr)
@@ -526,7 +531,8 @@ void LinboBackend::_handleRootTimerTimeout() {
         this->logout();
     }
     else if(this->_state > Root) {
-        // non-matching state
+        // non-matching state -> some task is running (eg. create image)
+        // -> restart to make sure, the timer still works after the task finished
         this->restartRootTimeout();
     }
 }
