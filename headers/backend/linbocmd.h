@@ -7,6 +7,8 @@
 #include "linbologger.h"
 #include "linboimage.h"
 #include "linboconfig.h"
+#include "linbodiskpartition.h"
+#include "linboos.h"
 
 class LinboBackend;
 
@@ -14,7 +16,22 @@ class LinboCmd : public QObject
 {
     Q_OBJECT
 public:
-    explicit LinboCmd(LinboBackend *parent);
+    explicit LinboCmd(QObject *parent);
+
+    bool startOs(LinboOs* os, QString cachePath);
+    bool syncOs(LinboOs* os, QString serverIP, QString cachePath);
+    bool reinstallOs(LinboOs* os, QString serverIP, QString cachePath);
+
+    bool createImageOfOs(LinboOs* os, QString name, QString cachePath);
+
+    bool partitionDrive(QList<LinboDiskPartition*> paritions, bool format);
+    bool uploadImage(LinboImage *image, QString password, QString serverIP, QString cachePath);
+
+    bool authenticate(QString password, QString serverIP);
+
+    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format, QList<LinboOs*> operaringSystems, QString serverIP, QString cachePath);
+    bool updateLinbo(QString serverIP, QString cachePath);
+    bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole, QString password, QString serverIP);
 
     template<typename ... Strings>
     bool executeAsync(QString argument, const Strings&... arguments) {
@@ -36,9 +53,9 @@ public:
     QString getOutputOfLastSyncCommand();
     int getExitCodeOfLastSyncCommand();
 
-    QString readImageDescription(LinboImage* image);
-    bool writeImageDescription(LinboImage* image, QString newDescription);
-    bool writeImageDescription(QString imageName, QString newDescription);
+    QString readImageDescription(LinboImage* image, QString cachePath);
+    bool writeImageDescription(LinboImage* image, QString newDescription, QString cachePath);
+    bool writeImageDescription(QString imageName, QString newDescription, QString cachePath);
 
     void setStringToMaskInOutput(QString string);
     void killAsyncProcess();
@@ -51,8 +68,6 @@ private:
 
     QString _outputOfLastSyncExecution;
     int _exitCodeOfLastSyncExecution;
-
-    LinboBackend* _backend;
 
     QProcess* _asynchronosProcess;
     QProcess* _synchronosProcess;

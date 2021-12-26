@@ -1,11 +1,10 @@
 #include "../../headers/backend/linbocmd.h"
 #include "linbobackend.h"
 
-LinboCmd::LinboCmd(LinboBackend *parent)
+LinboCmd::LinboCmd(QObject *parent)
     : QObject(parent)
 {
     this->_stringToMaskInOutput = "";
-    this->_backend = parent;
     // Processes
     this->_asynchronosProcess = new QProcess(this);
     // ascynchorons commands are logged to logger
@@ -17,9 +16,133 @@ LinboCmd::LinboCmd(LinboBackend *parent)
     this->_synchronosProcess = new QProcess(this);
 }
 
-QString LinboCmd::readImageDescription(LinboImage* image) {
+
+bool LinboCmd::startOs(LinboOs* os, QString cachePath) {
+    return this->executeAsync(
+               "start",
+               os->bootPartition(),
+               os->rootPartition(),
+               os->kernel(),
+               os->initrd(),
+               os->kernelOptions(),
+               cachePath
+           );
+}
+
+bool LinboCmd::syncOs(LinboOs* os, QString serverIP, QString cachePath) {
+    return this->executeAsync(
+               "syncstart",
+               serverIP,
+               cachePath,
+               os->baseImage()->name(),
+               "",
+               os->bootPartition(),
+               os->rootPartition(),
+               os->kernel(),
+               os->initrd(),
+               os->kernelOptions()
+           );
+}
+
+bool LinboCmd::reinstallOs(LinboOs* os, QString serverIP, QString cachePath) {
+    return this->executeAsync(
+               "syncr",
+               serverIP,
+               cachePath,
+               os->baseImage()->name(),
+               "",
+               os->bootPartition(),
+               os->rootPartition(),
+               os->kernel(),
+               os->initrd(),
+               os->kernelOptions(),
+               QString("force")
+           );
+}
+
+bool LinboCmd::authenticate(QString password, QString serverIP) {
+    int exitCode = this->executeSync("authenticate", serverIP, "linbo", password, "linbo");
+    return exitCode == 0;
+}
+
+bool LinboCmd::createImageOfOs(LinboOs* os, QString name, QString cachePath) {
+    return this->executeAsync(
+               "create",
+               cachePath,
+               name,
+               name,
+               os->bootPartition(),
+               os->rootPartition(),
+               os->kernel(),
+               os->initrd()
+           );
+}
+
+bool LinboCmd::uploadImage(LinboImage *image, QString password, QString serverIP, QString cachePath) {
+    return this->executeAsync(
+               "upload",
+               serverIP,
+               "linbo",
+               password,
+               cachePath,
+               image->name()
+           );
+}
+
+bool LinboCmd::partitionDrive(QList<LinboDiskPartition*> paritions, bool format) {
+    QStringList commandArgs = QStringList(format ? "partition":"partition_noformat");
+    for(LinboDiskPartition* partiton : paritions) {
+        commandArgs
+                << partiton->path()
+                << QString::number(partiton->size())
+                << partiton->id()
+                << QString((partiton->bootable())?"bootable":"\" \"")
+                << partiton->fstype();
+    }
+
+    return this->executeAsync(commandArgs);
+}
+
+bool LinboCmd::updateCache(LinboConfig::DownloadMethod downloadMethod, bool format, QList<LinboOs*> operaringSystems, QString serverIP, QString cachePath) {
+    QStringList commandArgs;
+    commandArgs
+            << (format ? "initcache_format":"initcache")
+            << serverIP
+            << cachePath;
+
+
+    commandArgs.append(LinboConfig::downloadMethodToString(downloadMethod));
+
+    for(LinboOs* os : operaringSystems) {
+        commandArgs
+                << os->baseImage()->name()
+                << "";
+    }
+
+    return this->executeAsync(commandArgs);
+}
+
+bool LinboCmd::updateLinbo(QString serverIP, QString cachePath) {
+    return this->executeAsync("update", serverIP, cachePath);
+}
+
+bool LinboCmd::registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole, QString password, QString serverIP) {
+    return this->executeAsync(
+               "register",
+               serverIP,
+               "linbo",
+               password,
+               room,
+               hostname,
+               ipAddress,
+               hostGroup,
+               LinboConfig::deviceRoleToString(deviceRole)
+           );
+}
+
+QString LinboCmd::readImageDescription(LinboImage* image, QString cachePath) {
     QProcess readProcess;
-    QString description = this->getOutput("readfile", this->_backend->config()->cachePath(), image->name() + ".desc");
+    QString description = this->getOutput("readfile", cachePath, image->name() + ".desc");
 
     if(this->getExitCodeOfLastSyncCommand() == 0)
         return description;
@@ -27,33 +150,30 @@ QString LinboCmd::readImageDescription(LinboImage* image) {
         return "";
 }
 
-bool LinboCmd::writeImageDescription(LinboImage* image, QString newDescription) {
-    return this->writeImageDescription(image->name(), newDescription);
+bool LinboCmd::writeImageDescription(LinboImage* image, QString newDescription, QString cachePath) {
+    return this->writeImageDescription(image->name(), newDescription, cachePath);
 }
 
-bool LinboCmd::writeImageDescription(QString imageName, QString newDescription) {
+bool LinboCmd::writeImageDescription(QString imageName, QString newDescription, QString cachePath) {
 
     QProcess process;
     process.start(
         this->_linboCmdCommand,
-        this->_buildCommand("writefile", this->_backend->config()->cachePath(), imageName + ".desc"));
+        this->_buildCommand("writefile", cachePath, imageName + ".desc"));
 
     if(!process.waitForStarted()) {
-        this->_backend->logger()->error("Description writer didn't start: " + QString::number(process.exitCode()));
         return false;
     }
 
     process.write(newDescription.toUtf8());
 
     if(!process.waitForBytesWritten()) {
-        this->_backend->logger()->error("Description writer didn't write: " + QString::number(process.exitCode()));
         return false;
     }
 
     process.closeWriteChannel();
 
     if(!process.waitForFinished()) {
-        this->_backend->logger()->error("Description writer didn't finish: " + QString::number(process.exitCode()));
         return false;
     }
 

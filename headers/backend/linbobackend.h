@@ -93,7 +93,7 @@ public slots:
     bool login(QString password);
     void logout();
 
-    void partitionDrive();
+    bool     partitionDrive();
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
@@ -111,7 +111,7 @@ protected slots:
     bool replaceImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
-    bool uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
 private:
     LinboState _state;
@@ -131,9 +131,10 @@ private:
     void _setState(LinboState state);
 
 private slots:
-    bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
-    bool _uploadImage(const LinboImage* image, LinboPostProcessActions::Flags postProcessAction = LinboPostProcessActions::NoAction, bool allowCreatingImageState = false);
     void _logout(bool force);
+
+    bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions);
+    bool _uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions);
 
     void _executeAutomaticTasks();
     bool _executeAutoPartition();
@@ -142,7 +143,7 @@ private slots:
     bool _executeAutostart();
 
     void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void _handleCommandFinishedSuccessfull();
+    void _handleCommandFinishedSuccess();
     void _handleCommandFinishedError();
     void _executeNextPostProcessAction();
     void _executePostProcessAction(LinboPostProcessActions::Flag action);
