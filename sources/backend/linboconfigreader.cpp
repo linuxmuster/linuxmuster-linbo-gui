@@ -167,7 +167,7 @@ void LinboConfigReader::_loadThemeConf(QSettings *settings, LinboConfig *config)
 }
 
 void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
-    QMapIterator<LinboTheme::LinboThemeColorRole, QString> i(theme->colorRolesAndNames());
+    QMapIterator<LinboTheme::ColorRole, QString> i(theme->colorRolesAndNames());
     while (i.hasNext()) {
         i.next();
         QString colorConfKey = "colors/" + i.value().toLower().replace("color", "");
@@ -179,7 +179,7 @@ void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
 }
 
 void LinboConfigReader::_loadIcons(QSettings *settings, LinboTheme *theme) {
-    QMapIterator<LinboTheme::LinboThemeIcon, QString> i(theme->iconsAndNames());
+    QMapIterator<LinboTheme::Icon, QString> i(theme->iconsAndNames());
     while (i.hasNext()) {
         i.next();
         QString iconConfKey = "icons/" + i.value().toLower().replace("icon", "");

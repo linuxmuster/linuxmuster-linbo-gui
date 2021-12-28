@@ -14,7 +14,7 @@ public:
 
     friend class LinboConfigReader;
 
-    enum LinboThemeColorRole {
+    enum ColorRole {
         BackgroundColor,
         ElevatedBackgroundColor,
         LineColor,
@@ -26,9 +26,9 @@ public:
 
         LinboThemeColorRoleCount
     };
-    Q_ENUM(LinboThemeColorRole)
+    Q_ENUM(ColorRole)
 
-    enum LinboThemeIcon {
+    enum Icon {
         NoIcon,
 
         BrandTopIcon,
@@ -77,9 +77,9 @@ public:
 
         LinboThemeIconCount
     };
-    Q_ENUM(LinboThemeIcon)
+    Q_ENUM(Icon)
 
-    enum LinboThemeSizeRole {
+    enum SizeRole {
         Margins,
         RowHeight,
         RowLabelHeight,
@@ -90,20 +90,20 @@ public:
         TopLogoHeight,
         BottomLogoHeight
     };
-    Q_ENUM(LinboThemeSizeRole)
+    Q_ENUM(SizeRole)
 
-    QString iconPath(LinboThemeIcon icon);
-    QColor color(LinboThemeColorRole colorRole);
+    QString iconPath(Icon icon);
+    QColor color(ColorRole colorRole);
 
-    QMap<LinboThemeColorRole, QString> colorRolesAndNames();
-    QMap<LinboThemeIcon, QString> iconsAndNames();
-    QMap<LinboThemeSizeRole, QString> sizeRolesAndNames();
+    QMap<ColorRole, QString> colorRolesAndNames();
+    QMap<Icon, QString> iconsAndNames();
+    QMap<SizeRole, QString> sizeRolesAndNames();
 
-    QString iconName(LinboThemeIcon icon);
+    QString iconName(Icon icon);
 
 private:
-    QMap<LinboThemeColorRole, QColor> _colors;
-    QMap<LinboThemeIcon, QString> _icons;
+    QMap<ColorRole, QColor> _colors;
+    QMap<Icon, QString> _icons;
     QMetaEnum _iconMetaEnum;
     QMetaEnum _colorRoleMetaEnum;
     QMetaEnum _sizeRoleMetaEnum;

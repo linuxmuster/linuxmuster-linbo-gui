@@ -27,7 +27,7 @@ LinboGuiTheme::LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QOb
     this->_mainWindow = mainWindow;
 }
 
-QString LinboGuiTheme::iconPath(LinboTheme::LinboThemeIcon icon) {
+QString LinboGuiTheme::iconPath(LinboTheme::Icon icon) {
     if(icon == LinboTheme::NoIcon)
         return "";
 
@@ -52,7 +52,7 @@ QString LinboGuiTheme::iconPath(LinboTheme::LinboThemeIcon icon) {
     return iconPath;
 }
 
-QColor LinboGuiTheme::color(LinboTheme::LinboThemeColorRole colorRole) {
+QColor LinboGuiTheme::color(LinboTheme::ColorRole colorRole) {
 
     if(
         this->_theme->color(colorRole).isValid()
@@ -91,7 +91,7 @@ QColor LinboGuiTheme::color(LinboTheme::LinboThemeColorRole colorRole) {
 
 }
 
-int LinboGuiTheme::size(LinboTheme::LinboThemeSizeRole sizeRole) {
+int LinboGuiTheme::size(LinboTheme::SizeRole sizeRole) {
     int rootHeight = this->_mainWindow->height();
     switch (sizeRole) {
     case LinboTheme::Margins:
@@ -137,7 +137,7 @@ QString LinboGuiTheme::insertValues(QString string) {
 }
 
 QString LinboGuiTheme::insertColorValues(QString string) {
-    QMapIterator<LinboTheme::LinboThemeColorRole, QString> i(this->_theme->colorRolesAndNames());
+    QMapIterator<LinboTheme::ColorRole, QString> i(this->_theme->colorRolesAndNames());
     while (i.hasNext()) {
         i.next();
         QString colorKey = "%" + i.value();
@@ -147,7 +147,7 @@ QString LinboGuiTheme::insertColorValues(QString string) {
 }
 
 QString LinboGuiTheme::insertIconValues(QString string) {
-    QMapIterator<LinboTheme::LinboThemeIcon, QString> i(this->_theme->iconsAndNames());
+    QMapIterator<LinboTheme::Icon, QString> i(this->_theme->iconsAndNames());
     while (i.hasNext()) {
         i.next();
         QString iconKey = "%" + i.value();
@@ -157,7 +157,7 @@ QString LinboGuiTheme::insertIconValues(QString string) {
 }
 
 QString LinboGuiTheme::insertSizeValues(QString string) {
-    QMapIterator<LinboTheme::LinboThemeSizeRole, QString> i(this->_theme->sizeRolesAndNames());
+    QMapIterator<LinboTheme::SizeRole, QString> i(this->_theme->sizeRolesAndNames());
     while (i.hasNext()) {
         i.next();
         QString sizeKey = "%" + i.value();
