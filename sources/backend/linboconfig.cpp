@@ -34,6 +34,7 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_operatingSystems = {};
     this->_themeConfFile = "";
     this->_clientDetailsVisibleByDefault = false;
+    this->_theme = new LinboTheme();
 }
 
 QList<LinboImage*> LinboConfig::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {

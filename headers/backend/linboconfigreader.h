@@ -5,6 +5,7 @@
 #include <QRegularExpression>
 #include <QFile>
 #include <QPair>
+#include <QSettings>
 #include "linboconfig.h"
 #include "linboimage.h"
 #include "linbodiskpartition.h"
@@ -55,12 +56,16 @@ private:
 
     void _loadEnvironmentValues(LinboConfig* config);
     void _loadExistingImages(LinboConfig* config);
-    bool _loadThemeConfig(QString themeConfFilePath, LinboConfig* config);
 
     void _loadConfigFromBlock(Block block, LinboConfig* config);
     void _loadLinboConfigFromBlock(QMap<QString, QString> rawLinboConfig, LinboConfig* config);
     void _loadPartitionConfigFromBlock(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
     void _loadOsConfigFromBlock(QMap<QString, QString> rawOsConfig, LinboConfig* config);
+
+    bool _loadThemeConf(LinboConfig* config);
+    void _loadThemeConf(QSettings* settings, LinboConfig* config);
+    void _loadIcons(QSettings* settings, LinboTheme* theme);
+    void _loadColors(QSettings* settings, LinboTheme* theme);
 
     bool _validateColorCode(QString code);
     bool _stringToBool(const QString& value);

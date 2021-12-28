@@ -10,7 +10,7 @@ LinboConfig* LinboConfigReader::readConfig() {
     LinboConfig* config = new LinboConfig(this->_backend);
     this->_loadStartConf(config);
     this->_loadEnvironmentValues(config);
-    this->_loadThemeConfig(this->_iconBasePath + "/" + config->themeConfFile(), config);
+    this->_loadThemeConf(config);
     return config;
 }
 
@@ -144,41 +144,50 @@ void LinboConfigReader::_loadExistingImages(LinboConfig* config) {
     }
 }
 
-bool LinboConfigReader::_loadThemeConfig(QString themeConfFilePath, LinboConfig* config) {
+bool LinboConfigReader::_loadThemeConf(LinboConfig* config) {
+    QString themeConfFilePath = this->_iconBasePath + "/" + config->themeConfFile();
     QSettings settingsReader(themeConfFilePath, QSettings::IniFormat);
-    LinboTheme* themeConfig = new LinboTheme();
+
     if(settingsReader.status() != QSettings::NoError) {
         this->_backend->logger()->error("Could not read theme config: " + themeConfFilePath);
-        config->_theme = themeConfig;
         return false;
     }
 
-    QMapIterator<LinboTheme::LinboThemeColorRole, QString> ic(themeConfig->colorRolesAndNames());
-    while (ic.hasNext()) {
-        ic.next();
-        //qDebug() << qPrintable("    - `" + ic.value().toLower().replace("color", "") + "`");
-        QColor colorFromConf = settingsReader.value("colors/" + ic.value().toLower().replace("color", ""), "").toString();
-        if(colorFromConf.isValid()) {
-            themeConfig->_colors[ic.key()] = colorFromConf;
-        }
-    }
+    this->_loadThemeConf(&settingsReader, config);
 
-    QMapIterator<LinboTheme::LinboThemeIcon, QString> ii(themeConfig->iconsAndNames());
-    while (ii.hasNext()) {
-        ii.next();
-        QString iconConfKey = "icons/" + ii.value().toLower().replace("icon", "");
-        //qDebug() << qPrintable("    - `" + ii.value().toLower().replace("icon", "") + "`");
-        QString iconFromConf = settingsReader.value(iconConfKey, "").toString();
-        if(!iconFromConf.isEmpty()) {
-            themeConfig->_icons[ii.key()] = this->_iconBasePath + "/" + iconFromConf;
-        }
-    }
+    return true;
+}
+
+void LinboConfigReader::_loadThemeConf(QSettings *settings, LinboConfig *config) {
+    this->_loadColors(settings, config->theme());
+    this->_loadIcons(settings, config->theme());
 
     if(!config->backgroundColor().isEmpty())
-        themeConfig->_colors[LinboTheme::PrimaryColor] = config->backgroundColor();
+        config->theme()->_colors[LinboTheme::PrimaryColor] = config->backgroundColor();
+}
 
-    config->_theme = themeConfig;
-    return true;
+void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
+    QMapIterator<LinboTheme::LinboThemeColorRole, QString> i(theme->colorRolesAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString colorConfKey = "colors/" + i.value().toLower().replace("color", "");
+        QColor colorFromConf = settings->value(colorConfKey, "").toString();
+        if(colorFromConf.isValid()) {
+            theme->_colors[i.key()] = colorFromConf;
+        }
+    }
+}
+
+void LinboConfigReader::_loadIcons(QSettings *settings, LinboTheme *theme) {
+    QMapIterator<LinboTheme::LinboThemeIcon, QString> i(theme->iconsAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString iconConfKey = "icons/" + i.value().toLower().replace("icon", "");
+        QString iconFromConf = settings->value(iconConfKey, "").toString();
+        if(!iconFromConf.isEmpty()) {
+            theme->_icons[i.key()] = this->_iconBasePath + "/" + iconFromConf;
+        }
+    }
 }
 
 void LinboConfigReader::_loadConfigFromBlock(Block block, LinboConfig *config) {
