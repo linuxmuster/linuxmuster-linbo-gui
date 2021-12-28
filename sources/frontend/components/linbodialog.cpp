@@ -41,10 +41,10 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     connect(this->_opacityEffectAnimation, &QPropertyAnimation::finished, this, &LinboDialog::closedByUser);
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Window, gTheme->getColor(LinboTheme::BackgroundColor));
+    pal.setColor(QPalette::Window, gTheme->color(LinboTheme::BackgroundColor));
     this->setAutoFillBackground(true);
     this->setPalette(pal);
-    this->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
+    this->setStyleSheet("QLabel { color: " + gTheme->color(LinboTheme::TextColor).name() + ";} ");
 
     this->raise();
     this->setVisible(false);
@@ -61,7 +61,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->_toolBarWidget = new QWidget(parent);
     this->_toolBarWidget->setAutoFillBackground(true);
     this->_toolBarWidget->setPalette(pal);
-    this->_toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
+    this->_toolBarWidget->setStyleSheet("QLabel { color: " + gTheme->color(LinboTheme::TextColor).name() + ";} ");
 
     this->_toolBarWidget->hide();
 
@@ -89,7 +89,7 @@ LinboDialog::LinboDialog(QWidget* parent) : QWidget(parent)
     this->_bottomToolBarWidget = new QWidget(parent);
     this->_bottomToolBarWidget->setAutoFillBackground(true);
     this->_bottomToolBarWidget->setPalette(pal);
-    this->_bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";} ");
+    this->_bottomToolBarWidget->setStyleSheet("QLabel { color: " + gTheme->color(LinboTheme::TextColor).name() + ";} ");
 
     this->_bottomToolBarWidget->hide();
 
@@ -136,15 +136,15 @@ QString LinboDialog::title() {
 void LinboDialog::resizeEvent(QResizeEvent *e) {
     QWidget::resizeEvent(e);
 
-    int rowHeight = gTheme->getSize(LinboTheme::RowHeight);
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int rowHeight = gTheme->size(LinboTheme::RowHeight);
+    int margins = gTheme->size(LinboTheme::Margins);
     int toolBarHeight = rowHeight + margins ;
 
     this->_toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
     this->_toolBarLayout->setContentsMargins(margins, margins * 0.5, margins * 0.5, 0);
 
     QFont titleFont = this->_titleLabel->font();
-    titleFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize) * 1.5);
+    titleFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize) * 1.5);
     this->_titleLabel->setFont(titleFont);
     this->_titleLabel->setFixedHeight(rowHeight);
     this->_titleLabel->setFixedWidth(this->width() - margins);

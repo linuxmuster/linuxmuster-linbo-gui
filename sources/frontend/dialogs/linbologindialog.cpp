@@ -55,8 +55,8 @@ LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : Lin
 void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    this->_passwordInput->setFixedHeight(gTheme->getSize(LinboTheme::RowHeight));
-    this->_passwordInput->setFixedWidth(this->width() - gTheme->getSize(LinboTheme::Margins) * 2);
+    this->_passwordInput->setFixedHeight(gTheme->size(LinboTheme::RowHeight));
+    this->_passwordInput->setFixedWidth(this->width() - gTheme->size(LinboTheme::Margins) * 2);
 }
 
 

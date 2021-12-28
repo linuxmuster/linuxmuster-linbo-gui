@@ -33,9 +33,9 @@ class LinboGuiTheme : public QObject
 public:
     explicit LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent = nullptr);
 
-    QString getIconPath(LinboTheme::LinboThemeIcon icon);
-    QColor getColor(LinboTheme::LinboThemeColorRole colorRole);
-    int getSize(LinboTheme::LinboThemeSizeRole sizeRole);
+    QString iconPath(LinboTheme::LinboThemeIcon icon);
+    QColor color(LinboTheme::LinboThemeColorRole colorRole);
+    int size(LinboTheme::LinboThemeSizeRole sizeRole);
     int toFontSize(int size);
 
     QString insertValues(QString string);

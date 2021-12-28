@@ -56,7 +56,7 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::Background, extraOverlays));
 
     // Hover
-    this->_hoveredOverlay = new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayHoveredIcon));
+    this->_hoveredOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayHoveredIcon));
     this->_overlays.append(
         new LinboPushButtonOverlay(
             LinboPushButtonOverlay::OnHover,
@@ -71,7 +71,7 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     this->_overlays.append(
         new LinboPushButtonOverlay(
             LinboPushButtonOverlay::OnPressed,
-            new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayPressedIcon)),
+            new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayPressedIcon)),
             true
         )
     );
@@ -82,7 +82,7 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnChecked, extraOverlays));
 
     // KeyboardFocus
-    QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->getIconPath(LinboTheme::OverlayKeyboardFocusIcon));
+    QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayKeyboardFocusIcon));
     this->_overlays.append(
     new LinboPushButtonOverlay {
         LinboPushButtonOverlay::OnKeyboardFocus,

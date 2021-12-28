@@ -110,7 +110,7 @@ void LinboRegisterDialog::_handleRoomChanged(const QString& newText) {
 void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int margins = gTheme->size(LinboTheme::Margins);
 
     this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
 
@@ -119,12 +119,12 @@ void LinboRegisterDialog::resizeEvent(QResizeEvent *event) {
 
         // make lables smaller
         if(i % 2 == 0)
-            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowLabelHeight));
+            item->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowLabelHeight));
         else
-            item->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
+            item->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowHeight));
 
         QFont font = item->font();
-        font.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+        font.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
 
         // make lables bold
         if(i % 2 == 0)

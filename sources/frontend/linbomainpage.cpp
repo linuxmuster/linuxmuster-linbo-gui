@@ -44,9 +44,9 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addSpacerItem(new QSpacerItem(this->width(), mainLayout->spacing()));
 
     // Linbo logo
-    int linboLogoHeight = gTheme->getSize(LinboTheme::TopLogoHeight);
+    int linboLogoHeight = gTheme->size(LinboTheme::TopLogoHeight);
 
-    LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->getIconPath(LinboTheme::BrandTopIcon));
+    LinboSvgWidget* linboLogo = new LinboSvgWidget(linboLogoHeight, gTheme->iconPath(LinboTheme::BrandTopIcon));
     mainLayout->addWidget(linboLogo);
     mainLayout->setAlignment(linboLogo, Qt::AlignCenter);
 
@@ -72,7 +72,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     // version / network label
     QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->_backend->config()->ipAddress() + " - F1");
     QFont versionAndNetworkLabelFont;
-    versionAndNetworkLabelFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+    versionAndNetworkLabelFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
     versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);
     versionAndNetworkLabel->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
     mainLayout->addWidget(versionAndNetworkLabel);
@@ -80,9 +80,9 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
 
     // Linuxmuster logo
-    double linuxmusterLogoHeight = gTheme->getSize(LinboTheme::BottomLogoHeight);
+    double linuxmusterLogoHeight = gTheme->size(LinboTheme::BottomLogoHeight);
 
-    LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->getIconPath(LinboTheme::BrandBottomIcon));
+    LinboSvgWidget* linuxmusterLogo = new LinboSvgWidget(linuxmusterLogoHeight, gTheme->iconPath(LinboTheme::BrandBottomIcon));
     mainLayout->addWidget(linuxmusterLogo);
     mainLayout->setAlignment(linuxmusterLogo, Qt::AlignCenter);
 
@@ -150,8 +150,8 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
 
     // Dialogs (for imaging stuff)
     this->_loginDialog = new LinboLoginDialog(this->_backend, this);
-    int dialogHeight = gTheme->getSize(LinboTheme::DialogHeight);
-    int dialogWidth = gTheme->getSize(LinboTheme::DialogWidth);
+    int dialogHeight = gTheme->size(LinboTheme::DialogHeight);
+    int dialogWidth = gTheme->size(LinboTheme::DialogWidth);
     this->_loginDialog->setGeometry( 0, 0, dialogWidth * 0.8, dialogHeight * 0.2);
     this->_loginDialog->centerInParent();
     connect(this->_powerActionButtons[0], &LinboToolButton::clicked, this->_loginDialog, &LinboLoginDialog::open);

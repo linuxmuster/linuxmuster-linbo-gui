@@ -77,7 +77,7 @@ void LinboUpdateCacheDialog::_updateCache() {
 void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int margins = gTheme->size(LinboTheme::Margins);
 
     this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
     for(int i = 0; i < 5; i++) {
@@ -86,9 +86,9 @@ void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
             continue;
 
         QAbstractButton* button = static_cast<QAbstractButton*>(this->_mainLayout->itemAt(i)->widget());
-        button->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
+        button->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowHeight));
         QFont buttonFont = button->font();
-        buttonFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+        buttonFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
         button->setFont(buttonFont);
     }
 }

@@ -28,7 +28,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->_mainLayout->setAlignment(Qt::AlignCenter);
     this->_mainLayout->setContentsMargins(0,0,0,0);
 
-    this->_networkIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::NetworkIcon));
+    this->_networkIconWidget = new QSvgWidget(gTheme->iconPath(LinboTheme::NetworkIcon));
     this->_mainLayout->addWidget(this->_networkIconWidget, 0, 0, 1, 1);
 
     //% "Hostname"
@@ -43,7 +43,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     //% "Mac"
     this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->macAddress()), 0, 4, 1, 1);
 
-    this->_desktopIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::DesktopIcon));
+    this->_desktopIconWidget = new QSvgWidget(gTheme->iconPath(LinboTheme::DesktopIcon));
     this->_mainLayout->addWidget(this->_desktopIconWidget, 1, 0, 1, 1);
 
     //% "HDD"

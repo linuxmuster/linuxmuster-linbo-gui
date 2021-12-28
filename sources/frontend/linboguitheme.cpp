@@ -27,7 +27,7 @@ LinboGuiTheme::LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QOb
     this->_mainWindow = mainWindow;
 }
 
-QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
+QString LinboGuiTheme::iconPath(LinboTheme::LinboThemeIcon icon) {
     if(icon == LinboTheme::NoIcon)
         return "";
 
@@ -52,7 +52,7 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
     return iconPath;
 }
 
-QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
+QColor LinboGuiTheme::color(LinboTheme::LinboThemeColorRole colorRole) {
 
     if(
         this->_theme->color(colorRole).isValid()
@@ -64,24 +64,24 @@ QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
     case LinboTheme::PrimaryColor:
         return this->_theme->color(LinboTheme::PrimaryColor);
     case LinboTheme::BackgroundColor:
-        return this->getColor(LinboTheme::PrimaryColor);
+        return this->color(LinboTheme::PrimaryColor);
     case LinboTheme::ElevatedBackgroundColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::BackgroundColor).lighter(120);
+            return this->color(LinboTheme::BackgroundColor).lighter(120);
         else
-            return this->getColor(LinboTheme::BackgroundColor).darker(105);
+            return this->color(LinboTheme::BackgroundColor).darker(105);
     case LinboTheme::LineColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::PrimaryColor).lighter(170);
+            return this->color(LinboTheme::PrimaryColor).lighter(170);
         else
-            return this->getColor(LinboTheme::PrimaryColor).darker(120);
+            return this->color(LinboTheme::PrimaryColor).darker(120);
     case LinboTheme::ToolButtonColor:
-        return this->getColor(LinboTheme::AccentColor);
+        return this->color(LinboTheme::AccentColor);
     case LinboTheme::DisabledToolButtonColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::ToolButtonColor).lighter(170);
+            return this->color(LinboTheme::ToolButtonColor).lighter(170);
         else
-            return this->getColor(LinboTheme::ToolButtonColor).darker(120);
+            return this->color(LinboTheme::ToolButtonColor).darker(120);
     default:
         if(this->_isBackgroundColorDark())
             return this->_lightColors[colorRole];
@@ -91,19 +91,19 @@ QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
 
 }
 
-int LinboGuiTheme::getSize(LinboTheme::LinboThemeSizeRole sizeRole) {
+int LinboGuiTheme::size(LinboTheme::LinboThemeSizeRole sizeRole) {
     int rootHeight = this->_mainWindow->height();
     switch (sizeRole) {
     case LinboTheme::Margins:
-        return this->getSize(LinboTheme::RowHeight) * 0.4;
+        return this->size(LinboTheme::RowHeight) * 0.4;
     case LinboTheme::RowHeight:
         return rootHeight * 0.05;
     case LinboTheme::RowLabelHeight:
-        return this->getSize(LinboTheme::RowHeight) * 0.8;
+        return this->size(LinboTheme::RowHeight) * 0.8;
     case LinboTheme::RowFontSize:
-        return this->getSize(LinboTheme::RowLabelHeight) * 0.5;
+        return this->size(LinboTheme::RowLabelHeight) * 0.5;
     case LinboTheme::RowPaddingSize:
-        return this->getSize(LinboTheme::RowFontSize) * 0.2;
+        return this->size(LinboTheme::RowFontSize) * 0.2;
     case LinboTheme::DialogWidth:
         return rootHeight * 0.8;
     case LinboTheme::DialogHeight:
@@ -124,7 +124,7 @@ int LinboGuiTheme::toFontSize(int size) {
 }
 
 bool LinboGuiTheme::_isBackgroundColorDark() {
-    QColor backgroundColor = QColor(this->getColor(LinboTheme::BackgroundColor));
+    QColor backgroundColor = QColor(this->color(LinboTheme::BackgroundColor));
     int h, s, v;
     backgroundColor.getHsv(&h, &s, &v);
     return v < 210;
@@ -141,7 +141,7 @@ QString LinboGuiTheme::insertColorValues(QString string) {
     while (i.hasNext()) {
         i.next();
         QString colorKey = "%" + i.value();
-        string = string.replace(colorKey, this->getColor(i.key()).name());
+        string = string.replace(colorKey, this->color(i.key()).name());
     }
     return string;
 }
@@ -151,7 +151,7 @@ QString LinboGuiTheme::insertIconValues(QString string) {
     while (i.hasNext()) {
         i.next();
         QString iconKey = "%" + i.value();
-        string = string.replace(iconKey, this->getIconPath(i.key()));
+        string = string.replace(iconKey, this->iconPath(i.key()));
     }
     return string;
 }
@@ -161,7 +161,7 @@ QString LinboGuiTheme::insertSizeValues(QString string) {
     while (i.hasNext()) {
         i.next();
         QString sizeKey = "%" + i.value();
-        string = string.replace(sizeKey, QString::number(this->getSize(i.key())));
+        string = string.replace(sizeKey, QString::number(this->size(i.key())));
     }
     return string;
 }

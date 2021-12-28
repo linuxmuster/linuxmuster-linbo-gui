@@ -305,7 +305,7 @@ void LinboMainActions::_handleLatestLogChanged(const LinboLogger::LinboLog& late
     if(this->_backend->state() == LinboBackend::Idle)
         return;
 
-    QString logColor = gTheme->getColor(LinboTheme::TextColor).name();
+    QString logColor = gTheme->color(LinboTheme::TextColor).name();
 
     if (latestLog.type == LinboLogger::StdErr)
         logColor = "red";

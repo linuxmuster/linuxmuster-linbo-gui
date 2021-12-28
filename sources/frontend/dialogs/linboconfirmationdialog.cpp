@@ -43,11 +43,11 @@ LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question
 void LinboConfirmationDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int rowHeight = gTheme->getSize(LinboTheme::RowHeight);
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int rowHeight = gTheme->size(LinboTheme::RowHeight);
+    int margins = gTheme->size(LinboTheme::Margins);
 
     this->_questionLabel->setGeometry(0, (this->height() - rowHeight) / 2, this->width() - margins * 2, rowHeight);
     QFont font = this->_questionLabel->font();
-    font.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+    font.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
     this->_questionLabel->setFont(font);
 }
