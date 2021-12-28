@@ -24,20 +24,28 @@ LinboCheckBox::LinboCheckBox(QString label, QWidget* parent) : QCheckBox(label, 
 
 void LinboCheckBox::paintEvent(QPaintEvent *e) {
     QString indicatorSize = QString::number(this->font().pixelSize());
-    this->setStyleSheet("QCheckBox {"
-                        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-                        "}"
-                        "QCheckBox::indicator {"
-                        "width: " + indicatorSize + "px;"
-                        "height: " + indicatorSize + "px;"
-                        "}"
-                        "QCheckBox::indicator:unchecked {"
-                        "image: url(" + gTheme->getIconPath(LinboTheme::CheckBoxUncheckedIcon) + ");"
-                        "}"
-                        "QCheckBox::indicator:checked {"
-                        "image: url(" + gTheme->getIconPath(LinboTheme::CheckBoxCheckedIcon) + ");"
-                        "}"
-                        "");
+    this->setStyleSheet(QString(
+                            "QCheckBox {"
+                            "color: %1;"
+                            "}"
+                            "QCheckBox::indicator {"
+                            "width: %2px;"
+                            "height: %2px;"
+                            "}"
+                            "QCheckBox::indicator:unchecked {"
+                            "image: url(%3);"
+                            "}"
+                            "QCheckBox::indicator:checked {"
+                            "image: url(%4);"
+                            "}"
+                            ""
+                        )
+                        .arg(
+                            gTheme->getColor(LinboTheme::TextColor).name(),
+                            indicatorSize,
+                            gTheme->getIconPath(LinboTheme::CheckBoxUncheckedIcon),
+                            gTheme->getIconPath(LinboTheme::CheckBoxCheckedIcon)
+                        ));
 
     QCheckBox::paintEvent(e);
 }
