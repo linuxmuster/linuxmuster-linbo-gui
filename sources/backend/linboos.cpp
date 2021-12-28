@@ -21,7 +21,7 @@
 
 LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
 {
-    this->_parent = parent;
+    this->_backend = parent;
     this->_autostartEnabled = false;
     this->_autostartTimeout = 0;
     this->_hidden = false;
@@ -31,15 +31,15 @@ LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
 }
 
 bool LinboOs::executeStart() {
-    return this->_parent->startOs(this);
+    return this->_backend->startOs(this);
 }
 
 bool LinboOs::executeSync() {
-    return this->_parent->syncOs(this);
+    return this->_backend->syncOs(this);
 }
 
 bool LinboOs::executeReinstall() {
-    return this->_parent->reinstallOs(this);
+    return this->_backend->reinstallOs(this);
 }
 
 bool LinboOs::executeDefaultAction() {

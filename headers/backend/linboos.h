@@ -103,16 +103,12 @@ public:
     bool replaceImage(QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool createImage(QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
-    LinboBackend* backend() {
-        return this->_parent;
-    }
-
 private:
     explicit LinboOs(LinboBackend *parent = nullptr);
 
     void _setBaseImage(LinboImage* baseImage);
 
-    LinboBackend* _parent;
+    LinboBackend* _backend;
 
     QString _name;
     QString _version;
