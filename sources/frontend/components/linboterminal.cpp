@@ -8,29 +8,33 @@ LinboTerminal::LinboTerminal(QWidget* parent) : QTextEdit(parent)
     this->_doNotExitOnProcessExit = false;
 
     this->setStyleSheet(
-        "QTextEdit {"
-        "   border: 0 0 0 0;"
-        "   background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "   padding-left: 5px;"
-        "   color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "}");
+        gTheme->insertValues(
+            "QTextEdit {"
+            "   border: 0 0 0 0;"
+            "   background: %ElevatedBackgroundColor;"
+            "   padding-left: 5px;"
+            "   color: %TextColor;"
+            "}"
+        ));
 
     this->verticalScrollBar()->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "    width:10px;    "
-        "    margin: 0px 0px 0px 0px;"
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "    min-height: 10px;"
-        "}"
-        "QScrollBar::add-line:vertical {"
-        "    height: 0px;"
-        "}"
-        "QScrollBar::sub-line:vertical {"
-        "    height: 0 px;"
-        "}");
+        gTheme->insertValues(
+            "QScrollBar:vertical {"
+            "    background: %ElevatedBackgroundColor;"
+            "    width:10px;    "
+            "    margin: 0px 0px 0px 0px;"
+            "}"
+            "QScrollBar::handle:vertical {"
+            "    background: %TextColor;"
+            "    min-height: 10px;"
+            "}"
+            "QScrollBar::add-line:vertical {"
+            "    height: 0px;"
+            "}"
+            "QScrollBar::sub-line:vertical {"
+            "    height: 0 px;"
+            "}"
+        ));
 
     this->setCursorWidth(8);
     this->setFont(QFont("Ubuntu Mono"));

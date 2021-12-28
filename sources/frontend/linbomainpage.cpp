@@ -74,7 +74,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     QFont versionAndNetworkLabelFont;
     versionAndNetworkLabelFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
     versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);
-    versionAndNetworkLabel->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
+    versionAndNetworkLabel->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
     mainLayout->addWidget(versionAndNetworkLabel);
     mainLayout->setAlignment(versionAndNetworkLabel, Qt::AlignCenter);
 

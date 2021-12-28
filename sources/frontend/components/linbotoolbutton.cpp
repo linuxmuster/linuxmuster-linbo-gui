@@ -38,7 +38,24 @@ LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, 
 void LinboToolButton::paintEvent(QPaintEvent *e) {
     LinboPushButton::paintEvent(e);
     if(this->_colorRole == LinboTheme::ToolButtonColor)
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->_colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboTheme::DisabledToolButtonColor).name() + ";}");
+        LinboPushButton::setStyleSheet(
+            QString(
+                "QLabel { "
+                "    color: %1;"
+                "    font-weight: bold;"
+                "}"
+                "QLabel:disabled {"
+                "    color: %2;"
+                "}")
+            .arg(
+                gTheme->getColor(this->_colorRole).name(),
+                gTheme->getColor(LinboTheme::DisabledToolButtonColor).name()
+            ));
     else
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->_colorRole).name() + ";}");
+        LinboPushButton::setStyleSheet(
+            QString(
+                "QLabel {"
+                "    color: %1;"
+                "}")
+            .arg(gTheme->getColor(this->_colorRole).name()));
 }

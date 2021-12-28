@@ -64,15 +64,18 @@ LinboGui::LinboGui()
     this->_theme = new LinboGuiTheme(this->_backend, this, this);
 
     // set background
-    this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboTheme::BackgroundColor).name() + "; }"
-                         "QLabel { color: " "black" "; }"
-                         "QToolTip {"
-                         "border: 0 0 0 0;"
-                         "background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-                         "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-                         "padding: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize) * 0.2) + ";"
-                         "font-size: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize)) + "px;"
-                         "}");
+    this->setStyleSheet(
+        gTheme->insertValues(
+            "QMainWindow { background: %BackgroundColor; }"
+            "QLabel { color: " "black" "; }"
+            "QToolTip {"
+            "border: 0 0 0 0;"
+            "background: %ElevatedBackgroundColor;"
+            "color: %TextColor;"
+            "padding: %RowPaddingSizepx;"
+            "font-size: %RowFontSizepx;"
+            "}"
+        ));
 
     // attach translator
     QString localeName = this->_backend->config()->locale();

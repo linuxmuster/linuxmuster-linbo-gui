@@ -20,48 +20,55 @@
 
 LinboTextBrowser::LinboTextBrowser(QWidget* parent) : QTextBrowser(parent)
 {
-    this->setStyleSheet("QTextBrowser {"
-                        "border: 0 0 0 0;"
-                        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::LineColor).name() + ";"
-                        "background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-                        "padding-left: 5px;"
-                        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-                        "}"
-                        "QTextBrowser:focus {"
-                        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
-                        "}");
+    this->setStyleSheet(
+        gTheme->insertValues(
+            "QTextBrowser {"
+            "    border: 0 0 0 0;"
+            "    border-bottom: 1px solid %LineColor;"
+            "    background: %ElevatedBackgroundColor;"
+            "    padding-left: 5px;"
+            "    color: %TextColor;"
+            "}"
+            "QTextBrowser:focus {"
+            "    border-bottom: 1px solid %AccentColor;"
+            "}"
+        ));
 
     this->verticalScrollBar()->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "    width: 10px;    "
-        "    margin: 0px 0px 0px 0px;"
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "    min-height: 10px;"
-        "}"
-        "QScrollBar::add-line:vertical {"
-        "    height: 0px;"
-        "}"
-        "QScrollBar::sub-line:vertical {"
-        "    height: 0 px;"
-        "}");
+        gTheme->insertValues(
+            "QScrollBar:vertical {"
+            "    background: %ElevatedBackgroundColor;"
+            "    width: 10px;    "
+            "    margin: 0px 0px 0px 0px;"
+            "}"
+            "QScrollBar::handle:vertical {"
+            "    background: %TextColor;"
+            "    min-height: 10px;"
+            "}"
+            "QScrollBar::add-line:vertical {"
+            "    height: 0px;"
+            "}"
+            "QScrollBar::sub-line:vertical {"
+            "    height: 0 px;"
+            "}"
+        ));
 
     this->horizontalScrollBar()->setStyleSheet(
-        "QScrollBar:horizontal {"
-        "    background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "    height: 10px;    "
-        "    margin: 0px 0px 0px 0px;"
-        "}"
-        "QScrollBar::handle:horizontal {"
-        "    background: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "    min-width: 10px;"
-        "}"
-        "QScrollBar::add-line:horizontal {"
-        "    width: 0px;"
-        "}"
-        "QScrollBar::sub-line:horizontal {"
-        "    width: 0 px;"
-        "}");
+        gTheme->insertValues(
+            "QScrollBar:horizontal {"
+            "    background: %ElevatedBackgroundColor;"
+            "    height: 10px;    "
+            "    margin: 0px 0px 0px 0px;"
+            "}"
+            "QScrollBar::handle:horizontal {"
+            "    background: %TextColor;"
+            "    min-width: 10px;"
+            "}"
+            "QScrollBar::add-line:horizontal {"
+            "    width: 0px;"
+            "}"
+            "QScrollBar::sub-line:horizontal {"
+            "    width: 0 px;"
+            "}"
+        ));
 }

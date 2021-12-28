@@ -25,23 +25,27 @@ LinboRadioButton::LinboRadioButton(QString label, QWidget* parent) : QRadioButto
 
 void LinboRadioButton::paintEvent(QPaintEvent *e) {
     QString indicatorSize = QString::number(this->font().pixelSize());
-    this->setStyleSheet("QRadioButton {"
-                        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-                        "}"
-                        "QRadioButton::indicator {"
-                        "width: " + indicatorSize + "px;"
-                        "height: " + indicatorSize + "px;"
-                        "}"
-                        "QRadioButton::indicator:unchecked {"
-                        "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonUncheckedIcon) + ");"
-                        "}"
-                        "QRadioButton::indicator:checked {"
-                        "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonCheckedIcon) + ");"
-                        "}"
-                         "QRadioButton::indicator:disabled {"
-                         "image: url(" + gTheme->getIconPath(LinboTheme::RadioButtonDisabledIcon) + ");"
-                         "}"
-                        "");
+    this->setStyleSheet(
+        gTheme->insertValues(
+            QString(
+                "QRadioButton {"
+                "    color: %TextColor;"
+                "}"
+                "QRadioButton::indicator {"
+                "    width: %1px;"
+                "    height: %1px;"
+                "}"
+                "QRadioButton::indicator:unchecked {"
+                "    image: url(%RadioButtonUncheckedIcon);"
+                "}"
+                "QRadioButton::indicator:checked {"
+                "    image: url(%RadioButtonCheckedIcon);"
+                "}"
+                "QRadioButton::indicator:disabled {"
+                "    image: url(%RadioButtonDisabledIcon);"
+                "}"
+            )
+            .arg(indicatorSize)));
 
     QRadioButton::paintEvent(e);
 }

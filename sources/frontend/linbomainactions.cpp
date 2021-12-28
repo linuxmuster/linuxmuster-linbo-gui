@@ -29,7 +29,7 @@ LinboMainActions::LinboMainActions(LinboBackend* backend, QWidget *parent) : QWi
 
     this->_inited = false;
 
-    this->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
+    this->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
 
     // Progress bar
     this->_progressBarWidget = new QWidget();

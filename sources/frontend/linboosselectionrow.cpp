@@ -58,7 +58,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->_noOsLabel->setAlignment(Qt::AlignCenter);
         this->_noOsLabelFont.setBold(true);
         this->_noOsLabel->setFont(this->_noOsLabelFont);
-        this->_noOsLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
+        this->_noOsLabel->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
 
         QString environmentValuesText;
         //% "Hostname"
@@ -72,7 +72,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
         this->_environmentValuesLabel->hide();
         this->_environmentValuesLabel->setAlignment(Qt::AlignCenter);
         this->_environmentValuesLabel->setFont(this->_environmentValuesLabelFont);
-        this->_environmentValuesLabel->setStyleSheet("QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + " }");
+        this->_environmentValuesLabel->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
     }
     else {
         this->_osButtons[0]->_button->setChecked(true);

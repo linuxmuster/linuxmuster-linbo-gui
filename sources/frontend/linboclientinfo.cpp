@@ -22,7 +22,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
 {
 
     this->_mainWidget = new QWidget(this);
-    this->_mainWidget->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
+    this->_mainWidget->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
 
     this->_mainLayout = new QGridLayout(this->_mainWidget);
     this->_mainLayout->setAlignment(Qt::AlignCenter);

@@ -48,7 +48,7 @@ LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* p
     this->_updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
 
     QFrame* separatorLine = new QFrame();
-    separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
+    separatorLine->setStyleSheet(gTheme->insertValues("QFrame {color: %LineColor;}"));
     separatorLine->setFrameShape(QFrame::HLine);
     this->_mainLayout->addWidget(separatorLine);
 

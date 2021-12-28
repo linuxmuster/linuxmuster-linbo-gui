@@ -23,18 +23,18 @@ LinboComboBox::LinboComboBox()
     this->setStyleSheet(
         gTheme->insertValues(
             "QComboBox {"
-            "border: 0 0 0 0;"
-            "border-bottom: 1px solid %1;"
-            "background-color: %2;"
-            "selection-color: #ffffff;"
-            "selection-background-color: %3;"
-            "color: %4;"
+            "    border: 0 0 0 0;"
+            "    border-bottom: 1px solid %LineColor;"
+            "    background-color: %ElevatedBackgroundColor;"
+            "    selection-color: #ffffff;"
+            "    selection-background-color: %AccentColor;"
+            "    color: %TextColor;"
             "}"
             "QComboBox QAbstractItemView {"
-            "background-color: %5;"
+            "    background-color: %ElevatedBackgroundColor;"
             "}"
             "QComboBox:focus {"
-            "border-bottom: 1px solid %6;"
+            "    border-bottom: 1px solid %AccentColor;"
             "}"
         )
     );

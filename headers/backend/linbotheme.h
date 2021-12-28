@@ -84,6 +84,7 @@ public:
         RowHeight,
         RowLabelHeight,
         RowFontSize,
+        RowPaddingSize,
         DialogWidth,
         DialogHeight,
         TopLogoHeight,

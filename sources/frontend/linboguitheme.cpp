@@ -102,6 +102,8 @@ int LinboGuiTheme::getSize(LinboTheme::LinboThemeSizeRole sizeRole) {
         return this->getSize(LinboTheme::RowHeight) * 0.8;
     case LinboTheme::RowFontSize:
         return this->getSize(LinboTheme::RowLabelHeight) * 0.5;
+    case LinboTheme::RowPaddingSize:
+        return this->getSize(LinboTheme::RowFontSize) * 0.2;
     case LinboTheme::DialogWidth:
         return rootHeight * 0.8;
     case LinboTheme::DialogHeight:
@@ -130,7 +132,7 @@ bool LinboGuiTheme::_isBackgroundColorDark() {
 
 QString LinboGuiTheme::insertValues(QString string) {
     string = this->insertColorValues(string);
-    string = this->insertColorValues(string);
+    string = this->insertIconValues(string);
     return this->insertSizeValues(string);
 }
 
@@ -138,7 +140,7 @@ QString LinboGuiTheme::insertColorValues(QString string) {
     QMapIterator<LinboTheme::LinboThemeColorRole, QString> i(this->_theme->colorRolesAndNames());
     while (i.hasNext()) {
         i.next();
-        QString colorKey = "%" + i.value().toLower();
+        QString colorKey = "%" + i.value();
         string = string.replace(colorKey, this->getColor(i.key()).name());
     }
     return string;
@@ -148,7 +150,7 @@ QString LinboGuiTheme::insertIconValues(QString string) {
     QMapIterator<LinboTheme::LinboThemeIcon, QString> i(this->_theme->iconsAndNames());
     while (i.hasNext()) {
         i.next();
-        QString iconKey = "%" + i.value().toLower();
+        QString iconKey = "%" + i.value();
         string = string.replace(iconKey, this->getIconPath(i.key()));
     }
     return string;
@@ -158,7 +160,7 @@ QString LinboGuiTheme::insertSizeValues(QString string) {
     QMapIterator<LinboTheme::LinboThemeSizeRole, QString> i(this->_theme->sizeRolesAndNames());
     while (i.hasNext()) {
         i.next();
-        QString sizeKey = "%" + i.value().toLower();
+        QString sizeKey = "%" + i.value();
         string = string.replace(sizeKey, QString::number(this->getSize(i.key())));
     }
     return string;
