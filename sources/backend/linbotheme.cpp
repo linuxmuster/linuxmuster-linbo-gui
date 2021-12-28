@@ -15,6 +15,7 @@ LinboTheme::LinboTheme(QObject *parent) : QObject(parent)
 
     this->_iconMetaEnum = QMetaEnum::fromType<LinboThemeIcon>();
     this->_colorRoleMetaEnum = QMetaEnum::fromType<LinboThemeColorRole>();
+    this->_sizeRoleMetaEnum = QMetaEnum::fromType<LinboThemeSizeRole>();
 }
 
 
@@ -46,6 +47,14 @@ QMap<LinboTheme::LinboThemeIcon, QString> LinboTheme::iconsAndNames() {
         iconsAndNames.insert(LinboThemeIcon(i), this->_iconMetaEnum.valueToKey(i));
     }
     return iconsAndNames;
+}
+
+QMap<LinboTheme::LinboThemeSizeRole, QString> LinboTheme::sizeRolesAndNames() {
+    QMap<LinboTheme::LinboThemeSizeRole, QString> sizeRolesAndNames;
+    for(int i = 0; i < LinboThemeIconCount; i++) {
+        sizeRolesAndNames.insert(LinboThemeSizeRole(i), this->_sizeRoleMetaEnum.valueToKey(i));
+    }
+    return sizeRolesAndNames;
 }
 
 QString LinboTheme::iconName(LinboThemeIcon icon) {

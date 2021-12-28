@@ -21,20 +21,22 @@
 LinboComboBox::LinboComboBox()
 {
     this->setStyleSheet(
-        "QComboBox {"
-        "border: 0 0 0 0;"
-        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::LineColor).name() + ";"
-        "background-color: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "selection-color: #ffffff;"
-        "selection-background-color: " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
-        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "}"
-        "QComboBox QAbstractItemView {"
-        "background-color: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "}"
-        "QComboBox:focus {"
-        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
-        "}"
+        gTheme->insertValues(
+            "QComboBox {"
+            "border: 0 0 0 0;"
+            "border-bottom: 1px solid %1;"
+            "background-color: %2;"
+            "selection-color: #ffffff;"
+            "selection-background-color: %3;"
+            "color: %4;"
+            "}"
+            "QComboBox QAbstractItemView {"
+            "background-color: %5;"
+            "}"
+            "QComboBox:focus {"
+            "border-bottom: 1px solid %6;"
+            "}"
+        )
     );
 
 }

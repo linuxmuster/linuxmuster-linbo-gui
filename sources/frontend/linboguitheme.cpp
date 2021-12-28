@@ -23,7 +23,7 @@ LinboGuiTheme* gTheme = nullptr;
 LinboGuiTheme::LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent) : QObject(parent)
 {
     gTheme = this;
-    this->_backend = backend;
+    this->_theme = backend->config()->theme();
     this->_mainWindow = mainWindow;
 }
 
@@ -32,9 +32,9 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
         return "";
 
     if(
-        !this->_backend->config()->theme()->iconPath(icon).isEmpty()
+        !this->_theme->iconPath(icon).isEmpty()
     ) {
-        return this->_backend->config()->theme()->iconPath(icon);
+        return this->_theme->iconPath(icon);
     }
 
     QString iconPath = ":/icons/";
@@ -44,7 +44,7 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
         iconPath += this->_isBackgroundColorDark() ? "light/":"dark/";
 
     // remove "Icon"
-    QString iconName = this->_backend->config()->theme()->iconName(icon);
+    QString iconName = this->_theme->iconName(icon);
     // de-capitalize first letter
     iconName.replace(0, 1, iconName.at(0).toLower());
 
@@ -55,14 +55,14 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
 QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
 
     if(
-        this->_backend->config()->theme()->color(colorRole).isValid()
+        this->_theme->color(colorRole).isValid()
     ) {
-        return this->_backend->config()->theme()->color(colorRole);
+        return this->_theme->color(colorRole);
     }
 
     switch (colorRole) {
     case LinboTheme::PrimaryColor:
-        return this->_backend->config()->theme()->color(LinboTheme::PrimaryColor);
+        return this->_theme->color(LinboTheme::PrimaryColor);
     case LinboTheme::BackgroundColor:
         return this->getColor(LinboTheme::PrimaryColor);
     case LinboTheme::ElevatedBackgroundColor:
@@ -126,4 +126,40 @@ bool LinboGuiTheme::_isBackgroundColorDark() {
     int h, s, v;
     backgroundColor.getHsv(&h, &s, &v);
     return v < 210;
+}
+
+QString LinboGuiTheme::insertValues(QString string) {
+    string = this->insertColorValues(string);
+    string = this->insertColorValues(string);
+    return this->insertSizeValues(string);
+}
+
+QString LinboGuiTheme::insertColorValues(QString string) {
+    QMapIterator<LinboTheme::LinboThemeColorRole, QString> i(this->_theme->colorRolesAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString colorKey = "%" + i.value().toLower();
+        string = string.replace(colorKey, this->getColor(i.key()).name());
+    }
+    return string;
+}
+
+QString LinboGuiTheme::insertIconValues(QString string) {
+    QMapIterator<LinboTheme::LinboThemeIcon, QString> i(this->_theme->iconsAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString iconKey = "%" + i.value().toLower();
+        string = string.replace(iconKey, this->getIconPath(i.key()));
+    }
+    return string;
+}
+
+QString LinboGuiTheme::insertSizeValues(QString string) {
+    QMapIterator<LinboTheme::LinboThemeSizeRole, QString> i(this->_theme->sizeRolesAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString sizeKey = "%" + i.value().toLower();
+        string = string.replace(sizeKey, QString::number(this->getSize(i.key())));
+    }
+    return string;
 }

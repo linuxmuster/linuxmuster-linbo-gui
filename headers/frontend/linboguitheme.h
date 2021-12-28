@@ -38,6 +38,11 @@ public:
     int getSize(LinboTheme::LinboThemeSizeRole sizeRole);
     int toFontSize(int size);
 
+    QString insertValues(QString string);
+    QString insertColorValues(QString string);
+    QString insertIconValues(QString string);
+    QString insertSizeValues(QString string);
+
 private:
     QMap<LinboTheme::LinboThemeColorRole, QColor> _lightColors = {
         {LinboTheme::TextColor, "#ffffff"},
@@ -66,7 +71,7 @@ private:
         LinboTheme::OverlayKeyboardFocusIcon
     };
 
-    LinboBackend* _backend;
+    LinboTheme* _theme;
     QMainWindow* _mainWindow;
 
     bool _isBackgroundColorDark();

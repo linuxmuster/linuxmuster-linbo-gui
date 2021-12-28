@@ -96,6 +96,7 @@ public:
 
     QMap<LinboThemeColorRole, QString> colorRolesAndNames();
     QMap<LinboThemeIcon, QString> iconsAndNames();
+    QMap<LinboThemeSizeRole, QString> sizeRolesAndNames();
 
     QString iconName(LinboThemeIcon icon);
 
@@ -104,6 +105,7 @@ private:
     QMap<LinboThemeIcon, QString> _icons;
     QMetaEnum _iconMetaEnum;
     QMetaEnum _colorRoleMetaEnum;
+    QMetaEnum _sizeRoleMetaEnum;
 signals:
 
 };
