@@ -41,22 +41,25 @@ bool LinboConfigReader::_loadStartConf(QFile *file, LinboConfig* config) {
 }
 
 void LinboConfigReader::_loadStartConf(QTextStream *input, LinboConfig* config) {
-    Block currentBlock = Block{"", {}};
+    QList<Block> blocks = this->_parseStartConf(input);
+    for(const Block& block : blocks) {
+        this->_loadConfigFromBlock(block, config);
+    }
+}
 
+QList<LinboConfigReader::Block> LinboConfigReader::_parseStartConf(QTextStream* input) {
+    QList<Block> blocks;
     while(!input->atEnd()) {
         Line line = this->_parseLine(input->readLine());
         if(line.isNewBlock) {
-            this->_loadConfigFromBlock(currentBlock, config);
-            currentBlock = Block {
-                this->_parseLineAsBlockName(line),
-                {}
-            };
+            blocks.append(Block{this->_parseLineAsBlockName(line), {}});
         }
-        else if(line.isKeyValuePair) {
+        else if(line.isKeyValuePair && blocks.length() > 0) {
             KeyValuePair keyValuePair = this->_parseLineAsKeyValuePair(line);
-            currentBlock.config.insert(keyValuePair.key, keyValuePair.value);
+            blocks.last().config.insert(keyValuePair.key, keyValuePair.value);
         }
     }
+    return blocks;
 }
 
 LinboConfigReader::Line LinboConfigReader::_parseLine(QString line) {

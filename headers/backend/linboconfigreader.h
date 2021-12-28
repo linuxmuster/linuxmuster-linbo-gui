@@ -45,6 +45,7 @@ private:
     bool _loadStartConf(LinboConfig* config);
     bool _loadStartConf(QFile* file, LinboConfig* config);
     void _loadStartConf(QTextStream* input, LinboConfig* config);
+    QList<Block> _parseStartConf(QTextStream* input);
     Line _parseLine(QString line);
     QString _sanitizeLine(QString line);
     bool _isLineKeyValuePair(QString line);
