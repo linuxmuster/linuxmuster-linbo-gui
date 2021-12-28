@@ -93,7 +93,7 @@ public slots:
     bool login(QString password);
     void logout();
 
-    bool     partitionDrive();
+    bool partitionDrive();
     bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
@@ -116,6 +116,9 @@ protected slots:
     bool writeImageDescription(QString imageName, QString newDescription);
 
     bool uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+
+    QString loadEnvironmentValue(QString key);
+    QString getPartitionSize(QString partition);
 
 private:
     LinboState _state;

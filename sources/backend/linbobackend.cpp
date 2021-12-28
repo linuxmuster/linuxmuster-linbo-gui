@@ -331,6 +331,14 @@ LinboConfig* LinboBackend::config() {
     return this->_config;
 }
 
+QString LinboBackend::loadEnvironmentValue(QString key) {
+    return this->_linboCmd->getOutput(key).replace("\n", "");
+}
+
+QString LinboBackend::getPartitionSize(QString partition) {
+    return this->_linboCmd->getOutput("size", partition).replace("\n", "");
+}
+
 // -----------
 // - Helpers -
 // -----------

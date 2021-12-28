@@ -83,7 +83,7 @@ public:
     const QString& hddSize() const {
         return this->_hddSize;
     }
-    const QString& cachePath() const {
+    QString cachePath() const {
         return this->_cachePath;
     }
     const QString& hostGroup() const {

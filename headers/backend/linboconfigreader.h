@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QRegularExpression>
+#include <QFile>
+#include <QPair>
 #include "linboconfig.h"
 #include "linboimage.h"
 #include "linbodiskpartition.h"
@@ -19,16 +21,45 @@ class LinboConfigReader : public QObject
 
 protected:
     explicit LinboConfigReader(LinboBackend *backend);
+
+    struct Block {
+        QString name;
+        QMap<QString, QString> config;
+    };
+
+    struct Line {
+        bool isKeyValuePair;
+        bool isNewBlock;
+        QString content;
+    };
+
+    struct KeyValuePair {
+        QString key;
+        QString value;
+    };
+
     LinboConfig* readConfig();
 
 private:
-    LinboConfig* _loadStartConfiguration(QString startConfFilePath);
-    void _loadEnvironmentValues(LinboConfig* config);
-    LinboTheme* _loadThemeConfiguration(QString themeConfFilePath, LinboConfig* config);
 
-    void _parseLinboConfig(QMap<QString, QString> rawLinboConfig, LinboConfig* config);
-    void _parsePartitionConfig(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
-    void _parseOsConfig(QMap<QString, QString> rawOsConfig, LinboConfig* config);
+    bool _loadStartConf(LinboConfig* config);
+    bool _loadStartConf(QFile* file, LinboConfig* config);
+    void _loadStartConf(QTextStream* input, LinboConfig* config);
+    Line _parseLine(QString line);
+    QString _sanitizeLine(QString line);
+    bool _isLineKeyValuePair(QString line);
+    bool _isLineBlockName(QString line);
+    QString _parseLineAsBlockName(Line line);
+    KeyValuePair _parseLineAsKeyValuePair(Line line);
+
+    void _loadEnvironmentValues(LinboConfig* config);
+    void _loadExistingImages(LinboConfig* config);
+    bool _loadThemeConfig(QString themeConfFilePath, LinboConfig* config);
+
+    void _loadConfigFromBlock(Block block, LinboConfig* config);
+    void _loadLinboConfigFromBlock(QMap<QString, QString> rawLinboConfig, LinboConfig* config);
+    void _loadPartitionConfigFromBlock(QMap<QString, QString> rawParitionConfig, LinboConfig* config);
+    void _loadOsConfigFromBlock(QMap<QString, QString> rawOsConfig, LinboConfig* config);
 
     bool _validateColorCode(QString code);
     bool _stringToBool(const QString& value);

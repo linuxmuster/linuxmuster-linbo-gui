@@ -7,158 +7,147 @@ LinboConfigReader::LinboConfigReader(LinboBackend *backend) : QObject(backend)
 }
 
 LinboConfig* LinboConfigReader::readConfig() {
-    LinboConfig* config = this->_loadStartConfiguration(_configFilePath);
+    LinboConfig* config = new LinboConfig(this->_backend);
+    this->_loadStartConf(config);
+    this->_loadEnvironmentValues(config);
+    this->_loadThemeConfig(this->_iconBasePath + "/" + config->themeConfFile(), config);
     return config;
 }
 
-LinboConfig* LinboConfigReader::_loadStartConfiguration(QString startConfFilePath) {
-    LinboConfig* config = new LinboConfig(this->_backend);
-    // read start.conf
+bool LinboConfigReader::_loadStartConf(LinboConfig* config) {
     this->_backend->logger()->info("Starting to parse start.conf");
 
-    QFile inputFile(startConfFilePath);
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-        QTextStream input(&inputFile);
-        QString currentSection;
-        QMap<QString, QString> linboConfig;
-        QList<QMap<QString, QString>> partitionConfigs;
-        QList<QMap<QString, QString>> osConfigs;
-        bool firstLineOfSection = false;
+    QFile inputFile(this->_configFilePath);
+    if(!this->_loadStartConf(&inputFile, config)) {
+        this->_backend->logger()->error("Error opening the start.conf file: " + this->_configFilePath);
+        return false;
+    }
+    else {
+        this->_backend->logger()->info("Finished parsing start.conf");
+        return true;
+    }
+}
 
-        while(!input.atEnd()) {
-            QString thisLine = input.readLine();
+bool LinboConfigReader::_loadStartConf(QFile *file, LinboConfig* config) {
+    if (file->open(QIODevice::ReadOnly)) {
+        QTextStream input(file);
+        this->_loadStartConf(&input, config);
+        file->close();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
-            thisLine = thisLine.split("#")[0];
-            thisLine = thisLine.simplified();
-            if(thisLine.length() == 0)
-                continue;
+void LinboConfigReader::_loadStartConf(QTextStream *input, LinboConfig* config) {
+    Block currentBlock = Block{"", {}};
 
-            if(thisLine.startsWith("[")) {
-                currentSection = thisLine.toLower();
-                firstLineOfSection = true;
-                continue;
-            }
-
-            if(!thisLine.contains("=") || thisLine.startsWith("="))
-                continue;
-
-            QString key = thisLine.section('=', 0, 0).simplified().toLower();
-            QString value = thisLine.section('=', 1).simplified();
-
-            if(key.isEmpty() || value.isEmpty())
-                continue;
-
-            if(currentSection == "[linbo]") {
-                linboConfig.insert(key, value);
-            }
-            else if(currentSection == "[partition]") {
-                if(firstLineOfSection)
-                    partitionConfigs.append(QMap<QString, QString>());
-
-                partitionConfigs.last().insert(key, value);
-            }
-            else if(currentSection == "[os]") {
-                if(firstLineOfSection)
-                    osConfigs.append(QMap<QString, QString>());
-
-                osConfigs.last().insert(key, value);
-            }
-
-            firstLineOfSection = false;
+    while(!input->atEnd()) {
+        Line line = this->_parseLine(input->readLine());
+        if(line.isNewBlock) {
+            this->_loadConfigFromBlock(currentBlock, config);
+            currentBlock = Block {
+                this->_parseLineAsBlockName(line),
+                {}
+            };
         }
-
-        inputFile.close();
-
-        // write the config our internal objects
-        this->_parseLinboConfig(linboConfig, config);
-
-        for(const QMap<QString, QString> &partitionConfig : partitionConfigs) {
-            this->_parsePartitionConfig(partitionConfig, config);
-        }
-
-        for(const QMap<QString, QString> &osConfig : osConfigs) {
-            this->_parseOsConfig(osConfig, config);
+        else if(line.isKeyValuePair) {
+            KeyValuePair keyValuePair = this->_parseLineAsKeyValuePair(line);
+            currentBlock.config.insert(keyValuePair.key, keyValuePair.value);
         }
     }
-    else
-        this->_backend->logger()->error("Error opening the start configuration file: " + startConfFilePath);
+}
 
-    this->_backend->logger()->info("Finished parsing start.conf");
+LinboConfigReader::Line LinboConfigReader::_parseLine(QString line) {
+    return Line {
+        this->_isLineKeyValuePair(line),
+        this->_isLineBlockName(line),
+        this->_sanitizeLine(line)
+    };
+}
 
-    this->_loadEnvironmentValues(config);
+bool LinboConfigReader::_isLineKeyValuePair(QString line) {
+    if(line.isEmpty())
+        return false;
+    else if(!line.contains("="))
+        return false;
+    else if(line.startsWith("="))
+        return false;
+    return true;
+}
 
-    config->_theme = this->_loadThemeConfiguration(this->_iconBasePath + "/" + config->themeConfFile(), config);
+bool LinboConfigReader::_isLineBlockName(QString line) {
+    return line.startsWith("[");
+}
 
-    return config;
+LinboConfigReader::KeyValuePair LinboConfigReader::_parseLineAsKeyValuePair(Line line) {
+    const QString content = line.content;
+    const QString key = content.section('=', 0, 0).simplified().toLower();
+    const QString value = content.section('=', 1).simplified();
+    return KeyValuePair {key, value};
+}
+
+QString LinboConfigReader::_parseLineAsBlockName(LinboConfigReader::Line line) {
+    QString blockName = line.content;
+    blockName = blockName.replace("[", "").replace("]", "");
+    return blockName.simplified().toLower();
+}
+
+QString LinboConfigReader::_sanitizeLine(QString line) {
+    line = line.split("#")[0];
+    return line.simplified();
 }
 
 void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
     this->_backend->logger()->_log("Loading environment values", LinboLogger::LinboGuiInfo);
-    //  client ip
-    config->_ipAddress = this->_backend->_linboCmd->getOutput("ip").replace("\n", "");
 
-    // subnet mask
-    config->_subnetMask = this->_backend->_linboCmd->getOutput("netmask").replace("\n", "");
-
-    // subnet bitmask
-    config->_subnetBitmask = this->_backend->_linboCmd->getOutput("bitmask").replace("\n", "");
-
-    // mac address
-    config->_macAddress = this->_backend->_linboCmd->getOutput("mac").replace("\n", "");
-
-    // Version
-    config->_linboVersion = this->_backend->_linboCmd->getOutput("version").simplified().replace("\n", "").split("[").first();
-
-    // hostname
-    config->_hostname = this->_backend->_linboCmd->getOutput("hostname").replace("\n", "");
-
-    // CPU
-    config->_cpuModel = this->_backend->_linboCmd->getOutput("cpu").replace("\n", "");
-
-    // Memory
-    config->_ramSize = this->_backend->_linboCmd->getOutput("memory").replace("\n", "");
-
-    // Cache Size
-    config->_cacheSize = this->_backend->_linboCmd->getOutput("size", config->cachePath()).replace("\n", "");
+    config->_ipAddress = this->_backend->loadEnvironmentValue("ip");
+    config->_subnetMask = this->_backend->loadEnvironmentValue("netmask");
+    config->_subnetBitmask = this->_backend->loadEnvironmentValue("bitmask");
+    config->_macAddress = this->_backend->loadEnvironmentValue("mac");
+    config->_linboVersion = this->_backend->loadEnvironmentValue("version");
+    config->_hostname = this->_backend->loadEnvironmentValue("hostname");
+    config->_cpuModel = this->_backend->loadEnvironmentValue("cpu");
+    config->_ramSize = this->_backend->loadEnvironmentValue("memory");
+    config->_cacheSize = this->_backend->getPartitionSize(config->cachePath());
 
     // Harddisk Size
-    QRegularExpression *removePartition = new QRegularExpression("[0-9]{1,2}");
-    QString hd = config->cachePath();
+    QRegularExpression removePartition("[0-9]{1,2}");
     // e.g. turn /dev/sda1 into /dev/sda
-    hd.remove( *removePartition );
-    config->_hddSize = this->_backend->_linboCmd->getOutput("size", hd).replace("\n", "");
+    config->_hddSize = this->_backend->getPartitionSize(config->cachePath().replace(removePartition, ""));
 
-    // Load all existing images
+    this->_loadExistingImages(config);
+    this->_backend->logger()->_log("Finished loading environment values", LinboLogger::LinboGuiInfo);
+}
+
+void LinboConfigReader::_loadExistingImages(LinboConfig* config) {
     QStringList existingImageNames = this->_backend->_linboCmd->getOutput("listimages", config->cachePath()).split("\n");
-    for(QString existingImageName : existingImageNames) {
-        existingImageName = existingImageName.split("/").last();
-        if(!existingImageName.endsWith(".cloop"))
+    for(const QString &existingImageName : existingImageNames) {
+        if(existingImageName.isEmpty())
             continue;
 
         LinboImage* existingImage = nullptr;
-        if(!existingImageName.isEmpty() && !config->_images.contains(existingImageName)) {
+        if(!config->_images.contains(existingImageName)) {
             existingImage = new LinboImage(existingImageName, this->_backend);
             config->_images.insert(existingImageName, existingImage);
         }
-        else if(config->_images.contains(existingImageName)) {
+        else {
             existingImage = config->_images[existingImageName];
         }
 
         if(existingImage != nullptr)
             existingImage->_existsOnDisk = true;
     }
-
-    this->_backend->logger()->_log("Finished loading environment values", LinboLogger::LinboGuiInfo);
 }
 
-LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath, LinboConfig* config) {
-    LinboTheme* themeConfig = new LinboTheme();
-
+bool LinboConfigReader::_loadThemeConfig(QString themeConfFilePath, LinboConfig* config) {
     QSettings settingsReader(themeConfFilePath, QSettings::IniFormat);
+    LinboTheme* themeConfig = new LinboTheme();
     if(settingsReader.status() != QSettings::NoError) {
         this->_backend->logger()->error("Could not read theme config: " + themeConfFilePath);
-        return themeConfig;
+        config->_theme = themeConfig;
+        return false;
     }
 
     QMapIterator<LinboTheme::LinboThemeColorRole, QString> ic(themeConfig->colorRolesAndNames());
@@ -185,10 +174,26 @@ LinboTheme* LinboConfigReader::_loadThemeConfiguration(QString themeConfFilePath
     if(!config->backgroundColor().isEmpty())
         themeConfig->_colors[LinboTheme::PrimaryColor] = config->backgroundColor();
 
-    return themeConfig;
+    config->_theme = themeConfig;
+    return true;
 }
 
-void LinboConfigReader::_parseLinboConfig(QMap<QString, QString> rawLinboConfig, LinboConfig* linboConfig) {
+void LinboConfigReader::_loadConfigFromBlock(Block block, LinboConfig *config) {
+    if(block.name == "linbo") {
+        this->_loadLinboConfigFromBlock(block.config, config);
+    }
+    else if(block.name == "partition") {
+        this->_loadPartitionConfigFromBlock(block.config, config);
+    }
+    else if(block.name == "os") {
+        this->_loadOsConfigFromBlock(block.config, config);
+    }
+    else if(!block.name.isEmpty()) {
+        this->_backend->logger()->error("Got invalid config block: " + block.name);
+    }
+}
+
+void LinboConfigReader::_loadLinboConfigFromBlock(QMap<QString, QString> rawLinboConfig, LinboConfig* linboConfig) {
     for(auto iterator = rawLinboConfig.begin(); iterator != rawLinboConfig.end(); iterator++) {
         QString key = iterator.key();
         QString value = iterator.value();
@@ -208,7 +213,7 @@ void LinboConfigReader::_parseLinboConfig(QMap<QString, QString> rawLinboConfig,
     }
 }
 
-void LinboConfigReader::_parsePartitionConfig(QMap<QString, QString> rawParitionConfig, LinboConfig* config) {
+void LinboConfigReader::_loadPartitionConfigFromBlock(QMap<QString, QString> rawParitionConfig, LinboConfig* config) {
     LinboDiskPartition* partition = new LinboDiskPartition(this);
 
     for(auto iterator = rawParitionConfig.begin(); iterator != rawParitionConfig.end(); iterator++) {
@@ -227,7 +232,7 @@ void LinboConfigReader::_parsePartitionConfig(QMap<QString, QString> rawParition
         partition->deleteLater();
 }
 
-void LinboConfigReader::_parseOsConfig(QMap<QString, QString> rawOsConfig, LinboConfig* config) {
+void LinboConfigReader::_loadOsConfigFromBlock(QMap<QString, QString> rawOsConfig, LinboConfig* config) {
     LinboOs* os = new LinboOs(this->_backend);
 
     for(auto iterator = rawOsConfig.begin(); iterator != rawOsConfig.end(); iterator++) {
