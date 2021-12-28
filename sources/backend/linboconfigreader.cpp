@@ -205,43 +205,43 @@ void LinboConfigReader::_loadConfigFromBlock(Block block, LinboConfig *config) {
     }
 }
 
-void LinboConfigReader::_loadLinboConfigFromBlock(QMap<QString, QString> rawLinboConfig, LinboConfig* linboConfig) {
+void LinboConfigReader::_loadLinboConfigFromBlock(QMap<QString, QString> rawLinboConfig, LinboConfig* c) {
     for(auto iterator = rawLinboConfig.begin(); iterator != rawLinboConfig.end(); iterator++) {
         QString key = iterator.key();
         QString value = iterator.value();
-        if(key == "server")  linboConfig->_serverIpAddress = value;
-        else if(key == "cache")   linboConfig->_cachePath = value;
-        else if(key == "roottimeout")   linboConfig->_rootTimeout = (unsigned int)value.toInt();
-        else if(key == "group")   linboConfig->_hostGroup = value;
-        else if(key == "autopartition")  linboConfig->_autoPartition = _stringToBool(value);
-        else if(key == "autoinitcache")  linboConfig->_autoInitCache = _stringToBool(value);
-        else if(key == "autoformat")  linboConfig->_autoFormat = _stringToBool(value);
-        else if(key == "backgroundcolor" && this->_validateColorCode(value)) linboConfig->_backgroundColor = "#" + value;
-        else if(key == "downloadtype")  linboConfig->_downloadMethod = LinboConfig::stringToDownloadMethod(value);
-        else if(key == "locale") linboConfig->_locale = value;
-        else if(key == "guidisabled") linboConfig->_guiDisabled = this->_stringToBool(value);
-        else if(key == "clientdetailsvisiblebydefault") linboConfig->_clientDetailsVisibleByDefault = this->_stringToBool(value);
-        else if(key == "themeconffile") linboConfig->_themeConfFile = value;
+        if(key == "server")             c->_serverIpAddress = value;
+        else if(key == "cache")         c->_cachePath = value;
+        else if(key == "roottimeout")   c->_rootTimeout = (unsigned int)value.toInt();
+        else if(key == "group")         c->_hostGroup = value;
+        else if(key == "autopartition") c->_autoPartition = _stringToBool(value);
+        else if(key == "autoinitcache") c->_autoInitCache = _stringToBool(value);
+        else if(key == "autoformat")    c->_autoFormat = _stringToBool(value);
+        else if(key == "backgroundcolor" && this->_validateColorCode(value)) c->_backgroundColor = "#" + value;
+        else if(key == "downloadtype")  c->_downloadMethod = LinboConfig::stringToDownloadMethod(value);
+        else if(key == "locale")        c->_locale = value;
+        else if(key == "guidisabled")   c->_guiDisabled = this->_stringToBool(value);
+        else if(key == "clientdetailsvisiblebydefault") c->_clientDetailsVisibleByDefault = this->_stringToBool(value);
+        else if(key == "themeconffile") c->_themeConfFile = value;
     }
 }
 
 void LinboConfigReader::_loadPartitionConfigFromBlock(QMap<QString, QString> rawParitionConfig, LinboConfig* config) {
-    LinboDiskPartition* partition = new LinboDiskPartition(this);
+    LinboDiskPartition* p = new LinboDiskPartition(this);
 
     for(auto iterator = rawParitionConfig.begin(); iterator != rawParitionConfig.end(); iterator++) {
         QString key = iterator.key();
         QString value = iterator.value();
-        if(key == "dev") partition->_path = value;
-        else if(key == "size")  partition->_size = value.toInt();
-        else if(key == "id")  partition->_id = value;
-        else if(key == "fstype")  partition->_fstype = value;
-        else if(key.startsWith("bootable"))  partition->_bootable = _stringToBool(value);
+        if(key == "dev")            p->_path = value;
+        else if(key == "size")      p->_size = value.toInt();
+        else if(key == "id")        p->_id = value;
+        else if(key == "fstype")    p->_fstype = value;
+        else if(key == "bootable")  p->_bootable = _stringToBool(value);
     }
 
-    if(partition->path() != "")
-        config->_diskPartitions.append(partition);
+    if(p->path() != "")
+        config->_diskPartitions.append(p);
     else
-        partition->deleteLater();
+        p->deleteLater();
 }
 
 void LinboConfigReader::_loadOsConfigFromBlock(QMap<QString, QString> rawOsConfig, LinboConfig* config) {
