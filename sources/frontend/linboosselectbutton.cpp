@@ -18,11 +18,12 @@
 
 #include "linboosselectbutton.h"
 
-LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup* buttonGroup, QWidget* parent) : QWidget(parent)
+LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, LinboBackend* backend, QButtonGroup* buttonGroup, QWidget* parent) : QWidget(parent)
 {
     this->_inited = false;
     this->_buttonGroup = buttonGroup;
     this->_os = os;
+    this->_backend = backend;
     this->_shouldBeVisible = true;
     this->_showDefaultAction = true;
     this->_osNameLabel = nullptr;
@@ -31,7 +32,7 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
         icon = gTheme->getIconPath(LinboTheme::DefaultOsIcon);
     }
 
-    connect(os->backend(), &LinboBackend::stateChanged, this, &LinboOsSelectButton::_handleBackendStateChange);
+    connect(this->_backend, &LinboBackend::stateChanged, this, &LinboOsSelectButton::_handleBackendStateChange);
 
     QMap<LinboOs::LinboOsStartAction, QString> defaultStartActionOverlayPaths = {
         {LinboOs::StartOs, gTheme->getIconPath(LinboTheme::OverlayStartIcon)},
@@ -129,13 +130,13 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup
 
     this->_button->setCheckable(true);
     this->_buttonGroup->addButton(this->_button);
-    this->_handleBackendStateChange(this->_os->backend()->state());
+    this->_handleBackendStateChange(this->_backend->state());
 
     QWidget::setVisible(true);
 }
 
 void LinboOsSelectButton::_handlePrimaryButtonClicked() {
-    if(this->_os->backend()->state() == LinboBackend::Idle)
+    if(this->_backend->state() == LinboBackend::Idle)
         switch (this->_os->defaultAction()) {
         case LinboOs::StartOs:
             this->_os->executeStart();
@@ -149,7 +150,7 @@ void LinboOsSelectButton::_handlePrimaryButtonClicked() {
         default:
             break;
         }
-    else if (this->_os->backend()->state() == LinboBackend::Root) {
+    else if (this->_backend->state() == LinboBackend::Root) {
         emit this->imageCreationRequested(this->_os);
     }
 }
@@ -259,8 +260,8 @@ QString LinboOsSelectButton::_getTooltipContentForAction(LinboOs::LinboOsStartAc
 
 void LinboOsSelectButton::_updateActionButtonVisibility(bool doNotAnimate) {
 
-    bool startActionVisible = this->_shouldBeVisible && this->_os->backend()->state() < LinboBackend::Root;
-    bool rootActionVisible = this->_shouldBeVisible && this->_os->backend()->state() >= LinboBackend::Root;
+    bool startActionVisible = this->_shouldBeVisible && this->_backend->state() < LinboBackend::Root;
+    bool rootActionVisible = this->_shouldBeVisible && this->_backend->state() >= LinboBackend::Root;
 
     if(this->_inited && !doNotAnimate) {
         this->_defaultStartActionOverlay->setVisibleAnimated(startActionVisible && this->_showDefaultAction);

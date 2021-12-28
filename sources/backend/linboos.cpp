@@ -56,11 +56,11 @@ bool LinboOs::executeDefaultAction() {
 }
 
 bool LinboOs::replaceImage(QString description, LinboPostProcessActions::Flags postProcessActions) {
-    return this->backend()->replaceImageOfOs(this, description, postProcessActions);
+    return this->_backend->replaceImageOfOs(this, description, postProcessActions);
 }
 
 bool LinboOs::createImage(QString name, QString description, LinboPostProcessActions::Flags postProcessActions) {
-    return this->backend()->createImageOfOs(this, name, description, postProcessActions);
+    return this->_backend->createImageOfOs(this, name, description, postProcessActions);
 }
 
 void LinboOs::_setBaseImage (LinboImage* baseImage) {
