@@ -20,6 +20,8 @@
 #define QMODERNDIALOG_H
 
 #include <QDialog>
+#include <QMap>
+#include <QPair>
 #include <QObject>
 #include <QWidget>
 #include <QApplication>
@@ -54,13 +56,20 @@ protected:
     void addToolButton(LinboToolButton* toolButton);
 
 private:
+    struct _AnimatedWidget {
+        bool isValid;
+        QWidget* widget;
+        QGraphicsOpacityEffect* effect;
+        QPropertyAnimation* animation;
+    };
+    typedef QList<_AnimatedWidget> AnimatedWidgets;
+
     bool _busy;
     QString _title;
 
     ModalOverlay* _modalOverlayWidget;
 
-    QGraphicsOpacityEffect* _opacityEffect;
-    QPropertyAnimation* _opacityEffectAnimation;
+    AnimatedWidgets _animatedWidgets;
 
     QRect _originalGeometry;
 
@@ -68,16 +77,26 @@ private:
     QHBoxLayout* _toolBarLayout;
     QLabel* _titleLabel;
     LinboToolButton* _closeButton;
-    QGraphicsOpacityEffect* _toolBarOpacityEffect;
-    QPropertyAnimation* _toolBarOopacityEffectAnimation;
 
     QWidget* _bottomToolBarWidget;
     QHBoxLayout* _bottomToolBarLayout;
-    QGraphicsOpacityEffect* _bottomToolBarOpacityEffect;
-    QPropertyAnimation* _bottomToolBarOopacityEffectAnimation;
     QList<LinboToolButton*> _toolButtons;
 
     QWidget* _firstChild;
+
+    void _initColors();
+    void _initModalWidget();
+    void _initOpacityEffectForWidget(QWidget* widget);
+    void _initToolbar();
+    void _initBottomToolbar();
+
+    void _updateToolbarsEnabled();
+
+    void _setAllAnimatedWidgetsVisible(bool visible);
+    void _setAnimatedWidgetVisible(bool visible, _AnimatedWidget widget);
+    void _hideAnimatedWidget(_AnimatedWidget widget);
+    void _showAnimatedWidget(_AnimatedWidget widget);
+    _AnimatedWidget _findAnimatedWidget(QPropertyAnimation* animation);
 
 public slots:
     void open();
@@ -85,7 +104,7 @@ public slots:
     void autoClose();
 
 private slots:
-    void _animationFinished();
+    void _handleAnimationFinished();
 
 signals:
     void opened();
