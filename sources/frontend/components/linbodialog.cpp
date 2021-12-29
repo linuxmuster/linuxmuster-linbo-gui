@@ -336,18 +336,18 @@ ModalOverlay::ModalOverlay(QWidget* parent) : QWidget(parent) {
     this->setGeometry(0, 0, parent->width(), parent->height());
     this->setAutoFillBackground(true);
 
-    this->opacityAnimation = new QPropertyAnimation(this, "color");
-    this->opacityAnimation->setDuration(400);
-    this->opacityAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_opacityAnimation = new QPropertyAnimation(this, "color");
+    this->_opacityAnimation->setDuration(400);
+    this->_opacityAnimation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
 }
 
-QColor ModalOverlay::getColor() {
-    return this->color;
+QColor ModalOverlay::color() {
+    return this->_color;
 }
 
 void ModalOverlay::setColor(QColor color) {
-    if(this->color != color) {
-        this->color = color;
+    if(this->_color != color) {
+        this->_color = color;
         QPalette pal = palette();
         pal.setColor(QPalette::Window, color);
         this->setPalette(pal);
@@ -359,19 +359,24 @@ void ModalOverlay::setVisibleAnimated(bool visible) {
     if(this->isVisible() == visible)
         return;
 
-    if(visible) {
-        disconnect(this->opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
-        this->opacityAnimation->setEndValue(ModalOverlay::_VISIBLE_COLOR);
-        this->setColor(ModalOverlay::_INVISIBLE_COLOR);
-        this->setVisible(true);
-    }
-    else {
-        connect(this->opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
-        this->opacityAnimation->setEndValue(ModalOverlay::_INVISIBLE_COLOR);
-    }
+    if(visible)
+        this->_show();
+    else
+        this->_hide();
+}
 
-    this->opacityAnimation->setStartValue(this->getColor());
-    this->opacityAnimation->start();
+void ModalOverlay::_show() {
+    disconnect(this->_opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
+    this->_opacityAnimation->setEndValue(ModalOverlay::_VISIBLE_COLOR);
+    this->setColor(ModalOverlay::_INVISIBLE_COLOR);
+    this->setVisible(true);
+    this->_opacityAnimation->setStartValue(this->color());
+    this->_opacityAnimation->start();
+}
+
+void ModalOverlay::_hide() {
+    connect(this->_opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
+    this->_opacityAnimation->setEndValue(ModalOverlay::_INVISIBLE_COLOR);
 }
 
 void ModalOverlay::mouseReleaseEvent (QMouseEvent* event) {
