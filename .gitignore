@@ -1,4 +1,4 @@
-*.pro.user*
+CMakeLists.txt.user*
 build/buildGUI*
 build/linbofs*
 build/*.tar.xz
