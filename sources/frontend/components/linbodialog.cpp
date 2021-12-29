@@ -377,6 +377,8 @@ void ModalOverlay::_show() {
 void ModalOverlay::_hide() {
     connect(this->_opacityAnimation, &QPropertyAnimation::finished, this, &LinboDialog::hide);
     this->_opacityAnimation->setEndValue(ModalOverlay::_INVISIBLE_COLOR);
+    this->_opacityAnimation->setStartValue(this->color());
+    this->_opacityAnimation->start();
 }
 
 void ModalOverlay::mouseReleaseEvent (QMouseEvent* event) {
