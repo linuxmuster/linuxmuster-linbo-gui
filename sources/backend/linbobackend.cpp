@@ -354,7 +354,7 @@ void LinboBackend::_executeAutomaticTasks() {
 
 bool LinboBackend::_executeAutoPartition() {
     if(this->_config->autoPartition()) {
-        return this->_partitionDrive(true, LinboPostProcessActions::ExecuteAutoInitCache | LinboPostProcessActions::Logout);
+        return this->_partitionDrive(true, LinboPostProcessActions::ExecuteAutoInitCache | LinboPostProcessActions::ExecuteAutostart | LinboPostProcessActions::Logout);
     }
     return false;
 }
@@ -384,11 +384,12 @@ bool LinboBackend::_executeAutostart() {
 
 LinboOs* LinboBackend::_getOsForAutostart() {
     LinboOs* osForAutostart = nullptr;
-    for(LinboOs* os : this->_config->operatingSystems())
+    for(LinboOs* os : this->_config->operatingSystems()) {
         if(os->autostartEnabled()) {
             osForAutostart = os;
             break;
         }
+    }
 
     if(osForAutostart == nullptr || !osForAutostart->actionEnabled(osForAutostart->defaultAction())) {
         return nullptr;
@@ -489,18 +490,21 @@ void LinboBackend::_handleRootTimerTimeout() {
 void LinboBackend::_handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     Q_UNUSED(exitStatus)
     if(exitCode == 0) {
+        this->_logger->chapterEnd("Command finished successfully.");
         this->_handleCommandFinishedSuccess();
     }
     else {
+        this->_logger->chapterEnd("Command finished with an error.");
         this->_handleCommandFinishedError();
     }
 }
 
 void LinboBackend::_handleCommandFinishedSuccess() {
-    this->_logger->chapterEnd("Command finished successfully.");
-
     if(this->_noMorePostProcessActionsToExecute() && this->state() > Root) {
         this->_setState(RootActionSuccess);
+    }
+    else if(this->_noMorePostProcessActionsToExecute() && this->state() < Root && this->state() > Idle) {
+        this->_setState(Idle);
     }
     else if(!this->_noMorePostProcessActionsToExecute()) {
         this->_executeNextPostProcessAction();
@@ -508,9 +512,6 @@ void LinboBackend::_handleCommandFinishedSuccess() {
 }
 
 void LinboBackend::_handleCommandFinishedError() {
-    this->_logger->error("Process exited with an error.");
-    this->_logger->chapterEnd("Command finished with an error.");
-
     if(this->_state > Root && !this->_postProcessActions.testAnyFlags(LinboPostProcessActions::Logout))
         this->_setState(RootActionError);
     else if(this->_state != Root && this->_state != Idle) // prevent showing an error when the process was cancelled
@@ -532,22 +533,23 @@ void LinboBackend::_executeNextPostProcessAction() {
         this->_postProcessActions = LinboPostProcessActions::NoAction;
     }
     else {
-        this->_executePostProcessAction(actionToExecute);
         this->_postProcessActions = actions.setFlag(actionToExecute, false);
+        this->_executePostProcessAction(actionToExecute);
     }
 }
 
 void LinboBackend::_executePostProcessAction(LinboPostProcessActions::Flag action) {
+    bool actionSkipped = false;
     switch(action) {
     case LinboPostProcessActions::UploadImage:
         this->_uploadImage(this->_imageToUploadAutomatically, this->_postProcessActions);
         this->_imageToUploadAutomatically = nullptr;
         break;
     case LinboPostProcessActions::ExecuteAutoInitCache:
-        this->_executeAutoInitCache();
+        actionSkipped = !this->_executeAutoInitCache();
         break;
     case LinboPostProcessActions::ExecuteAutostart:
-        this->_executeAutostart();
+        actionSkipped = !this->_executeAutostart();
         break;
     case LinboPostProcessActions::Shutdown:
         this->shutdown();
@@ -561,6 +563,8 @@ void LinboBackend::_executePostProcessAction(LinboPostProcessActions::Flag actio
     default:
         this->logger()->error("Tried to execute a non-existing post process action!");
     };
+    if(actionSkipped)
+        this->_handleCommandFinishedSuccess();
 }
 
 bool LinboBackend::_noMorePostProcessActionsToExecute() {
