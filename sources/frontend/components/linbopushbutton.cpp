@@ -37,59 +37,26 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
 
     this->setMouseTracking(true);
     this->setFocusPolicy(Qt::TabFocus);
+    this->setObjectName(icon);
 
     this->_geometryAnimation = new QPropertyAnimation(this, "geometry", this);
     this->_geometryAnimation->setDuration(400);
     this->_geometryAnimation->setEasingCurve(QEasingCurve::InOutQuad);
 
-    this->setObjectName(icon);
-
-    // Background
-    if(!icon.isEmpty()) {
-        this->_svgIcon = new QSvgWidget(icon);
-        this->_overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->_svgIcon, true));
-    }
-
     this->_label = new QLabel(label, this);
     this->_label->setAlignment(Qt::AlignCenter);
-    this->_overlays.append(new LinboPushButtonOverlay(LinboPushButtonOverlay::Background, this->_label, true));
-    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::Background, extraOverlays));
-
-    // Hover
-    this->_hoveredOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayHoveredIcon));
-    this->_overlays.append(
-        new LinboPushButtonOverlay(
-            LinboPushButtonOverlay::OnHover,
-            this->_hoveredOverlay,
-            true
-        )
-    );
-
-    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnHover, extraOverlays));
-
-    // Pressed
-    this->_overlays.append(
-        new LinboPushButtonOverlay(
-            LinboPushButtonOverlay::OnPressed,
-            new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayPressedIcon)),
-            true
-        )
-    );
-
-    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed, extraOverlays));
-
-    // Checked
-    this->_overlays.append(this->_getOverlaysOfType(LinboPushButtonOverlay::OnChecked, extraOverlays));
-
-    // KeyboardFocus
-    QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayKeyboardFocusIcon));
-    this->_overlays.append(
-    new LinboPushButtonOverlay {
-        LinboPushButtonOverlay::OnKeyboardFocus,
-        keyboardFocusOverlay,
-        true
+    if(!icon.isEmpty()) {
+        this->_svgIcon = new QSvgWidget(icon);
     }
-    );
+
+    this->_initOverlays(extraOverlays);
+    connect(this, &LinboPushButton::toggled, this, &LinboPushButton::_handleToggled);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void LinboPushButton::_initOverlays(QList<LinboPushButtonOverlay*> extraOverlays) {
+    OverlayList defaultOverlays = this->_createDefaultOverlays();
+    this->_loadOverlays(defaultOverlays, extraOverlays);
 
     // set defaults
     for(LinboPushButtonOverlay* overlay : this->_overlays) {
@@ -110,9 +77,46 @@ LinboPushButton::LinboPushButton(QString icon, QString label, QList<LinboPushBut
     for(LinboPushButtonOverlay* overlay : this->_getOverlaysOfType(LinboPushButtonOverlay::OnPressed)) {
         overlay->_setAnimationDuration(100);
     }
+}
 
-    connect(this, &LinboPushButton::toggled, this, &LinboPushButton::_handleToggled);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+LinboPushButton::OverlayList LinboPushButton::_createDefaultOverlays() {
+    this->_hoveredOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayHoveredIcon));
+    QSvgWidget* pressedOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayPressedIcon));
+    QSvgWidget* keyboardFocusOverlay = new QSvgWidget(gTheme->iconPath(LinboTheme::OverlayKeyboardFocusIcon));
+    QList<QPair<LinboPushButtonOverlay::OverlayType, QWidget*>> defaultOverlayWidgets =
+    {
+        {LinboPushButtonOverlay::Background, this->_svgIcon},
+        {LinboPushButtonOverlay::Background, this->_label},
+        {LinboPushButtonOverlay::OnHover, this->_hoveredOverlay},
+        {LinboPushButtonOverlay::OnPressed, pressedOverlay},
+        {LinboPushButtonOverlay::OnKeyboardFocus, keyboardFocusOverlay}
+    };
+
+    OverlayList defaultOverlays;
+    for(const QPair<LinboPushButtonOverlay::OverlayType, QWidget*>& overlayWidget : defaultOverlayWidgets) {
+        if(overlayWidget.second == nullptr)
+            continue;
+        defaultOverlays.append(
+            new LinboPushButtonOverlay(
+                overlayWidget.first,
+                overlayWidget.second
+            ));
+    }
+    return defaultOverlays;
+}
+
+void LinboPushButton::_loadOverlays(OverlayList defaultOverlays, OverlayList extraOverlays) {
+    QList<LinboPushButtonOverlay::OverlayType> loadingOrder = {
+        LinboPushButtonOverlay::Background,
+        LinboPushButtonOverlay::OnHover,
+        LinboPushButtonOverlay::OnPressed,
+        LinboPushButtonOverlay::OnChecked,
+        LinboPushButtonOverlay::OnKeyboardFocus
+    };
+    for(const LinboPushButtonOverlay::OverlayType& type : loadingOrder) {
+        this->_overlays.append(this->_getOverlaysOfType(type, defaultOverlays));
+        this->_overlays.append(this->_getOverlaysOfType(type, extraOverlays));
+    }
 }
 
 void LinboPushButton::_handleToggled(bool checked) {

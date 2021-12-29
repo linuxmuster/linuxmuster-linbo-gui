@@ -42,7 +42,7 @@ public:
         OnKeyboardFocus
     };
 
-    explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);
+    explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically = true, QObject *parent = nullptr);
 
     void setVisible(bool visible);
     void setVisibleAnimated(bool visible);

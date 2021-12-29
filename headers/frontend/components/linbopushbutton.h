@@ -43,6 +43,8 @@ public:
     LinboPushButton(QString icon, QString label, QWidget* parent = nullptr);
     LinboPushButton(QString icon, QString label, QList<LinboPushButtonOverlay*> extraOverlays, QWidget* parent = nullptr);
 
+    typedef QList<LinboPushButtonOverlay*> OverlayList;
+
     void setVisible(bool visible) override;
     void setVisibleAnimated(bool visible);
 
@@ -74,6 +76,10 @@ private:
     QSvgWidget* _svgIcon;
     QSvgWidget* _hoveredOverlay;
     QLabel *_label;
+
+    void _initOverlays(QList<LinboPushButtonOverlay*> extraOverlays);
+    OverlayList _createDefaultOverlays();
+    void _loadOverlays(OverlayList defaultOverlays, OverlayList extraOverlays);
 
     bool _overlayTypeIsMuted(LinboPushButtonOverlay::OverlayType overlayType);
     QList<LinboPushButtonOverlay*> _getOverlaysOfType(LinboPushButtonOverlay::OverlayType type);
