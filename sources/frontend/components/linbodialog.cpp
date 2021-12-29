@@ -133,6 +133,11 @@ void LinboDialog::resizeEvent(QResizeEvent *e) {
     int margins = gTheme->size(LinboTheme::Margins);
     int toolBarHeight = rowHeight + margins ;
 
+    this->_resizeToolBar(rowHeight, margins, toolBarHeight);
+    this->_resizeBottomToolBar(rowHeight, margins, toolBarHeight);
+}
+
+void LinboDialog::_resizeToolBar(int rowHeight, int margins, int toolBarHeight) {
     this->_toolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() - toolBarHeight, this->geometry().width(), toolBarHeight);
     this->_toolBarLayout->setContentsMargins(margins, margins * 0.5, margins * 0.5, 0);
 
@@ -145,13 +150,6 @@ void LinboDialog::resizeEvent(QResizeEvent *e) {
     this->_closeButton->setFixedHeight(rowHeight);
     this->_closeButton->setFixedWidth(rowHeight);
 
-    this->_bottomToolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() + this->height(), this->geometry().width(), toolBarHeight);
-    this->_bottomToolBarLayout->setSpacing(margins);
-    this->_bottomToolBarLayout->setContentsMargins(margins, 0, margins, margins);
-
-    for(LinboToolButton* toolButton : this->_toolButtons)
-        toolButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
     if(this->_toolBarWidget->isEnabled()) {
         QMargins contentMargins = this->contentsMargins();
         contentMargins.setTop(0);
@@ -159,6 +157,15 @@ void LinboDialog::resizeEvent(QResizeEvent *e) {
     }
 }
 
+void LinboDialog::_resizeBottomToolBar(int rowHeight, int margins, int toolBarHeight) {
+    Q_UNUSED(rowHeight)
+    this->_bottomToolBarWidget->setGeometry(this->geometry().x(), this->geometry().y() + this->height(), this->geometry().width(), toolBarHeight);
+    this->_bottomToolBarLayout->setSpacing(margins);
+    this->_bottomToolBarLayout->setContentsMargins(margins, 0, margins, margins);
+
+    for(LinboToolButton* toolButton : this->_toolButtons)
+        toolButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+}
 
 void LinboDialog::paintEvent(QPaintEvent *e) {
     QWidgetList widgets = this->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);

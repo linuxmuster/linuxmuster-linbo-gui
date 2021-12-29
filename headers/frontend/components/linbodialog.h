@@ -98,6 +98,9 @@ private:
     void _showAnimatedWidget(_AnimatedWidget widget);
     _AnimatedWidget _findAnimatedWidget(QPropertyAnimation* animation);
 
+    void _resizeToolBar(int rowHeight, int margins, int toolBarHeight);
+    void _resizeBottomToolBar(int rowHeight, int margins, int toolBarHeight);
+
 public slots:
     void open();
     void close();
