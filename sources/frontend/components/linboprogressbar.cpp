@@ -75,42 +75,68 @@ bool LinboProgressBar::indeterminate() {
 }
 
 void LinboProgressBar::paintEvent(QPaintEvent *e) {
+    _FromTo values = this->_calculateFromTo();
+
+    if(this->_reversed) {
+        values = this->_reverseFromTo(values);
+    }
+
+    this->_paint(e, values);
+    QWidget::paintEvent(e);
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromTo() {
+    if(this->_indeterminate) {
+        return this->_calculateFromToIndeterminate();
+    }
+    else {
+        return this->_calculateFromToDeterminate();
+    }
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromToIndeterminate() {
+    _FromTo result;
+    int maximum = this->maximum() / 2;
+    if(this->value() <= maximum)
+        // for the first half -> fill from left
+        result.to = double(double(this->value()) / double(maximum));
+    else {
+        // for the second half -> empty from right
+        result.from = double(double(this->value()- (maximum)) / double(maximum));
+        result.to = 1;
+    }
+    return result;
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromToDeterminate() {
+    _FromTo result;
+    result.to = double(double(this->value()) / double(this->maximum()));
+    result.from = 0.0;
+    return result;
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_reverseFromTo(_FromTo values) {
+    double tmp = 1 - values.from;
+    values.from = 1 - values.to;
+    values.to = tmp;
+    return values;
+}
+
+void LinboProgressBar::_paint(QPaintEvent* e, _FromTo values) {
     QPainter painter;
     painter.begin(this);
     // background
     painter.fillRect(e->rect(), gTheme->color(LinboTheme::ElevatedBackgroundColor));
-
-    double from = 0;
-    double to = 0;
-
     // progress
-    if(this->_indeterminate) {
-        int maximum = this->maximum() / 2;
-        if(this->value() <= maximum)
-            // for the first half -> fill from left
-            to = double(double(this->value()) / double(maximum));
-        else {
-            // for the second half -> empty from right
-            from = double(double(this->value()- (maximum)) / double(maximum));
-            to = 1;
-        }
-    }
-    else {
-        to = double(double(this->value()) / double(this->maximum()));
-    }
-
-    if(this->_reversed) {
-        // if reversed -> reverse and swap from and to
-        double tmp = 1 - from;
-        from = 1 - to;
-        to = tmp;
-
-    }
-
-    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), gTheme->color(LinboTheme::AccentColor));
+    painter.fillRect(
+        QRect(
+            e->rect().width() * values.from,
+            0,
+            e->rect().width() * values.to,
+            e->rect().height()
+        ),
+        gTheme->color(LinboTheme::AccentColor)
+    );
 
     painter.end();
-
-    QWidget::paintEvent(e);
 }
-
