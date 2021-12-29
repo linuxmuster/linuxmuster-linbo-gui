@@ -168,51 +168,65 @@ void LinboDialog::_resizeBottomToolBar(int rowHeight, int margins, int toolBarHe
 }
 
 void LinboDialog::paintEvent(QPaintEvent *e) {
+    this->_updateTabOrder();
+    return QWidget::paintEvent(e);
+}
+
+void LinboDialog::_updateTabOrder() {
+    WidgetPair pair{nullptr, nullptr};
+    pair = this->_updateTabOrderChildren(pair);
+    pair = this->_updateTabOrderBottomToolBar(pair);
+    this->_closeTabOrderCircle(pair);
+}
+
+LinboDialog::WidgetPair LinboDialog::_updateTabOrderChildren(WidgetPair currentPair) {
     QWidgetList widgets = this->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
 
-    QWidget* latestWidget = nullptr;
-    QWidget* firstWidget = nullptr;
-
     for(QWidget* widget : widgets) {
-        if(widget->focusPolicy() != Qt::NoFocus) {
-            if(latestWidget != nullptr && widget->parent() == this)
-                QWidget::setTabOrder(latestWidget, widget);
-
-            if(firstWidget == nullptr)
-                firstWidget = widget;
-
-            latestWidget = widget;
-        }
+        currentPair = this->_updateWidgetTabOrder(widget, currentPair);
     }
 
-    this->_firstChild = firstWidget;
+    this->_firstChild = currentPair.first;
     if(this->_firstChild == nullptr)
         this->_firstChild = this->_closeButton;
 
+    return currentPair;
+}
+
+LinboDialog::WidgetPair LinboDialog::_updateTabOrderBottomToolBar(WidgetPair currentPair) {
     for(LinboToolButton* widget: this->_toolButtons) {
-        if(widget->focusPolicy() != Qt::NoFocus) {
-            if(latestWidget != nullptr)
-                QWidget::setTabOrder(latestWidget, widget);
-
-            if(firstWidget == nullptr)
-                firstWidget = widget;
-
-            latestWidget = widget;
-        }
+        currentPair = this->_updateWidgetTabOrder(widget, currentPair);
     }
 
-    if(this->_toolButtons.length() > 0)
-        QWidget::setTabOrder(this->_toolButtons.last(), this->_closeButton);
+    if(currentPair.second != nullptr)
+        QWidget::setTabOrder(currentPair.second, this->_closeButton);
 
+    return currentPair;
+}
+
+void LinboDialog::_closeTabOrderCircle(WidgetPair currentPair) {
     // This is a hack to create a cricle for tabbing inside a dialog
+    // This does not work for the first child, though. So there is still a hole in the circle
     connect(this->_closeButton, &LinboPushButton::defocused, this, [=](Qt::FocusReason reason) {
         if(reason == Qt::TabFocusReason)
-            firstWidget->setFocus();
+            currentPair.first->setFocus();
         else if(reason == Qt::BacktabFocusReason)
-            latestWidget->setFocus();
+            currentPair.second->setFocus();
     });
+}
 
-    return QWidget::paintEvent(e);
+LinboDialog::WidgetPair LinboDialog::_updateWidgetTabOrder(QWidget* widget, WidgetPair currentPair) {
+    if(widget->focusPolicy() == Qt::NoFocus)
+        return currentPair;
+
+    if(currentPair.second != nullptr)
+        QWidget::setTabOrder(currentPair.second, widget);
+
+    if(currentPair.first == nullptr)
+        currentPair.first = widget;
+
+    currentPair.second = widget;
+    return currentPair;
 }
 
 void LinboDialog::keyPressEvent(QKeyEvent *ev)

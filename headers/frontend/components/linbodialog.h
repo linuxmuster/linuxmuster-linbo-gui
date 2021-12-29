@@ -63,6 +63,7 @@ private:
         QPropertyAnimation* animation;
     };
     typedef QList<_AnimatedWidget> AnimatedWidgets;
+    typedef QPair<QWidget*, QWidget*> WidgetPair;
 
     bool _busy;
     QString _title;
@@ -91,6 +92,12 @@ private:
     void _initBottomToolbar();
 
     void _updateToolbarsEnabled();
+
+    void _updateTabOrder();
+    WidgetPair _updateTabOrderChildren(WidgetPair currentPair);
+    WidgetPair _updateTabOrderBottomToolBar(WidgetPair currentPair);
+    void _closeTabOrderCircle(WidgetPair currentPair);
+    WidgetPair _updateWidgetTabOrder(QWidget* widget, WidgetPair currentPair);
 
     void _setAllAnimatedWidgetsVisible(bool visible);
     void _setAnimatedWidgetVisible(bool visible, _AnimatedWidget widget);
