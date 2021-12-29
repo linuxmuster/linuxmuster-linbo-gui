@@ -36,7 +36,7 @@ public:
     LinboProgressBar(QWidget* parent = nullptr);
 
     void setIndeterminate(bool indeterminate);
-    bool getIndeterminate();
+    bool indeterminate();
     void setReversed(bool reversed);
 
 protected:
@@ -48,11 +48,10 @@ private:
     int _preIndeterminateValue;
     int _preIndeterminateMinimum;
     int _preIndeterminateMaximum;
-    QTimer* _refreshTimer;
     QPropertyAnimation* _indeterminateAnimtion;
 
-protected slots:
-    void updateIndeterminate();
+    void _setIndeterminate();
+    void _setDeterminate();
 
 };
 

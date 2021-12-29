@@ -20,12 +20,6 @@
 
 LinboProgressBar::LinboProgressBar(QWidget* parent) : QProgressBar(parent)
 {
-    this->_refreshTimer = new QTimer();
-    this->_refreshTimer->setSingleShot(false);
-    this->_refreshTimer->setInterval(400);
-    connect(this->_refreshTimer, &QTimer::timeout, this, &LinboProgressBar::updateIndeterminate);
-
-
     this->_indeterminateAnimtion = new QPropertyAnimation(this, "value");
     this->_indeterminateAnimtion->setDuration(2000);
     this->_indeterminateAnimtion->setStartValue(0);
@@ -43,21 +37,29 @@ void LinboProgressBar::setIndeterminate(bool indeterminate) {
     this->_indeterminate = indeterminate;
 
     if(this->_indeterminate) {
-        this->_preIndeterminateValue = this->value();
-        this->_preIndeterminateMinimum = this->minimum();
-        this->_preIndeterminateMaximum = this->maximum();
-        // finer steps, so the Animation is fluid
-        this->setMinimum(0);
-        this->setMaximum(1000);
-        this->_indeterminateAnimtion->start();
+        this->_setIndeterminate();
     }
     else {
-        // reset minimum and maximum
-        this->setMinimum(this->_preIndeterminateMinimum);
-        this->setMaximum(this->_preIndeterminateMaximum);
-        this->setValue(this->_preIndeterminateValue);
-        this->_indeterminateAnimtion->stop();
+        this->_setDeterminate();
     }
+}
+
+void LinboProgressBar::_setIndeterminate() {
+    this->_preIndeterminateValue = this->value();
+    this->_preIndeterminateMinimum = this->minimum();
+    this->_preIndeterminateMaximum = this->maximum();
+    // finer steps, so the Animation is fluid
+    this->setMinimum(0);
+    this->setMaximum(1000);
+    this->_indeterminateAnimtion->start();
+}
+
+void LinboProgressBar::_setDeterminate() {
+    // reset minimum and maximum
+    this->setMinimum(this->_preIndeterminateMinimum);
+    this->setMaximum(this->_preIndeterminateMaximum);
+    this->setValue(this->_preIndeterminateValue);
+    this->_indeterminateAnimtion->stop();
 }
 
 void LinboProgressBar::setReversed(bool reversed) {
@@ -68,12 +70,8 @@ void LinboProgressBar::setReversed(bool reversed) {
     this->update();
 }
 
-bool LinboProgressBar::getIndeterminate() {
+bool LinboProgressBar::indeterminate() {
     return this->_indeterminate;
-}
-
-void LinboProgressBar::updateIndeterminate() {
-    qDebug() << "update indeterminate";
 }
 
 void LinboProgressBar::paintEvent(QPaintEvent *e) {
