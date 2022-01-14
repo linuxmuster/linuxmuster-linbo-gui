@@ -17,14 +17,75 @@
 ##
 ## This script will build the linbo GUI for 32 and 64 bit.
 
+vercomp () {
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
+
+checkInstalledVersion () {
+	BIN=$1
+	MIN_VERSION=$2
+
+	if ! command -v $BIN &> /dev/null
+	then
+		echo "----------------------------------"
+		echo "- $BIN was not found!           -"
+		echo "- Please install $BIN >= $MIN_VERSION -"
+		echo "----------------------------------"
+		exit 1
+	fi
+
+	INSTALLED_VERSION=$($BIN --version 2>&1 | head -n 1 | awk '{print $NF}')
+	vercomp $INSTALLED_VERSION $MIN_VERSION
+	COMPARE_RESULT=$?
+
+	if [[ $COMPARE_RESULT != 0 ]] && [[ $COMPARE_RESULT != 1 ]]; then
+		echo "----------------------------------"
+		echo "- $BIN $INSTALLED_VERSION not compatible!   -"
+		echo "- Please install cmake >= $MIN_VERSION -"
+		echo "----------------------------------"
+		exit 1
+	fi
+}
+
 # Check ubuntu version
 if [[ $(lsb_release -rs) != "18.04" ]]; then
 	echo "--------------------------------"
 	echo "- Incompatible ubuntu version! -"
-	echo "-   You have to be on 18.04    -"
+	echo "- You have to be on 18.04      -"
 	echo "--------------------------------"
 	exit 1
 fi
+
+checkInstalledVersion cmake 3.21.1
+checkInstalledVersion gcc 9.0.0
+checkInstalledVersion g++ 9.0.0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
@@ -42,7 +103,8 @@ do
     shift
 done
 
-AllArchitecures=(64 32)
+# New architectures (like arm) could be added here
+AllArchitecures=(64)
 BuildArchitecures=(64)
 
 for ARCH in "${BuildArchitecures[@]}"

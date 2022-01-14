@@ -16,6 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install gcc-9
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt-get update -y
+          sudo apt-get install gcc-9 g++-9
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+
+      - name: Setup cmake 
+        uses: jwlawson/actions-setup-cmake@v1.9
+        with:
+          cmake-version: '3.21.1'
+
       - name: Build
         run: ./build.sh --nodeb
 

@@ -6,3 +6,4 @@ debian/linuxmuster-linbo-gui7
 debian/tmp.*
 /*.json
 .vscode
+archives
