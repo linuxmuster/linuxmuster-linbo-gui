@@ -51,8 +51,8 @@ if [[ $ARCH_VALID -ne 1 ]]; then
    exit 1
 fi
 
-sudo apt update
-## 64: sudo apt install build-essential gcc-9 g++-9 libudev-dev libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y
+apt-get update
+## 64: DEBIAN_FRONTEND=noninteractive apt-get install wget build-essential cmake gcc-9 g++-9 libudev-dev libudev1 libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y --allow-downgrades
 
 # Check for errors in apt install
 if [[ $? -ne 0 ]]; then
@@ -78,6 +78,7 @@ then
 
 	# set default platform plugin
 	export QT_QPA_PLATFORM=linuxfb
+	export CMAKE_PREFIX_PATH=../Qt
 
 	# configure Qt
 	./configure \
