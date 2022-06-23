@@ -21,44 +21,36 @@ mkdir -p "$tmp_dir"
 libs_ex_any="libc.so.6\nlibpthread.so.0"
 libs_ex="$tmp_dir/libs_ex"
 
-for bits in 64; do
+initramfs_url="$initramfs_base_url/initramfs64.conf"
+source="$build_dir/linbofs"
 
-  case "$bits" in
-    64) b="$bits" ;;
-    *) b="" ;;
-  esac
+# get initramfs.conf
+initramfs_conf="$tmp_dir/$(basename "$initramfs_url")"
+wget "$initramfs_url" -O "$initramfs_conf"
 
-  initramfs_url="$initramfs_base_url/initramfs$b.conf"
-  source="$build_dir/linbofs$b"
+# get existing libs
+libs="$(ls -1 "$source/lib/")"
+if [ -s "$initrams_conf" -a -n "$libs" ]; then
+rm -f "$libs_ex"
 
-  # get initramfs.conf
-  initramfs_conf="$tmp_dir/$(basename "$initramfs_url")"
-  wget "$initramfs_url" -O "$initramfs_conf"
-
-  # get existing libs
-  libs="$(ls -1 "$source/lib/")"
-  if [ -s "$initrams_conf" -a -n "$libs" ]; then
-    rm -f "$libs_ex"
-
-    # exclude libs which are already in linbofs by looking in initramfs.conf
-    for l in $libs; do
-      grep -q "$l" "$initramfs_conf" && echo "$l" >> "$libs_ex"
-    done
-  else
-    echo "$libs_ex_any" > "$libs_ex"
-  fi
-
-  # Make sure linbo_gui is executable (just in case)
-  chmod +x $source/usr/bin/linbo_gui
-
-  # Build archive
-  archive="${arc_dir}/linbo_gui${bits}_7.tar.lz"
-  cd "$source"
-  echo -n "Creating $(basename $archive) ... "
-  tar --lzma -X "$libs_ex" -cf "$archive" * || exit 1
-  md5sum "$archive" | awk '{print $1}' > "$archive.md5" || exit 1
-
-  echo "Done!"
+# exclude libs which are already in linbofs by looking in initramfs.conf
+for l in $libs; do
+grep -q "$l" "$initramfs_conf" && echo "$l" >> "$libs_ex"
 done
+else
+echo "$libs_ex_any" > "$libs_ex"
+fi
+
+# Make sure linbo_gui is executable (just in case)
+chmod +x $source/usr/bin/linbo_gui
+
+# Build archive
+archive="${arc_dir}/linbo_gui64_7.tar.lz"
+cd "$source"
+echo -n "Creating $(basename $archive) ... "
+tar --lzma -X "$libs_ex" -cf "$archive" * || exit 1
+md5sum "$archive" | awk '{print $1}' > "$archive.md5" || exit 1
+
+echo "Done!"
 
 rm -rf "$tmp_dir"

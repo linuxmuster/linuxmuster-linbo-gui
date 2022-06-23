@@ -71,6 +71,9 @@ install: build
 	# Add here commands to install the package.
 	dh_install
 
+	# Build gui
+	debian/mkgui.sh
+
 	# create gui archives
 	debian/mkarchives.sh
 

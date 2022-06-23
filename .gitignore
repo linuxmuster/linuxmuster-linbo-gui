@@ -1,7 +1,6 @@
 CMakeLists.txt.user*
-build/buildGUI*
-build/linbofs*
-build/*.tar.xz
+build/bin
+build/linbofs
 debian/linuxmuster-linbo-gui7
 debian/tmp.*
 /*.json
