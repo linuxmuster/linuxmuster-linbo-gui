@@ -52,7 +52,7 @@ if [[ $ARCH_VALID -ne 1 ]]; then
 fi
 
 apt-get update
-## 64: DEBIAN_FRONTEND=noninteractive apt-get install build-essential cmake gcc-9 g++-9 libudev-dev libudev1 libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y --allow-downgrades
+## 64: DEBIAN_FRONTEND=noninteractive apt-get install wget build-essential cmake gcc-9 g++-9 libudev-dev libudev1 libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y --allow-downgrades
 
 # Check for errors in apt install
 if [[ $? -ne 0 ]]; then
