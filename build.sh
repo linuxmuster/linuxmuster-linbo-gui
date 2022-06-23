@@ -128,7 +128,7 @@ do
 		sed -i "/## $NOT_ARCH: /d" build.sh
 	done
 
-	docker run --rm -it -v $PWD/../..:/workspace ubuntu:22.04 bash -c "cd /workspace/build/buildGUI$ARCH && ./build.sh \"$@\""
+	docker run --rm -v $PWD/../..:/workspace ubuntu:22.04 bash -c "cd /workspace/build/buildGUI$ARCH && ./build.sh \"$@\""
 
 	if [[ $? -ne 0 ]]; then
 	   echo "There was an error when building linbo_gui for $ARCH!"
