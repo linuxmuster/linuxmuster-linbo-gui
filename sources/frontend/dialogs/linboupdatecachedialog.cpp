@@ -20,75 +20,75 @@
 
 LinboUpdateCacheDialog::LinboUpdateCacheDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
-    this->backend = backend;
+    this->_backend = backend;
 
     //% "Update cache"
     this->setTitle(qtTrId("dialog_updateCache_title"));
 
-    this->mainLayout = new QVBoxLayout(this);
+    this->_mainLayout = new QVBoxLayout(this);
 
-    this->updateTypeButtonGroup = new QButtonGroup(this);
+    this->_updateTypeButtonGroup = new QButtonGroup(this);
 
     //% "Update using rsync"
     LinboRadioButton* rsyncButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_rsync"));
-    rsyncButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Rsync);
-    this->mainLayout->addWidget(rsyncButton);
-    this->updateTypeButtonGroup->addButton(rsyncButton, int(LinboConfig::Rsync));
+    rsyncButton->setChecked(backend->config()->downloadMethod() == LinboConfig::Rsync);
+    this->_mainLayout->addWidget(rsyncButton);
+    this->_updateTypeButtonGroup->addButton(rsyncButton, int(LinboConfig::Rsync));
 
     //% "Update using multicast"
     LinboRadioButton* multicastButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_multicast"));
-    multicastButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Multicast);
-    this->mainLayout->addWidget(multicastButton);
-    this->updateTypeButtonGroup->addButton(multicastButton, int(LinboConfig::Multicast));
+    multicastButton->setChecked(backend->config()->downloadMethod() == LinboConfig::Multicast);
+    this->_mainLayout->addWidget(multicastButton);
+    this->_updateTypeButtonGroup->addButton(multicastButton, int(LinboConfig::Multicast));
 
     //% "Update using torrent"
     LinboRadioButton* torrentButton = new LinboRadioButton(qtTrId("dialog_updateCache_updateType_torrent"));
-    torrentButton->setChecked(backend->getConfig()->downloadMethod() == LinboConfig::Torrent);
-    this->mainLayout->addWidget(torrentButton);
-    this->updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
+    torrentButton->setChecked(backend->config()->downloadMethod() == LinboConfig::Torrent);
+    this->_mainLayout->addWidget(torrentButton);
+    this->_updateTypeButtonGroup->addButton(torrentButton, int(LinboConfig::Torrent));
 
     QFrame* separatorLine = new QFrame();
-    separatorLine->setStyleSheet("QFrame {color: " + gTheme->getColor(LinboTheme::LineColor).name() + ";}");
+    separatorLine->setStyleSheet(gTheme->insertValues("QFrame {color: %LineColor;}"));
     separatorLine->setFrameShape(QFrame::HLine);
-    this->mainLayout->addWidget(separatorLine);
+    this->_mainLayout->addWidget(separatorLine);
 
     //% "Format cache partition"
-    formatCheckBox = new LinboCheckBox(qtTrId("dialog_updateCache_formatPartition"));
-    this->mainLayout->addWidget(formatCheckBox);
+    _formatCheckBox = new LinboCheckBox(qtTrId("dialog_updateCache_formatPartition"));
+    this->_mainLayout->addWidget(_formatCheckBox);
 
-    this->mainLayout->addStretch();
+    this->_mainLayout->addStretch();
 
     //% "update"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("dialog_updateCache_button_update"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(updateCache()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboUpdateCacheDialog::_updateCache);
 
     //% "cancel"
     toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboUpdateCacheDialog::autoClose);
 }
 
-void LinboUpdateCacheDialog::updateCache() {
-    this->backend->updateCache(LinboConfig::DownloadMethod(this->updateTypeButtonGroup->checkedId()), this->formatCheckBox->isChecked());
+void LinboUpdateCacheDialog::_updateCache() {
+    this->_backend->updateCache(LinboConfig::DownloadMethod(this->_updateTypeButtonGroup->checkedId()), this->_formatCheckBox->isChecked());
     this->close();
 }
 
 void LinboUpdateCacheDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int margins = gTheme->size(LinboTheme::Margins);
 
-    this->mainLayout->setContentsMargins(margins, margins, margins, margins);
+    this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
     for(int i = 0; i < 5; i++) {
         if(i == 3)
             // skip line
             continue;
 
-        QAbstractButton* button = static_cast<QAbstractButton*>(this->mainLayout->itemAt(i)->widget());
-        button->setFixedSize(this->width() - margins * 2, gTheme->getSize(LinboTheme::RowHeight));
+        QAbstractButton* button = static_cast<QAbstractButton*>(this->_mainLayout->itemAt(i)->widget());
+        button->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowHeight));
         QFont buttonFont = button->font();
-        buttonFont.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
+        buttonFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
         button->setFont(buttonFont);
     }
 }

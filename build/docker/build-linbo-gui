@@ -1,0 +1,32 @@
+#!/bin/bash
+# This script must be executed in the root of the linuxmuster-linbo-gui repo
+set -e
+
+cd /workspace
+mkdir -p build/bin
+cd build/bin
+
+export CMAKE_PREFIX_PATH=/usr/lib/Qt
+cmake ../../
+make -j8
+
+ls -l .
+strip linbo_gui
+chmod +x linbo_gui
+
+cd ..
+
+# main binary
+mkdir -p ./linbofs/usr/bin/
+cp ./bin/linbo_gui linbofs/usr/bin/
+
+# shared libraries
+mkdir -p ./linbofs/lib/
+# Get all dependencies | split at path separator | remove everything but path | copy the libs to linbofs/lib
+ldd ./bin/linbo_gui | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./linbofs/lib/
+
+# Keyboard layouts
+mkdir -p ./linbofs/usr/share/X11/
+cp -r /usr/share/X11/xkb/ ./linbofs/usr/share/X11/
+
+exit 0

@@ -22,23 +22,40 @@ LinboToolButton::LinboToolButton(QString text, QWidget* parent) : LinboToolButto
 {
 }
 
-LinboToolButton::LinboToolButton(LinboTheme::LinboThemeIcon icon, QWidget* parent) : LinboToolButton("", icon, LinboTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(LinboTheme::Icon icon, QWidget* parent) : LinboToolButton("", icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, QWidget* parent) : LinboToolButton(text, icon, LinboTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, QWidget* parent) : LinboToolButton(text, icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text, LinboTheme::LinboThemeIcon icon, LinboTheme::LinboThemeColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->getIconPath(icon), text, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, LinboTheme::ColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->iconPath(icon), text, parent)
 {
-    this->colorRole = colorRole;
+    this->_colorRole = colorRole;
 }
 
 void LinboToolButton::paintEvent(QPaintEvent *e) {
     LinboPushButton::paintEvent(e);
-    if(this->colorRole == LinboTheme::ToolButtonColor)
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + "; font-weight: bold;} QLabel:disabled { color: " + gTheme->getColor(LinboTheme::DisabledToolButtonColor).name() + ";}");
+    if(this->_colorRole == LinboTheme::ToolButtonColor)
+        LinboPushButton::setStyleSheet(
+            QString(
+                "QLabel { "
+                "    color: %1;"
+                "    font-weight: bold;"
+                "}"
+                "QLabel:disabled {"
+                "    color: %2;"
+                "}")
+            .arg(
+                gTheme->color(this->_colorRole).name(),
+                gTheme->color(LinboTheme::DisabledToolButtonColor).name()
+            ));
     else
-        LinboPushButton::setStyleSheet("QLabel { color: " + gTheme->getColor(this->colorRole).name() + ";}");
+        LinboPushButton::setStyleSheet(
+            QString(
+                "QLabel {"
+                "    color: %1;"
+                "}")
+            .arg(gTheme->color(this->_colorRole).name()));
 }

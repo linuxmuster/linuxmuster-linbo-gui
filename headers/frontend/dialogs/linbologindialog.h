@@ -44,12 +44,11 @@ protected:
     virtual void setVisibleAnimated(bool visible) override;
 
 private:
-    LinboBackend* backend;
-    QLabel* headerLabel;
-    QLineEdit* passwordInput;
-    QWidget* buttonLayoutWidget;
-
-    QVBoxLayout* mainLayout;
+    LinboBackend* _backend;
+    QLabel* _headerLabel;
+    QLineEdit* _passwordInput;
+    QWidget* _buttonLayoutWidget;
+    QVBoxLayout* _mainLayout;
 
 private slots:
     void inputFinished();

@@ -21,20 +21,21 @@
 LinboLineEdit::LinboLineEdit(QWidget* parent) : QLineEdit(parent)
 {
     this->setStyleSheet(
-        "QLineEdit {"
-        "border: 0 0 0 0;"
-        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::LineColor).name() + ";"
-        "background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-        "padding-left: 10px;"
-        "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-        "}"
-        "QLineEdit:focus {"
-        "border-bottom: 1px solid " + gTheme->getColor(LinboTheme::AccentColor).name() + ";"
-        "}"
-        "QLineEdit::disabled {"
-        "border-bottom: 0;"
-        "}"
-    );
+        gTheme->insertValues(
+            "QLineEdit {"
+            "    border: 0 0 0 0;"
+            "    border-bottom: 1px solid %LineColor;"
+            "    background: %ElevatedBackgroundColor;"
+            "    padding-left: 10px;"
+            "    color: %TextColor;"
+            "}"
+            "QLineEdit:focus {"
+            "    border-bottom: 1px solid %AccentColor;"
+            "}"
+            "QLineEdit::disabled {"
+            "    border-bottom: 0;"
+            "}"
+        ));
 }
 
 void LinboLineEdit::resizeEvent(QResizeEvent *event) {

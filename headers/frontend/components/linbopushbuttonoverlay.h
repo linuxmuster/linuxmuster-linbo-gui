@@ -42,25 +42,25 @@ public:
         OnKeyboardFocus
     };
 
-    explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent = nullptr);
+    explicit LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically = true, QObject *parent = nullptr);
 
     void setVisible(bool visible);
     void setVisibleAnimated(bool visible);
 private:
 
-    bool shouldBeVisible;
-    bool managedAutomatically;
-    OverlayType type;
-    QWidget* widget;
-    QGraphicsOpacityEffect* effect;
-    QPropertyAnimation* animation;
+    bool _shouldBeVisible;
+    bool _managedAutomatically;
+    OverlayType _type;
+    QWidget* _widget;
+    QGraphicsOpacityEffect* _effect;
+    QPropertyAnimation* _animation;
 
-    void setAnimationDuration(int duration);
-    void setEffectEnabled(bool enabled);
-    OverlayType getType();
+    void _setAnimationDuration(int duration);
+    void _setEffectEnabled(bool enabled);
+    OverlayType _getType();
 
 private slots:
-    void handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State);
+    void _handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State);
 
 signals:
 

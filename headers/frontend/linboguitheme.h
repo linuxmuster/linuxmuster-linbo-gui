@@ -33,27 +33,32 @@ class LinboGuiTheme : public QObject
 public:
     explicit LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent = nullptr);
 
-    QString getIconPath(LinboTheme::LinboThemeIcon icon);
-    QColor getColor(LinboTheme::LinboThemeColorRole colorRole);
-    int getSize(LinboTheme::LinboThemeSizeRole sizeRole);
+    QString iconPath(LinboTheme::Icon icon);
+    QColor color(LinboTheme::ColorRole colorRole);
+    int size(LinboTheme::SizeRole sizeRole);
     int toFontSize(int size);
 
+    QString insertValues(QString string);
+    QString insertColorValues(QString string);
+    QString insertIconValues(QString string);
+    QString insertSizeValues(QString string);
+
 private:
-    QMap<LinboTheme::LinboThemeColorRole, QColor> _lightColors = {
+    QMap<LinboTheme::ColorRole, QColor> _lightColors = {
         {LinboTheme::TextColor, "#ffffff"},
         {LinboTheme::ToolButtonColor, "#f59c00"},
         {LinboTheme::DisabledToolButtonColor, "#94753e"},
         {LinboTheme::AccentColor, "#f59c00"}
     };
 
-    QMap<LinboTheme::LinboThemeColorRole, QColor> _darkColors = {
+    QMap<LinboTheme::ColorRole, QColor> _darkColors = {
         {LinboTheme::TextColor, "#000000"},
         {LinboTheme::ToolButtonColor, "#394f5e"},
         {LinboTheme::DisabledToolButtonColor, "#7b909e"},
         {LinboTheme::AccentColor, "#f59c00"}
     };
 
-    QList<LinboTheme::LinboThemeIcon> _universalIcons = {
+    QList<LinboTheme::Icon> _universalIcons = {
         LinboTheme::OverlayStartIcon,
         LinboTheme::OverlaySyncIcon,
         LinboTheme::OverlayReinstallIcon,
@@ -66,7 +71,7 @@ private:
         LinboTheme::OverlayKeyboardFocusIcon
     };
 
-    LinboBackend* _backend;
+    LinboTheme* _theme;
     QMainWindow* _mainWindow;
 
     bool _isBackgroundColorDark();

@@ -35,7 +35,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QLabel* questionLabel;
+    QLabel* _questionLabel;
 
 signals:
     void accepted();

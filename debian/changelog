@@ -1,3 +1,11 @@
+linuxmuster-linbo-gui7 (7.1.0) lmn72; urgency=medium
+
+  * Move to Qt6
+  * Move to Ubuntu 22.04 as build environment
+  * When cancelling an action with the logout flag, the user is now logged out
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 26 Nov 2021 17:36:22 +0100
+
 linuxmuster-linbo-gui7 (7.0.5) lmn71; urgency=medium
 
   * Fix: GuiDisabled not working

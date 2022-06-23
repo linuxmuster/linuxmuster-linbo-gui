@@ -20,99 +20,123 @@
 
 LinboProgressBar::LinboProgressBar(QWidget* parent) : QProgressBar(parent)
 {
-    this->refreshTimer = new QTimer();
-    this->refreshTimer->setSingleShot(false);
-    this->refreshTimer->setInterval(400);
-    connect(this->refreshTimer, SIGNAL(timeout()), this, SLOT(updateIndeterminate()));
-
-
-    this->indeterminateAnimtion = new QPropertyAnimation(this, "value");
-    this->indeterminateAnimtion->setDuration(2000);
-    this->indeterminateAnimtion->setStartValue(0);
-    this->indeterminateAnimtion->setEndValue(1000);
-    this->indeterminateAnimtion->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
-    this->indeterminateAnimtion->setLoopCount(-1);
+    this->_indeterminateAnimtion = new QPropertyAnimation(this, "value");
+    this->_indeterminateAnimtion->setDuration(2000);
+    this->_indeterminateAnimtion->setStartValue(0);
+    this->_indeterminateAnimtion->setEndValue(1000);
+    this->_indeterminateAnimtion->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_indeterminateAnimtion->setLoopCount(-1);
 
     this->setValue(0);
 }
 
 void LinboProgressBar::setIndeterminate(bool indeterminate) {
-    if(this->indeterminate == indeterminate)
+    if(this->_indeterminate == indeterminate)
         return;
 
-    this->indeterminate = indeterminate;
+    this->_indeterminate = indeterminate;
 
-    if(this->indeterminate) {
-        this->preIndeterminateValue = this->value();
-        this->preIndeterminateMinimum = this->minimum();
-        this->preIndeterminateMaximum = this->maximum();
-        // finer steps, so the Animation is fluid
-        this->setMinimum(0);
-        this->setMaximum(1000);
-        this->indeterminateAnimtion->start();
+    if(this->_indeterminate) {
+        this->_setIndeterminate();
     }
     else {
-        // reset minimum and maximum
-        this->setMinimum(this->preIndeterminateMinimum);
-        this->setMaximum(this->preIndeterminateMaximum);
-        this->setValue(this->preIndeterminateValue);
-        this->indeterminateAnimtion->stop();
+        this->_setDeterminate();
     }
+}
+
+void LinboProgressBar::_setIndeterminate() {
+    this->_preIndeterminateValue = this->value();
+    this->_preIndeterminateMinimum = this->minimum();
+    this->_preIndeterminateMaximum = this->maximum();
+    // finer steps, so the Animation is fluid
+    this->setMinimum(0);
+    this->setMaximum(1000);
+    this->_indeterminateAnimtion->start();
+}
+
+void LinboProgressBar::_setDeterminate() {
+    // reset minimum and maximum
+    this->setMinimum(this->_preIndeterminateMinimum);
+    this->setMaximum(this->_preIndeterminateMaximum);
+    this->setValue(this->_preIndeterminateValue);
+    this->_indeterminateAnimtion->stop();
 }
 
 void LinboProgressBar::setReversed(bool reversed) {
-    if(this->reversed == reversed)
+    if(this->_reversed == reversed)
         return;
 
-    this->reversed = reversed;
+    this->_reversed = reversed;
     this->update();
 }
 
-bool LinboProgressBar::getIndeterminate() {
-    return this->indeterminate;
-}
-
-void LinboProgressBar::updateIndeterminate() {
-    qDebug() << "update indeterminate";
+bool LinboProgressBar::indeterminate() {
+    return this->_indeterminate;
 }
 
 void LinboProgressBar::paintEvent(QPaintEvent *e) {
-    QPainter painter;
-    painter.begin(this);
-    // background
-    painter.fillRect(e->rect(), gTheme->getColor(LinboTheme::ElevatedBackgroundColor));
+    _FromTo values = this->_calculateFromTo();
 
-    double from = 0;
-    double to = 0;
-
-    // progress
-    if(this->indeterminate) {
-        int maximum = this->maximum() / 2;
-        if(this->value() <= maximum)
-            // for the first half -> fill from left
-            to = double(double(this->value()) / double(maximum));
-        else {
-            // for the second half -> empty from right
-            from = double(double(this->value()- (maximum)) / double(maximum));
-            to = 1;
-        }
-    }
-    else {
-        to = double(double(this->value()) / double(this->maximum()));
+    if(this->_reversed) {
+        values = this->_reverseFromTo(values);
     }
 
-    if(this->reversed) {
-        // if reversed -> reverse and swap from and to
-        double tmp = 1 - from;
-        from = 1 - to;
-        to = tmp;
-
-    }
-
-    painter.fillRect(QRect(e->rect().width() * from, 0, e->rect().width() * to, e->rect().height()), gTheme->getColor(LinboTheme::AccentColor));
-
-    painter.end();
-
+    this->_paint(e, values);
     QWidget::paintEvent(e);
 }
 
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromTo() {
+    if(this->_indeterminate) {
+        return this->_calculateFromToIndeterminate();
+    }
+    else {
+        return this->_calculateFromToDeterminate();
+    }
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromToIndeterminate() {
+    _FromTo result;
+    int maximum = this->maximum() / 2;
+    if(this->value() <= maximum)
+        // for the first half -> fill from left
+        result.to = double(double(this->value()) / double(maximum));
+    else {
+        // for the second half -> empty from right
+        result.from = double(double(this->value()- (maximum)) / double(maximum));
+        result.to = 1;
+    }
+    return result;
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_calculateFromToDeterminate() {
+    _FromTo result;
+    result.to = double(double(this->value()) / double(this->maximum()));
+    result.from = 0.0;
+    return result;
+}
+
+LinboProgressBar::_FromTo LinboProgressBar::_reverseFromTo(_FromTo values) {
+    double tmp = 1 - values.from;
+    values.from = 1 - values.to;
+    values.to = tmp;
+    return values;
+}
+
+void LinboProgressBar::_paint(QPaintEvent* e, _FromTo values) {
+    QPainter painter;
+    painter.begin(this);
+    // background
+    painter.fillRect(e->rect(), gTheme->color(LinboTheme::ElevatedBackgroundColor));
+    // progress
+    painter.fillRect(
+        QRect(
+            e->rect().width() * values.from,
+            0,
+            e->rect().width() * values.to,
+            e->rect().height()
+        ),
+        gTheme->color(LinboTheme::AccentColor)
+    );
+
+    painter.end();
+}

@@ -21,42 +21,42 @@
 LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget(parent)
 {
 
-    this->mainWidget = new QWidget(this);
-    this->mainWidget->setStyleSheet( "QLabel { color: " + gTheme->getColor(LinboTheme::TextColor).name() + "; }");
+    this->_mainWidget = new QWidget(this);
+    this->_mainWidget->setStyleSheet(gTheme->insertValues("QLabel { color: %TextColor; }"));
 
-    this->mainLayout = new QGridLayout(this->mainWidget);
-    this->mainLayout->setAlignment(Qt::AlignCenter);
-    this->mainLayout->setContentsMargins(0,0,0,0);
+    this->_mainLayout = new QGridLayout(this->_mainWidget);
+    this->_mainLayout->setAlignment(Qt::AlignCenter);
+    this->_mainLayout->setContentsMargins(0,0,0,0);
 
-    this->networkIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::NetworkIcon));
-    this->mainLayout->addWidget(this->networkIconWidget, 0, 0, 1, 1);
+    this->_networkIconWidget = new QSvgWidget(gTheme->iconPath(LinboTheme::NetworkIcon));
+    this->_mainLayout->addWidget(this->_networkIconWidget, 0, 0, 1, 1);
 
     //% "Hostname"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("hostname") + ":</b>  " + config->hostname()), 0, 1, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("hostname") + ":</b>  " + config->hostname()), 0, 1, 1, 1);
 
     //% "Host group"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("group") + ":</b>  " + config->hostGroup()), 0, 2, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("group") + ":</b>  " + config->hostGroup()), 0, 2, 1, 1);
 
     //% "IP-Address"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("ip") + ":</b>  " + config->ipAddress()), 0, 3, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("ip") + ":</b>  " + config->ipAddress()), 0, 3, 1, 1);
 
     //% "Mac"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->macAddress()), 0, 4, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_mac") + ":</b>  " + config->macAddress()), 0, 4, 1, 1);
 
-    this->desktopIconWidget = new QSvgWidget(gTheme->getIconPath(LinboTheme::DesktopIcon));
-    this->mainLayout->addWidget(this->desktopIconWidget, 1, 0, 1, 1);
+    this->_desktopIconWidget = new QSvgWidget(gTheme->iconPath(LinboTheme::DesktopIcon));
+    this->_mainLayout->addWidget(this->_desktopIconWidget, 1, 0, 1, 1);
 
     //% "HDD"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->hddSize()), 1, 1, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->hddSize()), 1, 1, 1, 1);
 
     //% "Cache"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cache") + ":</b>  " + config->cacheSize()), 1, 2, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cache") + ":</b>  " + config->cacheSize()), 1, 2, 1, 1);
 
     //% "CPU"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cpu") + ":</b>  " + config->cpuModel()), 1, 3, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cpu") + ":</b>  " + config->cpuModel()), 1, 3, 1, 1);
 
     //% "RAM"
-    this->mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_ram") + ":</b>  " + config->ramSize()), 1, 4, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_ram") + ":</b>  " + config->ramSize()), 1, 4, 1, 1);
 
 
     this->setStyleSheet("QGridLayout {background: red;}");
@@ -68,11 +68,11 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
 
     int iconHeight = this->height() * 0.3;
 
-    this->mainWidget->setGeometry(0,0,this->width(), this->height());
-    this->mainLayout->setSpacing(this->height() * 0.2);
+    this->_mainWidget->setGeometry(0,0,this->width(), this->height());
+    this->_mainLayout->setSpacing(this->height() * 0.2);
 
-    this->networkIconWidget->setFixedSize(iconHeight, iconHeight);
-    this->desktopIconWidget->setFixedSize(iconHeight, iconHeight);
+    this->_networkIconWidget->setFixedSize(iconHeight, iconHeight);
+    this->_desktopIconWidget->setFixedSize(iconHeight, iconHeight);
 
     // set font size
     for(int i = 0; i < 10; i++) {
@@ -80,7 +80,7 @@ void LinboClientInfo::resizeEvent(QResizeEvent *event) {
         if(i == 0 || i == 5)
             continue;
 
-        QLayoutItem* labelItem = this->mainLayout->itemAt(i);
+        QLayoutItem* labelItem = this->_mainLayout->itemAt(i);
 
         QLabel* label = static_cast<QLabel*>(labelItem->widget());
         label->setTextFormat(Qt::RichText);

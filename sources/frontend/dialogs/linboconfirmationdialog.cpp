@@ -21,33 +21,33 @@
 LinboConfirmationDialog::LinboConfirmationDialog(QString title, QString question, QWidget* parent) : LinboDialog(parent)
 {
     this->setTitle(title);
-    this->questionLabel = new QLabel(question, this);
-    this->questionLabel->setAlignment(Qt::AlignCenter);
+    this->_questionLabel = new QLabel(question, this);
+    this->_questionLabel->setAlignment(Qt::AlignCenter);
 
     //% "yes"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("yes"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(accepted()));
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::accepted);
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::autoClose);
 
     //% "no"
     toolButtonCache = new LinboToolButton(qtTrId("no"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(autoClose()));
-    connect(toolButtonCache, SIGNAL(clicked()), this, SIGNAL(rejected()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::autoClose);
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboConfirmationDialog::rejected);
 
-    connect(this, SIGNAL(closedByUser()), this, SIGNAL(rejected()));
+    connect(this, &LinboConfirmationDialog::closedByUser, this, &LinboConfirmationDialog::rejected);
 }
 
 
 void LinboConfirmationDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    int rowHeight = gTheme->getSize(LinboTheme::RowHeight);
-    int margins = gTheme->getSize(LinboTheme::Margins);
+    int rowHeight = gTheme->size(LinboTheme::RowHeight);
+    int margins = gTheme->size(LinboTheme::Margins);
 
-    this->questionLabel->setGeometry(0, (this->height() - rowHeight) / 2, this->width() - margins * 2, rowHeight);
-    QFont font = this->questionLabel->font();
-    font.setPixelSize(gTheme->getSize(LinboTheme::RowFontSize));
-    this->questionLabel->setFont(font);
+    this->_questionLabel->setGeometry(0, (this->height() - rowHeight) / 2, this->width() - margins * 2, rowHeight);
+    QFont font = this->_questionLabel->font();
+    font.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
+    this->_questionLabel->setFont(font);
 }

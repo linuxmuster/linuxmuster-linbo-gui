@@ -27,12 +27,14 @@
 #include <QFile>
 #include <QSettings>
 
+#include "linbopostprocessactions.h"
 #include "linbologger.h"
 #include "linboconfig.h"
 #include "linboos.h"
 #include "linboimage.h"
 #include "linbodiskpartition.h"
 #include "linboconfigreader.h"
+#include "linbocmd.h"
 
 /**
  * @brief The LinboBackend class is used to execute Linbo commands (control linbo_cmd) very comfortable.
@@ -42,16 +44,16 @@
 class LinboBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(LinboBackend::LinboState state READ getState NOTIFY stateChanged)
-    Q_PROPERTY(LinboOs* _currentOs READ getCurrentOs WRITE setCurrentOs NOTIFY currentOsChanged)
-    Q_PROPERTY(double autostartTimeoutProgress READ getAutostartTimeoutProgress NOTIFY autostartTimeoutProgressChanged)
-    Q_PROPERTY(int autostartTimeoutRemainingSeconds READ getAutostartTimeoutRemainingSeconds NOTIFY autostartTimeoutProgressChanged)
+    Q_PROPERTY(LinboBackend::LinboState state READ state NOTIFY stateChanged)
+    Q_PROPERTY(double _timeoutProgress READ _timeoutProgress NOTIFY timeoutProgressChanged)
+    Q_PROPERTY(int _timeoutRemainingMilliseconds READ _timeoutRemainingMilliseconds NOTIFY timeoutProgressChanged)
 
 public:
     explicit LinboBackend(QObject *parent = nullptr);
 
     friend class LinboImage;
     friend class LinboConfigReader;
+    friend class LinboOs;
 
     /**
      * @brief The LinboState enum contains all possible states of Linbo
@@ -77,136 +79,97 @@ public:
         RootActionSuccess   /*!< The last root action was successfull, the resetMessage() function will reset to Root */
     };
 
-    enum LinboPostProcessAction {
-        NoAction = 1,
-        Shutdown = 2,
-        Reboot = 4,
-        Logout = 8,
-        UploadImage = 16,
-        ExecuteAutoInitCache = 32,
-        ExecuteAutostart = 64,
-        CancelToIdle = 128
-    };
-    Q_DECLARE_FLAGS(LinboPostProcessActions, LinboPostProcessAction)
-    Q_FLAG(LinboPostProcessActions)
+    LinboState state();
+    LinboLogger* logger();
+    LinboConfig* config();
+    LinboOs* osOfCurrentAction();
 
-    LinboState getState();
-    LinboLogger* getLogger();
-    LinboConfig* getConfig();
-    LinboOs* getCurrentOs();
-    void setCurrentOs(LinboOs* os);
     void restartRootTimeout();
-
-    double getAutostartTimeoutProgress();
-    int getAutostartTimeoutRemainingSeconds();
-
-    double getRootTimeoutProgress();
-    int getRootTimeoutRemainingSeconds();
-
-protected:
-    QString _readImageDescription(LinboImage* image);
-    bool _writeImageDescription(LinboImage* image, QString newDescription);
-    bool _writeImageDescription(QString imageName, QString newDescription);
-
-private:
-    LinboState _state;
-    LinboLogger* _logger;
-    LinboConfigReader* _configReader;
-    LinboConfig* _config;
-    QStringList _linboCommandCache;
-
-    QTimer* _autostartTimer;
-    QTimer* _rootTimeoutTimer;
-    QTimer* _timeoutRemainingTimeRefreshTimer;
-
-    LinboOs* _currentOs;
-#ifdef TEST_ENV
-    QString const _linboCmdCommand = TEST_ENV"/linbo_cmd";
-#else
-    QString const _linboCmdCommand = "linbo_cmd";
-#endif
-
-    QProcess* _asynchronosProcess;
-    QProcess* _synchronosProcess;
-
-    QString _rootPassword;
-    const LinboImage* _imageToUploadAutomatically;
-    LinboPostProcessActions _postProcessActions;
-
-    template<typename ... Strings>
-    QString _executeCommand(bool waitForFinished, QString argument, const Strings&... arguments) {
-        return this->_executeCommand(waitForFinished, this->_linboCmdCommand, this->_buildCommand(argument, arguments ...));
-    }
-
-    QStringList _buildCommand() {
-        QStringList tmpArguments = this->_linboCommandCache;
-        this->_linboCommandCache.clear();
-        return tmpArguments;
-    }
-
-    template<typename ... Strings>
-    QStringList _buildCommand(QString argument, const Strings&... arguments) {
-        // this appends a quoted space in case item is empty and resolves
-        // problems with linbo_cmd's weird "shift"-usage
-        if (argument.isEmpty())
-            this->_linboCommandCache.append("");
-        else
-            this->_linboCommandCache.append(argument);
-
-        return _buildCommand(arguments...);
-    }
-
-    QString _executeCommand(bool wait, QString command, QStringList commandArgs, int* returnCode = nullptr);
-
-    void _setState(LinboState state);
 
 public slots:
     void shutdown();
     void reboot();
 
-    bool startCurrentOs();
-    bool syncCurrentOs();
-    bool reinstallCurrentOs();
-
     bool login(QString password);
     void logout();
 
-    bool replaceImageOfCurrentOs(QString description = "", LinboPostProcessActions postProcessActions = NoAction);
-    bool createImageOfCurrentOS(QString name, QString description = "", LinboPostProcessActions postProcessActions = NoAction);
-
-    bool uploadImage(const LinboImage* image, LinboPostProcessActions postProcessActions = NoAction);
-
-    bool partitionDrive(bool format = true, LinboPostProcessActions postProcessActions = NoAction);
-    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions postProcessActions = NoAction);
+    bool partitionDrive();
+    bool updateCache(LinboConfig::DownloadMethod downloadMethod, bool format = false, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
     bool updateLinbo();
     bool registerClient(QString room, QString hostname, QString ipAddress, QString hostGroup, LinboConfig::LinboDeviceRole deviceRole);
 
     bool cancelCurrentAction();
     bool resetMessage();
 
+protected:
+
+protected slots:
+    bool startOs(LinboOs* os);
+    bool syncOs(LinboOs* os);
+    bool reinstallOs(LinboOs* os);
+
+    bool replaceImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+
+    QString readImageDescription(LinboImage* image);
+    bool writeImageDescription(LinboImage* image, QString newDescription);
+    bool writeImageDescription(QString imageName, QString newDescription);
+
+    bool uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+
+    QString loadEnvironmentValue(QString key);
+    QString getPartitionSize(QString partition);
+
+private:
+    LinboState _state;
+    LinboLogger* _logger;
+    LinboConfigReader* _configReader;
+    LinboConfig* _config;
+    LinboCmd* _linboCmd;
+    LinboOs* _osOfCurrentAction;
+
+    QTimer* _timeoutTimer;
+    QTimer* _timeoutRemainingTimeRefreshTimer;
+
+    QString _rootPassword;
+    LinboImage* _imageToUploadAutomatically;
+    LinboPostProcessActions::Flags _postProcessActions;
+
+    void _setState(LinboState state);
+
 private slots:
-    bool _uploadImage(const LinboImage* image, LinboPostProcessActions postProcessAction = NoAction, bool allowCreatingImageState = false);
+    void _logout(bool force);
+
+    bool _partitionDrive(bool format, LinboPostProcessActions::Flags postProcessActions);
+    bool _uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions);
 
     void _executeAutomaticTasks();
-    void _executeAutoPartition();
-    void _executeAutoInitCache();
-    void _executeAutostart();
+    bool _executeAutoPartition();
+    bool _executeAutoInitCache();
+    LinboOs* _getOsForAutostart();
+    bool _executeAutostart();
+
+    void _handleCommandFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void _handleCommandFinishedSuccess();
+    void _handleCommandFinishedError();
+    void _executeNextPostProcessAction();
+    void _executePostProcessAction(LinboPostProcessActions::Flag action);
+    bool _noMorePostProcessActionsToExecute();
+    bool _validatePostProcessActions(LinboPostProcessActions::Flags postProcessActions);
+    LinboPostProcessActions::Flag _nextAction(LinboPostProcessActions::Flags postProcessActions);
+
+    void _initTimers();
+    void _handleTimeoutTimerTimeout();
     void _handleAutostartTimerTimeout();
     void _handleRootTimerTimeout();
-    void _readFromStdout();
-    void _readFromStderr();
-    void _handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void _logout(bool force);
+    void _handleTimeoutRemaningTimeRefreshTimerTimeout();
+    double _timeoutProgress();
+    int _timeoutRemainingMilliseconds();
 
 signals:
     void stateChanged(LinboBackend::LinboState state);
-    void currentOsChanged(LinboOs* os);
-    void autostartTimeoutProgressChanged();
-    void rootTimeoutProgressChanged();
+    void timeoutProgressChanged(double progress, int remaningMilliseconds);
 
 };
-
-extern LinboBackend* gBackend;
-Q_DECLARE_OPERATORS_FOR_FLAGS(LinboBackend::LinboPostProcessActions)
 
 #endif // LINBOBACKEND_H

@@ -20,54 +20,54 @@
 
 LinboLoginDialog::LinboLoginDialog(LinboBackend* backend, QWidget* parent) : LinboDialog(parent)
 {
-    this->backend = backend;
+    this->_backend = backend;
 
     //% "Please enter password:"
     this->setTitle(qtTrId("dialog_login_title"));
 
-    this->passwordInput = new LinboLineEdit();
-    this->passwordInput->setEchoMode(QLineEdit::NoEcho);
-    this->passwordInput->setAlignment(Qt::AlignCenter);
-    connect(passwordInput,SIGNAL(returnPressed()),this,SLOT(inputFinished()));
+    this->_passwordInput = new LinboLineEdit();
+    this->_passwordInput->setEchoMode(QLineEdit::NoEcho);
+    this->_passwordInput->setAlignment(Qt::AlignCenter);
+    connect(_passwordInput, &LinboLineEdit::returnPressed, this, &LinboLoginDialog::inputFinished);
 
     //% "Please enter password:"
-    connect(passwordInput, &QLineEdit::textChanged, [=] {this->setTitle(qtTrId("dialog_login_title"));});
+    connect(_passwordInput, &QLineEdit::textChanged, this, [=] {this->setTitle(qtTrId("dialog_login_title"));});
 
     //% "cancel"
     LinboToolButton* toolButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(close()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboLoginDialog::close);
 
     //% "login"
     toolButtonCache = new LinboToolButton(qtTrId("dialog_login_button_login"));
     this->addToolButton(toolButtonCache);
-    connect(toolButtonCache, SIGNAL(clicked()), this, SLOT(inputFinished()));
+    connect(toolButtonCache, &LinboToolButton::clicked, this, &LinboLoginDialog::inputFinished);
 
-    this->mainLayout = new QVBoxLayout(this);
-    this->mainLayout->setContentsMargins(0,0,0,0);
-    this->mainLayout->addStretch();
-    this->mainLayout->addWidget(this->passwordInput);
-    this->mainLayout->setAlignment(this->passwordInput, Qt::AlignCenter);
-    this->mainLayout->addStretch();
-    this->mainLayout->setAlignment(Qt::AlignCenter);
+    this->_mainLayout = new QVBoxLayout(this);
+    this->_mainLayout->setContentsMargins(0,0,0,0);
+    this->_mainLayout->addStretch();
+    this->_mainLayout->addWidget(this->_passwordInput);
+    this->_mainLayout->setAlignment(this->_passwordInput, Qt::AlignCenter);
+    this->_mainLayout->addStretch();
+    this->_mainLayout->setAlignment(Qt::AlignCenter);
 }
 
 void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
     LinboDialog::resizeEvent(event);
 
-    this->passwordInput->setFixedHeight(gTheme->getSize(LinboTheme::RowHeight));
-    this->passwordInput->setFixedWidth(this->width() - gTheme->getSize(LinboTheme::Margins) * 2);
+    this->_passwordInput->setFixedHeight(gTheme->size(LinboTheme::RowHeight));
+    this->_passwordInput->setFixedWidth(this->width() - gTheme->size(LinboTheme::Margins) * 2);
 }
 
 
 void LinboLoginDialog::inputFinished() {
 
-    if(this->backend->login(this->passwordInput->text())) {
-        this->passwordInput->clear();
+    if(this->_backend->login(this->_passwordInput->text())) {
+        this->_passwordInput->clear();
         this->close();
     }
     else {
-        this->passwordInput->clear();
+        this->_passwordInput->clear();
         //% "Wrong password!"
         this->setTitle(qtTrId("dialog_login_title_wrong"));
     }
@@ -76,10 +76,10 @@ void LinboLoginDialog::inputFinished() {
 
 void LinboLoginDialog::setVisibleAnimated(bool visible) {
     if(!visible) {
-        this->passwordInput->clear();
+        this->_passwordInput->clear();
     }
     else {
-        this->passwordInput->setFocus();
+        this->_passwordInput->setFocus();
     }
     LinboDialog::setVisibleAnimated(visible);
 }

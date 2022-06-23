@@ -38,41 +38,37 @@ public:
     friend class LinboOsSelectionRow;
 
 protected:
+    LinboOsSelectButton(QString icon, LinboOs* os, LinboBackend* backend, QButtonGroup* buttonGroup, QWidget* parent = nullptr);
     void resizeEvent(QResizeEvent *event) override;
-
 private:
-    LinboOsSelectButton(QString icon, LinboOs* os, QButtonGroup* buttonGroup, QWidget* parent = nullptr);
 
-    LinboOs* getOs();
-    void setVisibleAnimated(bool visible);
+    LinboOs* _getOs();
+    void _setVisibleAnimated(bool visible);
     void setVisible(bool visible) override;
 
-    // if set to true, the "old" Layout will be used (one big and four small buttons)
-    void setShowActionButtons(bool showActionButtons);
+    bool _inited;
+    bool _shouldBeVisible;
+    bool _showDefaultAction;
 
-    bool inited;
-    bool showActionButtons;
-    bool shouldBeVisible;
-    bool showDefaultAction;
-
-    LinboOs* os;
-    LinboPushButton* button;
-    QList<LinboPushButton*> startActionButtons;
-    QList<LinboPushButton*> rootActionButtons;
-    LinboPushButtonOverlay* defaultStartActionOverlay;
-    LinboPushButtonOverlay* defaultRootActionOverlay;
-    QButtonGroup* buttonGroup;
-    QLabel* osNameLabel;
+    LinboBackend* _backend;
+    LinboOs* _os;
+    LinboPushButton* _button;
+    QList<LinboPushButton*> _startActionButtons;
+    QList<LinboPushButton*> _rootActionButtons;
+    LinboPushButtonOverlay* _defaultStartActionOverlay;
+    LinboPushButtonOverlay* _defaultRootActionOverlay;
+    QButtonGroup* _buttonGroup;
+    QLabel* _osNameLabel;
 
 private slots:
-    void handleBackendStateChange(LinboBackend::LinboState state);
-    void updateActionButtonVisibility(bool doNotAnimate = false);
-    void handlePrimaryButtonClicked();
-    QString getTooltipContentForAction(LinboOs::LinboOsStartAction action);
+    void _handleBackendStateChange(LinboBackend::LinboState state);
+    void _updateActionButtonVisibility(bool doNotAnimate = false);
+    void _handlePrimaryButtonClicked();
+    QString _getTooltipContentForAction(LinboOs::LinboOsStartAction action);
 
 signals:
-    void imageCreationRequested();
-    void imageUploadRequested();
+    void imageCreationRequested(LinboOs* os);
+    void imageUploadRequested(LinboOs* os);
 
 };
 

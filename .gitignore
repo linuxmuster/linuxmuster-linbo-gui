@@ -1,8 +1,8 @@
-*.pro.user*
-build/buildGUI*
-build/linbofs*
-build/*.tar.xz
+CMakeLists.txt.user*
+build/bin
+build/linbofs
 debian/linuxmuster-linbo-gui7
 debian/tmp.*
 /*.json
 .vscode
+archives

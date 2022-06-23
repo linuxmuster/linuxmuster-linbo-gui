@@ -20,7 +20,7 @@
 
 LinboLogger::LinboLogger(QString logFilePath, QObject *parent) : QObject(parent)
 {
-    this->logFilePath = logFilePath;
+    this->_logFilePath = logFilePath;
 }
 
 QString LinboLogger::logTypeToString(LinboLogType logType) {
@@ -42,47 +42,47 @@ QString LinboLogger::logTypeToString(LinboLogType logType) {
     }
 }
 
-void LinboLogger::log(QString logText, LinboLogType logType) {
+void LinboLogger::_log(QString logText, LinboLogType logType) {
     if(logText.isEmpty() || logText == "")
         return;
     qDebug() << qPrintable("[" + this->logTypeToString(logType) + "] " + logText);
 
     LinboLog latestLog {logText, logType, QDateTime::currentDateTime()};
-    this->logHistory.append(latestLog);
+    this->_logHistory.append(latestLog);
 
     // TODO: Log error, when this fails
-    this->writeToLogFile("[" + this->logTypeToString(logType) + "] " + logText);
+    this->_writeToLogFile("[" + this->logTypeToString(logType) + "] " + logText);
 
     emit this->latestLogChanged(latestLog);
 }
 
 void LinboLogger::info(QString logText) {
-    this->log(logText, LinboLogger::LinboGuiInfo);
+    this->_log(logText, LinboLogger::LinboGuiInfo);
 }
 
 void LinboLogger::error(QString logText) {
-    this->log(logText, LinboLogger::LinboGuiError);
+    this->_log(logText, LinboLogger::LinboGuiError);
 }
 
 void LinboLogger::chapterBeginning(QString logText) {
-    this->log(logText, LinboLogger::LinboLogChapterBeginning);
+    this->_log(logText, LinboLogger::LinboLogChapterBeginning);
 }
 
 void LinboLogger::chapterEnd(QString logText) {
-    this->log(logText, LinboLogger::LinboLogChapterEnd);
+    this->_log(logText, LinboLogger::LinboLogChapterEnd);
 }
 
 void LinboLogger::stdErr(QString logText) {
-    this->log(logText, LinboLogger::StdErr);
+    this->_log(logText, LinboLogger::StdErr);
 }
 
 void LinboLogger::stdOut(QString logText) {
-    this->log(logText, LinboLogger::StdOut);
+    this->_log(logText, LinboLogger::StdOut);
 }
 
-bool LinboLogger::writeToLogFile(QString text) {
+bool LinboLogger::_writeToLogFile(QString text) {
     // write to logfile
-    QFile logfile(this->logFilePath);
+    QFile logfile(this->_logFilePath);
     if(!logfile.open( QIODevice::WriteOnly | QIODevice::Append ))
         return false;
 
@@ -94,31 +94,31 @@ bool LinboLogger::writeToLogFile(QString text) {
 }
 
 const LinboLogger::LinboLog& LinboLogger::getLatestLog() {
-    return this->logHistory.last();
+    return this->_logHistory.last();
 }
 
-QList<LinboLogger::LinboLog> LinboLogger::getLogs() {
-    return this->logHistory;
+QList<LinboLogger::LinboLog> LinboLogger::logs() {
+    return this->_logHistory;
 }
 
-QList<LinboLogger::LinboLog> LinboLogger::getLogsOfCurrentChapter() {
+QList<LinboLogger::LinboLog> LinboLogger::logsOfCurrentChapter() {
     QList<LinboLog> tmpLogs;
 
-    for(int i = this->logHistory.length() - 1; i >= 0; i--) {
-        tmpLogs.append(this->logHistory[i]);
-        if(this->logHistory[i].type == LinboLogType::LinboLogChapterBeginning)
+    for(int i = this->_logHistory.length() - 1; i >= 0; i--) {
+        tmpLogs.append(this->_logHistory[i]);
+        if(this->_logHistory[i].type == LinboLogType::LinboLogChapterBeginning)
             break;
-        else if(this->logHistory[i].type == LinboLogType::LinboLogChapterEnd)
+        else if(this->_logHistory[i].type == LinboLogType::LinboLogChapterEnd)
             tmpLogs.clear();
     }
 
     return tmpLogs;
 }
 
-QList<LinboLogger::LinboLog> LinboLogger::getFilterLogs(QList<LinboLog> logs, LinboLogTypes filterTypes) {
+QList<LinboLogger::LinboLog> LinboLogger::filteredLogs(QList<LinboLog> logs, LinboLogTypes filterTypes) {
     QList<LinboLog> tmpLogs;
 
-    for(LinboLog log : logs) {
+    for(const LinboLog &log : logs) {
         if(filterTypes.testFlag(log.type))
             tmpLogs.append(log);
     }

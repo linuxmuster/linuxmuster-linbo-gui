@@ -40,11 +40,11 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QWidget* mainWidget;
-    QGridLayout* mainLayout;
+    QWidget* _mainWidget;
+    QGridLayout* _mainLayout;
 
-    QSvgWidget* networkIconWidget;
-    QSvgWidget* desktopIconWidget;
+    QSvgWidget* _networkIconWidget;
+    QSvgWidget* _desktopIconWidget;
 
 signals:
 

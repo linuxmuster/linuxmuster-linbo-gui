@@ -27,8 +27,8 @@ LinboGui::LinboGui()
     this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.9);
     this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.9);
 
-    //this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.1);
-    //this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.1);
+    this->setFixedHeight(QGuiApplication::screens().at(0)->geometry().height() * 0.5);
+    this->setFixedWidth(QGuiApplication::screens().at(0)->geometry().width() * 0.5);
 
 #else
     // fill whole screen
@@ -58,29 +58,32 @@ LinboGui::LinboGui()
     qDebug() << "Display width: " << this->width() << " height: " << this->height();
 
     // create the backend
-    this->backend = new LinboBackend(this);
+    this->_backend = new LinboBackend(this);
 
     // create the theme
-    this->theme = new LinboGuiTheme(this->backend, this, this);
+    this->_theme = new LinboGuiTheme(this->_backend, this, this);
 
     // set background
-    this->setStyleSheet( "QMainWindow { background: " + gTheme->getColor(LinboTheme::BackgroundColor).name() + "; }"
-                         "QLabel { color: " "black" "; }"
-                         "QToolTip {"
-                         "border: 0 0 0 0;"
-                         "background: " + gTheme->getColor(LinboTheme::ElevatedBackgroundColor).name() + ";"
-                         "color: " + gTheme->getColor(LinboTheme::TextColor).name() + ";"
-                         "padding: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize) * 0.2) + ";"
-                         "font-size: " + QString::number(gTheme->getSize(LinboTheme::RowFontSize)) + "px;"
-                         "}");
+    this->setStyleSheet(
+        gTheme->insertValues(
+            "QMainWindow { background: %BackgroundColor; }"
+            "QLabel { color: " "black" "; }"
+            "QToolTip {"
+            "border: 0 0 0 0;"
+            "background: %ElevatedBackgroundColor;"
+            "color: %TextColor;"
+            "padding: %RowPaddingSizepx;"
+            "font-size: %RowFontSizepx;"
+            "}"
+        ));
 
     // attach translator
-    QString localeName = this->backend->getConfig()->locale();
-    if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == "-")) {
+    QString localeName = this->_backend->config()->locale();
+    if(localeName.isEmpty() || (localeName.length() == 5 && localeName[2] == '-')) {
 
         if(!localeName.isEmpty()) {
             // correct case (de-de -> de-DE)
-            QStringList tmpLocaleName = this->backend->getConfig()->locale().split("-");
+            QStringList tmpLocaleName = this->_backend->config()->locale().split("-");
             localeName = tmpLocaleName[0] + "-";
             localeName += tmpLocaleName[1].toUpper();
         }
@@ -88,13 +91,14 @@ LinboGui::LinboGui()
         QTranslator* translator = new QTranslator(this);
 
         // fallback to en-GB!
-        if(!translator->load(":/" + localeName + ".qm"))
-            translator->load(":/en-GB.qm");
+        if(!translator->load(":/" + localeName + ".qm") && !translator->load(":/en-GB.qm")) {
+            this->_backend->logger()->error("Could not load any translation!");
+        }
 
         QApplication::installTranslator(translator);
     }
 
     // create start page
-    this->startPage = new LinboMainPage(this->backend, this);
+    this->_startPage = new LinboMainPage(this->_backend, this);
 
 }

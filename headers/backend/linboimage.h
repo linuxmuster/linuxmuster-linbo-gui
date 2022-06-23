@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include "linbopostprocessactions.h"
+
 class LinboBackend;
 class LinboOs;
 
@@ -37,10 +39,12 @@ public:
     friend class LinboOs;
 
     QString getDescription();
-    const QString& getName() const {
+    bool upload(LinboPostProcessActions::Flags postProcessActions);
+
+    const QString& name() const {
         return this->_name;
     }
-    LinboOs* getOs() {
+    LinboOs* os() {
         return this->_os;
     }
     bool hasOs() {

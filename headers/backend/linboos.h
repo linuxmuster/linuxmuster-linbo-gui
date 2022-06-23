@@ -27,6 +27,7 @@
 #include <QtDebug>
 
 #include "linboimage.h"
+#include "linbopostprocessactions.h"
 
 class LinboOs : public QObject
 {
@@ -94,20 +95,20 @@ public:
     bool actionEnabled(LinboOsStartAction action);
     static LinboOsStartAction startActionFromString(const QString& name);
 
-    bool start();
-    bool sync();
-    bool reinstall();
+    bool executeStart();
+    bool executeSync();
+    bool executeReinstall();
+    bool executeDefaultAction();
 
-    LinboBackend* backend() {
-        return this->_parent;
-    }
+    bool replaceImage(QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createImage(QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
 private:
     explicit LinboOs(LinboBackend *parent = nullptr);
 
-    void setBaseImage (LinboImage* baseImage);
+    void _setBaseImage(LinboImage* baseImage);
 
-    LinboBackend* _parent;
+    LinboBackend* _backend;
 
     QString _name;
     QString _version;

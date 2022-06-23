@@ -20,6 +20,8 @@
 #define QMODERNDIALOG_H
 
 #include <QDialog>
+#include <QMap>
+#include <QPair>
 #include <QObject>
 #include <QWidget>
 #include <QApplication>
@@ -36,14 +38,12 @@ class ModalOverlay;
 class LinboDialog : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(double scale READ getScale WRITE setScale)
-    Q_PROPERTY(QString title READ getTitle WRITE setTitle)
 
 public:
     LinboDialog(QWidget* parent);
 
     virtual void setTitle(QString title);
-    virtual QString getTitle();
+    virtual QString title();
 
     virtual void centerInParent();
 
@@ -56,42 +56,65 @@ protected:
     void addToolButton(LinboToolButton* toolButton);
 
 private:
-    double scale;
-    bool busy;
-    QString title;
+    struct _AnimatedWidget {
+        bool isValid;
+        QWidget* widget;
+        QGraphicsOpacityEffect* effect;
+        QPropertyAnimation* animation;
+    };
+    typedef QList<_AnimatedWidget> AnimatedWidgets;
+    typedef QPair<QWidget*, QWidget*> WidgetPair;
 
-    ModalOverlay* modalOverlayWidget;
+    bool _busy;
+    QString _title;
 
-    QGraphicsOpacityEffect* opacityEffect;
-    QPropertyAnimation* opacityEffectAnimation;
+    ModalOverlay* _modalOverlayWidget;
 
-    QRect originalGeometry;
+    AnimatedWidgets _animatedWidgets;
 
-    QWidget* toolBarWidget;
-    QHBoxLayout* toolBarLayout;
-    QLabel* titleLabel;
-    LinboToolButton* closeButton;
-    QGraphicsOpacityEffect* toolBarOpacityEffect;
-    QPropertyAnimation* toolBarOopacityEffectAnimation;
+    QRect _originalGeometry;
 
-    QWidget* bottomToolBarWidget;
-    QHBoxLayout* bottomToolBarLayout;
-    QGraphicsOpacityEffect* bottomToolBarOpacityEffect;
-    QPropertyAnimation* bottomToolBarOopacityEffectAnimation;
-    QList<LinboToolButton*> toolButtons;
+    QWidget* _toolBarWidget;
+    QHBoxLayout* _toolBarLayout;
+    QLabel* _titleLabel;
+    LinboToolButton* _closeButton;
 
-    QWidget* firstChild;
+    QWidget* _bottomToolBarWidget;
+    QHBoxLayout* _bottomToolBarLayout;
+    QList<LinboToolButton*> _toolButtons;
+
+    QWidget* _firstChild;
+
+    void _initColors();
+    void _initModalWidget();
+    void _initOpacityEffectForWidget(QWidget* widget);
+    void _initToolbar();
+    void _initBottomToolbar();
+
+    void _updateToolbarsEnabled();
+
+    void _updateTabOrder();
+    WidgetPair _updateTabOrderChildren(WidgetPair currentPair);
+    WidgetPair _updateTabOrderBottomToolBar(WidgetPair currentPair);
+    void _closeTabOrderCircle(WidgetPair currentPair);
+    WidgetPair _updateWidgetTabOrder(QWidget* widget, WidgetPair currentPair);
+
+    void _setAllAnimatedWidgetsVisible(bool visible);
+    void _setAnimatedWidgetVisible(bool visible, _AnimatedWidget widget);
+    void _hideAnimatedWidget(_AnimatedWidget widget);
+    void _showAnimatedWidget(_AnimatedWidget widget);
+    _AnimatedWidget _findAnimatedWidget(QPropertyAnimation* animation);
+
+    void _resizeToolBar(int rowHeight, int margins, int toolBarHeight);
+    void _resizeBottomToolBar(int rowHeight, int margins, int toolBarHeight);
 
 public slots:
     void open();
     void close();
     void autoClose();
 
-    void setScale(double scale);
-    double getScale();
-
 private slots:
-    void animationFinished();
+    void _handleAnimationFinished();
 
 signals:
     void opened();
@@ -100,27 +123,32 @@ signals:
 
 class ModalOverlay : public QWidget {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ getColor WRITE setColor)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
-    friend class LinboDialog;
+    ModalOverlay(QWidget* parent);
+
+    QColor color();
+    void setColor(QColor color);
+
+    void setVisibleAnimated(bool visible);
 
 protected:
     void mouseReleaseEvent (QMouseEvent* event) override;
 
 private:
-    ModalOverlay(QWidget* parent);
+    void _show();
+    void _hide();
 
-    QColor getColor();
-    void setColor(QColor color);
+    QPropertyAnimation* _opacityAnimation;
+    QColor _color;
 
-    void setVisibleAnimated(bool visible);
-
-    QPropertyAnimation* opacityAnimation;
-    QColor color;
+    static constexpr QColor _INVISIBLE_COLOR = QColor(0,0,0,0);
+    static constexpr QColor _VISIBLE_COLOR = QColor(0,0,0,66);
 
 signals:
     void clicked();
+    void colorChanged(QColor color);
 };
 
 #endif // QMODERNDIALOG_H

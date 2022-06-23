@@ -48,34 +48,36 @@ public:
     explicit LinboMainPage(LinboBackend* backend, QWidget *parent = nullptr);
 
 private:
-    LinboBackend* backend;
-    LinboOsSelectionRow* osSelectionRow;
-    LinboMainActions* mainActions;
-    LinboClientInfo* clientInfo;
-    LinboPushButton* rootActionButton;
-    LinboPushButton* logoutActionButton;
-    QList<LinboPushButton*> powerActionButtons;
+    LinboBackend* _backend;
+    LinboOsSelectionRow* _osSelectionRow;
+    LinboMainActions* _mainActions;
+    LinboClientInfo* _clientInfo;
+    LinboPushButton* _rootActionButton;
+    LinboPushButton* _logoutActionButton;
+    QList<LinboPushButton*> _powerActionButtons;
 
-    LinboLoginDialog* loginDialog;
-    LinboTerminalDialog* terminalDialog;
-    LinboConfirmationDialog* confirmationDialog;
-    LinboRegisterDialog* registerDialog;
-    LinboUpdateCacheDialog* updateCacheDialog;
-    LinboImageCreationDialog* imageCreationDialog;
-    LinboImageUploadDialog* imageUploadDialog;
-    QList<LinboDialog*> allDialogs;
+    LinboLoginDialog* _loginDialog;
+    LinboTerminalDialog* _terminalDialog;
+    LinboConfirmationDialog* _confirmationDialog;
+    LinboRegisterDialog* _registerDialog;
+    LinboUpdateCacheDialog* _updateCacheDialog;
+    LinboImageCreationDialog* _imageCreationDialog;
+    LinboImageUploadDialog* _imageUploadDialog;
+    QList<LinboDialog*> _allDialogs;
 
-    QPropertyAnimation* startActionWidgetAnimation;
-    QPropertyAnimation* clientInfoAnimation;
+    QPropertyAnimation* _startActionWidgetAnimation;
+    QPropertyAnimation* _clientInfoAnimation;
 
-    bool inited;
-    bool showClientInfo;
-    bool f1Pressed;
+    bool _inited;
+    bool _showClientInfo;
+    bool _f1Pressed;
+
+protected slots:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
-    void handleLinboStateChanged(LinboBackend::LinboState newState);
+    void _handleLinboStateChanged(LinboBackend::LinboState newState);
 
-    bool eventFilter(QObject *obj, QEvent *event) override;
 signals:
 
 };

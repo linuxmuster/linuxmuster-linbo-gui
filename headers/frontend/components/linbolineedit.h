@@ -32,7 +32,6 @@ public:
     LinboLineEdit(QWidget* parent = nullptr);
 
 protected:
-
     void resizeEvent(QResizeEvent *event) override;
 };
 

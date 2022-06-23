@@ -20,78 +20,78 @@
 
 LinboPushButtonOverlay::LinboPushButtonOverlay(OverlayType type, QWidget* overlayWidget, bool managedAutomatically, QObject *parent) : QObject(parent)
 {
-    this->shouldBeVisible = false;
-    this->managedAutomatically = managedAutomatically;
-    this->type = type;
-    this->widget = overlayWidget;
-    this->widget->setVisible(false);
+    this->_shouldBeVisible = false;
+    this->_managedAutomatically = managedAutomatically;
+    this->_type = type;
+    this->_widget = overlayWidget;
+    this->_widget->setVisible(false);
 
-    this->effect = new QGraphicsOpacityEffect(overlayWidget);
-    this->effect->setOpacity(0);
-    this->effect->setEnabled(false);
-    this->widget->setGraphicsEffect(this->effect);
+    this->_effect = new QGraphicsOpacityEffect(overlayWidget);
+    this->_effect->setOpacity(0);
+    this->_effect->setEnabled(false);
+    this->_widget->setGraphicsEffect(this->_effect);
 
-    this->animation = new QPropertyAnimation(this->effect, "opacity");
-    this->animation->setDuration(400);
-    this->animation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
+    this->_animation = new QPropertyAnimation(this->_effect, "opacity");
+    this->_animation->setDuration(400);
+    this->_animation->setEasingCurve(QEasingCurve(QEasingCurve::InOutQuad));
 
-    this->setEffectEnabled(false);
+    this->_setEffectEnabled(false);
 
-    connect(this->animation, SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)), this, SLOT(handleAnimationStateChanged(QAbstractAnimation::State, QAbstractAnimation::State)));
+    connect(this->_animation, &QPropertyAnimation::stateChanged, this, &LinboPushButtonOverlay::_handleAnimationStateChanged);
 }
 
 
-void LinboPushButtonOverlay::setAnimationDuration(int duration) {
-    this->animation->setDuration(duration);
+void LinboPushButtonOverlay::_setAnimationDuration(int duration) {
+    this->_animation->setDuration(duration);
 }
 
 void LinboPushButtonOverlay::setVisible(bool visible) {
-    if(this->shouldBeVisible == visible)
+    if(this->_shouldBeVisible == visible)
         return;
 
-    this->shouldBeVisible = visible;
+    this->_shouldBeVisible = visible;
 
-    this->effect->setOpacity(0);
-    this->widget->setVisible(visible);
+    this->_effect->setOpacity(0);
+    this->_widget->setVisible(visible);
 }
 
 void LinboPushButtonOverlay::setVisibleAnimated(bool visible) {
-    if(this->shouldBeVisible == visible)
+    if(this->_shouldBeVisible == visible)
         return;
 
-    this->shouldBeVisible = visible;
+    this->_shouldBeVisible = visible;
 
     int startValue = visible ? 0:1;
-    this->animation->stop();
-    this->animation->setStartValue(startValue);
-    this->animation->setEndValue(1-startValue);
-    this->animation->start();
+    this->_animation->stop();
+    this->_animation->setStartValue(startValue);
+    this->_animation->setEndValue(1-startValue);
+    this->_animation->start();
 }
 
-void LinboPushButtonOverlay::setEffectEnabled(bool enabled) {
+void LinboPushButtonOverlay::_setEffectEnabled(bool enabled) {
     if(enabled) {
-        this->effect->setEnabled(true);
-        this->widget->setVisible(true);
+        this->_effect->setEnabled(true);
+        this->_widget->setVisible(true);
     }
     else {
-        this->widget->setVisible(this->effect->opacity() > 0);
-        this->effect->setEnabled(false);
+        this->_widget->setVisible(this->_effect->opacity() > 0);
+        this->_effect->setEnabled(false);
     }
 }
 
-void LinboPushButtonOverlay::handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State) {
+void LinboPushButtonOverlay::_handleAnimationStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State) {
     switch (newState) {
     case QAbstractAnimation::Running:
-        this->setEffectEnabled(true);
+        this->_setEffectEnabled(true);
         break;
     case QAbstractAnimation::Stopped:
-        this->setEffectEnabled(false);
+        this->_setEffectEnabled(false);
         break;
     default:
         break;
     }
 }
 
-LinboPushButtonOverlay::OverlayType LinboPushButtonOverlay::getType() {
-    return this->type;
+LinboPushButtonOverlay::OverlayType LinboPushButtonOverlay::_getType() {
+    return this->_type;
 }

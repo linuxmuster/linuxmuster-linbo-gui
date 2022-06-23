@@ -23,18 +23,18 @@ LinboGuiTheme* gTheme = nullptr;
 LinboGuiTheme::LinboGuiTheme(LinboBackend* backend, QMainWindow* mainWindow, QObject *parent) : QObject(parent)
 {
     gTheme = this;
-    this->_backend = backend;
+    this->_theme = backend->config()->theme();
     this->_mainWindow = mainWindow;
 }
 
-QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
+QString LinboGuiTheme::iconPath(LinboTheme::Icon icon) {
     if(icon == LinboTheme::NoIcon)
         return "";
 
     if(
-        !this->_backend->getConfig()->theme()->getIconPath(icon).isEmpty()
+        !this->_theme->iconPath(icon).isEmpty()
     ) {
-        return this->_backend->getConfig()->theme()->getIconPath(icon);
+        return this->_theme->iconPath(icon);
     }
 
     QString iconPath = ":/icons/";
@@ -44,7 +44,7 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
         iconPath += this->_isBackgroundColorDark() ? "light/":"dark/";
 
     // remove "Icon"
-    QString iconName = this->_backend->getConfig()->theme()->getIconName(icon);
+    QString iconName = this->_theme->iconName(icon);
     // de-capitalize first letter
     iconName.replace(0, 1, iconName.at(0).toLower());
 
@@ -52,36 +52,36 @@ QString LinboGuiTheme::getIconPath(LinboTheme::LinboThemeIcon icon) {
     return iconPath;
 }
 
-QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
+QColor LinboGuiTheme::color(LinboTheme::ColorRole colorRole) {
 
     if(
-        this->_backend->getConfig()->theme()->getColor(colorRole).isValid()
+        this->_theme->color(colorRole).isValid()
     ) {
-        return this->_backend->getConfig()->theme()->getColor(colorRole);
+        return this->_theme->color(colorRole);
     }
 
     switch (colorRole) {
     case LinboTheme::PrimaryColor:
-        return this->_backend->getConfig()->theme()->getColor(LinboTheme::PrimaryColor);
+        return this->_theme->color(LinboTheme::PrimaryColor);
     case LinboTheme::BackgroundColor:
-        return this->getColor(LinboTheme::PrimaryColor);
+        return this->color(LinboTheme::PrimaryColor);
     case LinboTheme::ElevatedBackgroundColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::BackgroundColor).lighter(120);
+            return this->color(LinboTheme::BackgroundColor).lighter(120);
         else
-            return this->getColor(LinboTheme::BackgroundColor).darker(105);
+            return this->color(LinboTheme::BackgroundColor).darker(105);
     case LinboTheme::LineColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::PrimaryColor).lighter(170);
+            return this->color(LinboTheme::PrimaryColor).lighter(170);
         else
-            return this->getColor(LinboTheme::PrimaryColor).darker(120);
+            return this->color(LinboTheme::PrimaryColor).darker(120);
     case LinboTheme::ToolButtonColor:
-        return this->getColor(LinboTheme::AccentColor);
+        return this->color(LinboTheme::AccentColor);
     case LinboTheme::DisabledToolButtonColor:
         if(this->_isBackgroundColorDark())
-            return this->getColor(LinboTheme::ToolButtonColor).lighter(170);
+            return this->color(LinboTheme::ToolButtonColor).lighter(170);
         else
-            return this->getColor(LinboTheme::ToolButtonColor).darker(120);
+            return this->color(LinboTheme::ToolButtonColor).darker(120);
     default:
         if(this->_isBackgroundColorDark())
             return this->_lightColors[colorRole];
@@ -91,17 +91,19 @@ QColor LinboGuiTheme::getColor(LinboTheme::LinboThemeColorRole colorRole) {
 
 }
 
-int LinboGuiTheme::getSize(LinboTheme::LinboThemeSizeRole sizeRole) {
+int LinboGuiTheme::size(LinboTheme::SizeRole sizeRole) {
     int rootHeight = this->_mainWindow->height();
     switch (sizeRole) {
     case LinboTheme::Margins:
-        return this->getSize(LinboTheme::RowHeight) * 0.4;
+        return this->size(LinboTheme::RowHeight) * 0.4;
     case LinboTheme::RowHeight:
         return rootHeight * 0.05;
     case LinboTheme::RowLabelHeight:
-        return this->getSize(LinboTheme::RowHeight) * 0.8;
+        return this->size(LinboTheme::RowHeight) * 0.8;
     case LinboTheme::RowFontSize:
-        return this->getSize(LinboTheme::RowLabelHeight) * 0.5;
+        return this->size(LinboTheme::RowLabelHeight) * 0.5;
+    case LinboTheme::RowPaddingSize:
+        return this->size(LinboTheme::RowFontSize) * 0.2;
     case LinboTheme::DialogWidth:
         return rootHeight * 0.8;
     case LinboTheme::DialogHeight:
@@ -122,8 +124,44 @@ int LinboGuiTheme::toFontSize(int size) {
 }
 
 bool LinboGuiTheme::_isBackgroundColorDark() {
-    QColor backgroundColor = QColor(this->getColor(LinboTheme::BackgroundColor));
+    QColor backgroundColor = QColor(this->color(LinboTheme::BackgroundColor));
     int h, s, v;
     backgroundColor.getHsv(&h, &s, &v);
     return v < 210;
+}
+
+QString LinboGuiTheme::insertValues(QString string) {
+    string = this->insertColorValues(string);
+    string = this->insertIconValues(string);
+    return this->insertSizeValues(string);
+}
+
+QString LinboGuiTheme::insertColorValues(QString string) {
+    QMapIterator<LinboTheme::ColorRole, QString> i(this->_theme->colorRolesAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString colorKey = "%" + i.value();
+        string = string.replace(colorKey, this->color(i.key()).name());
+    }
+    return string;
+}
+
+QString LinboGuiTheme::insertIconValues(QString string) {
+    QMapIterator<LinboTheme::Icon, QString> i(this->_theme->iconsAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString iconKey = "%" + i.value();
+        string = string.replace(iconKey, this->iconPath(i.key()));
+    }
+    return string;
+}
+
+QString LinboGuiTheme::insertSizeValues(QString string) {
+    QMapIterator<LinboTheme::SizeRole, QString> i(this->_theme->sizeRolesAndNames());
+    while (i.hasNext()) {
+        i.next();
+        QString sizeKey = "%" + i.value();
+        string = string.replace(sizeKey, QString::number(this->size(i.key())));
+    }
+    return string;
 }

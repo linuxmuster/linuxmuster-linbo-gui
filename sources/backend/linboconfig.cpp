@@ -27,7 +27,6 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_locale = "";
     this->_downloadMethod = LinboConfig::Rsync;
     this->_autoFormat = 0;
-    this->_useMinimalLayout = false;
     this->_guiDisabled = false;
     this->_rootTimeout = 0;
     this->_autoPartition = false;
@@ -35,16 +34,17 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_operatingSystems = {};
     this->_themeConfFile = "";
     this->_clientDetailsVisibleByDefault = false;
+    this->_theme = new LinboTheme();
 }
 
 QList<LinboImage*> LinboConfig::getImagesOfOs(LinboOs* os, bool includeImagesWithoutOs, bool includeNonExistantImages) {
     QList<LinboImage*> filteredImages;
     QList<LinboImage*> imagesWithoutOs;
 
-    for(LinboImage* image : this->_images)
+    for(LinboImage* image : qAsConst(this->_images))
         if(!image->existsOnDisk() && !includeNonExistantImages)
             continue;
-        else if(image->getOs() == os)
+        else if(image->os() == os)
             filteredImages.append(image);
         else if(includeImagesWithoutOs && !image->hasOs())
             imagesWithoutOs.append(image);

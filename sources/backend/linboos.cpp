@@ -21,7 +21,7 @@
 
 LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
 {
-    this->_parent = parent;
+    this->_backend = parent;
     this->_autostartEnabled = false;
     this->_autostartTimeout = 0;
     this->_hidden = false;
@@ -30,22 +30,40 @@ LinboOs::LinboOs(LinboBackend *parent) : QObject(parent)
     this->_baseImage = nullptr;
 }
 
-bool LinboOs::start() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->startCurrentOs();
+bool LinboOs::executeStart() {
+    return this->_backend->startOs(this);
 }
 
-bool LinboOs::sync() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->syncCurrentOs();
+bool LinboOs::executeSync() {
+    return this->_backend->syncOs(this);
 }
 
-bool LinboOs::reinstall() {
-    this->_parent->setCurrentOs(this);
-    return this->_parent->reinstallCurrentOs();
+bool LinboOs::executeReinstall() {
+    return this->_backend->reinstallOs(this);
 }
 
-void LinboOs::setBaseImage (LinboImage* baseImage) {
+bool LinboOs::executeDefaultAction() {
+    switch (this->defaultAction()) {
+    case LinboOs::StartOs:
+        return this->executeStart();
+    case LinboOs::SyncOs:
+        return this->executeSync();
+    case LinboOs::ReinstallOs:
+        return this->executeReinstall();
+    default:
+        return false;
+    }
+}
+
+bool LinboOs::replaceImage(QString description, LinboPostProcessActions::Flags postProcessActions) {
+    return this->_backend->replaceImageOfOs(this, description, postProcessActions);
+}
+
+bool LinboOs::createImage(QString name, QString description, LinboPostProcessActions::Flags postProcessActions) {
+    return this->_backend->createImageOfOs(this, name, description, postProcessActions);
+}
+
+void LinboOs::_setBaseImage (LinboImage* baseImage) {
     baseImage->_os = this;
     this->_baseImage = baseImage;
 }

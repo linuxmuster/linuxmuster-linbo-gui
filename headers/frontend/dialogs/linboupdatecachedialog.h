@@ -43,13 +43,13 @@ public:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    LinboBackend* backend;
-    QButtonGroup* updateTypeButtonGroup;
-    QVBoxLayout* mainLayout;
-    LinboCheckBox* formatCheckBox;
+    LinboBackend* _backend;
+    QButtonGroup* _updateTypeButtonGroup;
+    QVBoxLayout* _mainLayout;
+    LinboCheckBox* _formatCheckBox;
 
 private slots:
-    void updateCache();
+    void _updateCache();
 
 };
 
