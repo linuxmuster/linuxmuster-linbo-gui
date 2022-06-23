@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+MAINTAINER dorian@linuxmuster.net
+
 ARG QT_EVERYWHERE_URL="https://download.qt.io/archive/qt/6.2/6.2.2/single/qt-everywhere-src-6.2.2.tar.xz"
 
 WORKDIR /workspace
