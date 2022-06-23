@@ -1,4 +1,4 @@
-me: "Build linbo-gui build docker image"
+name: "Build linbo-gui build docker image"
 
 on:
   push:
@@ -6,6 +6,8 @@ on:
       - feat/Qt6
     paths:
       - '/build/docker/Dockerfile'
+  workflow_dispatch:
+
 jobs:
   build-and-push-docker-image:
     name: Build and push linbo-gui build Docker image to GhCr
