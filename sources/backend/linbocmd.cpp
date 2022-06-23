@@ -62,7 +62,7 @@ bool LinboCmd::reinstallOs(LinboOs* os, QString serverIP, QString cachePath) {
 }
 
 bool LinboCmd::authenticate(QString password, QString serverIP) {
-    int exitCode = this->executeSync("authenticate", serverIP, "linbo", password, "linbo");
+    int exitCode = this->executeSync("authenticate", serverIP, "linbo", password);
     return exitCode == 0;
 }
 
