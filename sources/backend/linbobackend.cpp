@@ -44,6 +44,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
     if(this->_config->guiDisabled()) {
         this->_setState(Disabled);
         this->_logger->_log("Linbo GUI is disabled", LinboLogger::LinboGuiInfo);
+        return;
     }
 
     this->_executeAutomaticTasks();
