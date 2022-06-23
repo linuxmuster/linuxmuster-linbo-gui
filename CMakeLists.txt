@@ -256,3 +256,6 @@ install(TARGETS linbo_gui
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+qt_import_plugins(linbo_gui
+    INCLUDE Qt6::QLinuxFbIntegrationPlugin)
