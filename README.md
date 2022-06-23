@@ -13,7 +13,7 @@
   <a href="https://crowdin.com/project/linuxmusternet"><img src="https://badges.crowdin.net/linuxmusternet/localized.svg" /></a>
 </p>
 
-This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt6!
+This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo7) based on Qt6!
 
 ### Maintainance Details
     
