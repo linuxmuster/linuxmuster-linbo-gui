@@ -9,4 +9,4 @@
 src_dir="$(pwd)"
 deb_dir="$src_dir/debian"
 
-docker run --rm -v $src_dir:/workspace linuxmuster/linuxmuster-linbo-gui-build 
+docker run --rm -v $src_dir:/workspace ghcr.io/linuxmuster/linuxmuster-linbo-gui-build 

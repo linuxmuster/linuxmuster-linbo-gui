@@ -1,0 +1,34 @@
+me: "Build linbo-gui build docker image"
+
+on:
+  push:
+    branches:
+      - feat/Qt6
+    paths:
+      - '/build/docker/Dockerfile'
+jobs:
+  build-and-push-docker-image:
+    name: Build and push linbo-gui build Docker image to GhCr
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: /build/docker
+          push: true
+          file: /build/docker/Dockerfile
+          tags: |
+            ghcr.io/linuxmuster/linuxmuster-linbo-gui-build:latest
