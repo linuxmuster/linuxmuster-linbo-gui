@@ -17,12 +17,12 @@ This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) bas
 
 # Maintainance Details
     
-Linuxmuster.net official | ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)  YES
+Linuxmuster.net official | ✅ YES
 :---: | :---: 
-[Community support](https://ask.linuxmuster.net) | ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)  YES**
-Actively developed | ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)  YES
+[Community support](https://ask.linuxmuster.net) | ✅ YES**
+Actively developed | ✅ YES
 Maintainer organisation |  Linuxmuster.net e.V. 
-Primary maintainer | dorian@itsblue.de  
+Primary maintainer | dorian@linuxmuster.net
 
 
 ** The linuxmuster community consits of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in any case.
@@ -35,10 +35,6 @@ Please note: the prebuilt packages do not contain a 32-bit version.
 # Building yourself
 For your convenience there is a script to build the package: [build.sh](./build.sh)  
 You have to invoke it in the build root.  
-If you want to build the 32-bit version, you will have to insert `32` in the following places:
-- In the file `/build.sh`: Line 64 change `(64)` to `(64 32)`
-- In the file `/debian/mkarchives.sh`: Line 24 change `for bits in 64; do` to `for bits in 32 64; do`
-Please note: It will take a long time to build the first time you do it.  
 
 # Screenshots
 Some screenshots can be found here: https://github.com/linuxmuster/linuxmuster-linbo-gui/tree/master/.github/media  
