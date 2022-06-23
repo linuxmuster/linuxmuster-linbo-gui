@@ -52,7 +52,7 @@ if [[ $ARCH_VALID -ne 1 ]]; then
 fi
 
 sudo apt-get update
-## 64: sudo DEBIAN_FRONTEND=noninteractive apt-get install build-essential gcc-9 g++-9 libudev-dev libudev1=249.11-0ubuntu3 libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y
+## 64: sudo DEBIAN_FRONTEND=noninteractive apt-get install build-essential gcc-9 g++-9 libudev-dev libudev1=249.11-0ubuntu3 libinput-dev libxkbcommon-dev  libmtdev-dev libwacom-dev -y --allow-downgrades
 
 # Check for errors in apt install
 if [[ $? -ne 0 ]]; then
