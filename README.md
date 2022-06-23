@@ -15,7 +15,7 @@
 
 This is the GUI of [Linbo](https://github.com/linuxmuster/linuxmuster-linbo) based on Qt6!
 
-# Maintainance Details
+### Maintainance Details
     
 Linuxmuster.net official | ✅ YES
 :---: | :---: 
@@ -27,27 +27,33 @@ Primary maintainer | dorian@linuxmuster.net
 
 ** The linuxmuster community consits of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in any case.
 
-# Releases
+### Releases
 The latest release can be found [here](https://github.com/linuxmuster/linuxmuster-linbo-gui/releases/latest)  
 The attached file `linuxmuster-linbo-gui7_*.deb` is the Package which you can install on your server.
 Please note: the prebuilt packages do not contain a 32-bit version.
 
-# Building yourself
+### Compatibility with Linbo
+If you install an incompatible combination of the gui and linbo itself, the gui will not function!
+
+- `>= v7.1.0` is only compatible with Linbo `>= v4.1.0`
+- `< v7.1.0` is only compatible with Linbo `< v4.1.0`
+
+### Building yourself
 For your convenience there is a script to build the package: [build.sh](./build.sh)  
 You have to invoke it in the build root.  
 
-# Screenshots
+### Screenshots
 Some screenshots can be found here: https://github.com/linuxmuster/linuxmuster-linbo-gui/tree/master/.github/media  
 Please note that they might not be up to date though.
   
-# Icons
+### Icons
 All of the SVG icons in this Gui were taken from one of the following sources and slighlty modified:
 - The Linux Mint was taken from [Icon Fonts](http://www.onlinewebfonts.com/icon) and is licensed by CC BY 3.0
 - The Debian icon was taken from [debian.org](https://www.debian.org/logos/)
 - The Windows 7 icon was taken from [Wikipedia](https://commons.wikimedia.org/wiki/File:Windows_logo_-_2002%E2%80%932012_(Black).svg)
 - All other icons were taken from [fontawesome.com](https://fontawesome.com/license) and are licensed under the [Creative Commons Attribution 4.0 International license](https://fontawesome.com/license).
 
-# Creating a release
+### Creating a release
 The following steps have to be followed to create a release:
 1. Update the changelog file
 2. Update the version code in the .pro file
@@ -62,7 +68,7 @@ In case of a mistake, the tag can be deleted:
 1. Locally: `git tag -d vVERSION`
 2. Remotely: `git push --delete origin vVERSION`
 
-## Version schema:
+### Version schema:
 - Genreal: `major.minor.patch` ([semver](https://semver.org/))
 - Prereleases (release candidates) must end with `~XX` where `XX` is the number of the Prerelease
   - So, before version `7.1.1` is released, there may be versions `7.1.1~01`, `7.1.1~02`, and so on
