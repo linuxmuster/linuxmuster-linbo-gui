@@ -86,7 +86,7 @@ jobs:
           assets_path: .
 
   publsh:
-    needs: deb-package
+    needs: build
     name: Push to archive repo
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
