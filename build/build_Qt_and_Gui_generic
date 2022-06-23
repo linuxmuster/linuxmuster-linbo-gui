@@ -78,6 +78,7 @@ then
 
 	# set default platform plugin
 	export QT_QPA_PLATFORM=linuxfb
+	export CMAKE_PREFIX_PATH=../Qt
 
 	# configure Qt
 	./configure \
