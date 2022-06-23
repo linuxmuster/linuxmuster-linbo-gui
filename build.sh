@@ -75,7 +75,8 @@ checkInstalledVersion () {
 }
 
 # Check ubuntu version
-if [[ $(lsb_release -rs) != "22.04" ]]; then
+. /etc/os-release
+if [[ $VERSION_ID != "22.04" ]]; then
 	echo "--------------------------------"
 	echo "- Incompatible ubuntu version! -"
 	echo "- You have to be on 22.04      -"
@@ -83,9 +84,9 @@ if [[ $(lsb_release -rs) != "22.04" ]]; then
 	exit 1
 fi
 
-checkInstalledVersion cmake 3.21.1
-checkInstalledVersion gcc 9.0.0
-checkInstalledVersion g++ 9.0.0
+#checkInstalledVersion cmake 3.21.1
+#checkInstalledVersion gcc 9.0.0
+#checkInstalledVersion g++ 9.0.0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
