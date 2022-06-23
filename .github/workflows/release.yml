@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt list | grep docker
-          sudo apt install debhelper
+          sudo apt install debhelper docker.io docker
           ./build.sh --nodeb
 
       - name: Upload artifact
