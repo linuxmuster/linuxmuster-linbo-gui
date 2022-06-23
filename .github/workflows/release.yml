@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: |
           sudo apt update
-          sudo apt list | grep docker
+          sudo apt list --installed
           sudo apt install debhelper docker.io docker
           ./build.sh --nodeb
 
