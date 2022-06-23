@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Thomas Schmitt <thomas@linuxmuster.net>, Dorian Zedler <dorian@itsblue.de>
 Homepage: https://github.com/linuxmuster/linuxmuster-linbo-gui
-Build-Depends: debhelper, docker-ce | docker.io, docker-ce-cli | docker
+Build-Depends: debhelper, docker-ce | moby-engine, docker-ce-cli | moby-cli
 
 Package: linuxmuster-linbo-gui7
 Architecture: all
