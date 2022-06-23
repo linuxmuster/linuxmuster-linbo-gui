@@ -19,36 +19,9 @@ jobs:
       - name: Build
         run: |
           sudo apt update
-          sudo apt list --installed
-          sudo apt install debhelper docker.io docker
-          ./build.sh --nodeb
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linbofs
-          path: build/linbofs*
+          sudo apt install debhelper
+          ./build.sh
         
-  deb-package:
-    needs: build
-    name: DEB-Package
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install debhelper -y
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linbofs
-          path: build
-
-      - name: Build
-        run: debian/mkdeb.sh
-
       - name: Copy artifacts
         run: mkdir package && cp ../linuxmuster-linbo-gui7_* ./package
 
@@ -59,7 +32,7 @@ jobs:
           path: package/*
         
   github-release:
-    needs: deb-package
+    needs: build
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     name: GitHub Release
     runs-on: ubuntu-18.04
