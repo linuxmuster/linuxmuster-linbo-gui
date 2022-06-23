@@ -75,10 +75,10 @@ checkInstalledVersion () {
 }
 
 # Check ubuntu version
-if [[ $(lsb_release -rs) != "18.04" ]]; then
+if [[ $(lsb_release -rs) != "22.04" ]]; then
 	echo "--------------------------------"
 	echo "- Incompatible ubuntu version! -"
-	echo "- You have to be on 18.04      -"
+	echo "- You have to be on 22.04      -"
 	echo "--------------------------------"
 	exit 1
 fi
