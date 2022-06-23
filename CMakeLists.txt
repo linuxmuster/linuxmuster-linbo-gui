@@ -107,7 +107,7 @@ target_include_directories(linbo_gui PUBLIC
 )
 
 target_compile_definitions(linbo_gui PUBLIC
-    GUI_VERSION=\"\\\"7.1.0~rc01\\\"\"
+    GUI_VERSION=\"\\\"7.1.0\\\"\"
 )
 
 target_link_libraries(linbo_gui PUBLIC
