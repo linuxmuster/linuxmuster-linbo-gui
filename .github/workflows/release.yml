@@ -17,7 +17,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build
-        run: ./build.sh --nodeb
+        run: |
+          sudo apt update
+          sudo apt list | grep docker
+          sudo apt install debhelper
+          ./build.sh --nodeb
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
