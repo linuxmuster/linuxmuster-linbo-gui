@@ -87,6 +87,7 @@ fi
 #checkInstalledVersion cmake 3.21.1
 #checkInstalledVersion gcc 9.0.0
 #checkInstalledVersion g++ 9.0.0
+checkInstalledVersion docker 20.0.0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
@@ -127,7 +128,7 @@ do
 		sed -i "/## $NOT_ARCH: /d" build.sh
 	done
 
-	./build.sh "$@"
+	docker run --rm -it -v $PWD/../..:/workspace ubuntu:22.04 bash -c "cd /workspace/build/buildGUI$ARCH && ./build.sh \"$@\""
 
 	if [[ $? -ne 0 ]]; then
 	   echo "There was an error when building linbo_gui for $ARCH!"
@@ -166,7 +167,7 @@ echo "-   Now building debian package      -"
 echo "--------------------------------------"
 
 sudo apt update
-sudo apt install debhelper -y
+sudo apt install debhelper build-essential -y
 
 cd ..
 ./debian/mkdeb.sh
