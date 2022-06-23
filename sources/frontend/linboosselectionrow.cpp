@@ -107,7 +107,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             buttonHeight = heightOverride / 2 - spacing / 2;
             totalWidth = buttonWidth * buttonCount + spacing * (buttonCount + 1);
         }
-        if(buttonCount > 2) {
+        else if(buttonCount > 2) {
             // if we have more than two buttons -> we have multiple rows with two buttons each
             spacing = heightOverride * 0.1;
             buttonWidth = std::min((widthOverride - spacing) / 2, int(heightOverride * 1.5) - spacing);
