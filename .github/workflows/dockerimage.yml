@@ -3,7 +3,7 @@ name: "Build linbo-gui build docker image"
 on:
   push:
     branches:
-      - feat/Qt6
+      - main
     paths:
       - '/build/docker/Dockerfile'
   workflow_dispatch:
