@@ -3,7 +3,7 @@ name: "Build linbo-gui build docker image"
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - '/build/docker/Dockerfile'
   workflow_dispatch:
