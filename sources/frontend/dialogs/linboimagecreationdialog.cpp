@@ -34,7 +34,7 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     this->_actionButtonGroup = new QButtonGroup(this);
     this->_actionButtonGroup->setExclusive(true);
 
-    connect(this->_actionButtonGroup, &QButtonGroup::buttonToggled, this, &LinboImageCreationDialog::_refreshPathAndDescription);
+    connect(this->_actionButtonGroup, &QButtonGroup::buttonToggled, this, [=] { this->_refreshPathAndDescription(false); });
 
     //% "replace current image"
     LinboRadioButton* replaceImage = new LinboRadioButton(qtTrId("dialog_createImage_action_current"));
