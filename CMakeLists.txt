@@ -22,7 +22,9 @@ find_package(Qt6 COMPONENTS Svg)
 find_package(Qt6 COMPONENTS SvgWidgets)
 find_package(Qt6 COMPONENTS Xml)
 
-qt_add_executable(linbo_gui WIN32 MACOSX_BUNDLE
+qt_add_executable(linbo_gui "")
+
+set(SOURCE_FILES
     headers/backend/linbobackend.h
     headers/backend/linbocmd.h
     headers/backend/linboconfig.h
@@ -98,16 +100,15 @@ qt_add_executable(linbo_gui WIN32 MACOSX_BUNDLE
     sources/linbogui.cpp
     sources/main.cpp
 )
+
+target_sources(linbo_gui PRIVATE ${SOURCE_FILES})
+
 target_include_directories(linbo_gui PUBLIC
     headers
     headers/backend
     headers/frontend
     headers/frontend/components
     headers/frontend/dialogs
-)
-
-target_compile_definitions(linbo_gui PUBLIC
-    GUI_VERSION=\"\\\"7.1.0\\\"\"
 )
 
 target_link_libraries(linbo_gui PUBLIC
@@ -255,6 +256,10 @@ install(TARGETS linbo_gui
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)
+
+target_compile_definitions(linbo_gui PUBLIC
+    GUI_VERSION=\"\\\"7.1.0~rc0\\\"\"
 )
 
 qt_import_plugins(linbo_gui
