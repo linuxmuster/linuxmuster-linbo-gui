@@ -135,14 +135,18 @@ start()
 }
 
 # linbo_cmd preregister 10.0.0.1
-# writes to /tmp/newregister
 preregister()
 {
     if [[ "${1}" != "10.0.0.1" ]]; then
         echo "Wrong parameters: «$*»"
         return 1
     else
-        echo "mobil,x200ma,cpqmathe045,10.16.1.2"
+        echo << EOL
+receiving incremental file list
+last_registered
+             95 100%   92.77kB/s    0:00:00 (xfr#1, to-chk=0/1)
+server,ubuntu_test2,server-test03,10.9.1.103
+EOL
         return 0
     fi
 }
@@ -275,6 +279,7 @@ listimages()
         return 1
     else
         ls -1 ./*.cloop
+        ls -1 ./*.qcow2
         return 0
     fi
 }
