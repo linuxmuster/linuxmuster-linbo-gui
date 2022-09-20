@@ -1,3 +1,5 @@
+> ⚠️ This is <b>version 7.2.x</b> of the linbo-gui for <b>LMN 7.2</b>. Checkout the [v7.0.x branch](https://github.com/linuxmuster/linuxmuster-linbo-gui/tree/v7.0.x) for the current verson for <b>LMN 7.0 and 7.1</b>!
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/linuxmuster/linuxmuster-linbo-gui/master/resources/images/linbo_logo_small.png" alt="Linbo logo" width="70%" />
 </p>
