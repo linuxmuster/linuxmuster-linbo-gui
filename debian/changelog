@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.0.6) lmn71; urgency=medium
+
+  * Fix: qcow2 images not displayed in upload dialog
+
+ -- Dorian Zedler <dorian@itsblue.de>  Tue, 20 Sep 2022 15:36:22 +0100
+
 linuxmuster-linbo-gui7 (7.0.5) lmn71; urgency=medium
 
   * Fix: GuiDisabled not working
