@@ -133,8 +133,6 @@ void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
     QStringList existingImageNames = this->backend->_executeCommand(true, "listimages", config->cachePath()).split("\n");
     for(QString existingImageName : existingImageNames) {
         existingImageName = existingImageName.split("/").last();
-        if(!existingImageName.endsWith(".cloop"))
-            continue;
 
         LinboImage* existingImage = nullptr;
         if(!existingImageName.isEmpty() && !config->_images.contains(existingImageName)) {

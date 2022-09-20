@@ -274,7 +274,7 @@ listimages()
         echo "Wrong parameters: «$*»"
         return 1
     else
-        ls -1 ./*.cloop
+        ls -1 ./*.cloop ./*.qcow2
         return 0
     fi
 }
