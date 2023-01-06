@@ -111,6 +111,6 @@ RUN echo "**** download Qt-everywhere ****" && \
   rm -rf qt-everywhere*
 
 ENV CMAKE_PREFIX_PATH=/usr/lib/Qt
-COPY ./build-linbo-gui /usr/local/bin/
+COPY ./linbo-gui-* /usr/local/bin/
 
-CMD ["/usr/local/bin/build-linbo-gui"]
+CMD ["/usr/local/bin/linbo-gui-build"]

@@ -206,7 +206,8 @@ qt6_add_resources(linbo_gui "linbo"
         ${linbo_resource_files}
 )
 
-qt_add_translations(linbo_gui TS_FILES
+qt_add_translations(linbo_gui
+    TS_FILES
     "resources/translations/linbo-gui/blank.ts"
     "resources/translations/linbo-gui/af-ZA.ts"
     "resources/translations/linbo-gui/ar-SA.ts"
@@ -238,15 +239,8 @@ qt_add_translations(linbo_gui TS_FILES
     "resources/translations/linbo-gui/vi-VN.ts"
     "resources/translations/linbo-gui/zh-CN.ts"
     "resources/translations/linbo-gui/zh-TW.ts"
-)
-
-qt6_add_resources(linbo_gui "translations"
-    PREFIX
-        "/"
-    BASE
-        "resources/translations/linbo-gui"
-    FILES
-        ${translations_resource_files}
+    LRELEASE_OPTIONS
+    -idbased
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)

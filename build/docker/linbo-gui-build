@@ -8,7 +8,8 @@ mkdir -p build/bin
 cd build/bin
 
 cmake ../../
-make -j8
+make linbo_gui_lrelease
+make linbo_gui -j8
 
 ls -l .
 strip linbo_gui

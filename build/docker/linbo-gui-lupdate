@@ -1,0 +1,11 @@
+#!/bin/bash
+# This script must be executed in the root of the linuxmuster-linbo-gui repo
+set -e
+
+cd /workspace
+rm -rf build/bin
+mkdir -p build/bin
+cd build/bin
+
+cmake ../../
+make linbo_gui_lupdate
