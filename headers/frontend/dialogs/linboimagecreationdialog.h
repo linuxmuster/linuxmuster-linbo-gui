@@ -29,7 +29,6 @@
 
 #include "linbodialog.h"
 #include "linbotoolbutton.h"
-#include "linbolineedit.h"
 #include "linbotextbrowser.h"
 #include "linboradiobutton.h"
 
@@ -51,13 +50,17 @@ private:
     LinboBackend* _backend;
     QVBoxLayout* _mainLayout;
     QButtonGroup* _actionButtonGroup;
-    LinboLineEdit* _imageNameLineEdit;
     LinboTextBrowser* _imageDescriptionTextBrowser;
 
     QButtonGroup* _postProcessActionButtonGroup;
     QHBoxLayout* _postProcessActionLayout;
 
     LinboOs* _targetOs;
+
+    enum ImageCreationAction {
+        BASE_IMAGE,
+        DIFF_IMAGE
+    };
 
 private slots:
     void _refreshPathAndDescription(bool isOpening = false);

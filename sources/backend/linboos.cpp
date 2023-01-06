@@ -55,12 +55,12 @@ bool LinboOs::executeDefaultAction() {
     }
 }
 
-bool LinboOs::replaceImage(QString description, LinboPostProcessActions::Flags postProcessActions) {
-    return this->_backend->replaceImageOfOs(this, description, postProcessActions);
+bool LinboOs::createBaseImage(QString description, LinboPostProcessActions::Flags postProcessActions) {
+    return this->_backend->createBaseImageOfOs(this, description, postProcessActions);
 }
 
-bool LinboOs::createImage(QString name, QString description, LinboPostProcessActions::Flags postProcessActions) {
-    return this->_backend->createImageOfOs(this, name, description, postProcessActions);
+bool LinboOs::createDiffImage(QString description, LinboPostProcessActions::Flags postProcessActions) {
+    return this->_backend->createDiffImageOfOs(this, description, postProcessActions);
 }
 
 void LinboOs::_setBaseImage (LinboImage* baseImage) {
