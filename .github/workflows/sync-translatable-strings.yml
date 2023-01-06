@@ -25,10 +25,9 @@ jobs:
     - name: Update translatable strings
       run: docker run --rm -v $(pwd):/workspace ghcr.io/linuxmuster/linuxmuster-linbo-gui-build linbo-gui-lupdate
 
-    - name: Clean old translations
+    - name: Delete all but blank.ts
       run: |
         rm ./resources/translations/linbo-gui/*-*.ts
-        rm ./resources/translations/linbo-gui/*.qm
        
     - name: Sync translations with crowdin
       uses: crowdin/github-action@1.0.16
