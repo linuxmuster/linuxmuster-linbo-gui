@@ -3,10 +3,10 @@
 set -e
 
 cd /workspace
+rm -rf build/bin
 mkdir -p build/bin
 cd build/bin
 
-export CMAKE_PREFIX_PATH=/usr/lib/Qt
 cmake ../../
 make -j8
 
