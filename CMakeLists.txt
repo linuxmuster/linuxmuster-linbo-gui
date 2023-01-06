@@ -21,6 +21,7 @@ find_package(Qt6 COMPONENTS Widgets)
 find_package(Qt6 COMPONENTS Svg)
 find_package(Qt6 COMPONENTS SvgWidgets)
 find_package(Qt6 COMPONENTS Xml)
+find_package(Qt6 COMPONENTS LinguistTools)
 
 qt_add_executable(linbo_gui "")
 
@@ -204,46 +205,42 @@ qt6_add_resources(linbo_gui "linbo"
     FILES
         ${linbo_resource_files}
 )
-set(translations_resource_files
-    "resources/translations/linbo-gui/af-ZA.qm"
-    "resources/translations/linbo-gui/ar-SA.qm"
-    "resources/translations/linbo-gui/ca-ES.qm"
-    "resources/translations/linbo-gui/cs-CZ.qm"
-    "resources/translations/linbo-gui/da-DK.qm"
-    "resources/translations/linbo-gui/de-DE.qm"
-    "resources/translations/linbo-gui/el-GR.qm"
-    "resources/translations/linbo-gui/en-GB.qm"
-    "resources/translations/linbo-gui/es-ES.qm"
-    "resources/translations/linbo-gui/fi-FI.qm"
-    "resources/translations/linbo-gui/fr-FR.qm"
-    "resources/translations/linbo-gui/he-IL.qm"
-    "resources/translations/linbo-gui/hu-HU.qm"
-    "resources/translations/linbo-gui/it-IT.qm"
-    "resources/translations/linbo-gui/ja-JP.qm"
-    "resources/translations/linbo-gui/ko-KR.qm"
-    "resources/translations/linbo-gui/nl-NL.qm"
-    "resources/translations/linbo-gui/no-NO.qm"
-    "resources/translations/linbo-gui/pl-PL.qm"
-    "resources/translations/linbo-gui/pt-BR.qm"
-    "resources/translations/linbo-gui/pt-PT.qm"
-    "resources/translations/linbo-gui/ro-RO.qm"
-    "resources/translations/linbo-gui/ru-RU.qm"
-    "resources/translations/linbo-gui/sr-SP.qm"
-    "resources/translations/linbo-gui/sv-SE.qm"
-    "resources/translations/linbo-gui/tr-TR.qm"
-    "resources/translations/linbo-gui/uk-UA.qm"
-    "resources/translations/linbo-gui/vi-VN.qm"
-    "resources/translations/linbo-gui/zh-CN.qm"
-    "resources/translations/linbo-gui/zh-TW.qm"
-)
 
-qt6_add_resources(linbo_gui "translations"
-    PREFIX
-        "/"
-    BASE
-        "resources/translations/linbo-gui"
-    FILES
-        ${translations_resource_files}
+qt_add_translations(linbo_gui
+    TS_FILES
+    "resources/translations/linbo-gui/blank.ts"
+    "resources/translations/linbo-gui/af-ZA.ts"
+    "resources/translations/linbo-gui/ar-SA.ts"
+    "resources/translations/linbo-gui/ca-ES.ts"
+    "resources/translations/linbo-gui/cs-CZ.ts"
+    "resources/translations/linbo-gui/da-DK.ts"
+    "resources/translations/linbo-gui/de-DE.ts"
+    "resources/translations/linbo-gui/el-GR.ts"
+    "resources/translations/linbo-gui/en-GB.ts"
+    "resources/translations/linbo-gui/es-ES.ts"
+    "resources/translations/linbo-gui/fi-FI.ts"
+    "resources/translations/linbo-gui/fr-FR.ts"
+    "resources/translations/linbo-gui/he-IL.ts"
+    "resources/translations/linbo-gui/hu-HU.ts"
+    "resources/translations/linbo-gui/it-IT.ts"
+    "resources/translations/linbo-gui/ja-JP.ts"
+    "resources/translations/linbo-gui/ko-KR.ts"
+    "resources/translations/linbo-gui/nl-NL.ts"
+    "resources/translations/linbo-gui/no-NO.ts"
+    "resources/translations/linbo-gui/pl-PL.ts"
+    "resources/translations/linbo-gui/pt-BR.ts"
+    "resources/translations/linbo-gui/pt-PT.ts"
+    "resources/translations/linbo-gui/ro-RO.ts"
+    "resources/translations/linbo-gui/ru-RU.ts"
+    "resources/translations/linbo-gui/sr-SP.ts"
+    "resources/translations/linbo-gui/sv-SE.ts"
+    "resources/translations/linbo-gui/tr-TR.ts"
+    "resources/translations/linbo-gui/uk-UA.ts"
+    "resources/translations/linbo-gui/vi-VN.ts"
+    "resources/translations/linbo-gui/zh-CN.ts"
+    "resources/translations/linbo-gui/zh-TW.ts"
+    LRELEASE_OPTIONS
+    -idbased
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)

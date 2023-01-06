@@ -22,16 +22,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
        
-    - name: Install lupdate and lrelease
-      run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
-       
+    - name: Update translatable strings
+      run: docker run --rm -v $(pwd):/workspace ghcr.io/linuxmuster/linuxmuster-linbo-gui-build linbo-gui-lupdate
+
     - name: Clean old translations
       run: |
-        rm -f ./resources/translations/linbo-gui/*-*.ts
-        rm -f ./resources/translations/linbo-gui/*.qm
-       
-    - name: Update translatable strings
-      run: lupdate ./linboGUI.pro
+        rm ./resources/translations/linbo-gui/*-*.ts
+        rm ./resources/translations/linbo-gui/*.qm
        
     - name: Sync translations with crowdin
       uses: crowdin/github-action@1.0.16
@@ -45,19 +42,6 @@ jobs:
         export_only_approved: true
         push_translations: false
 
-    - name: Release translations
-      run: |
-        mv ./resources/translations/linbo-gui/blank.ts ./resources/translations/linbo-gui/en-GB.ts
-        TRANSLATIONS=$(ls ./resources/translations/linbo-gui/*-*.ts)
-        while read lang; do
-          echo "Releasing $lang"
-          lrelease -idbased $lang
-        done <<< "$TRANSLATIONS"
-          
-    - name: Delete .ts files
-      run: |
-        rm ./resources/translations/linbo-gui/*.ts
-        
     - name: Commit files
       run: |
         if [ -z $(git status --porcelain) ];

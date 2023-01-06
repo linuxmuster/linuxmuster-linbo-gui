@@ -43,6 +43,8 @@ RUN echo "**** download Qt-everywhere ****" && \
      -qt-libpng \
      -libudev \
      -libinput \
+     -feature-linguist \
+     -feature-printdialog \
      -nomake examples \
      -no-gif \
      -no-libjpeg \
@@ -55,14 +57,6 @@ RUN echo "**** download Qt-everywhere ****" && \
      -no-libproxy \
      -no-sql-sqlite \
      -no-feature-textodfwriter \
-     -no-feature-calendarwidget \
-     -no-feature-printpreviewwidget \
-     -no-feature-colordialog \
-     -no-feature-filedialog \
-     -no-feature-fontdialog \
-     -no-feature-printpreviewdialog \
-     -no-feature-progressdialog \
-     -no-feature-wizard \
      -no-feature-udpsocket \
      -no-feature-networkproxy \
      -no-feature-socks5 \
@@ -81,7 +75,6 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtlocation \
      -skip qtscript \
      -skip qtdeclarative \
-     -skip qtlocation \
      -skip qtmultimedia \
      -skip qtquickcontrols \
      -skip qtquickcontrols2 \
@@ -90,7 +83,6 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtwinextras \
      -skip qtwebchannel \
      -skip qtwebengine \
-     -skip qttools \
      -skip qtserialbus \
      -skip qtserialport \
      -skip qtspeech \
@@ -118,6 +110,7 @@ RUN echo "**** download Qt-everywhere ****" && \
   cd .. && \
   rm -rf qt-everywhere*
 
-COPY ./build-linbo-gui /usr/local/bin/
+ENV CMAKE_PREFIX_PATH=/usr/lib/Qt
+COPY ./linbo-gui-* /usr/local/bin/
 
-ENTRYPOINT ["/usr/local/bin/build-linbo-gui"]
+CMD ["/usr/local/bin/linbo-gui-build"]
