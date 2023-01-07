@@ -100,8 +100,8 @@ public:
     bool executeReinstall();
     bool executeDefaultAction();
 
-    bool replaceImage(QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
-    bool createImage(QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createBaseImage(QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createDiffImage(QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
 private:
     explicit LinboOs(LinboBackend *parent = nullptr);

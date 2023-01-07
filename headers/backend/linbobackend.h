@@ -108,8 +108,8 @@ protected slots:
     bool syncOs(LinboOs* os);
     bool reinstallOs(LinboOs* os);
 
-    bool replaceImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
-    bool createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createBaseImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
+    bool createDiffImageOfOs(LinboOs* os, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
     QString readImageDescription(LinboImage* image);
     bool writeImageDescription(LinboImage* image, QString newDescription);
@@ -135,7 +135,10 @@ private:
     LinboImage* _imageToUploadAutomatically;
     LinboPostProcessActions::Flags _postProcessActions;
 
+    QRegularExpression qcwoEndingRegex = QRegularExpression(".qcow2$");
+
     void _setState(LinboState state);
+    bool _createImageOfOs(LinboOs* os, QString name, QString description = "", LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
 private slots:
     void _logout(bool force);

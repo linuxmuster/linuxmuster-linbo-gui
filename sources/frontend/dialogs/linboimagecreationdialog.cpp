@@ -36,21 +36,15 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
 
     connect(this->_actionButtonGroup, &QButtonGroup::buttonToggled, this, [=] { this->_refreshPathAndDescription(false); });
 
-    //% "replace current image"
-    LinboRadioButton* replaceImage = new LinboRadioButton(qtTrId("dialog_createImage_action_current"));
-    this->_mainLayout->addWidget(replaceImage);
-    this->_actionButtonGroup->addButton(replaceImage, 0);
+    //% "create new base image"
+    LinboRadioButton* newBaseImage = new LinboRadioButton(qtTrId("dialog_createImage_action_base"));
+    this->_mainLayout->addWidget(newBaseImage);
+    this->_actionButtonGroup->addButton(newBaseImage, BASE_IMAGE);
 
-    //% "create a new image"
-    LinboRadioButton* createNewImage = new LinboRadioButton(qtTrId("dialog_createImage_action_new"));
-    this->_mainLayout->addWidget(createNewImage);
-    this->_actionButtonGroup->addButton(createNewImage, 1);
-
-    //% "Image name:"
-    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageName") + "</b>"));
-
-    this->_imageNameLineEdit = new LinboLineEdit();
-    this->_mainLayout->addWidget(this->_imageNameLineEdit);
+    //% "create new differential image"
+    LinboRadioButton* newDiffImage = new LinboRadioButton(qtTrId("dialog_createImage_action_diff"));
+    this->_mainLayout->addWidget(newDiffImage);
+    this->_actionButtonGroup->addButton(newDiffImage, DIFF_IMAGE);
 
     //% "Image description:"
     this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("dialog_createImage_imageDescription") + "</b>"));
@@ -126,12 +120,14 @@ void LinboImageCreationDialog::open(LinboOs* os) {
 
 void LinboImageCreationDialog::_createImage(LinboPostProcessActions::Flags postProcessActions) {
 
-    if(this->_actionButtonGroup->checkedId() == 0)
-        // replace image
-        this->_targetOs->replaceImage(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
-    else
-        // create new image
-        this->_targetOs->createImage(this->_imageNameLineEdit->text(), this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+    switch (this->_actionButtonGroup->checkedId()) {
+    case BASE_IMAGE:
+        this->_targetOs->createBaseImage(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        break;
+    case DIFF_IMAGE:
+        this->_targetOs->createDiffImage(this->_imageDescriptionTextBrowser->toPlainText(), postProcessActions);
+        break;
+    }
 
     this->autoClose();
 }
@@ -143,24 +139,35 @@ void LinboImageCreationDialog::resizeEvent(QResizeEvent *event) {
 
     this->_mainLayout->setContentsMargins(margins, margins, margins, margins);
 
-    for(int i = 0; i < 12; i++) {
-        QWidget* item;
+    for(int i = 0, mainItemCount = 0;; i++) {
+        QLayoutItem* item;
+        QWidget* widget;
 
-        if(i < 8)
-            item = this->_mainLayout->itemAt(i)->widget();
+        if(mainItemCount == 0)
+            item = this->_mainLayout->itemAt(i);
         else
-            item = this->_postProcessActionLayout->itemAt(i-8)->widget();
+            item = this->_postProcessActionLayout->itemAt(i-mainItemCount);
 
-        if(i != 6) {
-            if(i % 2 == 0)
-                item->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowLabelHeight));
-            else
-                item->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowHeight));
+        if ((item == nullptr || item->widget() == nullptr) && mainItemCount == 0) {
+            mainItemCount = i+1;
+            continue;
         }
 
-        QFont buttonFont = item->font();
+        if (item == nullptr || item->widget() == nullptr) break;
+
+        widget = item->widget();
+
+        QFont buttonFont = widget->font();
         buttonFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
-        item->setFont(buttonFont);
+        widget->setFont(buttonFont);
+
+        if(widget == this->_imageDescriptionTextBrowser)
+            continue;
+
+        if(i % 2 == 0)
+            widget->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowLabelHeight));
+        else
+            widget->setFixedSize(this->width() - margins * 2, gTheme->size(LinboTheme::RowHeight));
     }
 }
 
@@ -178,14 +185,5 @@ void LinboImageCreationDialog::_refreshPathAndDescription(bool isOpening) {
         }
     }
 
-    if(this->_actionButtonGroup->checkedId() == 0) {
-        this->_imageNameLineEdit->setEnabled(false);
-        this->_imageNameLineEdit->setText(this->_targetOs->baseImage()->name());
-        this->_imageDescriptionTextBrowser->setText(this->_targetOs->baseImage()->getDescription());
-    }
-    else {
-        this->_imageNameLineEdit->setEnabled(true);
-        this->_imageNameLineEdit->setText("");
-        this->_imageDescriptionTextBrowser->setText("");
-    }
+    this->_imageDescriptionTextBrowser->setText(this->_targetOs->baseImage()->getDescription());
 }

@@ -139,7 +139,7 @@ void LinboTerminal::keyPressEvent(QKeyEvent *event)
 }
 
 QString LinboTerminal::_getCurrentCommand() {
-    int count = toPlainText().count() - _fixedPosition;
+    int count = toPlainText().length() - _fixedPosition;
     return toPlainText().right(count);
 }
 

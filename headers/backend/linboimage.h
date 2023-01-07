@@ -41,7 +41,7 @@ public:
     QString getDescription();
     bool upload(LinboPostProcessActions::Flags postProcessActions);
 
-    const QString& name() const {
+    QString name() {
         return this->_name;
     }
     LinboOs* os() {

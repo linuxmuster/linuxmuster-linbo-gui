@@ -70,7 +70,7 @@ LinboMainPage::LinboMainPage(LinboBackend* backend, QWidget *parent) : QWidget(p
     mainLayout->addStretch();
 
     // version / network label
-    QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + "- GUI " + GUI_VERSION + " - " + this->_backend->config()->ipAddress() + " - F1");
+    QLabel* versionAndNetworkLabel = new QLabel(backend->config()->linboVersion() + " - GUI " + GUI_VERSION + " - " + this->_backend->config()->ipAddress() + " - F1");
     QFont versionAndNetworkLabelFont;
     versionAndNetworkLabelFont.setPixelSize(gTheme->size(LinboTheme::RowFontSize));
     versionAndNetworkLabel->setFont(versionAndNetworkLabelFont);

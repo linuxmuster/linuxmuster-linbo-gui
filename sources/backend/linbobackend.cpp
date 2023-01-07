@@ -140,11 +140,15 @@ void LinboBackend::restartRootTimeout() {
     }
 }
 
-bool LinboBackend::replaceImageOfOs(LinboOs* os, QString description, LinboPostProcessActions::Flags postProcessAction) {
-    return this->createImageOfOs(os, os->baseImage()->name(), description, postProcessAction);
+bool LinboBackend::createBaseImageOfOs(LinboOs* os, QString description, LinboPostProcessActions::Flags postProcessAction) {
+    return this->_createImageOfOs(os, os->baseImage()->name(), description, postProcessAction);
 }
 
-bool LinboBackend::createImageOfOs(LinboOs* os, QString name, QString description, LinboPostProcessActions::Flags postProcessActions) {
+bool LinboBackend::createDiffImageOfOs(LinboOs* os, QString description, LinboPostProcessActions::Flags postProcessAction) {
+    return this->_createImageOfOs(os, os->baseImage()->name().replace(this->qcwoEndingRegex, ".qdiff"), description, postProcessAction);
+}
+
+bool LinboBackend::_createImageOfOs(LinboOs* os, QString name, QString description, LinboPostProcessActions::Flags postProcessActions) {
     if(this->_state != Root)
         return false;
 
@@ -155,7 +159,7 @@ bool LinboBackend::createImageOfOs(LinboOs* os, QString name, QString descriptio
     this->_setState(CreatingImage);
 
     this->_logger->_log("Writing image description", LinboLogger::LinboGuiInfo);
-    if(!this->_linboCmd->writeImageDescription(name, description, this->_config->cachePath()))
+    if(!this->_linboCmd->writeImageDescription(os->baseImage()->name(), description, this->_config->cachePath()))
         this->_logger->_log("Error writing image description, continuing anyway...", LinboLogger::LinboGuiError);
 
     if(this->_postProcessActions.testFlag(LinboPostProcessActions::UploadImage) && os->baseImage() != nullptr && name == os->baseImage()->name()) {
