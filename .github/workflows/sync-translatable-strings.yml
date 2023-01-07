@@ -41,6 +41,10 @@ jobs:
         export_only_approved: true
         push_translations: false
 
+    - name: Delete all but blank.ts
+      run: |
+        cp ./resources/translations/linbo-gui/blank.ts ./resources/translations/linbo-gui/en-GB.ts
+        
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:
