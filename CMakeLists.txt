@@ -256,7 +256,7 @@ install(TARGETS linbo_gui
 )
 
 target_compile_definitions(linbo_gui PUBLIC
-    GUI_VERSION=\"7.1.0~rc0\"
+    GUI_VERSION=\"7.2.0\"
 )
 
 qt_import_plugins(linbo_gui
