@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.2.0) lmn72; urgency=low
+
+  * Support differential imaging
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sat, 07 Jan 2022 09:36:22 +0100
+
 linuxmuster-linbo-gui7 (7.1.0) lmn72; urgency=medium
 
   * Move to Qt6
