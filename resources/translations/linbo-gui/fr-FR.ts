@@ -23,68 +23,63 @@
       <source>The action to perfom:</source>
       <translation>Action à effectuer :</translation>
     </message>
-    <message id="dialog_createImage_action_current">
+    <message id="dialog_createImage_action_base">
       <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="40"/>
-      <source>replace current image</source>
-      <translation>remplacer l&apos;image actuelle</translation>
+      <source>create new base image</source>
+      <translation type="unfinished"/>
     </message>
-    <message id="dialog_createImage_action_new">
+    <message id="dialog_createImage_action_diff">
       <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="45"/>
-      <source>create a new image</source>
-      <translation>créer une nouvelle image</translation>
-    </message>
-    <message id="dialog_createImage_imageName">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="50"/>
-      <source>Image name:</source>
-      <translation>Nom de l&apos;image :</translation>
+      <source>create new differential image</source>
+      <translation type="unfinished"/>
     </message>
     <message id="dialog_createImage_imageDescription">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="56"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="50"/>
       <source>Image description:</source>
       <translation>Description de l&apos;image :</translation>
     </message>
     <message id="dialog_createImage_postActionQuestion">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="64"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="58"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="40"/>
       <source>What to do after the process has finished?</source>
       <translation>Que faire après la fin du processus ?</translation>
     </message>
     <message id="dialog_createImage_postaction_nothing">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="73"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="67"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="49"/>
       <source>nothing</source>
       <translation>rien</translation>
     </message>
     <message id="dialog_createImage_postaction_shutdown">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="79"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="73"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="55"/>
       <source>shutdown</source>
       <translation>éteindre</translation>
     </message>
     <message id="dialog_createImage_postaction_reboot">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="84"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="78"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="60"/>
       <source>reboot</source>
       <translation>redémarrer</translation>
     </message>
     <message id="dialog_createImage_postaction_logout">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="89"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="83"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="65"/>
       <source>logout</source>
       <translation>déconnexion</translation>
     </message>
     <message id="dialog_createImage_button_create">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="96"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="90"/>
       <source>create</source>
       <translation>créer</translation>
     </message>
     <message id="dialog_createImage_button_createAndUpload">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="104"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="98"/>
       <source>create + upload</source>
       <translation>créer + téléverser</translation>
     </message>
     <message id="cancel">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="114"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="108"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="86"/>
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="37"/>
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="90"/>
