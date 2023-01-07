@@ -41,20 +41,11 @@ jobs:
         export_only_approved: true
         push_translations: false
 
-    - name: Commit files
-      run: |
-        if [ -z $(git status --porcelain) ];
-        then
-          echo "... No changes"
-          exit 0
-        fi
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add -A
-        git commit -m "New Translations from crowdin (by GitHub Action)" -a
-        
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        commit-message: "New Translations from Crowdin (by GitHub Action)"
+        title: "New Translations from Crowdin (by GitHub Action)"
+        body: "New Translations from Crowdin (by GitHub Action)"
+        author: "GitHub Action <action@github.com>"
+        branch: "i18n"
