@@ -176,7 +176,7 @@
     <message id="dialog_register_clientRole_staffComputer">
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="78"/>
       <source>Staff computer</source>
-      <translation>Personalcomputer</translation>
+      <translation>Personal Computer</translation>
     </message>
     <message id="dialog_register_button_resgister">
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="85"/>
