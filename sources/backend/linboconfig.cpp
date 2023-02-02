@@ -31,7 +31,7 @@ LinboConfig::LinboConfig(QObject *parent) : QObject(parent)
     this->_autoPartition = false;
     this->_autoFormat = false;
     this->_operatingSystems = {};
-    this->_themeConfFile = "";
+    this->_themeName = "";
     this->_clientDetailsVisibleByDefault = false;
     this->_theme = new LinboTheme();
 }

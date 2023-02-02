@@ -145,7 +145,7 @@ void LinboConfigReader::_loadExistingImages(LinboConfig* config) {
 }
 
 bool LinboConfigReader::_loadThemeConf(LinboConfig* config) {
-    QString themeConfFilePath = this->_iconBasePath + "/" + config->themeConfFile();
+    QString themeConfFilePath = this->_themeBasePath + "/" + config->themeName() + "/theme.conf";
     QSettings settingsReader(themeConfFilePath, QSettings::IniFormat);
 
     if(settingsReader.status() != QSettings::NoError) {
@@ -160,7 +160,7 @@ bool LinboConfigReader::_loadThemeConf(LinboConfig* config) {
 
 void LinboConfigReader::_loadThemeConf(QSettings *settings, LinboConfig *config) {
     this->_loadColors(settings, config->theme());
-    this->_loadIcons(settings, config->theme());
+    this->_loadIcons(settings, config->theme(), config);
 }
 
 void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
@@ -175,14 +175,14 @@ void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
     }
 }
 
-void LinboConfigReader::_loadIcons(QSettings *settings, LinboTheme *theme) {
+void LinboConfigReader::_loadIcons(QSettings *settings, LinboTheme *theme, LinboConfig* config) {
     QMapIterator<LinboTheme::Icon, QString> i(theme->iconsAndNames());
     while (i.hasNext()) {
         i.next();
         QString iconConfKey = "icons/" + i.value().toLower().replace("icon", "");
         QString iconFromConf = settings->value(iconConfKey, "").toString();
         if(!iconFromConf.isEmpty()) {
-            theme->_icons[i.key()] = this->_iconBasePath + "/" + iconFromConf;
+            theme->_icons[i.key()] = this->_themeBasePath + "/" + config->themeName() + "/" + iconFromConf;
         }
     }
 }
@@ -217,7 +217,7 @@ void LinboConfigReader::_loadLinboConfigFromBlock(QMap<QString, QString> rawLinb
         else if(key == "locale")        c->_locale = value;
         else if(key == "guidisabled")   c->_guiDisabled = this->_stringToBool(value);
         else if(key == "clientdetailsvisiblebydefault") c->_clientDetailsVisibleByDefault = this->_stringToBool(value);
-        else if(key == "themeconffile") c->_themeConfFile = value;
+        else if(key == "theme") c->_themeName = value;
     }
 }
 

@@ -113,8 +113,8 @@ public:
     bool guiDisabled() {
         return this->_guiDisabled;
     }
-    const QString& themeConfFile() const {
-        return this->_themeConfFile;
+    const QString& themeName() const {
+        return this->_themeName;
     }
 
     QMap<QString, LinboImage*> images() {
@@ -158,7 +158,7 @@ private:
     QString _hddSize;
     QString _cachePath;
     QString _hostGroup;
-    QString _themeConfFile;
+    QString _themeName;
     DownloadMethod _downloadMethod;
     QString _locale;
     unsigned int _rootTimeout;

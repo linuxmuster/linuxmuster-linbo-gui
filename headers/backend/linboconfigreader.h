@@ -64,7 +64,7 @@ private:
 
     bool _loadThemeConf(LinboConfig* config);
     void _loadThemeConf(QSettings* settings, LinboConfig* config);
-    void _loadIcons(QSettings* settings, LinboTheme* theme);
+    void _loadIcons(QSettings* settings, LinboTheme* theme, LinboConfig* config);
     void _loadColors(QSettings* settings, LinboTheme* theme);
 
     bool _validateColorCode(QString code);
@@ -75,11 +75,14 @@ private:
     const QVector<QString> _trueWords = {"yes", "true", "enable"};
 #ifdef TEST_ENV
     const QString _configFilePath = TEST_ENV"/start.conf";
-    const QString _iconBasePath = TEST_ENV"/icons";
+    const QString _guiFileBasePath = TEST_ENV"/gui";
 #else
     const QString _configFilePath = "start.conf";
-    const QString _iconBasePath = "/icons";
+    const QString _guiFileBasePath = "/";
 #endif
+
+    const QString _iconBasePath = _guiFileBasePath + "/icons";
+    const QString _themeBasePath = _guiFileBasePath + "/themes";
 
 signals:
 
