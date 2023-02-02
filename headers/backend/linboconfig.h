@@ -98,9 +98,6 @@ public:
     const bool& autoInitCache() {
         return this->_autoInitCache;
     }
-    const QString& backgroundColor() {
-        return this->_backgroundColor;
-    }
     const DownloadMethod& downloadMethod() {
         return this->_downloadMethod;
     }
@@ -163,7 +160,6 @@ private:
     QString _hostGroup;
     QString _themeConfFile;
     DownloadMethod _downloadMethod;
-    QString _backgroundColor;
     QString _locale;
     unsigned int _rootTimeout;
     bool _autoPartition;

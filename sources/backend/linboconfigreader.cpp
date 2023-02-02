@@ -161,9 +161,6 @@ bool LinboConfigReader::_loadThemeConf(LinboConfig* config) {
 void LinboConfigReader::_loadThemeConf(QSettings *settings, LinboConfig *config) {
     this->_loadColors(settings, config->theme());
     this->_loadIcons(settings, config->theme());
-
-    if(!config->backgroundColor().isEmpty())
-        config->theme()->_colors[LinboTheme::PrimaryColor] = config->backgroundColor();
 }
 
 void LinboConfigReader::_loadColors(QSettings *settings, LinboTheme *theme) {
@@ -216,7 +213,6 @@ void LinboConfigReader::_loadLinboConfigFromBlock(QMap<QString, QString> rawLinb
         else if(key == "autopartition") c->_autoPartition = _stringToBool(value);
         else if(key == "autoinitcache") c->_autoInitCache = _stringToBool(value);
         else if(key == "autoformat")    c->_autoFormat = _stringToBool(value);
-        else if(key == "backgroundcolor" && this->_validateColorCode(value)) c->_backgroundColor = "#" + value;
         else if(key == "downloadtype")  c->_downloadMethod = LinboConfig::stringToDownloadMethod(value);
         else if(key == "locale")        c->_locale = value;
         else if(key == "guidisabled")   c->_guiDisabled = this->_stringToBool(value);
