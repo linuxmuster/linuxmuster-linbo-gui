@@ -24,6 +24,9 @@ find_package(Qt6 COMPONENTS Xml)
 find_package(Qt6 COMPONENTS LinguistTools)
 
 qt_add_executable(linbo_gui "")
+target_compile_definitions(linbo_gui PUBLIC
+    GUI_VERSION=\"7.2.1\"
+)
 
 set(SOURCE_FILES
     headers/backend/linbobackend.h
@@ -253,10 +256,6 @@ install(TARGETS linbo_gui
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
-)
-
-target_compile_definitions(linbo_gui PUBLIC
-    GUI_VERSION=\"7.2.0\"
 )
 
 qt_import_plugins(linbo_gui

@@ -1,8 +1,15 @@
+linuxmuster-linbo-gui7 (7.2.1) lmn72; urgency=low
+
+  * remove backgroundcolor start.conf option
+  * support new theming structure
+
+ -- Dorian Zedler <dorian@itsblue.de>  Thu, 02 Feb 2023 13:17:22 +0100
+
 linuxmuster-linbo-gui7 (7.2.0) lmn72; urgency=low
 
   * Support differential imaging
 
- -- Dorian Zedler <dorian@itsblue.de>  Sat, 07 Jan 2022 09:36:22 +0100
+ -- Dorian Zedler <dorian@itsblue.de>  Sat, 07 Jan 2023 09:36:22 +0100
 
 linuxmuster-linbo-gui7 (7.1.0) lmn72; urgency=medium
 
