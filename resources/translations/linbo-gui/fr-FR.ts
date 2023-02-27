@@ -26,12 +26,12 @@
     <message id="dialog_createImage_action_base">
       <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="40"/>
       <source>create new base image</source>
-      <translation type="unfinished"/>
+      <translation>créer une nouvelle image de base</translation>
     </message>
     <message id="dialog_createImage_action_diff">
       <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="45"/>
       <source>create new differential image</source>
-      <translation type="unfinished"/>
+      <translation>créer une nouvelle image différentielle</translation>
     </message>
     <message id="dialog_createImage_imageDescription">
       <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="50"/>
@@ -277,7 +277,7 @@
     <message id="main_message_noLogs">
       <location filename="../../../sources/frontend/linbomainactions.cpp" line="262"/>
       <source>No logs before this crash</source>
-      <translation type="unfinished"/>
+      <translation>Aucun journal avant ce plantage</translation>
     </message>
     <message id="main_message_lastLogs">
       <location filename="../../../sources/frontend/linbomainactions.cpp" line="265"/>
