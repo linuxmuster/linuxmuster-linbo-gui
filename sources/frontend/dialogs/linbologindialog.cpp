@@ -62,7 +62,12 @@ void LinboLoginDialog::resizeEvent(QResizeEvent *event) {
 
 void LinboLoginDialog::inputFinished() {
 
+    //% "Logging in..."
+    this->setTitle(qtTrId("dialog_login_title_logging_in"));
+
     if(this->_backend->login(this->_passwordInput->text())) {
+        //% "Please enter password:"
+        this->setTitle(qtTrId("dialog_login_title"));
         this->_passwordInput->clear();
         this->close();
     }
