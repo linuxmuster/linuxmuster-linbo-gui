@@ -110,6 +110,7 @@
     <message id="dialog_login_title">
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="26"/>
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="34"/>
+      <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="70"/>
       <source>Please enter password:</source>
       <translation>Por favor, introduzca la contraseña:</translation>
     </message>
@@ -118,8 +119,13 @@
       <source>login</source>
       <translation type="unfinished"/>
     </message>
+    <message id="dialog_login_title_logging_in">
+      <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="66"/>
+      <source>Logging in...</source>
+      <translation type="unfinished"/>
+    </message>
     <message id="dialog_login_title_wrong">
-      <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="72"/>
+      <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="77"/>
       <source>Wrong password!</source>
       <translation>Contraseña incorrecta!</translation>
     </message>
