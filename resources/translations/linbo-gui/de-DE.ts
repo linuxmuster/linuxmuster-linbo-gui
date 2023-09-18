@@ -122,7 +122,7 @@
     <message id="dialog_login_title_logging_in">
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="66"/>
       <source>Logging in...</source>
-      <translation type="unfinished"/>
+      <translation>Melde an...</translation>
     </message>
     <message id="dialog_login_title_wrong">
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="77"/>
