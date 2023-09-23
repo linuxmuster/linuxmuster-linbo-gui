@@ -129,6 +129,11 @@ void LinboPushButton::resizeEvent(QResizeEvent *event) {
 
     QList<QWidget*> doNotResizeWidgets;
 
+    if(this->width() == 0 || this->height() == 0)
+        this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+    else
+        this->setFocusPolicy(Qt::FocusPolicy::TabFocus);
+
     if(this->_label != nullptr && !this->_label->text().isEmpty()) {
 
         this->_label->setFixedHeight(this->height());

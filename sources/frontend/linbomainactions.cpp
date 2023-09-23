@@ -156,6 +156,9 @@ void LinboMainActions::_resizeAndPositionAllItems() {
     this->_passedTimeLabel->setGeometry((this->_progressBarWidget->width() - logLabelWidth) / 2, this->_progressBar->y() + progressBarHeight + defaultSpacing, logLabelWidth, logLabelHeight);
 
     this->_cancelButton->setGeometry((this->_progressBarWidget->width() - cancelButtonWidth) / 2, this->_passedTimeLabel->y() + logLabelHeight + defaultSpacing, cancelButtonWidth, cancelButtonWidth);
+    if(cancelButtonWidth > 0)
+        // Workaround to focus the cancel button on autostart
+        this->_cancelButton->setFocus(Qt::PopupFocusReason);
 
     // Message widget
     this->_messageWidget->setGeometry(QRect(0,0, this->width(), this->height()));

@@ -236,8 +236,14 @@ void LinboOsSelectionRow::_handleLinboStateChanged(LinboBackend::LinboState newS
     }
 
 
-    for(LinboOsSelectButton* osButton : this->_osButtons)
-        osButton->setEnabled(buttonsEnabled);
+    for(LinboOsSelectButton* osButton : this->_osButtons) {
+        if(showOnlyButtonOfOsOfCurrentAction && osButton->_os != this->_backend->osOfCurrentAction()) {
+            osButton->setEnabled(false);
+        } else {
+            osButton->setEnabled(buttonsEnabled);
+        }
+    }
+
     this->setShowOnlyButtonOfOsOfCurrentAction(showOnlyButtonOfOsOfCurrentAction);
 }
 
