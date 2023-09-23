@@ -134,6 +134,10 @@ LinboOsSelectButton::LinboOsSelectButton(QString icon, LinboOs* os, LinboBackend
 }
 
 void LinboOsSelectButton::_handlePrimaryButtonClicked() {
+    if (this->_backend->state() == LinboBackend::Autostarting) {
+        this->_backend->cancelCurrentAction();
+    }
+
     if(this->_backend->state() == LinboBackend::Idle)
         switch (this->_os->defaultAction()) {
         case LinboOs::StartOs:

@@ -34,7 +34,7 @@ public:
     explicit LinboOsSelectionRow(LinboBackend* backend, QWidget *parent = nullptr);
 
     LinboOs* getSelectedOs();
-    void setShowOnlySelectedButton(bool value);
+    void setShowOnlyButtonOfOsOfCurrentAction(bool value);
 
     void setMinimumSizeAnimated(QSize size);
 
@@ -49,7 +49,7 @@ private:
     QLabel* _environmentValuesLabel;
     QFont _environmentValuesLabelFont;
     QPropertyAnimation* _sizeAnimation;
-    bool _showOnlySelectedButton;
+    bool _showOnlyButtonOfOsOfCurrentAction;
     bool _inited;
 
     QSize* _sizeOverride;

@@ -26,7 +26,7 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->_backend = backend;
     connect(this->_backend, &LinboBackend::stateChanged, this, &LinboOsSelectionRow::_handleLinboStateChanged);
 
-    this->_showOnlySelectedButton = false;
+    this->_showOnlyButtonOfOsOfCurrentAction = false;
 
     this->_sizeAnimation = new QPropertyAnimation(this, "minimumSize", this);
     this->_sizeAnimation->setDuration(100);
@@ -122,9 +122,9 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             bool visible = true;
             QRect geometry = this->_osButtons[i]->geometry();
 
-            if(this->_osButtons[i]->_os != this->_backend->osOfCurrentAction() || !this->_showOnlySelectedButton) {
+            if(this->_osButtons[i]->_os != this->_backend->osOfCurrentAction() || !this->_showOnlyButtonOfOsOfCurrentAction) {
                 // "normal" buttons
-                visible = !this->_showOnlySelectedButton;
+                visible = !this->_showOnlyButtonOfOsOfCurrentAction;
                 if(buttonCount > 2)
                     if(i < 2)
                         geometry = QRect(x + (buttonWidth  * i) + (spacing * (i+1)), 0, buttonWidth, buttonHeight);
@@ -179,14 +179,14 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
     this->_inited = true;
 }
 
-void LinboOsSelectionRow::setShowOnlySelectedButton(bool value) {
+void LinboOsSelectionRow::setShowOnlyButtonOfOsOfCurrentAction(bool value) {
     // find selected button
     // set its x so it is in the middle (animated)
     // set Opacity of all other buttons to 0 (animated)
-    if(value == this->_showOnlySelectedButton)
+    if(value == this->_showOnlyButtonOfOsOfCurrentAction)
         return;
 
-    this->_showOnlySelectedButton = value;
+    this->_showOnlyButtonOfOsOfCurrentAction = value;
 
     if(this->_inited)
         this->_resizeAndPositionAllButtons();
@@ -200,35 +200,44 @@ void LinboOsSelectionRow::resizeEvent(QResizeEvent *event) {
 
 void LinboOsSelectionRow::_handleLinboStateChanged(LinboBackend::LinboState newState) {
 
+    bool buttonsEnabled = true;
+    bool showOnlyButtonOfOsOfCurrentAction = this->_showOnlyButtonOfOsOfCurrentAction;
+
     switch (newState) {
     case LinboBackend::Idle:
     case LinboBackend::Root:
-        for(LinboOsSelectButton* osButton : this->_osButtons)
-            osButton->setEnabled(true);
-        this->setShowOnlySelectedButton(false);
+        buttonsEnabled = true;
+        showOnlyButtonOfOsOfCurrentAction = false;
         break;
 
     case LinboBackend::Autostarting:
+        buttonsEnabled = true;
+        showOnlyButtonOfOsOfCurrentAction = true;
+        break;
+
     case LinboBackend::Starting:
     case LinboBackend::Syncing:
     case LinboBackend::Reinstalling:
     case LinboBackend::CreatingImage:
     case LinboBackend::UploadingImage:
-        for(LinboOsSelectButton* osButton : this->_osButtons)
-            osButton->setEnabled(false);
-        this->setShowOnlySelectedButton(true);
+        buttonsEnabled = false;
+        showOnlyButtonOfOsOfCurrentAction = true;
         break;
 
     case LinboBackend::Partitioning:
     case LinboBackend::UpdatingCache:
     case LinboBackend::RootActionSuccess:
-        for(LinboOsSelectButton* osButton : this->_osButtons)
-            osButton->setEnabled(false);
+        buttonsEnabled = false;
         break;
 
     default:
         break;
     }
+
+
+    for(LinboOsSelectButton* osButton : this->_osButtons)
+        osButton->setEnabled(buttonsEnabled);
+    this->setShowOnlyButtonOfOsOfCurrentAction(showOnlyButtonOfOsOfCurrentAction);
 }
 
 void LinboOsSelectionRow::setMinimumSizeAnimated(QSize size) {
