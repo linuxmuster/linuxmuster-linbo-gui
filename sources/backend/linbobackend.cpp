@@ -59,7 +59,7 @@ LinboBackend::LinboBackend(QObject *parent) : QObject(parent)
 // --------------------
 
 LinboOs* LinboBackend::osOfCurrentAction() {
-    QList<LinboState> osBaseStates = {Autostarting, Starting, Syncing, Reinstalling, CreatingImage, UploadingImage};
+    QList<LinboState> osBaseStates = {Autostarting, Starting, Syncing, Reinstalling, CreatingImage, UploadingImage, StartActionError, RootActionError, RootActionSuccess};
     if(!osBaseStates.contains(this->state()))
         return nullptr;
     return this->_osOfCurrentAction;
@@ -215,6 +215,7 @@ bool LinboBackend::_partitionDrive(bool format, LinboPostProcessActions::Flags p
     if(this->_state != Root && this->_state != Initializing)
         return false;
 
+    this->_osOfCurrentAction = nullptr;
     this->_postProcessActions = postProcessActions;
     this->_logger->_log("Partitioning drive", LinboLogger::LinboLogChapterBeginning);
     this->_setState(Partitioning);
@@ -226,6 +227,7 @@ bool LinboBackend::updateCache(LinboConfig::DownloadMethod downloadMethod, bool 
     if(this->_state != Root && this->_state != Initializing && this->_state != UpdatingCache)
         return false;
 
+    this->_osOfCurrentAction = nullptr;
     this->_postProcessActions = postProcessActions;
     this->_logger->_log("Updating cache", LinboLogger::LinboLogChapterBeginning);
     this->_setState(UpdatingCache);

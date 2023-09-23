@@ -220,6 +220,7 @@ void LinboOsSelectionRow::_handleLinboStateChanged(LinboBackend::LinboState newS
     case LinboBackend::Reinstalling:
     case LinboBackend::CreatingImage:
     case LinboBackend::UploadingImage:
+    case LinboBackend::StartActionError:
         buttonsEnabled = false;
         showOnlyButtonOfOsOfCurrentAction = true;
         break;
