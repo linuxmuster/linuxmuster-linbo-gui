@@ -44,23 +44,18 @@ protected:
 private:
     LinboBackend* _backend;
     QList<LinboOsSelectButton*> _osButtons;
-    QButtonGroup* _osButtonGroup;
     QLabel* _noOsLabel;
     QFont _noOsLabelFont;
     QLabel* _environmentValuesLabel;
     QFont _environmentValuesLabelFont;
     QPropertyAnimation* _sizeAnimation;
-    LinboOsSelectButton* _selectedButton;
     bool _showOnlySelectedButton;
     bool _inited;
 
     QSize* _sizeOverride;
 
-    LinboOsSelectButton* _getSelectedButton();
-
 private slots:
     void _resizeAndPositionAllButtons(int heightOverride = -1, int widthOverride = -1);
-    void _handleButtonToggled(bool checked);
     void _handleLinboStateChanged(LinboBackend::LinboState newState);
 
 signals:

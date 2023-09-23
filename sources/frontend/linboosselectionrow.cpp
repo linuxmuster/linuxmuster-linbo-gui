@@ -32,19 +32,15 @@ LinboOsSelectionRow::LinboOsSelectionRow(LinboBackend* backend, QWidget *parent)
     this->_sizeAnimation->setDuration(100);
     this->_sizeAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-    this->_osButtonGroup = new QButtonGroup();
-    this->_osButtonGroup->setExclusive(true);
-
     for(LinboOs* os : backend->config()->operatingSystems()) {
         if(this->_osButtons.length() >= 4)
             break;
 
 #ifdef TEST_ENV
-        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/icons/" + os->iconName(), os, backend, this->_osButtonGroup, this);
+        LinboOsSelectButton* osButton = new LinboOsSelectButton(TEST_ENV"/gui/icons/" + os->iconName(), os, backend, this);
 #else
-        LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->iconName(), os, backend, this->_osButtonGroup, this);
+        LinboOsSelectButton* osButton = new LinboOsSelectButton("/icons/" + os->iconName(), os, backend, this);
 #endif
-        connect(osButton->_button, &LinboPushButton::toggled, this, &LinboOsSelectionRow::_handleButtonToggled);
         connect(osButton, &LinboOsSelectButton::imageCreationRequested, this, &LinboOsSelectionRow::imageCreationRequested);
         connect(osButton, &LinboOsSelectButton::imageUploadRequested, this, &LinboOsSelectionRow::imageUploadRequested);
 
@@ -126,7 +122,7 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
             bool visible = true;
             QRect geometry = this->_osButtons[i]->geometry();
 
-            if(this->_osButtons[i] != this->_selectedButton || !this->_showOnlySelectedButton) {
+            if(this->_osButtons[i]->_os != this->_backend->osOfCurrentAction() || !this->_showOnlySelectedButton) {
                 // "normal" buttons
                 visible = !this->_showOnlySelectedButton;
                 if(buttonCount > 2)
@@ -181,26 +177,6 @@ void LinboOsSelectionRow::_resizeAndPositionAllButtons(int heightOverride, int w
     }
 
     this->_inited = true;
-}
-
-void LinboOsSelectionRow::_handleButtonToggled(bool checked) {
-    if(checked)
-        this->_selectedButton = this->_getSelectedButton();
-}
-
-LinboOs* LinboOsSelectionRow::getSelectedOs() {
-    LinboOsSelectButton* selectedButton = this->_getSelectedButton();
-    if(selectedButton != nullptr)
-        return selectedButton->_getOs();
-    return nullptr;
-}
-
-LinboOsSelectButton* LinboOsSelectionRow::_getSelectedButton() {
-    for(LinboOsSelectButton* button : this->_osButtons) {
-        if(button->_button->isChecked())
-            return button;
-    }
-    return nullptr;
 }
 
 void LinboOsSelectionRow::setShowOnlySelectedButton(bool value) {

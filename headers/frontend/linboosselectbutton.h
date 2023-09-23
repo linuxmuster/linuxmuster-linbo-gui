@@ -38,7 +38,7 @@ public:
     friend class LinboOsSelectionRow;
 
 protected:
-    LinboOsSelectButton(QString icon, LinboOs* os, LinboBackend* backend, QButtonGroup* buttonGroup, QWidget* parent = nullptr);
+    LinboOsSelectButton(QString icon, LinboOs* os, LinboBackend* backend, QWidget* parent = nullptr);
     void resizeEvent(QResizeEvent *event) override;
 private:
 
@@ -57,7 +57,6 @@ private:
     QList<LinboPushButton*> _rootActionButtons;
     LinboPushButtonOverlay* _defaultStartActionOverlay;
     LinboPushButtonOverlay* _defaultRootActionOverlay;
-    QButtonGroup* _buttonGroup;
     QLabel* _osNameLabel;
 
 private slots:
