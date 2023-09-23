@@ -271,42 +271,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_disabled">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="237"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="240"/>
         <source>This client is controlled remotely. Please don&apos;t power it off.</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_processCrashed">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="258"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="261"/>
         <source>The process %1 crashed:</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_noLogs">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="262"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="265"/>
         <source>No logs before this crash</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_lastLogs">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="265"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="268"/>
         <source>The last logs before the crash were:</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_askForHelp">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="270"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="273"/>
         <source>Please ask your system administrator for help.</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_message_processFinishedSuccessfully">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="282"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="285"/>
         <source>The process %1 finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_autostart_label">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="325"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="328"/>
         <source>Starting</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main_rootTimeout_label">
-        <location filename="../../../sources/frontend/linbomainactions.cpp" line="329"/>
+        <location filename="../../../sources/frontend/linbomainactions.cpp" line="332"/>
         <source>Logging out automatically</source>
         <translation type="unfinished"></translation>
     </message>
