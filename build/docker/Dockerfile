@@ -29,7 +29,6 @@ RUN echo "**** download Qt-everywhere ****" && \
   echo "**** extract Qt-everywhere ****" && \
   tar -xf qt-everywhere.tar.xz --strip-components=1 -C ./qt-everywhere && \
   cd qt-everywhere && \
-  ls -l . && \
   export QT_QPA_PLATFORM=linuxfb && \
   \
   echo "**** configure Qt ****" && \
@@ -75,12 +74,12 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtlocation \
      -skip qtscript \
      -skip qtdeclarative \
+     -skip qtgrpc \
      -skip qtmultimedia \
      -skip qtquick \
      -skip qtquickcontrols \
      -skip qtquickcontrols2 \
      -skip qtsensors \
-     -skip qtwebsockets \
      -skip qtwinextras \
      -skip qtwebchannel \
      -skip qtwebengine \
@@ -90,16 +89,22 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtx11extras \
      -skip qt5compat \
      -skip qtlottie \
+     -skip qtshadertools \
      -skip qtmqtt \
+     -skip qthttpserver \
+     -skip qtwebsockets \
+     -skip qtremoteobjects \
      -skip qtopcua \
      -skip qtquicktimeline \
      -skip qtquick3d \
      -skip qtquick3dphysics \
+     -skip qtquickeffectmaker \
      -skip qtscxml \
      -skip qttranslations \
      -skip qtvirtualkeyboard \
      -skip qtwebview \
      -skip qtpositioning \
+     -skip qtlanguageserver \
      -skip qtcoap && \
   \
   echo "**** build Qt ****" && \
