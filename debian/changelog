@@ -1,3 +1,10 @@
+linuxmuster-linbo-gui7 (7.2.4) lmn72; urgency=medium
+
+  * fix: show os icon on errors 
+  * fix: focus cancel button on autostart
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sat, 23 Sep 2023 12:44:23 +0100
+
 linuxmuster-linbo-gui7 (7.2.3) lmn72; urgency=low
 
   * fix: show correct os icon (#90) 
