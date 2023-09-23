@@ -29,7 +29,7 @@ RUN echo "**** download Qt-everywhere ****" && \
   echo "**** extract Qt-everywhere ****" && \
   tar -xf qt-everywhere.tar.xz --strip-components=1 -C ./qt-everywhere && \
   cd qt-everywhere && \
-  export QT_QPA_PLATFORM=linuxfb && \
+  export QT_QPA_DEFAULT_PLATFORM=linuxfb && \
   \
   echo "**** configure Qt ****" && \
   ./configure \
