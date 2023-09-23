@@ -142,14 +142,14 @@
     <message id="hostname">
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="37"/>
       <location filename="../../../sources/frontend/linboclientinfo.cpp" line="35"/>
-      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="65"/>
+      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="61"/>
       <source>Hostname</source>
       <translation>Nom d&apos;hôte</translation>
     </message>
     <message id="ip">
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="42"/>
       <location filename="../../../sources/frontend/linboclientinfo.cpp" line="41"/>
-      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="67"/>
+      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="63"/>
       <source>IP-Address</source>
       <translation>Adresse IP</translation>
     </message>
@@ -226,7 +226,7 @@
     </message>
     <message id="client_info_mac">
       <location filename="../../../sources/frontend/linboclientinfo.cpp" line="44"/>
-      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="69"/>
+      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="65"/>
       <source>Mac</source>
       <translation>Mac</translation>
     </message>
@@ -341,37 +341,37 @@
       <translation>Êtes-vous sûr? Cela supprimera toutes les données de votre disque !</translation>
     </message>
     <message id="uploadImageOfOS">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="109"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="108"/>
       <source>Upload image of %1</source>
       <translation>Téléverser l'image de %1</translation>
     </message>
     <message id="main_noBaseImage">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="123"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="122"/>
       <source>No baseimage defined</source>
       <translation>Aucune image de base définie</translation>
     </message>
     <message id="createImageOfOS">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="231"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="233"/>
       <source>Create image of %1</source>
       <translation>Créer une image de %1</translation>
     </message>
     <message id="startOS">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="251"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="253"/>
       <source>Start %1</source>
       <translation>Démarrer %1</translation>
     </message>
     <message id="syncOS">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="253"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="255"/>
       <source>Sync and start %1</source>
       <translation>Synchroniser et démarrer %1</translation>
     </message>
     <message id="reinstallOS">
-      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="255"/>
+      <location filename="../../../sources/frontend/linboosselectbutton.cpp" line="257"/>
       <source>Reinstall %1</source>
       <translation>Réinstaller %1</translation>
     </message>
     <message id="osSelection_noOperatingSystems">
-      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="56"/>
+      <location filename="../../../sources/frontend/linboosselectionrow.cpp" line="52"/>
       <source>No Operating system configured in start.conf</source>
       <translation>Aucun système d&apos;exploitation configuré dans start.conf</translation>
     </message>
