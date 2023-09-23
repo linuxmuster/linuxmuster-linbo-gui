@@ -76,6 +76,7 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtscript \
      -skip qtdeclarative \
      -skip qtmultimedia \
+     -skip qtquick \
      -skip qtquickcontrols \
      -skip qtquickcontrols2 \
      -skip qtsensors \
@@ -93,6 +94,7 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtopcua \
      -skip qtquicktimeline \
      -skip qtquick3d \
+     -skip qtquick3dphysics \
      -skip qtscxml \
      -skip qttranslations \
      -skip qtvirtualkeyboard \

@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - '/build/docker/Dockerfile'
+      - 'build/docker/**'
   workflow_dispatch:
 
 jobs:
