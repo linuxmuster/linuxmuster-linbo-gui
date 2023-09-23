@@ -108,7 +108,7 @@ RUN echo "**** download Qt-everywhere ****" && \
      -skip qtcoap && \
   \
   echo "**** build Qt ****" && \
-  make && \	
+  make -j 16 -l 2.5 && \	
   \
   echo "**** install Qt ****" && \
   make install && \
