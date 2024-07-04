@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.2.5) lmn72; urgency=medium
+
+  * feat: allow linuxmuster-cachingserver-linbo7 as alternative dependency (#93)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Thu, 04 Jul 2024 17:29:23 +0100
+
 linuxmuster-linbo-gui7 (7.2.4) lmn72; urgency=medium
 
   * fix: show os icon on errors 
