@@ -57,7 +57,7 @@ jobs:
         id: check_prerelease
         uses: haya14busa/action-cond@v1
         with:
-          cond: ${{ env.DISTRIBUTION == 'lmn71' }}
+          cond: ${{ env.DISTRIBUTION == 'lmn72' }}
           if_true: "false"
           if_false: "true"
 
