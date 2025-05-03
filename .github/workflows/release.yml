@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: deb-package
 
@@ -57,7 +57,7 @@ jobs:
         id: check_prerelease
         uses: haya14busa/action-cond@v1
         with:
-          cond: ${{ env.DISTRIBUTION == 'lmn72' }}
+          cond: ${{ env.DISTRIBUTION == 'lmn73' }}
           if_true: "false"
           if_false: "true"
 
@@ -99,7 +99,7 @@ jobs:
           ssh-add - <<< "${{ secrets.REPO_SSH_KEY }}"
           
       - name: Clone archive repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with: 
           repository: "linuxmuster/archive"
           ssh-key: ${{ secrets.REPO_SSH_KEY }}
@@ -109,7 +109,7 @@ jobs:
         run: mkdir "package"
           
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: deb-package
           path: "./package"
