@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: |
           sudo apt update
-          sudo apt install debhelper
+          sudo apt install debhelper build-essential
           ./build.sh
         
       - name: Copy artifacts
