@@ -1,3 +1,15 @@
+linuxmuster-linbo-gui7 (7.3.1) lmn73; urgency=medium
+
+  * New package for LMN 7.3
+
+ -- Arnaud Kientz <arnaud@linuxmuster.net>  Sat, 03 May 2025 10:23:12 +0200
+
+linuxmuster-linbo-gui7 (7.2.5) lmn72; urgency=medium
+
+  * feat: allow linuxmuster-cachingserver-linbo7 as alternative dependency (#93)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Thu, 04 Jul 2024 17:29:23 +0100
+
 linuxmuster-linbo-gui7 (7.2.4) lmn72; urgency=medium
 
   * fix: show os icon on errors 
