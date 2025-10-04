@@ -1,5 +1,3 @@
-> ⚠️ This is <b>version 7.2.x</b> of the linbo-gui for <b>LMN 7.2</b>. Checkout the [v7.0.x branch](https://github.com/linuxmuster/linuxmuster-linbo-gui/tree/v7.0.x) for the current version for <b>LMN 7.0 and 7.1</b>!
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/linuxmuster/linuxmuster-linbo-gui/master/resources/images/linbo_logo_small.png" alt="Linbo logo" width="70%" />
 </p>
@@ -74,4 +72,4 @@ In case of a mistake, the tag can be deleted:
   - So, before version `7.1.1` is released, there may be versions `7.1.1~01`, `7.1.1~02`, and so on
 - Releases don't have a suffix
   - So, once version `7.1.1` is ready, it is published as `7.1.1`
-- This concept ensures that stable releases are elays evaluated as a higher version Number than perreleases.
+- This concept ensures that stable releases are always evaluated as a higher version Number than perreleases.
