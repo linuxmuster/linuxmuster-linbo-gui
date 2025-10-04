@@ -47,7 +47,7 @@ LinboClientInfo::LinboClientInfo(LinboConfig* config, QWidget *parent) : QWidget
     this->_mainLayout->addWidget(this->_desktopIconWidget, 1, 0, 1, 1);
 
     //% "HDD"
-    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->hddSize()), 1, 1, 1, 1);
+    this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_hdd") + ":</b>  " + config->diskSize()), 1, 1, 1, 1);
 
     //% "Cache"
     this->_mainLayout->addWidget(new QLabel("<b>" + qtTrId("client_info_cache") + ":</b>  " + config->cacheSize()), 1, 2, 1, 1);

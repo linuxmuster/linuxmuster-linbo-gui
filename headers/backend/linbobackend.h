@@ -118,7 +118,8 @@ protected slots:
     bool uploadImage(LinboImage* image, LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::NoAction);
 
     QString loadEnvironmentValue(QString key);
-    QString getPartitionSize(QString partition);
+    QString getCacheSize();
+    QString getDiskSize();
 
 private:
     LinboState _state;

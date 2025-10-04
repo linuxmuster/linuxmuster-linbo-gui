@@ -80,8 +80,8 @@ public:
     const QString& cacheSize() const {
         return this->_cacheSize;
     }
-    const QString& hddSize() const {
-        return this->_hddSize;
+    const QString& diskSize() const {
+        return this->_diskSize;
     }
     QString cachePath() const {
         return this->_cachePath;
@@ -155,7 +155,7 @@ private:
     QString _cpuModel;
     QString _ramSize;
     QString _cacheSize;
-    QString _hddSize;
+    QString _diskSize;
     QString _cachePath;
     QString _hostGroup;
     QString _themeName;

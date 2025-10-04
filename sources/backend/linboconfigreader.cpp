@@ -113,12 +113,8 @@ void LinboConfigReader::_loadEnvironmentValues(LinboConfig* config) {
     config->_hostname = this->_backend->loadEnvironmentValue("hostname");
     config->_cpuModel = this->_backend->loadEnvironmentValue("cpu");
     config->_ramSize = this->_backend->loadEnvironmentValue("memory");
-    config->_cacheSize = this->_backend->getPartitionSize(config->cachePath());
-
-    // Harddisk Size
-    QRegularExpression removePartition("[0-9]{1,2}");
-    // e.g. turn /dev/sda1 into /dev/sda
-    config->_hddSize = this->_backend->getPartitionSize(config->cachePath().replace(removePartition, ""));
+    config->_cacheSize = this->_backend->getCacheSize();
+    config->_diskSize = this->_backend->getDiskSize();
 
     this->_loadExistingImages(config);
     this->_backend->logger()->_log("Finished loading environment values", LinboLogger::LinboGuiInfo);
