@@ -343,13 +343,11 @@ QString LinboBackend::loadEnvironmentValue(QString key) {
 }
 
 QString LinboBackend::getCacheSize() {
-    // TODO
-    return this->_linboCmd->getOutput("linbo_size_cache").replace("\n", "");
+    return this->_linboCmd->getOutput("size_cache").replace("\n", "");
 
 }
 QString LinboBackend::getDiskSize(){
-    // TODO
-    return this->_linboCmd->getOutput("linbo_size_disk").replace("\n", "");
+    return this->_linboCmd->getOutput("size_disk").replace("\n", "");
 }
 
 // -----------

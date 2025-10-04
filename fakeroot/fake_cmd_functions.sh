@@ -284,6 +284,16 @@ listimages()
     fi
 }
 
+linbo_size_cache()
+{
+    echo "8.4/16.6GB"
+}
+
+linbo_size_disk()
+{
+    echo "32.0GB"
+}
+
 # linbo_cmd *
 help()
 {

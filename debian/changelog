@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.3.3) lmn73; urgency=medium
+
+  * fix: hdd and cache size in edge cases (#95)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Fri, 04 Oct 2025 13:40:23 +0100
+
 linuxmuster-linbo-gui7 (7.3.2) lmn73; urgency=medium
 
   * fix: hdd and cache size in edge cases (#95)

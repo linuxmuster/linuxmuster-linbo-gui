@@ -118,10 +118,10 @@ case "${cmd}" in
     listimages)
         listimages "$@"
         ;;
-    linbo_size_cache)
+    size_cache)
         linbo_size_cache "$@"
 	;;
-    linbo_size_disk)
+    size_disk)
         linbo_size_disk "$@"
         ;;
     *)
