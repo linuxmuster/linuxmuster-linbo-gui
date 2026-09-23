@@ -18,29 +18,21 @@
 
 #include "linbotoolbutton.h"
 
-LinboToolButton::LinboToolButton(QString text, QWidget* parent)
-    : LinboToolButton(text, LinboTheme::NoIcon, LinboTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(QString text, QWidget* parent) : LinboToolButton(text, LinboTheme::NoIcon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(LinboTheme::Icon icon, QWidget* parent)
-    : LinboToolButton("", icon, LinboTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(LinboTheme::Icon icon, QWidget* parent) : LinboToolButton("", icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, QWidget* parent)
-    : LinboToolButton(text, icon, LinboTheme::ToolButtonColor, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, QWidget* parent) : LinboToolButton(text, icon, LinboTheme::ToolButtonColor, parent)
 {
 }
 
-LinboToolButton::LinboToolButton(QString text,
-                                 LinboTheme::Icon icon,
-                                 LinboTheme::ColorRole colorRole,
-                                 QWidget* parent)
-    : LinboPushButton(gTheme->iconPath(icon), text, parent)
+LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, LinboTheme::ColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->iconPath(icon), text, parent)
 {
     this->_colorRole = colorRole;
-
     if(this->_colorRole == LinboTheme::ToolButtonColor)
         LinboPushButton::setStyleSheet(
             QString(
