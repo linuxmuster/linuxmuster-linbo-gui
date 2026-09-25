@@ -1,3 +1,9 @@
+linuxmuster-linbo-gui7 (7.4.1) lmn74; urgency=medium
+
+  * fix: high CPU usage in LinboToolButton (#99)
+
+ -- Dorian Zedler <dorian@itsblue.de>  Sun, 26 Sep 2026 10:30:23 +0100
+
 linuxmuster-linbo-gui7 (7.4.0) lmn74; urgency=medium
 
   * chore: release for lmn 7.4
