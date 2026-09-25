@@ -74,12 +74,12 @@
       <translation>créer</translation>
     </message>
     <message id="dialog_createImage_button_createAndUpload">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="98"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="97"/>
       <source>create + upload</source>
       <translation>créer + téléverser</translation>
     </message>
     <message id="cancel">
-      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="108"/>
+      <location filename="../../../sources/frontend/dialogs/linboimagecreationdialog.cpp" line="106"/>
       <location filename="../../../sources/frontend/dialogs/linboimageuploaddialog.cpp" line="86"/>
       <location filename="../../../sources/frontend/dialogs/linbologindialog.cpp" line="37"/>
       <location filename="../../../sources/frontend/dialogs/linboregisterdialog.cpp" line="90"/>
