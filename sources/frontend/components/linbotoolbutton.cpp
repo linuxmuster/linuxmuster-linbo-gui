@@ -33,10 +33,6 @@ LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, QWidget* p
 LinboToolButton::LinboToolButton(QString text, LinboTheme::Icon icon, LinboTheme::ColorRole colorRole, QWidget* parent) : LinboPushButton(gTheme->iconPath(icon), text, parent)
 {
     this->_colorRole = colorRole;
-}
-
-void LinboToolButton::paintEvent(QPaintEvent *e) {
-    LinboPushButton::paintEvent(e);
     if(this->_colorRole == LinboTheme::ToolButtonColor)
         LinboPushButton::setStyleSheet(
             QString(

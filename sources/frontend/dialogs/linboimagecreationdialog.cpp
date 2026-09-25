@@ -89,7 +89,6 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //% "create"
     LinboToolButton* pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_create"));
     this->addToolButton(pushButtonCache);
-    pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboToolButton::clicked, this, [=]() {
         this->_createImage(LinboPostProcessActions::Flags(this->_postProcessActionButtonGroup->checkedId()));
     });
@@ -97,7 +96,6 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //% "create + upload"
     pushButtonCache = new LinboToolButton(qtTrId("dialog_createImage_button_createAndUpload"));
     this->addToolButton(pushButtonCache);
-    pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboPushButton::clicked, this, [=]() {
         LinboPostProcessActions::Flags postProcessActions = LinboPostProcessActions::Flags(this->_postProcessActionButtonGroup->checkedId());
         postProcessActions.setFlag(LinboPostProcessActions::NoAction, false);
@@ -107,7 +105,6 @@ LinboImageCreationDialog::LinboImageCreationDialog(LinboBackend* backend, QWidge
     //% cancel
     pushButtonCache = new LinboToolButton(qtTrId("cancel"));
     this->addToolButton(pushButtonCache);
-    pushButtonCache->setStyleSheet("QLabel { color: #394f5e; font-weight: bold;}");
     connect(pushButtonCache, &LinboToolButton::clicked, this, &LinboImageCreationDialog::autoClose);
 
     connect(this, &LinboDialog::opened, [=] { this->_refreshPathAndDescription(true); });

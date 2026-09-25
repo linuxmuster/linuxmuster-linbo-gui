@@ -34,9 +34,6 @@ public:
     LinboToolButton(QString text, LinboTheme::Icon icon, QWidget* parent = nullptr);
     LinboToolButton(QString text, LinboTheme::Icon icon, LinboTheme::ColorRole colorRole, QWidget* parent = nullptr);
 
-protected:
-    void paintEvent(QPaintEvent *e) override;
-
 private:
     LinboTheme::ColorRole _colorRole;
 
